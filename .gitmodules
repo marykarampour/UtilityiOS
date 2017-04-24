@@ -1,0 +1,7 @@
+
+[submodule "UtilityiOS/AFNetworking"]
+	path = UtilityiOS/AFNetworking
+	url = https://github.com/AFNetworking/AFNetworking.git
+[submodule "UtilityiOS/JSONModel"]
+	path = UtilityiOS/JSONModel
+	url = https://github.com/jsonmodel/jsonmodel.git
