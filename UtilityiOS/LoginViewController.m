@@ -7,8 +7,13 @@
 //
 
 #import "LoginViewController.h"
+#import "LoginManager.h"
+#import "LoginView.h"
 
 @interface LoginViewController ()
+
+@property (nonatomic, strong) LoginManager *loginManager;
+@property (nonatomic, strong) LoginView *loginView;
 
 @end
 
@@ -16,7 +21,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    self.loginView = [[LoginView alloc] init];
+    [self.loginView setTarget:self selector:@selector(login)];
+}
+
+- (void)login {
+    self.loginManager = [[LoginManager alloc] initWithViewController:self];
+    [self.loginManager performLoginWithUsername:[self.loginView usernameText] password:[self.loginView passwordText]];
 }
 
 - (void)didReceiveMemoryWarning {

@@ -55,5 +55,20 @@ static CGFloat const SEPARATOR_LINE_SIZE = 1.0;
     return self;
 }
 
+- (void)setTarget:(id)object selector:(SEL)action {
+    self.username.delegate = object;
+    self.password.delegate = object;
+    [self.login addTarget:object action:action forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (NSString *)usernameText {
+    return self.username.text;
+}
+
+- (NSString *)passwordText {
+    return self.password.text;
+}
+
 
 @end
+

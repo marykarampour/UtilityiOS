@@ -10,4 +10,8 @@
 
 @interface LoginView : UIView
 
+- (void)setTarget:(id)object selector:(SEL)action;
+- (NSString *)usernameText;
+- (NSString *)passwordText;
+
 @end
