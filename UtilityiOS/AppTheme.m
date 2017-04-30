@@ -28,8 +28,8 @@ static AppThemeStyle const THEME_STYLE = AppThemeStyleLight;
 
 + (UIColor *)textHighlightColor {
     switch (THEME_STYLE) {
-        case AppThemeStyleLight: return [UIColor whiteColor];
-        case AppThemeStyleDark: return [UIColor blackColor];
+        case AppThemeStyleLight: return [UIColor blueColor];
+        case AppThemeStyleDark: return [UIColor blueColor];
         default: return [UIColor whiteColor];
     }
 }
@@ -44,8 +44,8 @@ static AppThemeStyle const THEME_STYLE = AppThemeStyleLight;
 
 + (UIColor *)seperatorColor {
     switch (THEME_STYLE) {
-        case AppThemeStyleLight: return [UIColor whiteColor];
-        case AppThemeStyleDark: return [UIColor blackColor];
+        case AppThemeStyleLight: return [UIColor blackColor];
+        case AppThemeStyleDark: return [UIColor grayColor];
         default: return [UIColor whiteColor];
     }
 }
@@ -68,32 +68,32 @@ static AppThemeStyle const THEME_STYLE = AppThemeStyleLight;
 
 + (UIColor *)textDefaultColor {
     switch (THEME_STYLE) {
-        case AppThemeStyleLight: return [UIColor whiteColor];
-        case AppThemeStyleDark: return [UIColor blackColor];
+        case AppThemeStyleLight: return [UIColor blackColor];
+        case AppThemeStyleDark: return [UIColor whiteColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)textLightColor {
     switch (THEME_STYLE) {
-        case AppThemeStyleLight: return [UIColor whiteColor];
-        case AppThemeStyleDark: return [UIColor blackColor];
+        case AppThemeStyleLight: return [UIColor colorWithWhite:0.3 alpha:1.0];
+        case AppThemeStyleDark: return [UIColor colorWithWhite:0.7 alpha:1.0];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)textMediumColor {
     switch (THEME_STYLE) {
-        case AppThemeStyleLight: return [UIColor whiteColor];
-        case AppThemeStyleDark: return [UIColor blackColor];
+        case AppThemeStyleLight: return [UIColor colorWithWhite:0.7 alpha:1.0];
+        case AppThemeStyleDark: return [UIColor colorWithWhite:0.3 alpha:1.0];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)textDarkColor {
     switch (THEME_STYLE) {
-        case AppThemeStyleLight: return [UIColor whiteColor];
-        case AppThemeStyleDark: return [UIColor blackColor];
+        case AppThemeStyleLight: return [UIColor blackColor];
+        case AppThemeStyleDark: return [UIColor whiteColor];
         default: return [UIColor whiteColor];
     }
 }

@@ -7,8 +7,14 @@
 //
 
 #import "NSObject+SplitView.h"
+#import "SplitViewManager.h"
 
 @implementation MasterViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.navigationItem.leftBarButtonItem = [[SplitViewManager instance] logoutButton];
+}
 
 @end
 

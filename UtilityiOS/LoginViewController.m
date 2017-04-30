@@ -35,7 +35,7 @@ typedef NS_ENUM(NSUInteger, TextFieldIndex) {
     self.edgesForExtendedLayout = UIRectEdgeNone;
     [self.navigationItem setHidesBackButton:YES];
     
-    self.loginView = [[MKBasicFormView alloc] initWithTextFieldPlaceholders:@[@"Username", @"Password"]];
+    self.loginView = [[MKBasicFormView alloc] initWithTextFieldPlaceholders:@[@"Username", @"Password"] buttonTitle:@"Login"];
     [self.loginView setTarget:self selector:@selector(login)];
     
     [self.view addSubview:self.loginView];
@@ -83,8 +83,7 @@ typedef NS_ENUM(NSUInteger, TextFieldIndex) {
 #pragma mark - textfields
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-    CGRect frame = [textField convertRect:textField.bounds toView:nil];
-    [self.viewAdjuster setReferenceFrame:frame];
+    [self.viewAdjuster setReferenceView:textField];
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {

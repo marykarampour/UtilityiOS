@@ -10,6 +10,7 @@
 #import "TabBarSplitViewController_Extension.h"
 #import "UINavigationController+Transition.h"
 
+#import "ShrunkenMenuViewController.h"
 #import "BaseDetailViewController.h"
 #import "LoginViewController.h"
 
@@ -73,7 +74,7 @@
 }
 
 #pragma mark - updating views
-
+//examples:
 //- (void)reloadWithShrunkednMenuForReport:(id)data {
 //    MasterDetailViewControllerPair *pair = [NSObject masterDetailViewPairFor:[PQRShrunkenMenuViewController class] detailClass:[PQRSpecialReportViewController class] tabItem:PQRTabBarIndexWizard];
 //    pair.master.hidesBottomBarWhenPushed = YES;
@@ -87,10 +88,10 @@
 //    [self pushWithFade:YES pair:pair forTabItem:PQRTabBarIndexSessions];
 //}
 //
-//- (void)didAfterSelectingTabItem:(PQRTabBarIndex)index {
-//    PQRMasterViewController *master = (PQRMasterViewController *)self.pairs[index].master.visibleViewController;
-//    PrimaryViewState state = ([master isKindOfClass:[PQRShrunkenMenuViewController class]] ? PrimaryViewStateShrunken : PrimaryViewStateVisible);
-//    [self updatePrimaryViewWithState:state];
-//}
+- (void)didAfterSelectingTabItem:(TabBarIndex)index {
+    MasterViewController *master = (MasterViewController *)self.pairs[index].master.visibleViewController;
+    PrimaryViewState state = ([master isKindOfClass:[ShrunkenMenuViewController class]] ? PrimaryViewStateShrunken : PrimaryViewStateVisible);
+    [self updatePrimaryViewWithState:state];
+}
 
 @end

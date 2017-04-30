@@ -35,7 +35,8 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
 }
 
-- (void)setReferenceFrame:(CGRect)frame {
+- (void)setReferenceView:(UIView *)view {
+    CGRect frame = [view convertRect:view.bounds toView:nil];
     _referenceFrame = frame;
 }
 

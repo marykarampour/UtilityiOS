@@ -10,7 +10,7 @@
 
 @interface MKBasicFormView : UIView
 
-- (instancetype)initWithTextFieldPlaceholders:(StringArr *)texts;
+- (instancetype)initWithTextFieldPlaceholders:(StringArr *)texts buttonTitle:(NSString *)buttonTitle;
 - (void)setTarget:(id)object selector:(SEL)action;
 - (NSString *)textAtIndex:(NSUInteger)index;
 - (BOOL)performAtTextFieldReturn:(UITextField *)textField;

@@ -32,20 +32,21 @@ static CGFloat const SEPARATOR_LINE_SIZE = 1.0;
 }
 
 - (instancetype)init {
-    return [self initWithTextFieldPlaceholders:@[@""]];
+    return [self initWithTextFieldPlaceholders:@[@""] buttonTitle:@""];
 }
 
-- (instancetype)initWithTextFieldPlaceholders:(StringArr *)texts {
+- (instancetype)initWithTextFieldPlaceholders:(StringArr *)texts buttonTitle:(NSString *)buttonTitle {
     if (self = [super init]) {
         if (texts.count) {
             self.textFields = [[NSMutableArray alloc] init];
             
             self.login = [UIButton buttonWithCustomType:CustomButtonTypeBold];
-            self.textFieldsView = [[UIView alloc] init];
+            [self.login setTitle:buttonTitle forState:UIControlStateNormal];
+            self.login.backgroundColor = [UIColor blueColor];
             
+            self.textFieldsView = [[UIView alloc] init];
             self.textFieldsView.layer.cornerRadius = ButtonCornerRadious;
             self.textFieldsView.layer.masksToBounds = YES;
-            self.login.backgroundColor = [UIColor blueColor];
             
             self.layer.cornerRadius = ButtonCornerRadious;
             self.layer.masksToBounds = YES;
@@ -68,16 +69,20 @@ static CGFloat const SEPARATOR_LINE_SIZE = 1.0;
                 if (idx == 0) {
                     if (texts.count > 1) {
                         verticalTXConstraint = @"V:|-0-[textField0]";
+                        textField.returnKeyType = UIReturnKeyNext;
                     }
                     else {
                         verticalTXConstraint = @"V:|-0-[textField0]-0-|";
+                        textField.returnKeyType = UIReturnKeyDone;
                     }
                 }
                 else if (texts.count - 1 == idx) {
                     verticalTXConstraint = [NSString stringWithFormat:@"%@-(%f)-[textField%d(==textField0)]-0-|", verticalTXConstraint, SEPARATOR_LINE_SIZE, idx];
+                    textField.returnKeyType = UIReturnKeyDone;
                 }
                 else {
                     verticalTXConstraint = [NSString stringWithFormat:@"%@-(%f)-[textField%d(==textField0)]", verticalTXConstraint, SEPARATOR_LINE_SIZE, idx];
+                    textField.returnKeyType = UIReturnKeyNext;
                 }
                 if (texts.count > 1 && idx > 0 && texts.count > idx) {
                     [self.textFields[idx-1] setNextControl:textField];

@@ -13,6 +13,6 @@
 - (instancetype)initWithViewController:(UIViewController *)viewController;
 - (void)registerObserver;
 - (void)removeObserver;
-- (void)setReferenceFrame:(CGRect)frame;
+- (void)setReferenceView:(UIView *)view;
 
 @end
