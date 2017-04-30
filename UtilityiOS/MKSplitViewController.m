@@ -17,7 +17,7 @@
 
 - (instancetype)initWithMasterDetailPairs:(NSArray<__kindof MasterDetailNavControllerPair *> *)pairs secondaryDetailViewController:(UIViewController *)detailViewController {
     if (self = [super initWithMasterDetailPairs:pairs secondaryDetailViewController:detailViewController]) {
-        self.splitViewController.view.backgroundColor = [UIColor VCBackground];
+        self.splitViewController.view.backgroundColor = [AppTheme VCBackgroundColor];
     }
     return self;
 }

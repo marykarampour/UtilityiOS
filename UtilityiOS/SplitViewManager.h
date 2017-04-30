@@ -15,5 +15,6 @@
 
 + (instancetype)instance;
 - (UIViewController *)windowRootViewController;
+- (UIBarButtonItem *)logoutButton;
 
 @end

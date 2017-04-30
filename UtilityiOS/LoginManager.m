@@ -7,6 +7,7 @@
 //
 
 #import "LoginManager.h"
+#import "SplitViewManager.h"
 
 @interface LoginManager ()
 
@@ -21,6 +22,10 @@
         self.viewController = viewController;
     }
     return self;
+}
+
+- (void)performLoginWithUsername:(NSString *)username password:(NSString *)passsword {
+    [[SplitViewManager instance].splitViewController animateLogin];
 }
 
 @end

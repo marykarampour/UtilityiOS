@@ -35,9 +35,9 @@
                 break;
         }
         
-        self.font = [UIFont mediumLabel];
-        self.textColor = [UIColor textDark];
-        self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:placeholder attributes:@{NSForegroundColorAttributeName:[UIColor textMedium]}];
+        self.font = [AppTheme mediumLabelFont];
+        self.textColor = [AppTheme textDarkColor];
+        self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:placeholder attributes:@{NSForegroundColorAttributeName:[AppTheme textMediumColor]}];
         self.backgroundColor = [UIColor whiteColor];
         
         self.placeholder = placeholder;

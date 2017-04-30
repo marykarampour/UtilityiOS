@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LoginView : UIView
+@interface MKBasicFormView : UIView
 
+- (instancetype)initWithTextFieldPlaceholders:(StringArr *)texts;
 - (void)setTarget:(id)object selector:(SEL)action;
-- (NSString *)usernameText;
-- (NSString *)passwordText;
+- (NSString *)textAtIndex:(NSUInteger)index;
+- (BOOL)performAtTextFieldReturn:(UITextField *)textField;
+- (CGFloat)height;
 
 @end

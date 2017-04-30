@@ -34,11 +34,9 @@
 		6B16FBC61EAA645600C8594B /* UINavigationController+Transition.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B16FBC51EAA645600C8594B /* UINavigationController+Transition.m */; };
 		6B16FBCA1EAA6A4000C8594B /* MKSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B16FBC91EAA6A4000C8594B /* MKSplitViewController.m */; };
 		6B16FBCD1EAA740D00C8594B /* MKTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B16FBCC1EAA740D00C8594B /* MKTableViewController.m */; };
-		6B16FBD11EAA783200C8594B /* UIColor+Theme.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B16FBD01EAA783200C8594B /* UIColor+Theme.m */; };
 		6B16FBD41EAA7A7500C8594B /* BaseDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B16FBD31EAA7A7500C8594B /* BaseDetailViewController.m */; };
 		6B16FBD71EAA7D7500C8594B /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B16FBD61EAA7D7500C8594B /* LoginViewController.m */; };
-		6B16FBDB1EAA811400C8594B /* LoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B16FBDA1EAA811400C8594B /* LoginView.m */; };
-		6B16FBDE1EAA855000C8594B /* UIFont+Theme.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B16FBDD1EAA855000C8594B /* UIFont+Theme.m */; };
+		6B16FBDB1EAA811400C8594B /* MKBasicFormView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B16FBDA1EAA811400C8594B /* MKBasicFormView.m */; };
 		6B16FBE11EAA8B6F00C8594B /* MKTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B16FBE01EAA8B6F00C8594B /* MKTextField.m */; };
 		6B16FBE41EAA940200C8594B /* UIButton+Theme.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B16FBE31EAA940200C8594B /* UIButton+Theme.m */; };
 		6B384A381EAE9B1C00ADAF14 /* DBManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B384A371EAE9B1C00ADAF14 /* DBManager.m */; };
@@ -54,11 +52,14 @@
 		6B384A5F1EB12CB300ADAF14 /* DBTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B384A5E1EB12CB300ADAF14 /* DBTests.m */; };
 		6B384A681EB12DDD00ADAF14 /* SampleTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B384A671EB12DDD00ADAF14 /* SampleTable.m */; };
 		6B384A6B1EB130F000ADAF14 /* MKPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B384A6A1EB130F000ADAF14 /* MKPair.m */; };
+		6B384A6E1EB3AB9C00ADAF14 /* AppTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B384A6D1EB3AB9C00ADAF14 /* AppTheme.m */; };
 		6BD983231EAD3D5900CFEFD6 /* UIView+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD983221EAD3D5900CFEFD6 /* UIView+Utility.m */; };
 		6BD983261EAD8E1900CFEFD6 /* ShrunkenMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD983251EAD8E1900CFEFD6 /* ShrunkenMenuViewController.m */; };
 		6BD9832A1EAD965F00CFEFD6 /* MKTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD983291EAD965F00CFEFD6 /* MKTableViewCell.m */; };
 		6BD9832E1EAD96FA00CFEFD6 /* ImageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD9832D1EAD96FA00CFEFD6 /* ImageTableViewCell.m */; };
 		6BD983311EAD9FCC00CFEFD6 /* SplitViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD983301EAD9FCC00CFEFD6 /* SplitViewManager.m */; };
+		6BF011891EB525CB00A2ECF5 /* KeyboardAdjuster.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BF011881EB525CB00A2ECF5 /* KeyboardAdjuster.m */; };
+		6BF0118C1EB5956600A2ECF5 /* UITextField+NextControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BF0118B1EB5956600A2ECF5 /* UITextField+NextControl.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -130,16 +131,12 @@
 		6B16FBC91EAA6A4000C8594B /* MKSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKSplitViewController.m; sourceTree = "<group>"; };
 		6B16FBCB1EAA740D00C8594B /* MKTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKTableViewController.h; sourceTree = "<group>"; };
 		6B16FBCC1EAA740D00C8594B /* MKTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKTableViewController.m; sourceTree = "<group>"; };
-		6B16FBCF1EAA783200C8594B /* UIColor+Theme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Theme.h"; sourceTree = "<group>"; };
-		6B16FBD01EAA783200C8594B /* UIColor+Theme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Theme.m"; sourceTree = "<group>"; };
 		6B16FBD21EAA7A7500C8594B /* BaseDetailViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseDetailViewController.h; sourceTree = "<group>"; };
 		6B16FBD31EAA7A7500C8594B /* BaseDetailViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseDetailViewController.m; sourceTree = "<group>"; };
 		6B16FBD51EAA7D7500C8594B /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
 		6B16FBD61EAA7D7500C8594B /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
-		6B16FBD91EAA811400C8594B /* LoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginView.h; sourceTree = "<group>"; };
-		6B16FBDA1EAA811400C8594B /* LoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginView.m; sourceTree = "<group>"; };
-		6B16FBDC1EAA855000C8594B /* UIFont+Theme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+Theme.h"; sourceTree = "<group>"; };
-		6B16FBDD1EAA855000C8594B /* UIFont+Theme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+Theme.m"; sourceTree = "<group>"; };
+		6B16FBD91EAA811400C8594B /* MKBasicFormView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKBasicFormView.h; sourceTree = "<group>"; };
+		6B16FBDA1EAA811400C8594B /* MKBasicFormView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKBasicFormView.m; sourceTree = "<group>"; };
 		6B16FBDF1EAA8B6F00C8594B /* MKTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKTextField.h; sourceTree = "<group>"; };
 		6B16FBE01EAA8B6F00C8594B /* MKTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKTextField.m; sourceTree = "<group>"; };
 		6B16FBE21EAA940200C8594B /* UIButton+Theme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Theme.h"; sourceTree = "<group>"; };
@@ -172,6 +169,8 @@
 		6B384A671EB12DDD00ADAF14 /* SampleTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SampleTable.m; sourceTree = "<group>"; };
 		6B384A691EB130F000ADAF14 /* MKPair.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKPair.h; sourceTree = "<group>"; };
 		6B384A6A1EB130F000ADAF14 /* MKPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKPair.m; sourceTree = "<group>"; };
+		6B384A6C1EB3AB9C00ADAF14 /* AppTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppTheme.h; sourceTree = "<group>"; };
+		6B384A6D1EB3AB9C00ADAF14 /* AppTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppTheme.m; sourceTree = "<group>"; };
 		6BD983211EAD3D5900CFEFD6 /* UIView+Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Utility.h"; sourceTree = "<group>"; };
 		6BD983221EAD3D5900CFEFD6 /* UIView+Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Utility.m"; sourceTree = "<group>"; };
 		6BD983241EAD8E1900CFEFD6 /* ShrunkenMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShrunkenMenuViewController.h; sourceTree = "<group>"; };
@@ -182,6 +181,10 @@
 		6BD9832D1EAD96FA00CFEFD6 /* ImageTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageTableViewCell.m; sourceTree = "<group>"; };
 		6BD9832F1EAD9FCC00CFEFD6 /* SplitViewManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SplitViewManager.h; sourceTree = "<group>"; };
 		6BD983301EAD9FCC00CFEFD6 /* SplitViewManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplitViewManager.m; sourceTree = "<group>"; };
+		6BF011871EB525CB00A2ECF5 /* KeyboardAdjuster.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardAdjuster.h; sourceTree = "<group>"; };
+		6BF011881EB525CB00A2ECF5 /* KeyboardAdjuster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardAdjuster.m; sourceTree = "<group>"; };
+		6BF0118A1EB5956600A2ECF5 /* UITextField+NextControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextField+NextControl.h"; sourceTree = "<group>"; };
+		6BF0118B1EB5956600A2ECF5 /* UITextField+NextControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+NextControl.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -225,6 +228,7 @@
 		6B16FB391EA904D800C8594B /* UtilityiOS */ = {
 			isa = PBXGroup;
 			children = (
+				6BF011861EB5259A00A2ECF5 /* UtilityClasses */,
 				6B384A351EAE6E5B00ADAF14 /* DataManagement */,
 				6BD983271EAD963F00CFEFD6 /* Views */,
 				6B16FBBE1EAA5A7100C8594B /* AppCommon */,
@@ -424,10 +428,8 @@
 		6B16FBCE1EAA77DC00C8594B /* Theme */ = {
 			isa = PBXGroup;
 			children = (
-				6B16FBCF1EAA783200C8594B /* UIColor+Theme.h */,
-				6B16FBD01EAA783200C8594B /* UIColor+Theme.m */,
-				6B16FBDC1EAA855000C8594B /* UIFont+Theme.h */,
-				6B16FBDD1EAA855000C8594B /* UIFont+Theme.m */,
+				6B384A6C1EB3AB9C00ADAF14 /* AppTheme.h */,
+				6B384A6D1EB3AB9C00ADAF14 /* AppTheme.m */,
 			);
 			name = Theme;
 			sourceTree = "<group>";
@@ -437,8 +439,8 @@
 			children = (
 				6B16FBD51EAA7D7500C8594B /* LoginViewController.h */,
 				6B16FBD61EAA7D7500C8594B /* LoginViewController.m */,
-				6B16FBD91EAA811400C8594B /* LoginView.h */,
-				6B16FBDA1EAA811400C8594B /* LoginView.m */,
+				6B16FBD91EAA811400C8594B /* MKBasicFormView.h */,
+				6B16FBDA1EAA811400C8594B /* MKBasicFormView.m */,
 				6B384A3C1EAFB63400ADAF14 /* LoginManager.h */,
 				6B384A3D1EAFB63400ADAF14 /* LoginManager.m */,
 			);
@@ -496,6 +498,8 @@
 				6B384A451EB0EB9B00ADAF14 /* NSObject+Utility.m */,
 				6B384A4A1EB0FAB000ADAF14 /* NSString+Utility.h */,
 				6B384A4B1EB0FAB000ADAF14 /* NSString+Utility.m */,
+				6BF0118A1EB5956600A2ECF5 /* UITextField+NextControl.h */,
+				6BF0118B1EB5956600A2ECF5 /* UITextField+NextControl.m */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -519,6 +523,15 @@
 				6BD9832D1EAD96FA00CFEFD6 /* ImageTableViewCell.m */,
 			);
 			name = Cells;
+			sourceTree = "<group>";
+		};
+		6BF011861EB5259A00A2ECF5 /* UtilityClasses */ = {
+			isa = PBXGroup;
+			children = (
+				6BF011871EB525CB00A2ECF5 /* KeyboardAdjuster.h */,
+				6BF011881EB525CB00A2ECF5 /* KeyboardAdjuster.m */,
+			);
+			name = UtilityClasses;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -632,9 +645,10 @@
 				6B16FBA61EA99D8B00C8594B /* JSONHTTPClient.m in Sources */,
 				6B16FBA41EA99D8B00C8594B /* JSONModelError.m in Sources */,
 				6B16FBCA1EAA6A4000C8594B /* MKSplitViewController.m in Sources */,
+				6BF0118C1EB5956600A2ECF5 /* UITextField+NextControl.m in Sources */,
 				6B16FBB81EA99DA600C8594B /* AFHTTPSessionManager.m in Sources */,
+				6B384A6E1EB3AB9C00ADAF14 /* AppTheme.m in Sources */,
 				6B16FBE41EAA940200C8594B /* UIButton+Theme.m in Sources */,
-				6B16FBDE1EAA855000C8594B /* UIFont+Theme.m in Sources */,
 				6B384A491EB0EDCB00ADAF14 /* MKModel.m in Sources */,
 				6B16FBBC1EA99DA600C8594B /* AFURLResponseSerialization.m in Sources */,
 				6B16FBA81EA99D8B00C8594B /* JSONKeyMapper.m in Sources */,
@@ -650,16 +664,16 @@
 				6B16FBC11EAA5AAB00C8594B /* AppCommon.m in Sources */,
 				6B16FB5D1EA93A3300C8594B /* NSObject+SplitView.m in Sources */,
 				6B16FBA31EA99D8B00C8594B /* JSONModelClassProperty.m in Sources */,
-				6B16FBD11EAA783200C8594B /* UIColor+Theme.m in Sources */,
 				6B16FBC61EAA645600C8594B /* UINavigationController+Transition.m in Sources */,
 				6B16FBA71EA99D8B00C8594B /* JSONModel+networking.m in Sources */,
-				6B16FBDB1EAA811400C8594B /* LoginView.m in Sources */,
+				6B16FBDB1EAA811400C8594B /* MKBasicFormView.m in Sources */,
 				6B16FBBB1EA99DA600C8594B /* AFURLRequestSerialization.m in Sources */,
 				6B384A4C1EB0FAB000ADAF14 /* NSString+Utility.m in Sources */,
 				6B16FB3C1EA904D800C8594B /* main.m in Sources */,
 				6B384A461EB0EB9B00ADAF14 /* NSObject+Utility.m in Sources */,
 				6B16FBA51EA99D8B00C8594B /* JSONAPI.m in Sources */,
 				6BD983261EAD8E1900CFEFD6 /* ShrunkenMenuViewController.m in Sources */,
+				6BF011891EB525CB00A2ECF5 /* KeyboardAdjuster.m in Sources */,
 				6BD9832A1EAD965F00CFEFD6 /* MKTableViewCell.m in Sources */,
 				6B16FB591EA9078600C8594B /* MKSpinner.m in Sources */,
 				6B16FBD41EAA7A7500C8594B /* BaseDetailViewController.m in Sources */,
@@ -881,6 +895,7 @@
 				6B384A651EB12CB300ADAF14 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

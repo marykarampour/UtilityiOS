@@ -29,7 +29,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.view.backgroundColor = [UIColor VCBackground];
+    self.view.backgroundColor = [AppTheme VCBackgroundColor];
     self.backgroundImageView.hidden = YES;
     [self.view addSubview:self.backgroundImageView];
 }

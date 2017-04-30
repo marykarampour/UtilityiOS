@@ -63,6 +63,10 @@ extern float const PrimaryColumnShrunkenWidth;
 extern float const DefaultRowHeight;
 extern float const ButtonCornerRadious;
 
+#pragma mark - strings
+
+extern NSString * const ExitTitle_STR;
+
 #pragma mark - classes
 
 @interface AppCommon : NSObject

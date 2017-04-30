@@ -27,6 +27,10 @@ float const PrimaryColumnShrunkenWidth            = 44.0;
 float const DefaultRowHeight                      = 44.0;
 float const ButtonCornerRadious                   = 6.0;
 
+#pragma mark - strings
+
+NSString * const ExitTitle_STR                    = @"Exit";
+
 #pragma mark - classes
 
 @implementation AppCommon

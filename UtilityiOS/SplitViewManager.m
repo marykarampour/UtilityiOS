@@ -7,6 +7,13 @@
 //
 
 #import "SplitViewManager.h"
+#import "BaseDetailViewController.h"
+#import "LoginViewController.h"
+#import "NSObject+Utility.h"
+
+@interface SplitViewManager () <UIAlertViewDelegate>
+
+@end
 
 @implementation SplitViewManager
 
@@ -19,35 +26,33 @@
     return manager;
 }
 
-//- (instancetype)init {
-//    if (self = [super init]) {
-//        [self setAppearance];
-//        
-//        NSArray<__kindof MasterDetailNavControllerPair *> * navPairs =
-//        @[
-//          [NSObject masterDetailNavPairFor:[PQRSessionsListViewController class] detailClass:[PQRLoginViewController class] title:kSessions icon:@"car-tabbar"],
-//          [NSObject masterDetailNavPairFor:[PQRReportsListViewController class] detailClass:[WebViewController class] title:kReports icon:@"report-tabbar"],
-//          [NSObject masterDetailNavPairFor:[PQRWizardListTableViewController class] detailClass:[PQRWizardViewController class] title:kWizard icon:@"chart-tabbar"]
-//          ];
-//        
-//        self.splitViewController = [[PQRSplitViewController alloc] initWithMasterDetailPairs:navPairs secondaryDetailViewController:[[PQRBaseDetailViewController alloc] init]];
-//    }
-//    return self;
-//}
-//
-//
-//
-//- (void)setAppearance {
-//    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:kFont14, NSFontAttributeName, [UIColor PQRSubtitle1TextColor], NSForegroundColorAttributeName, nil] forState:UIControlStateNormal];
-//    [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor PQRControlHighlightColor], NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
-//    
-//    [[UITabBar appearance] setBarTintColor:[UIColor PQRTableBackgroundColor]];
-//    [[UITabBar appearance] setTranslucent:NO];
-//}
-
+- (instancetype)init {
+    if (self = [super init]) {
+        NSArray<__kindof MasterDetailNavControllerPair *> * navPairs =
+        @[[NSObject masterDetailNavPairFor:[MasterViewController class] detailClass:[LoginViewController class] title:@"Title" icon:@"icon"]];
+        
+        self.splitViewController = [[MKSplitViewController alloc] initWithMasterDetailPairs:navPairs secondaryDetailViewController:[[BaseDetailViewController alloc] init]];
+    }
+    return self;
+}
 
 - (UIViewController *)windowRootViewController {
     return self.splitViewController.splitViewController;
+}
+
+- (UIBarButtonItem *)logoutButton {
+    return [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(ExitTitle_STR, nil) style:UIBarButtonItemStylePlain target:self action:@selector(logout)];
+}
+
+- (void)logout {
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(ExitTitle_STR, nil) message:NSLocalizedString(@"Are you sure you want to exit?", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"YES", nil) otherButtonTitles:NSLocalizedString(@"Cancel", nil), nil];
+    [alert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    if ([alertView.title isEqualToString:NSLocalizedString(ExitTitle_STR, nil)] && buttonIndex == 0) {
+        [[SplitViewManager instance].splitViewController animateLogout];
+    }
 }
 
 @end

@@ -23,10 +23,10 @@
     switch (type) {
         case CustomButtonTypePlain:
         case CustomButtonTypeDefault:
-            button.titleLabel.font = [UIFont mediumLabel];
+            button.titleLabel.font = [AppTheme mediumLabelFont];
             break;
         case CustomButtonTypeBold:
-            button.titleLabel.font = [UIFont largeBoldLabel];
+            button.titleLabel.font = [AppTheme largeBoldLabelFont];
             break;
         default:
             break;

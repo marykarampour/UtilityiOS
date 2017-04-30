@@ -12,8 +12,7 @@
 #ifdef __OBJC__
 #import <UIKit/UIKit.h>
 #import "AppCommon.h"
-#import "UIColor+Theme.h"
-#import "UIFont+Theme.h"
+#import "AppTheme.h"
 #endif
 
 #endif /* PrefixHeader_pch */
