@@ -36,6 +36,17 @@ typedef NSArray<NSString *>                                     StringArr;
 typedef NSMutableArray<NSString *>                              MStringArr;
 typedef NSDictionary<NSString *, NSString *>                    DictStringString;
 typedef NSMutableDictionary<NSString *, NSString *>             MDictStringString;
+
+typedef NSArray<DictStringString *>                             ArrDictStringString;
+typedef NSDictionary<NSString *, ArrDictStringString *>         DictStringDictStringString;
+typedef NSMutableDictionary<NSString *, NSString *>             MDictStringString;
+typedef NSMutableDictionary<NSString *, ArrDictStringString *>  MDictStringDictStringString;
+
+typedef NSDictionary<NSString *, StringArr *>                   DictStringStringArr;
+typedef NSMutableDictionary<NSString *, MStringArr *>           MDictStringStringArr;
+typedef NSDictionary<NSString *, DictStringStringArr *>         DictStringDictStringStringArr;
+typedef NSMutableDictionary<NSString *, MDictStringStringArr *> MDictStringDictStringStringArr;
+
 typedef NSArray<NSNumber *>                                     NumArr;
 typedef NSMutableArray<NSNumber *>                              MNumArr;
 

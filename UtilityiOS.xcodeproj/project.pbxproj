@@ -60,6 +60,12 @@
 		6BD983311EAD9FCC00CFEFD6 /* SplitViewManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD983301EAD9FCC00CFEFD6 /* SplitViewManager.m */; };
 		6BF011891EB525CB00A2ECF5 /* KeyboardAdjuster.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BF011881EB525CB00A2ECF5 /* KeyboardAdjuster.m */; };
 		6BF0118C1EB5956600A2ECF5 /* UITextField+NextControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BF0118B1EB5956600A2ECF5 /* UITextField+NextControl.m */; };
+		6BF011961EB6768B00A2ECF5 /* SQLDefinitions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6BF011921EB6768B00A2ECF5 /* SQLDefinitions.cpp */; };
+		6BF011971EB6768B00A2ECF5 /* Utility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6BF011941EB6768B00A2ECF5 /* Utility.cpp */; };
+		6BF0119A1EB6772D00A2ECF5 /* GraphORM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6BF011981EB6772D00A2ECF5 /* GraphORM.cpp */; };
+		6BF0119D1EB6776600A2ECF5 /* GraphLib.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6BF0119C1EB6776600A2ECF5 /* GraphLib.mm */; };
+		6BF011A11EB6781500A2ECF5 /* NSObject+CPPNSObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6BF011A01EB6781500A2ECF5 /* NSObject+CPPNSObject.mm */; };
+		6BF011A31EB6E50D00A2ECF5 /* GraphORMTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = 6BF011A21EB6E50D00A2ECF5 /* GraphORMTests.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -185,6 +191,18 @@
 		6BF011881EB525CB00A2ECF5 /* KeyboardAdjuster.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeyboardAdjuster.m; sourceTree = "<group>"; };
 		6BF0118A1EB5956600A2ECF5 /* UITextField+NextControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextField+NextControl.h"; sourceTree = "<group>"; };
 		6BF0118B1EB5956600A2ECF5 /* UITextField+NextControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+NextControl.m"; sourceTree = "<group>"; };
+		6BF011911EB6768B00A2ECF5 /* Definitions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Definitions.hpp; path = GraphORM/Utility/Utility/Definitions.hpp; sourceTree = "<group>"; };
+		6BF011921EB6768B00A2ECF5 /* SQLDefinitions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = SQLDefinitions.cpp; path = GraphORM/Utility/Utility/SQLDefinitions.cpp; sourceTree = "<group>"; };
+		6BF011931EB6768B00A2ECF5 /* SQLDefinitions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SQLDefinitions.hpp; path = GraphORM/Utility/Utility/SQLDefinitions.hpp; sourceTree = "<group>"; };
+		6BF011941EB6768B00A2ECF5 /* Utility.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Utility.cpp; path = GraphORM/Utility/Utility/Utility.cpp; sourceTree = "<group>"; };
+		6BF011951EB6768B00A2ECF5 /* Utility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Utility.hpp; path = GraphORM/Utility/Utility/Utility.hpp; sourceTree = "<group>"; };
+		6BF011981EB6772D00A2ECF5 /* GraphORM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GraphORM.cpp; path = GraphORM/GraphORMLibrary/GraphORM.cpp; sourceTree = "<group>"; };
+		6BF011991EB6772D00A2ECF5 /* GraphORM.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = GraphORM.hpp; path = GraphORM/GraphORMLibrary/GraphORM.hpp; sourceTree = "<group>"; };
+		6BF0119B1EB6776600A2ECF5 /* GraphLib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphLib.h; sourceTree = "<group>"; };
+		6BF0119C1EB6776600A2ECF5 /* GraphLib.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphLib.mm; sourceTree = "<group>"; };
+		6BF0119F1EB6781500A2ECF5 /* NSObject+CPPNSObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+CPPNSObject.h"; sourceTree = "<group>"; };
+		6BF011A01EB6781500A2ECF5 /* NSObject+CPPNSObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "NSObject+CPPNSObject.mm"; sourceTree = "<group>"; };
+		6BF011A21EB6E50D00A2ECF5 /* GraphORMTests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphORMTests.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -450,6 +468,7 @@
 		6B384A351EAE6E5B00ADAF14 /* DataManagement */ = {
 			isa = PBXGroup;
 			children = (
+				6BF0118D1EB674C600A2ECF5 /* Graph */,
 				6B384A541EB11BFD00ADAF14 /* SQL */,
 			);
 			name = DataManagement;
@@ -485,6 +504,7 @@
 				6B384A601EB12CB300ADAF14 /* Info.plist */,
 				6B384A661EB12DDD00ADAF14 /* SampleTable.h */,
 				6B384A671EB12DDD00ADAF14 /* SampleTable.m */,
+				6BF011A21EB6E50D00A2ECF5 /* GraphORMTests.mm */,
 			);
 			path = DBTests;
 			sourceTree = "<group>";
@@ -500,6 +520,8 @@
 				6B384A4B1EB0FAB000ADAF14 /* NSString+Utility.m */,
 				6BF0118A1EB5956600A2ECF5 /* UITextField+NextControl.h */,
 				6BF0118B1EB5956600A2ECF5 /* UITextField+NextControl.m */,
+				6BF0119F1EB6781500A2ECF5 /* NSObject+CPPNSObject.h */,
+				6BF011A01EB6781500A2ECF5 /* NSObject+CPPNSObject.mm */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -532,6 +554,22 @@
 				6BF011881EB525CB00A2ECF5 /* KeyboardAdjuster.m */,
 			);
 			name = UtilityClasses;
+			sourceTree = "<group>";
+		};
+		6BF0118D1EB674C600A2ECF5 /* Graph */ = {
+			isa = PBXGroup;
+			children = (
+				6BF011981EB6772D00A2ECF5 /* GraphORM.cpp */,
+				6BF011991EB6772D00A2ECF5 /* GraphORM.hpp */,
+				6BF011911EB6768B00A2ECF5 /* Definitions.hpp */,
+				6BF011921EB6768B00A2ECF5 /* SQLDefinitions.cpp */,
+				6BF011931EB6768B00A2ECF5 /* SQLDefinitions.hpp */,
+				6BF011941EB6768B00A2ECF5 /* Utility.cpp */,
+				6BF011951EB6768B00A2ECF5 /* Utility.hpp */,
+				6BF0119B1EB6776600A2ECF5 /* GraphLib.h */,
+				6BF0119C1EB6776600A2ECF5 /* GraphLib.mm */,
+			);
+			name = Graph;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -652,6 +690,7 @@
 				6B384A491EB0EDCB00ADAF14 /* MKModel.m in Sources */,
 				6B16FBBC1EA99DA600C8594B /* AFURLResponseSerialization.m in Sources */,
 				6B16FBA81EA99D8B00C8594B /* JSONKeyMapper.m in Sources */,
+				6BF011961EB6768B00A2ECF5 /* SQLDefinitions.cpp in Sources */,
 				6B384A411EAFE79E00ADAF14 /* ServerController.m in Sources */,
 				6B384A3E1EAFB63400ADAF14 /* LoginManager.m in Sources */,
 				6BD983311EAD9FCC00CFEFD6 /* SplitViewManager.m in Sources */,
@@ -668,11 +707,15 @@
 				6B16FBA71EA99D8B00C8594B /* JSONModel+networking.m in Sources */,
 				6B16FBDB1EAA811400C8594B /* MKBasicFormView.m in Sources */,
 				6B16FBBB1EA99DA600C8594B /* AFURLRequestSerialization.m in Sources */,
+				6BF011971EB6768B00A2ECF5 /* Utility.cpp in Sources */,
 				6B384A4C1EB0FAB000ADAF14 /* NSString+Utility.m in Sources */,
+				6BF0119A1EB6772D00A2ECF5 /* GraphORM.cpp in Sources */,
 				6B16FB3C1EA904D800C8594B /* main.m in Sources */,
 				6B384A461EB0EB9B00ADAF14 /* NSObject+Utility.m in Sources */,
 				6B16FBA51EA99D8B00C8594B /* JSONAPI.m in Sources */,
 				6BD983261EAD8E1900CFEFD6 /* ShrunkenMenuViewController.m in Sources */,
+				6BF0119D1EB6776600A2ECF5 /* GraphLib.mm in Sources */,
+				6BF011A11EB6781500A2ECF5 /* NSObject+CPPNSObject.mm in Sources */,
 				6BF011891EB525CB00A2ECF5 /* KeyboardAdjuster.m in Sources */,
 				6BD9832A1EAD965F00CFEFD6 /* MKTableViewCell.m in Sources */,
 				6B16FB591EA9078600C8594B /* MKSpinner.m in Sources */,
@@ -692,6 +735,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6BF011A31EB6E50D00A2ECF5 /* GraphORMTests.mm in Sources */,
 				6B384A681EB12DDD00ADAF14 /* SampleTable.m in Sources */,
 				6B384A5F1EB12CB300ADAF14 /* DBTests.m in Sources */,
 			);
@@ -846,6 +890,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = 629L622SQX;
+				GCC_PREFIX_HEADER = UtilityiOS/PrefixHeader.pch;
 				INFOPLIST_FILE = DBTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.team.DBTests;
@@ -859,6 +904,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				DEVELOPMENT_TEAM = 629L622SQX;
+				GCC_PREFIX_HEADER = UtilityiOS/PrefixHeader.pch;
 				INFOPLIST_FILE = DBTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.team.DBTests;

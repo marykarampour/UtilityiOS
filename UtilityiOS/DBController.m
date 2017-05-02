@@ -60,7 +60,7 @@
     [defaults synchronize];
 }
 
-#pragma mark - insert
+#pragma mark - execute
 
 - (void)execute:(QUERY_TYPE)query objects:(NSArray<DBModel *> *)data {
     switch (query) {
@@ -159,6 +159,28 @@
         }
     }
     return columnNames;
+}
+
+#pragma - schema
+
+- (DictStringDictStringString *)foreignKeys {
+    MDictStringDictStringString *keys = [[NSMutableDictionary alloc] init];
+    for (NSString *table in [SQLConstants tableCreatePairs].allKeys) {
+        ArrDictStringString *result = [self.dbManager loadData:[NSString stringWithFormat:exec_PRAGMA_foreign_key_list, table]];
+        [keys setObject:result forKey:table];
+    }
+    
+    return keys;
+}
+
+- (DictStringDictStringString *)tables {
+    MDictStringDictStringString *keys = [[NSMutableDictionary alloc] init];
+    for (NSString *table in [SQLConstants tableCreatePairs].allKeys) {
+        ArrDictStringString *result = [self.dbManager loadData:[NSString stringWithFormat:exec_PARGMA_table_info, table]];
+        [keys setObject:result forKey:table];
+    }
+    
+    return keys;
 }
 
 #pragma mark - helpers

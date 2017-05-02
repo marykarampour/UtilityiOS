@@ -5,3 +5,6 @@
 [submodule "UtilityiOS/JSONModel"]
 	path = UtilityiOS/JSONModel
 	url = https://github.com/jsonmodel/jsonmodel.git
+[submodule "UtilityiOS/GraphORM"]
+	path = UtilityiOS/GraphORM
+	url = https://Karampour@git.bhs-consultants.com/NodeModule/GraphORM.git

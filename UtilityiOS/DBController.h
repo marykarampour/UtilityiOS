@@ -20,4 +20,7 @@
 - (void)resetDB;
 - (void)updateDB;
 
+- (DictStringDictStringString *)tables;
+- (DictStringDictStringString *)foreignKeys;
+
 @end
