@@ -53,6 +53,8 @@
 		6B384A681EB12DDD00ADAF14 /* SampleTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B384A671EB12DDD00ADAF14 /* SampleTable.m */; };
 		6B384A6B1EB130F000ADAF14 /* MKPair.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B384A6A1EB130F000ADAF14 /* MKPair.m */; };
 		6B384A6E1EB3AB9C00ADAF14 /* AppTheme.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B384A6D1EB3AB9C00ADAF14 /* AppTheme.m */; };
+		6B4E08641EB90343002B9676 /* UIColor+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B4E08631EB90343002B9676 /* UIColor+Utility.m */; };
+		6B4E09DE1EBB960B002B9676 /* NSDate+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 6B4E09DD1EBB960B002B9676 /* NSDate+Utility.m */; };
 		6BD983231EAD3D5900CFEFD6 /* UIView+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD983221EAD3D5900CFEFD6 /* UIView+Utility.m */; };
 		6BD983261EAD8E1900CFEFD6 /* ShrunkenMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD983251EAD8E1900CFEFD6 /* ShrunkenMenuViewController.m */; };
 		6BD9832A1EAD965F00CFEFD6 /* MKTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BD983291EAD965F00CFEFD6 /* MKTableViewCell.m */; };
@@ -177,6 +179,10 @@
 		6B384A6A1EB130F000ADAF14 /* MKPair.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKPair.m; sourceTree = "<group>"; };
 		6B384A6C1EB3AB9C00ADAF14 /* AppTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppTheme.h; sourceTree = "<group>"; };
 		6B384A6D1EB3AB9C00ADAF14 /* AppTheme.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppTheme.m; sourceTree = "<group>"; };
+		6B4E08621EB90343002B9676 /* UIColor+Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Utility.h"; sourceTree = "<group>"; };
+		6B4E08631EB90343002B9676 /* UIColor+Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Utility.m"; sourceTree = "<group>"; };
+		6B4E09DC1EBB960B002B9676 /* NSDate+Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Utility.h"; sourceTree = "<group>"; };
+		6B4E09DD1EBB960B002B9676 /* NSDate+Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Utility.m"; sourceTree = "<group>"; };
 		6BD983211EAD3D5900CFEFD6 /* UIView+Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Utility.h"; sourceTree = "<group>"; };
 		6BD983221EAD3D5900CFEFD6 /* UIView+Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Utility.m"; sourceTree = "<group>"; };
 		6BD983241EAD8E1900CFEFD6 /* ShrunkenMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShrunkenMenuViewController.h; sourceTree = "<group>"; };
@@ -522,6 +528,10 @@
 				6BF0118B1EB5956600A2ECF5 /* UITextField+NextControl.m */,
 				6BF0119F1EB6781500A2ECF5 /* NSObject+CPPNSObject.h */,
 				6BF011A01EB6781500A2ECF5 /* NSObject+CPPNSObject.mm */,
+				6B4E08621EB90343002B9676 /* UIColor+Utility.h */,
+				6B4E08631EB90343002B9676 /* UIColor+Utility.m */,
+				6B4E09DC1EBB960B002B9676 /* NSDate+Utility.h */,
+				6B4E09DD1EBB960B002B9676 /* NSDate+Utility.m */,
 			);
 			name = Utility;
 			sourceTree = "<group>";
@@ -677,6 +687,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6B384A501EB112FF00ADAF14 /* DBController.m in Sources */,
+				6B4E08641EB90343002B9676 /* UIColor+Utility.m in Sources */,
 				6B16FBD71EAA7D7500C8594B /* LoginViewController.m in Sources */,
 				6BD983231EAD3D5900CFEFD6 /* UIView+Utility.m in Sources */,
 				6B16FBA91EA99D8B00C8594B /* JSONValueTransformer.m in Sources */,
@@ -700,6 +711,7 @@
 				6B16FBCD1EAA740D00C8594B /* MKTableViewController.m in Sources */,
 				6BD9832E1EAD96FA00CFEFD6 /* ImageTableViewCell.m in Sources */,
 				6B384A571EB11C2800ADAF14 /* DBModel.m in Sources */,
+				6B4E09DE1EBB960B002B9676 /* NSDate+Utility.m in Sources */,
 				6B16FBC11EAA5AAB00C8594B /* AppCommon.m in Sources */,
 				6B16FB5D1EA93A3300C8594B /* NSObject+SplitView.m in Sources */,
 				6B16FBA31EA99D8B00C8594B /* JSONModelClassProperty.m in Sources */,
