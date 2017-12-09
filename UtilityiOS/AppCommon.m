@@ -20,12 +20,24 @@ NSString * const BaseDevInURL                     = @"://10.1.0.119";
 NSString * const BaseDevOutURL                    = @"://kaching.baldhead.com";
 NSString * const BaseProductionURL                = @"://";
 
+#pragma mark - values
+
 float const TransitionAnimationDuration           = 0.4;
 float const PrimaryColumnWidth                    = 256.0;
 float const PrimaryColumnShrunkenWidth            = 44.0;
 
 float const DefaultRowHeight                      = 44.0;
 float const ButtonCornerRadious                   = 6.0;
+
+#pragma mark - format
+
+NSString * const DateFormatServerStyle            = @"YYYY-MM-dd HH:mm:ss";
+NSString * const DateFormatShortStyle             = @"yyyy-MM-dd";
+NSString * const DateFormatFullStyle              = @"EEEE, MMMM dd, yyyy";
+NSString * const DateFormatMonthDayYearStyle      = @"MMMM dd, yyyy";
+NSString * const DateFormatMonthYear              = @"MMMM yyyy";
+NSString * const DateFormatDayMonthYear           = @"dd MMMM yyyy";
+NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
 
 #pragma mark - strings
 

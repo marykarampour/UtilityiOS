@@ -31,9 +31,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.tableView.contentInset = UIEdgeInsetsZero;
-    self.tableView.separatorInset = UIEdgeInsetsZero;
-    self.tableView.layoutMargins = UIEdgeInsetsZero;
 }
 
 - (void)viewDidAppear:(BOOL)animated {

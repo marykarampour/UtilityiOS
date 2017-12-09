@@ -16,6 +16,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.tableView.contentInset = UIEdgeInsetsZero;
+    self.tableView.separatorInset = UIEdgeInsetsZero;
+    self.tableView.layoutMargins = UIEdgeInsetsZero;
+    
+    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 1.0, 0.5)];
+    footer.backgroundColor = [AppTheme seperatorColor];
+    self.tableView.tableFooterView = footer;
 }
 
 #pragma mark - Table view data source

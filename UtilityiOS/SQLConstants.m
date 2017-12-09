@@ -29,7 +29,7 @@ NSString * const exec_clear_table               = @"DELETE FROM %@";
 NSString * const exec_drop_table                = @"DROP TABLE %@";
 
 NSString * const exec_PARGMA_table_info         = @"PRAGMA table_info(\"%@\")";
-NSString * const exec_PRAGMA_foreign_key_list   =  @"PRAGMA foreign_key_list(\"%@\")";
+NSString * const exec_PRAGMA_foreign_key_list   = @"PRAGMA foreign_key_list(\"%@\")";
 
 NSString * const exec_insert                    = @"INSERT INTO %@ (%@) VALUES (%@)";
 NSString * const exec_update                    = @"UPDATE %@ SET %@ WHERE %@";

@@ -74,6 +74,16 @@ extern float const PrimaryColumnShrunkenWidth;
 extern float const DefaultRowHeight;
 extern float const ButtonCornerRadious;
 
+#pragma mark - format
+
+extern NSString * const DateFormatServerStyle;
+extern NSString * const DateFormatShortStyle;
+extern NSString * const DateFormatFullStyle;
+extern NSString * const DateFormatMonthDayYearStyle;
+extern NSString * const DateFormatMonthYear;
+extern NSString * const DateFormatDayMonthYear;
+extern NSString * const DateFormatDayMonthYearNumeric;
+
 #pragma mark - strings
 
 extern NSString * const ExitTitle_STR;
