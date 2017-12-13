@@ -8,9 +8,14 @@
 
 #import "JSONModel.h"
 
-@interface MKModel : JSONModel
+@interface MKModel : JSONModel <NSCoding, NSCopying>
+
+- (instancetype)initWithStringsDictionary:(NSDictionary *)values;
 
 - (NSString *)convertToJson:(NSString *)property;
 - (NSString *)convertToProperty:(NSString *)json;
+
+- (NSString *)titleText;
+- (void)copyValues:(__kindof MKModel *)object;
 
 @end

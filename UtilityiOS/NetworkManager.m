@@ -45,8 +45,8 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
 
 - (instancetype)init {
     if (self = [super init]) {
-        self.manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[AppCommon BaseURL]];
-        DEBUGLOG(@"Base url: %@", [AppCommon BaseURL]);
+        self.manager = [[AFHTTPSessionManager alloc] initWithBaseURL:[Constants BaseURL]];
+        DEBUGLOG(@"Base url: %@", [Constants BaseURL]);
         
         self.manager.requestSerializer = [AFJSONRequestSerializer serializer];
         self.manager.requestSerializer.HTTPMethodsEncodingParametersInURI = [NSSet setWithObjects:@"GET", @"HEAD", nil];

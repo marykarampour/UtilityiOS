@@ -45,10 +45,10 @@ static CGFloat const SEPARATOR_LINE_SIZE = 1.0;
             self.login.backgroundColor = [UIColor blueColor];
             
             self.textFieldsView = [[UIView alloc] init];
-            self.textFieldsView.layer.cornerRadius = ButtonCornerRadious;
+            self.textFieldsView.layer.cornerRadius = [Constants ButtonCornerRadious];
             self.textFieldsView.layer.masksToBounds = YES;
             
-            self.layer.cornerRadius = ButtonCornerRadious;
+            self.layer.cornerRadius = [Constants ButtonCornerRadious];
             self.layer.masksToBounds = YES;
             self.backgroundColor = [UIColor colorWithWhite:0.0 alpha:0.67];
             
@@ -96,7 +96,7 @@ static CGFloat const SEPARATOR_LINE_SIZE = 1.0;
             [self.textFieldsView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:verticalTXConstraint options:NSLayoutFormatAlignAllRight | NSLayoutFormatAlignAllLeft metrics:nil views:views]];
             
             [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:|-(%f)-[_textFieldsView]-(%f)-|", PADDING*2, PADDING*2] options:0 metrics:nil views:views]];
-            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-(%f)-[_textFieldsView(%f)]-(%f)-[_login(%f)]", PADDING*2, TEXTFIELD_HEIGHT*self.textFields.count+SEPARATOR_LINE_SIZE*(self.textFields.count-1), PADDING*2, DefaultRowHeight] options:NSLayoutFormatAlignAllRight | NSLayoutFormatAlignAllLeft metrics:nil views:views]];
+            [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:|-(%f)-[_textFieldsView(%f)]-(%f)-[_login(%f)]", PADDING*2, TEXTFIELD_HEIGHT*self.textFields.count+SEPARATOR_LINE_SIZE*(self.textFields.count-1), PADDING*2, [Constants DefaultRowHeight]] options:NSLayoutFormatAlignAllRight | NSLayoutFormatAlignAllLeft metrics:nil views:views]];
         }
     }
     return self;

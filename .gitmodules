@@ -7,4 +7,4 @@
 	url = https://github.com/jsonmodel/jsonmodel.git
 [submodule "UtilityiOS/GraphORM"]
 	path = UtilityiOS/GraphORM
-	url = https://Karampour@git.bhs-consultants.com/NodeModule/GraphORM.git
+	url = https://git.prometheussoftware.ca/NodeModule/GraphORM.git

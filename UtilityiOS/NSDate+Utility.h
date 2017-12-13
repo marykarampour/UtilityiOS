@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MKDateRange.h"
 
 @interface NSDate (Utility)
 
@@ -16,11 +17,26 @@
 - (NSDate *)startOfWeekGMT;
 - (NSDate *)midnightLocal;
 - (NSDate *)midnightGMT;
+- (NSDate *)endOfDay;
+
+- (NSDate *)weekStartDate;
+
+- (NSDate *)updateCalendarUnit:(NSCalendarUnit)unit value:(NSInteger)value;
+- (NSUInteger)valueForCalendarUnit:(NSCalendarUnit)unit;
+
 - (NSDate *)updateDayWithValue:(NSInteger)value;
 - (NSDate *)updateMonthWithValue:(NSInteger)value;
 - (NSDate *)updateYearWithValue:(NSInteger)value;
 - (NSString *)dateStringWithFormat:(NSString *)format;
 - (NSArray *)monthStringsWithFormat:(NSString *)format untilDate:(NSDate *)date;
 + (NSUInteger)daysBetweenFromDate:(NSDate *)from toDate:(NSDate *)to;
+
+- (MKDateRange *)yearRange;
+- (MKDateRange *)monthRange;
+
+- (NSUInteger)year;
+- (NSUInteger)month;
+
+- (NSNumber *)unixtimestamp;
 
 @end

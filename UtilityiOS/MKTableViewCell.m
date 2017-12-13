@@ -15,7 +15,7 @@
 }
 
 + (CGFloat)estimatedHeight {
-    return DefaultRowHeight;
+    return [Constants DefaultRowHeight];
 }
 
 @end

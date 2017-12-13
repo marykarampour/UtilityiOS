@@ -10,6 +10,15 @@
 
 @implementation UINavigationController (Transition)
 
+- (void)popToViewControllerAtIndex:(NSUInteger)index animated:(BOOL)animated {
+    if (self.viewControllers.count > index) {
+        UIViewController *presentingView = self.viewControllers[index];
+        if (presentingView) {
+            [self popToViewController:presentingView animated:animated];
+        }
+    }
+}
+
 - (void)pushToBottomViewController:(UIViewController *)viewController withDuration:(CFTimeInterval)duration {
     CATransition *transition = [CATransition animation];
     transition.duration = duration;

@@ -11,14 +11,84 @@
 #import "NSString+Utility.h"
 #import <objc/runtime.h>
 
-static DictStringString *JSONMapperDict;
-
 @implementation MKModel
 
-+ (void)initialize {
-    if (!JSONMapperDict) {
-        JSONMapperDict = [self keyMapperDictionaryWithAncestors];
+//+ (void)initialize {
+//    if (!JSONMapperDict) {
+//        JSONMapperDict = [self keyMapperDictionaryForClass:[self class]];//[self keyMapperDictionaryWithAncestors];
+//    }
+//}
+//TODO: make type: JSON vs DB
+//- (instancetype)initWithDB {
+//    if (self = [super init]) {
+//
+//    }
+//}
+
+- (instancetype)initWithStringsDictionary:(NSDictionary *)values {
+    return [self initWithStringsDictionary:values mapper:[[self class] keyMapper]];
+}
+
+- (instancetype)initWithStringsDictionary:(NSDictionary *)values mapper:(JSONKeyMapper *)mapper {
+    if (self = [super init]) {
+        
+        NSArray *names = [[self class] propertyNames];
+        for (NSString *name in names) {
+            NSString *propertyName = [self convertToJson:name];
+            
+            Class class = [self classOfProperty:name forObjectClass:[self class]];
+            id value = values[propertyName];
+            
+            if (value && ![value isKindOfClass:[NSNull class]]) {
+                if (class == [NSString class]) {
+                    if ([value isKindOfClass:[NSString class]] && ![(NSString *)value isEqualToString:@"<null>"]) {
+                        [self setValue:value forKey:name];
+                    }
+                }
+                else if (class == [NSNumber class]) {
+                    if ([value isKindOfClass:[NSString class]]) {
+                        [self setValue:[value stringToNumber] forKey:name];
+                    }
+                    else if ([value isKindOfClass:[NSNumber class]]) {
+                        [self setValue:value forKey:name];
+                    }
+                }
+                else {
+                    [self setValue:@([value boolValue]) forKey:name];
+                }
+            }
+        }
     }
+    return self;
+}
+
++ (NSArray *)propertyNames {
+    NSMutableArray *names = [[NSMutableArray alloc] init];
+    unsigned int count = 0;
+    objc_property_t *properties = class_copyPropertyList(self, &count);
+    
+    for (unsigned int i=0; i<count; i++) {
+        NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
+        [names addObject:name];
+    }
+    free(properties);
+    return names;
+}
+
+- (Class)classOfProperty:(NSString *)name forObjectClass:(Class)objectClass {
+    
+    Class class = nil;
+    objc_property_t property = class_getProperty(objectClass, [name UTF8String]);
+    NSString *attrs = [NSString stringWithCString:property_getAttributes(property) encoding:NSUTF8StringEncoding];
+    NSArray *components = [attrs componentsSeparatedByString:@","];
+    
+    if (components.count > 0) {
+        if ([components[0] characterAtIndex:1] == 'c' || [components[0] characterAtIndex:1] == 'B') {
+            return nil;
+        }
+        class = NSClassFromString([components[0] componentsSeparatedByString:@"\""][1]);
+    }
+    return class;
 }
 
 #pragma mark - JSONModel
@@ -29,28 +99,40 @@ static DictStringString *JSONMapperDict;
 
 #pragma mark - key mapper
 
-+ (JSONKeyMapper *)keyMapper {
-    return [[JSONKeyMapper alloc] initWithModelToJSONDictionary:[self keyMapperDictionaryWithAncestors]];
++ (DictStringString *)JSONMapperDict {
+    return [self keyMapperDictionaryForClass:[self class] format:StringFormatUnderScoreIgnoreDigits];//[self keyMapperDictionaryWithAncestors];
 }
 
-+ (NSDictionary *)keyMapperDictionaryWithAncestors {
++ (JSONKeyMapper *)keyMapper {
+    return [[JSONKeyMapper alloc] initWithModelToJSONDictionary:[self JSONMapperDict]];
+}
+
++ (DictStringString *)DBMapperDict {
+    return [self keyMapperDictionaryForClass:[self class] format:StringFormatUnderScoreIgnoreDigits];//[self keyMapperDictionaryWithAncestors];
+}
+
++ (JSONKeyMapper *)DBKeyMapper {
+    return [[JSONKeyMapper alloc] initWithModelToJSONDictionary:[self DBMapperDict]];
+}
+
++ (NSDictionary *)keyMapperDictionaryWithAncestorsWithFormat:(StringFormat)format {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     Class class = [self class];
     while (class != [MKModel class]) {
-        [dict addEntriesFromDictionary:[self keyMapperDictionaryForClass:class]];
+        [dict addEntriesFromDictionary:[self keyMapperDictionaryForClass:class format:format]];
         class = [class superclass];
     }
     return dict;
 }
 
-+ (NSDictionary *)keyMapperDictionaryForClass:(Class)class {
++ (NSDictionary *)keyMapperDictionaryForClass:(Class)class format:(StringFormat)format {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     unsigned int count = 0;
     objc_property_t *properties = class_copyPropertyList(class, &count);
     
     for (unsigned int i=0; i<count; i++) {
         NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
-        NSString *under_score_name = [name format:StringFormatUnderScoreIgnoreDigits];
+        NSString *under_score_name = [name format:format];
         [dict setValue:under_score_name forKey:name];
     }
     free(properties);
@@ -58,11 +140,11 @@ static DictStringString *JSONMapperDict;
 }
 
 - (NSString *)convertToJson:(NSString *)property {
-    return [JSONMapperDict objectForKey:property];
+    return [[[self class] JSONMapperDict] objectForKey:property];
 }
 
 - (NSString *)convertToProperty:(NSString *)json {
-    NSArray *keys = [JSONMapperDict allKeysForObject:json];
+    NSArray *keys = [[[self class] JSONMapperDict] allKeysForObject:json];
     if (keys && keys.count) {
         return keys[0];
     }
@@ -73,31 +155,13 @@ static DictStringString *JSONMapperDict;
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super init]) {
-        unsigned int count = 0;
-        objc_property_t *properties = class_copyPropertyList([self class], &count);
-        
-        for (unsigned int i=0; i<count; i++) {
-            NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
-            id value = [aDecoder decodeObjectForKey:name];
-            if (value) {
-                [self setValue:value forKey:name];
-            }
-        }
-        free(properties);
+        [self MKInitWithCoder:aDecoder];
     }
     return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-    unsigned int count = 0;
-    objc_property_t *properties = class_copyPropertyList([self class], &count);
-    
-    for (unsigned int i=0; i<count; i++) {
-        NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
-        id value = [self valueForKey:name];
-        [aCoder encodeObject:value forKey:name];
-    }
-    free(properties);
+    [self MKEncodeWithCoder:aCoder];
 }
 
 - (id)copyWithZone:(NSZone *)zone {
@@ -109,29 +173,25 @@ static DictStringString *JSONMapperDict;
 }
 
 - (NSUInteger)hash {
-    NSUInteger hashPrime = 179;
-    NSUInteger hashEven = 178;
-    NSUInteger hashResult = 1;
-    NSUInteger hashObjects = 1;
+    return [self MKHash];
+}
+
+- (NSString *)titleText {
+    return @"";
+}
+
+- (void)copyValues:(__kindof MKModel *)object {
     unsigned int count = 0;
-    
-    objc_property_t *properties = class_copyPropertyList([self class], &count);
+    objc_property_t *properties = class_copyPropertyList([object class], &count);
     
     for (unsigned int i=0; i<count; i++) {
         NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
-        id value = [self valueForKey:name];
-        if ([value isKindOfClass:[NSObject class]]) {
-            hashObjects = hashObjects ^ [value hash];
-        }
-        else {
-            hashResult = hashResult*hashPrime + (value ? hashPrime : hashEven);
+        if ([self respondsToSelector:NSSelectorFromString(name)] && [object valueForKey:name]) {
+            [self setValue:[object valueForKey:name] forKey:name];
         }
     }
     free(properties);
-    
-    return hashResult + hashObjects;
 }
-
 
 
 @end

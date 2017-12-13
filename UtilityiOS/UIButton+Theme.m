@@ -15,7 +15,7 @@
     
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     button.titleLabel.textAlignment = NSTextAlignmentCenter;
-    button.layer.cornerRadius = ButtonCornerRadious;
+    button.layer.cornerRadius = [Constants ButtonCornerRadious];
     button.layer.masksToBounds = YES;
     [button setTitleShadowColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
     button.titleLabel.shadowOffset = CGSizeMake(0.0, -0.5);

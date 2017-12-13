@@ -10,6 +10,8 @@
 
 @interface UINavigationController (Transition)
 
+- (void)popToViewControllerAtIndex:(NSUInteger)index animated:(BOOL)animated;
+
 - (void)pushToBottomViewController:(UIViewController *)viewController withDuration:(CFTimeInterval)duration;
 - (void)popFromBottomViewControllerWithDuration:(CFTimeInterval)duration;
 - (void)popToRootFromBottomViewControllerWithDuration:(CFTimeInterval)duration;

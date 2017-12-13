@@ -41,16 +41,16 @@
 }
 
 - (UIBarButtonItem *)logoutButton {
-    return [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(ExitTitle_STR, nil) style:UIBarButtonItemStylePlain target:self action:@selector(logout)];
+    return [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString([Constants ExitTitle_STR], nil) style:UIBarButtonItemStylePlain target:self action:@selector(logout)];
 }
 
 - (void)logout {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(ExitTitle_STR, nil) message:NSLocalizedString(@"Are you sure you want to exit?", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"YES", nil) otherButtonTitles:NSLocalizedString(@"Cancel", nil), nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString([Constants ExitTitle_STR], nil) message:NSLocalizedString(@"Are you sure you want to exit?", nil) delegate:self cancelButtonTitle:NSLocalizedString(@"YES", nil) otherButtonTitles:NSLocalizedString(@"Cancel", nil), nil];
     [alert show];
 }
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    if ([alertView.title isEqualToString:NSLocalizedString(ExitTitle_STR, nil)] && buttonIndex == 0) {
+    if ([alertView.title isEqualToString:NSLocalizedString([Constants ExitTitle_STR], nil)] && buttonIndex == 0) {
         [[SplitViewManager instance].splitViewController animateLogout];
     }
 }

@@ -60,12 +60,86 @@
     
     for (unsigned int i=0; i<count; i++) {
         NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
-        [object setValue:[[self valueForKey:name] copyWithZone:zone] forKey:name];
+        id value = [self valueForKey:name];
+        if ([value isKindOfClass:[NSArray class]]) {
+            NSArray *array = [[NSArray alloc] initWithArray:value copyItems:YES];
+            [object setValue:array forKey:name];
+        }
+        else {
+            [object setValue:[value copyWithZone:zone] forKey:name];
+        }
     }
     free(properties);
     
     return object;
 }
+
+- (void)MKInitWithCoder:(NSCoder *)aDecoder {
+    unsigned int count = 0;
+    objc_property_t *properties = class_copyPropertyList([self class], &count);
+    
+    for (unsigned int i=0; i<count; i++) {
+        NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
+        id value = [aDecoder decodeObjectForKey:name];
+        if (value) {
+            [self setValue:value forKey:name];
+        }
+    }
+    free(properties);
+}
+
+- (void)MKEncodeWithCoder:(NSCoder *)aCoder {
+    unsigned int count = 0;
+    objc_property_t *properties = class_copyPropertyList([self class], &count);
+    
+    for (unsigned int i=0; i<count; i++) {
+        NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
+        id value = [self valueForKey:name];
+        [aCoder encodeObject:value forKey:name];
+    }
+    free(properties);
+}
+
+- (NSUInteger)MKHash {
+    NSUInteger hashPrime = 179;
+    NSUInteger hashEven = 178;
+    NSUInteger hashResult = 1;
+    NSUInteger hashObjects = 1;
+    unsigned int count = 0;
+    
+    objc_property_t *properties = class_copyPropertyList([self class], &count);
+    
+    for (unsigned int i=0; i<count; i++) {
+        NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
+        id value = [self valueForKey:name];
+        if ([value isKindOfClass:[NSObject class]]) {
+            hashObjects = hashObjects ^ [value hash];
+        }
+        else {
+            hashResult = hashResult*hashPrime + (value ? hashPrime : hashEven);
+        }
+    }
+    free(properties);
+    
+    return hashResult + hashObjects;
+}
+
++ (StringArr *)propertyNamesOfClass:(Class)objectClass {
+    unsigned int varCount = 0;
+    objc_property_t *vars = class_copyPropertyList(objectClass, &varCount);
+    MStringArr *arr = [[NSMutableArray alloc] init];
+    
+    for (unsigned int i=0; i<varCount; i++) {
+        objc_property_t var = vars[i];
+        NSString *name = [NSString stringWithUTF8String:property_getName(var)];
+        [arr addObject:name];
+    }
+    free(vars);
+    return arr;
+}
+
+
+
 
 
 

@@ -26,11 +26,11 @@
 #pragma mark - login/out
 
 - (void)animateLogin {
-    [[self splitViewDetailMainNavController] popToRootFromBottomViewControllerWithDuration:TransitionAnimationDuration];
-    [self performSelector:@selector(showNavigationBar) withObject:nil afterDelay:TransitionAnimationDuration];
-    [self performSelector:@selector(showPrimaryView) withObject:nil afterDelay:(2*TransitionAnimationDuration)];
-    [self performSelector:@selector(showPrimaryListNavigationController) withObject:nil afterDelay:(3*TransitionAnimationDuration)];
-    [self performSelector:@selector(showDetailBackground) withObject:nil afterDelay:(4*TransitionAnimationDuration)];
+    [[self splitViewDetailMainNavController] popToRootFromBottomViewControllerWithDuration:[Constants TransitionAnimationDuration]];
+    [self performSelector:@selector(showNavigationBar) withObject:nil afterDelay:[Constants TransitionAnimationDuration]];
+    [self performSelector:@selector(showPrimaryView) withObject:nil afterDelay:(2*[Constants TransitionAnimationDuration])];
+    [self performSelector:@selector(showPrimaryListNavigationController) withObject:nil afterDelay:(3*[Constants TransitionAnimationDuration])];
+    [self performSelector:@selector(showDetailBackground) withObject:nil afterDelay:(4*[Constants TransitionAnimationDuration])];
 }
 
 - (void)showDetailBackground {
@@ -60,8 +60,8 @@
     [self setSelectedTab:TabBarIndexFirst];
     [self hideDetailBackground];
     [self updatePrimaryViewWithState:PrimaryViewStateHidden];
-    [self performSelector:@selector(hideNavigationBar) withObject:nil afterDelay:TransitionAnimationDuration];
-    [self performSelector:@selector(popToLoginScreen) withObject:nil afterDelay:(2 * TransitionAnimationDuration)];
+    [self performSelector:@selector(hideNavigationBar) withObject:nil afterDelay:[Constants TransitionAnimationDuration]];
+    [self performSelector:@selector(popToLoginScreen) withObject:nil afterDelay:(2 * [Constants TransitionAnimationDuration])];
 }
 
 - (void)hideNavigationBar {
@@ -70,7 +70,7 @@
 
 - (void)popToLoginScreen {
     LoginViewController *loginViewController = [[LoginViewController alloc] init];
-    [[self splitViewDetailMainNavController] pushToBottomViewController:loginViewController withDuration:TransitionAnimationDuration];
+    [[self splitViewDetailMainNavController] pushToBottomViewController:loginViewController withDuration:[Constants TransitionAnimationDuration]];
 }
 
 #pragma mark - updating views

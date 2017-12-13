@@ -95,8 +95,8 @@
 
 - (void)pushWithFade:(BOOL)fade pair:(MasterDetailViewControllerPair * _Nonnull)pair forTabItem:(TabBarIndex)index {
     if (fade) {
-        [(UINavigationController *)self.pairs[index].master pushWithFadeViewController:pair.master withDuration:TransitionAnimationDuration];
-        [(UINavigationController *)self.pairs[index].detail pushWithFadeViewController:pair.detail withDuration:2*TransitionAnimationDuration];
+        [(UINavigationController *)self.pairs[index].master pushWithFadeViewController:pair.master withDuration:[Constants TransitionAnimationDuration]];
+        [(UINavigationController *)self.pairs[index].detail pushWithFadeViewController:pair.detail withDuration:2*[Constants TransitionAnimationDuration]];
     }
     else {
         [(UINavigationController *)self.pairs[index].master pushViewController:pair.master animated:NO];
@@ -106,8 +106,8 @@
 
 - (void)popToRootWithFade:(BOOL)fade forTabItem:(TabBarIndex)index {
     if (fade) {
-        [(UINavigationController *)self.primaryTabBarController.viewControllers[index] popWithFadeViewControllerWithDuration:TransitionAnimationDuration];
-        [(UINavigationController *)self.detailNavigationControllers[index] popWithFadeViewControllerWithDuration:2*TransitionAnimationDuration];
+        [(UINavigationController *)self.primaryTabBarController.viewControllers[index] popWithFadeViewControllerWithDuration:[Constants TransitionAnimationDuration]];
+        [(UINavigationController *)self.detailNavigationControllers[index] popWithFadeViewControllerWithDuration:2*[Constants TransitionAnimationDuration]];
     }
     else {
         [(UINavigationController *)self.primaryTabBarController.viewControllers[index] popToRootViewControllerAnimated:NO];
@@ -122,19 +122,19 @@
     CGFloat width = 0.0;
     switch (state) {
         case PrimaryViewStateVisible:
-            width = PrimaryColumnWidth;
+            width = [Constants PrimaryColumnWidth];
             break;
         case PrimaryViewStateShrunken:
-            width = PrimaryColumnShrunkenWidth;
+            width = [Constants PrimaryColumnShrunkenWidth];
             break;
         default:
             break;
     }
     
     [UIView beginAnimations:nil context:NULL];
-    [UIView setAnimationDuration:TransitionAnimationDuration];
+    [UIView setAnimationDuration:[Constants TransitionAnimationDuration]];
     
-    self.splitViewController.preferredPrimaryColumnWidthFraction = width/[AppCommon screenWidth];
+    self.splitViewController.preferredPrimaryColumnWidthFraction = width/[Constants screenWidth];
     self.primaryTabBarController.tabBar.hidden = (state == PrimaryViewStateVisible ? NO : YES);
     [UIView commitAnimations];
 }
