@@ -13,7 +13,7 @@
 
 - (AFHTTPSessionManager *)service:(NSDictionary *)params completion:(void (^)(id, NSError *))completion {
     [[NetworkManager instance] setHeaders:[self headers]];
-    return [[NetworkManager instance] requestURL:kServiceEndpointURL type:NetworkRequestTypePOST parameters:params completion:^(id result, NSError *error) {
+    return [[NetworkManager instance] requestURL:kServiceEndpointURL type:NetworkRequestType_POST parameters:params completion:^(id result, NSError *error) {
         
     }];
 }
@@ -43,13 +43,43 @@
                     modelObject = result;
                 }
                 else {
-                    modelObject = [[modelClass alloc] initWithDictionary:result error:&modelError];
+                    NSMutableArray *arr = [[NSMutableArray alloc] init];
+                    for (NSDictionary *dict in result) {
+                        id obj = [[modelClass alloc] initWithDictionary:dict error:&modelError];
+                        if (obj && [obj isKindOfClass:modelClass]) {
+                            [arr addObject:obj];
+                        }
+                    }
+                    modelObject = arr;
                 }
             }
             else {
                 modelObject = [[modelClass alloc] initWithDictionary:result error:&modelError];
             }
             completion(modelObject, modelError);
+        }
+    }
+    else {
+        completion(nil, nil);//TODO: fix
+    }
+}
+
+- (void)processValuesInResult:(id)result error:(NSError *)error completion:(void (^)(id, NSError *))completion {
+    if (error || !result) {
+        completion(nil, error);
+    }
+    else if (result) {
+        if ([result isKindOfClass:[NSArray class]]) {
+            NSMutableArray *arr = [[NSMutableArray alloc] init];
+            for (NSDictionary *dict in result) {
+                if ([dict isKindOfClass:[NSDictionary class]]) {
+                    [arr addObjectsFromArray:dict.allValues];
+                }
+            }
+            completion(arr, error);
+        }
+        else {
+            completion(result, error);
         }
     }
     else {

@@ -18,4 +18,10 @@
 
 + (StringArr *)propertyNamesOfClass:(Class)objectClass;
 
++ (void)swizzleSelectorOriginal:(SEL)originalSelector swizzled:(SEL)swizzledSelector;
+/** @brief This method uses above to swizzle a method
+ @param selector to be swizzled.
+ @note The corresponding swizzled method with format swizzled_XXX should be implemeneted in your class for selector named XXX */
++ (void)swizzleSelector:(SEL)selector;
+
 @end

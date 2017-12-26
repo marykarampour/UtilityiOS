@@ -12,13 +12,31 @@
 #import "Constants.h"
 
 typedef NS_ENUM(NSUInteger, NetworkRequestType) {
-    NetworkRequestTypeGET,
-    NetworkRequestTypePOST,
-    NetworkRequestTypePUT,
-    NetworkRequestTypeDELETE,
-    NetworkRequestTypeHEAD,
-    NetworkRequestTypePATCH
+    NetworkRequestType_GET,
+    NetworkRequestType_POST,
+    NetworkRequestType_PUT,
+    NetworkRequestType_DELETE,
+    NetworkRequestType_HEAD,
+    NetworkRequestType_PATCH
 };
+
+typedef NS_ENUM(NSUInteger, NetworkContentType) {
+    NetworkContentType_JSON,
+    NetworkContentType_HTML,
+    NetworkContentType_OCTET,
+    NetworkContentType_GZIP,
+    NetworkContentType_JPEG
+};
+
+
+@interface MultipartInfo : NSObject
+
+@property (nonatomic, assign) NetworkContentType contentType;
+@property (nonatomic, strong) NSString *fileName;
+@property (nonatomic, strong) NSString *filePath;
+@property (nonatomic, strong) NSData *data;
+
+@end
 
 @interface NetworkManager : NSObject
 
@@ -28,7 +46,12 @@ typedef NS_ENUM(NSUInteger, NetworkRequestType) {
  @param headers the keys are keys for header, values are header value
  **/
 - (void)setHeaders:(NSDictionary *)headers;
+- (void)resetAuthorizationHeader;
 
 - (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NetworkRequestType)type parameters:(NSDictionary *)parameters completion:(void (^)(id result, NSError *error))completion;
+
+- (AFHTTPSessionManager *)requestMultipartFormURL:(NSString *)url type:(NetworkRequestType)type parameters:(NSDictionary *)parameters data:(NSArray<MultipartInfo *> *)data completion:(void (^ _Nullable )(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error))completion;
+
+- (AFHTTPSessionManager *)downloadURL:(NSString *)url toFile:(NSString *)filname completion:(void (^)(id result, NSError *error))completion;
 
 @end

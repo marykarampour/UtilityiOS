@@ -172,10 +172,6 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
     return [UIApplication sharedApplication].statusBarFrame.size.height;
 }
 
-+ (TargetType)appTargetType {
-    return 0;
-}
-
 + (CGFloat)safeAreaInsets {
     UIWindow *window = ((AppDelegate *)[UIApplication sharedApplication].delegate).window;
     if ([window respondsToSelector:@selector(safeAreaInsets)]) {
@@ -317,6 +313,20 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
     NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
     [defs setObject:nil forKey:DefaultSavedUsersKey];
     [defs synchronize];
+}
+
+#pragma mark - AppCommon abstracts
+
++ (TargetType)appTargetType {
+    return 0;
+}
+
++ (NSString *)authorizationUsername {
+    return @"";
+}
+
++ (NSString *)authorizationPassword {
+    return @"";
 }
 
 

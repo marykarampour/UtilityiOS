@@ -86,7 +86,9 @@ extern NSString * const DateFormatDayMonthYearNumeric;
 
 
 #pragma mark - classes
-
+/** @brief This class contains the constants used throughout the app
+ @note Projects must define a subclass of this class called AppCommon containing app specific constants. Different implementations are done via swizzling in A category of Constants. All methods are class methods, no instance of this class is created.
+ */
 @interface Constants : NSObject
 
 #pragma mark - networking
@@ -131,7 +133,12 @@ extern NSString * const DateFormatDayMonthYearNumeric;
 + (NSString *)versionString;
 + (NSString *)bundleID;
 + (NSString *)targetName;
+
+#pragma mark - AppCommon abstracts
+
 + (TargetType)appTargetType;
++ (NSString *)authorizationUsername;
++ (NSString *)authorizationPassword;
 
 @end
 

@@ -139,8 +139,25 @@
 }
 
 
++ (void)swizzleSelectorOriginal:(SEL)originalSelector swizzled:(SEL)swizzledSelector {
+    Class class = object_getClass(self);
+    Method originalMethod =class_getInstanceMethod(class, originalSelector);
+    Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
+    
+    BOOL addMethod = class_addMethod(class, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));
+    if (addMethod) {
+        class_replaceMethod(class, swizzledSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));
+    }
+    else {
+        method_exchangeImplementations(originalMethod, swizzledMethod);
+    }
+}
 
-
++ (void)swizzleSelector:(SEL)selector {
+    NSString *swizzledSelectorName = [NSString stringWithFormat:@"swizzled_%@", NSStringFromSelector(selector)];
+    SEL swizzledSelector = NSSelectorFromString(swizzledSelectorName);
+    [self swizzleSelectorOriginal:selector swizzled:swizzledSelector];
+}
 
 
 @end
