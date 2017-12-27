@@ -118,22 +118,37 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
 
 + (NSString *)BaseURLString {
     NSString *https = [Constants USING_HTTPS] ? @"https" : @"http";
+    NSString *port = @"3000";
+    NSString *url = @"";
     switch ([Constants ServerEnvironmentVariable]) {
         case ServerEnvironment_PROD:
-            return [NSString stringWithFormat:@"%@%@:3000", https, [Constants BaseProductionURL]];
+            url = [Constants BaseProductionURL];
+            break;
+            
         case ServerEnvironment_TESTING_IN:
-            return [NSString stringWithFormat:@"%@%@:3000", https, [Constants BaseTestingInURL]];
-        case ServerEnvironment_TESTING_OUT:
-            return [NSString stringWithFormat:@"%@%@:3001", https, [Constants BaseTestingOutURL]];
+            url = [Constants BaseTestingInURL];
+            break;
+            
+        case ServerEnvironment_TESTING_OUT: {
+            port = @"3001";
+            url = [Constants BaseTestingOutURL];
+        }
+            break;
+            
         case ServerEnvironment_LOCAL:
-            return [NSString stringWithFormat:@"%@%@:3000", https, [Constants BaseLocalHostURL]];
+            url = [Constants BaseLocalHostURL];
+            break;
+            
         case ServerEnvironment_DEV_IN:
-            return [NSString stringWithFormat:@"%@%@:3000", https, [Constants BaseDevInURL]];
+            url = [Constants BaseDevInURL];
+            break;
+            
         case ServerEnvironment_DEV_OUT:
         default:
-            return [NSString stringWithFormat:@"%@%@:3000", https, [Constants BaseDevOutURL]];
+            url = [Constants BaseDevOutURL];
             break;
     }
+    return [NSString stringWithFormat:@"%@%@:%@", https, url, port];
 }
 
 + (NSURL *)BaseURL {
