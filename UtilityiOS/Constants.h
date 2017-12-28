@@ -29,16 +29,24 @@
 
 #pragma mark - typedefs
 
-typedef NS_ENUM(NSUInteger, ServerEnvironment) {
+typedef NSInteger ServerEnvironment;
+typedef NSInteger TargetType;
+
+enum {
+    ServerEnvironment_NONE = -1,
     ServerEnvironment_DEV_IN,
     ServerEnvironment_DEV_OUT,
     ServerEnvironment_TESTING_IN,
     ServerEnvironment_TESTING_OUT,
     ServerEnvironment_LOCAL,
-    ServerEnvironment_PROD
+    ServerEnvironment_PROD,
+    ServerEnvironment_BASE
 };
 
-typedef NSUInteger TargetType;
+enum {
+    TargetType_NONE = -1,
+    TargetType_BASE
+};
 
 typedef NSArray<NSString *>                                     StringArr;
 typedef NSMutableArray<NSString *>                              MStringArr;
@@ -125,7 +133,7 @@ extern NSString * const DateFormatDayMonthYearNumeric;
 + (NSString *)TouchID_STR;
 
 + (NSString *)BaseURLString;
-+ (NSURL *)BaseURL;
++ (NSString *)BasePort;
 + (BOOL)isIPhone;
 + (BOOL)isIPad;
 + (CGFloat)screenWidth;
@@ -134,8 +142,15 @@ extern NSString * const DateFormatDayMonthYearNumeric;
 + (NSString *)bundleID;
 + (NSString *)targetName;
 
-#pragma mark - AppCommon abstracts
+#pragma mark - Push Notification
 
++ (void)setPushNotificationDeviceToken:(NSData *)deviceToken;
++ (NSString *)pushNotificationDeviceToken;
++ (NSString *)pushNotificationPlatform;
+
+#pragma mark - abstracts
+
++ (NSURL *)BaseURL;
 + (TargetType)appTargetType;
 + (NSString *)authorizationUsername;
 + (NSString *)authorizationPassword;

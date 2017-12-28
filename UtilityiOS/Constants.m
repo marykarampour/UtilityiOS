@@ -15,6 +15,7 @@
 static NSString * const DefaultLoggedInUsersKey = @"DefaultLoggedInUsersKey";
 static NSString * const DefaultVersionKey       = @"DefaultVersionKey";
 static NSString * const DefaultSavedUsersKey    = @"DefaultSavedUsersKey";
+static NSString * const DefaultPushNotificationDeviceTokenKey    = @"DefaultPushNotificationDeviceTokenKey";
 
 #pragma mark - format
 
@@ -31,7 +32,6 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
 
 @implementation Constants
 
-
 #pragma mark - networking
 
 + (ServerEnvironment)ServerEnvironmentVariable {
@@ -47,7 +47,7 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
 }
 
 + (NSString *)BaseTestingInURL {
-    return @"://10.1.0.129";
+    return @"://10.1.0.119";
 }
 
 + (NSString *)BaseTestingOutURL {
@@ -55,11 +55,11 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
 }
 
 + (NSString *)BaseDevInURL {
-    return @"://10.1.0.119";
+    return @"://10.1.0.129";
 }
 
 + (NSString *)BaseDevOutURL {
-    return @"://kaching.baldhead.com";
+    return @"://neomorpheus.baldhead.com";
 }
 
 + (NSString *)BaseProductionURL {
@@ -118,7 +118,6 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
 
 + (NSString *)BaseURLString {
     NSString *https = [Constants USING_HTTPS] ? @"https" : @"http";
-    NSString *port = @"3000";
     NSString *url = @"";
     switch ([Constants ServerEnvironmentVariable]) {
         case ServerEnvironment_PROD:
@@ -130,7 +129,6 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
             break;
             
         case ServerEnvironment_TESTING_OUT: {
-            port = @"3001";
             url = [Constants BaseTestingOutURL];
         }
             break;
@@ -148,11 +146,15 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
             url = [Constants BaseDevOutURL];
             break;
     }
-    return [NSString stringWithFormat:@"%@%@:%@", https, url, port];
+    return [NSString stringWithFormat:@"%@%@:%@", https, url, [Constants BasePort]];
 }
 
 + (NSURL *)BaseURL {
     return [NSURL URLWithString:[self BaseURLString]];
+}
+
++ (NSString *)BasePort {
+    return @"";
 }
 
 + (BOOL)isIPhone {
@@ -328,6 +330,27 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
     NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
     [defs setObject:nil forKey:DefaultSavedUsersKey];
     [defs synchronize];
+}
+
+#pragma mark - Push Notification
+
++ (void)setPushNotificationDeviceToken:(NSData *)deviceToken {
+    NSString *token = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
+    token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
+    [[NSUserDefaults standardUserDefaults] setObject:token forKey:DefaultPushNotificationDeviceTokenKey];
+    [[NSUserDefaults standardUserDefaults] synchronize];
+}
+
++ (NSString *)pushNotificationDeviceToken {
+    NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:DefaultPushNotificationDeviceTokenKey];
+    return token ? token : @"";
+}
+
++ (NSString *)pushNotificationPlatform {
+#if DEBUG
+    return @"APNS_SANDBOX";
+#endif
+    return @"APNS";
 }
 
 #pragma mark - AppCommon abstracts

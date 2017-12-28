@@ -91,6 +91,8 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
     return requestOperator(self.manager, selector, url, parameters,
                            ^(NSURLSessionDataTask *task, id responseObject) {
                                DEBUGLOG(@"Success Response: %@ - %@", task.response, responseObject);
+                               DEBUGLOG(@"Parameters: %@", parameters.description);
+
                                NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)responseObject;
                                if ([httpResponse respondsToSelector:@selector(allHeaderFields)]) {
                                   DEBUGLOG(@"Success Response Header: %@", [httpResponse allHeaderFields]);
@@ -99,9 +101,10 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
                            },
                            ^(NSURLSessionDataTask *task, NSError *error) {
                                DEBUGLOG(@"Error Response: %@ - %@", task.response, error.localizedDescription);
+                               DEBUGLOG(@"Parameters: %@", parameters.description);
+
                                completion(nil, error);
                            });
-    
 }
 
 - (AFHTTPSessionManager *)downloadURL:(NSString *)url toFile:(NSString *)filname completion:(void (^)(id, NSError *))completion {
