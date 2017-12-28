@@ -193,5 +193,25 @@
     free(properties);
 }
 
+- (void)setValuesOfObject:(__kindof MKModel *)object ancestors:(BOOL)ancestors {
+    MStringArr *arr = [[NSMutableArray alloc] init];
+    MKModel *currentObject = object;
+    Class currentClass = [currentObject class];
+    if (ancestors) {
+        while (currentClass != [MKModel class]) {
+            [arr addObjectsFromArray:[NSObject propertyNamesOfClass:currentClass]];
+            currentClass = [currentClass superclass];
+        }
+    }
+    else {
+        [arr addObjectsFromArray:[NSObject propertyNamesOfClass:currentClass]];
+    }
+    for (NSString *name in arr) {
+        id value = [object valueForKey:name];
+        if ([self respondsToSelector:NSSelectorFromString(name)]) {
+            [self setValue:value forKey:name];
+        }
+    }
+}
 
 @end

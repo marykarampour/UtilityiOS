@@ -87,15 +87,16 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
     
     SEL selector = [selectors[@(type)] pointerValue];
     operator requestOperator = (operator)[self.manager methodForSelector:selector];
-    
+    DEBUGLOG(@"Request Headers: %@", [self.manager.requestSerializer HTTPRequestHeaders]);
+    DEBUGLOG(@"Parameters: %@", parameters.description);
+
     return requestOperator(self.manager, selector, url, parameters,
                            ^(NSURLSessionDataTask *task, id responseObject) {
                                DEBUGLOG(@"Success Response: %@ - %@", task.response, responseObject);
-                               DEBUGLOG(@"Parameters: %@", parameters.description);
 
                                NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)responseObject;
                                if ([httpResponse respondsToSelector:@selector(allHeaderFields)]) {
-                                  DEBUGLOG(@"Success Response Header: %@", [httpResponse allHeaderFields]);
+                                   DEBUGLOG(@"Success Response Headers: %@", [httpResponse allHeaderFields]);
                                }
                                completion(responseObject, nil);
                            },

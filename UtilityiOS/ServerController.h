@@ -29,8 +29,11 @@
 + (NSDictionary *)headersForUsername:(NSString *)username;
 + (NSDictionary *)basicAuthHeaders;
 
+/** @brief Use when deserialized values from JSON to model objects are needed */
 - (void)processResult:(id)result error:(NSError *)error class:(Class)modelClass completion:(void (^)(id result, NSError *error))completion;
+/** @brief Use when raw values from JSON are needed */
 - (void)processValuesInResult:(id)result error:(NSError *)error completion:(void (^)(id result, NSError *error))completion;
+/** @brief Use to process data/file downloaded from url, it returns NSData object in completion */
 - (void)processDataURLResult:(id)result error:(NSError *)error completion:(void (^)(id result, NSError *error))completion;
 
 @end
