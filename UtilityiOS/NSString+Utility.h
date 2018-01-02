@@ -61,5 +61,6 @@ typedef NS_ENUM(NSUInteger, StringFormat) {
 
 
 - (NSNumber *)stringToNumber;
+- (NSString *)randomStringWithLenght:(NSUInteger)length;
 
 @end

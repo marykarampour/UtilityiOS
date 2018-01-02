@@ -80,13 +80,20 @@
     return result;
 }
 
-
-
 - (NSNumber *)stringToNumber {
     
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterNoStyle;
     return [formatter numberFromString:self];
+}
+
+- (NSString *)randomStringWithLenght:(NSUInteger)length {
+    NSString *seed = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    NSMutableString *randomStr = [[NSMutableString alloc] initWithCapacity:length];
+    for (unsigned int i=0; i<length; i++) {
+        [randomStr appendFormat:@"%C", [seed characterAtIndex:arc4random_uniform(seed.length)]];
+    }
+    return randomStr;
 }
 
 @end
