@@ -47,7 +47,7 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
 }
 
 + (NSString *)BaseTestingInURL {
-    return @"://10.1.0.119";
+    return @"://10.1.0.119";//same as @"://morpheus.baldhead.com"
 }
 
 + (NSString *)BaseTestingOutURL {
@@ -114,6 +114,54 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
 
 + (NSString *)TouchID_STR {
     return @"Touch ID";
+}
+
++ (NSString *)OK_STR {
+    return @"OK";
+}
+
++ (NSString *)Cancel_STR {
+    return @"Cancel";
+}
+
++ (NSString *)Skip_STR {
+    return @"Skip";
+}
+
++ (NSString *)PIN_STR {
+    return @"PIN";
+}
+
++ (NSString *)Username_STR {
+    return @"Username";
+}
+
++ (NSString *)Password_STR {
+    return @"Password";
+}
+
++ (NSString *)Enter_BLANK_STR {
+    return @"Please Enter Your %@";
+}
+
++ (NSString *)Incorrect_BLANK_STR {
+    return @"Incorrect %@";
+}
+
++ (NSString *)LocationRestrictedTitle_STR {
+    return @"Location access is restricted!";
+}
+
++ (NSString *)LocationRestrictedMessage_STR {
+    return @"";
+}
+
++ (float)GeoFenceRadiousKiloMeter {
+    return 1.0;
+}
+
++ (float)GeoFenceRadiousMeter {
+    return [Constants GeoFenceRadiousKiloMeter]*1000.0;
 }
 
 + (NSString *)BaseURLString {

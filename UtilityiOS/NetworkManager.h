@@ -46,6 +46,7 @@ typedef NS_ENUM(NSUInteger, NetworkContentType) {
  @param headers the keys are keys for header, values are header value
  **/
 - (void)setHeaders:(NSDictionary *)headers;
+- (void)resetHeaders:(NSArray *)headers;
 - (void)resetAuthorizationHeader;
 
 - (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NetworkRequestType)type parameters:(NSDictionary *)parameters completion:(void (^)(id result, NSError *error))completion;

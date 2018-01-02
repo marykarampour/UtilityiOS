@@ -22,6 +22,15 @@ static AppThemeStyle const THEME_STYLE = AppThemeStyleLight;
     [[UITabBar appearance] setTranslucent:NO];
     [[UITabBarItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:[self textDefaultColor], NSFontAttributeName:[self mediumLabelFont]} forState:UIControlStateNormal];
     [[UITabBarItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:[self textHighlightColor], NSFontAttributeName:[self mediumLabelFont]} forState:UIControlStateSelected];
+    
+    [[UISegmentedControl appearance] setTitleTextAttributes:
+     @{NSForegroundColorAttributeName:[self buttonTextColor],
+       NSFontAttributeName:[self mediumLabelFont]} forState:UIControlStateNormal];
+    [[UISegmentedControl appearance] setTitleTextAttributes:
+     @{NSForegroundColorAttributeName:[self buttonBackgroundColor],
+       NSFontAttributeName:[self mediumLabelFont]} forState:UIControlStateSelected];
+    [[UISegmentedControl appearance] setBackgroundColor:[AppTheme buttonTextColor]];
+    [[UISegmentedControl appearance] setTintColor:[AppTheme buttonBackgroundColor]];
 }
 
 #pragma mark - color
@@ -46,6 +55,14 @@ static AppThemeStyle const THEME_STYLE = AppThemeStyleLight;
     switch (THEME_STYLE) {
         case AppThemeStyleLight: return [UIColor blackColor];
         case AppThemeStyleDark: return [UIColor grayColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
++ (UIColor *)translusentBackground {
+    switch (THEME_STYLE) {
+        case AppThemeStyleLight: return [UIColor colorWithWhite:0.0 alpha:0.67];
+        case AppThemeStyleDark: return [UIColor colorWithWhite:1.0 alpha:0.33];
         default: return [UIColor whiteColor];
     }
 }
@@ -146,6 +163,30 @@ static AppThemeStyle const THEME_STYLE = AppThemeStyleLight;
     }
 }
 
++ (UIColor *)buttonBackgroundColor {
+    switch (THEME_STYLE) {
+        case AppThemeStyleLight: return [UIColor blackColor];
+        case AppThemeStyleDark: return [UIColor whiteColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
++ (UIColor *)buttonTextColor {
+    switch (THEME_STYLE) {
+        case AppThemeStyleLight: return [UIColor whiteColor];
+        case AppThemeStyleDark: return [UIColor blackColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
++ (UIColor *)buttonHighlightedColor {
+    switch (THEME_STYLE) {
+        case AppThemeStyleLight: return [UIColor whiteColor];
+        case AppThemeStyleDark: return [UIColor blackColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
 #pragma mark - font
 
 + (UIFont *)smallLabelFont {
@@ -172,5 +213,8 @@ static AppThemeStyle const THEME_STYLE = AppThemeStyleLight;
     return [UIFont boldSystemFontOfSize:22.0];
 }
 
++ (UIFont *)largeBoldTitleFont {
+    return [UIFont boldSystemFontOfSize:24.0];
+}
 
 @end

@@ -109,6 +109,8 @@ extern NSString * const DateFormatDayMonthYearNumeric;
 + (NSString *)BaseDevInURL;
 + (NSString *)BaseDevOutURL;
 + (NSString *)BaseProductionURL;
++ (NSString *)BaseURLString;
++ (NSString *)BasePort;
 
 #pragma mark - constants
 
@@ -117,6 +119,8 @@ extern NSString * const DateFormatDayMonthYearNumeric;
 + (float)PrimaryColumnShrunkenWidth;
 + (float)DefaultRowHeight;
 + (float)ButtonCornerRadious;
++ (float)GeoFenceRadiousMeter;
++ (float)GeoFenceRadiousKiloMeter;
 
 #pragma mark - defaults
 
@@ -131,9 +135,19 @@ extern NSString * const DateFormatDayMonthYearNumeric;
 + (NSString *)ExitTitle_STR;
 + (NSString *)FaceID_STR;
 + (NSString *)TouchID_STR;
++ (NSString *)OK_STR;
++ (NSString *)Cancel_STR;
++ (NSString *)Skip_STR;
++ (NSString *)PIN_STR;
++ (NSString *)Username_STR;
++ (NSString *)Password_STR;
++ (NSString *)Enter_BLANK_STR;
++ (NSString *)Incorrect_BLANK_STR;
++ (NSString *)LocationRestrictedTitle_STR;
++ (NSString *)LocationRestrictedMessage_STR;
 
-+ (NSString *)BaseURLString;
-+ (NSString *)BasePort;
+#pragma mark - app
+
 + (BOOL)isIPhone;
 + (BOOL)isIPad;
 + (CGFloat)screenWidth;

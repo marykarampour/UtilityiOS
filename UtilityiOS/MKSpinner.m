@@ -7,6 +7,7 @@
 //
 
 #import "MKSpinner.h"
+#import "UIView+Utility.h"
 
 @interface MKSpinner ()
 
@@ -92,6 +93,9 @@
     [self.back addSubview:self.hud];
     [self bringSubviewToFront:self.back];
     
+    [self removeConstraintsMask];
+    [self.back removeConstraintsMask];
+    
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[back(%f)]", self.hudWidth] options:0 metrics:nil views:@{@"back":self.back}]];
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[back(%f)]", self.hudHeight] options:0 metrics:nil views:@{@"back":self.back}]];
     
@@ -100,13 +104,6 @@
     
     [self.back addConstraint:[NSLayoutConstraint constraintWithItem:self.hud attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.back attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0]];
     [self.back addConstraint:[NSLayoutConstraint constraintWithItem:self.hud attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.back attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0]];
-    
-    for (UIView *view in self.subviews) {
-        [view setTranslatesAutoresizingMaskIntoConstraints:NO];
-    }
-    for (UIView *view in self.back.subviews) {
-        [view setTranslatesAutoresizingMaskIntoConstraints:NO];
-    }
 }
 
 @end

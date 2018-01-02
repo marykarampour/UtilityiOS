@@ -170,6 +170,13 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
     }];
 }
 
+- (void)resetHeaders:(NSArray *)headers {
+    [self.manager.requestSerializer clearAuthorizationHeader];
+    [headers enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [self.manager.requestSerializer setValue:nil forHTTPHeaderField:obj];
+    }];
+}
+
 - (NSString *)urlWithEndpoint:(NSString *)url {
     return [NSString stringWithFormat:@"%@%@", self.manager.baseURL, url];
 }

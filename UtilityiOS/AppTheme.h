@@ -22,9 +22,12 @@ typedef NS_ENUM(NSUInteger, AppThemeStyle) {
 
 //color
 + (UIColor *)seperatorColor;
++ (UIColor *)translusentBackground;
 + (UIColor *)VCBackgroundColor;
 + (UIColor *)VCForgroundColor;
 
++ (UIColor *)textDefaultColor;
++ (UIColor *)textHighlightColor;
 + (UIColor *)textLightColor;
 + (UIColor *)textMediumColor;
 + (UIColor *)textDarkColor;
@@ -37,6 +40,9 @@ typedef NS_ENUM(NSUInteger, AppThemeStyle) {
 + (UIColor *)labelMediumColor;
 + (UIColor *)labelDarkColor;
 
++ (UIColor *)buttonBackgroundColor;
++ (UIColor *)buttonTextColor;
++ (UIColor *)buttonHighlightedColor;
 
 //font
 + (UIFont *)smallLabelFont;
@@ -46,6 +52,7 @@ typedef NS_ENUM(NSUInteger, AppThemeStyle) {
 + (UIFont *)smallBoldLabelFont;
 + (UIFont *)mediumBoldLabelFont;
 + (UIFont *)largeBoldLabelFont;
++ (UIFont *)largeBoldTitleFont;
 
 
 @end
