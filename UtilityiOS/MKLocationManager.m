@@ -9,10 +9,21 @@
 #import "MKLocationManager.h"
 #import "NSObject+Alert.h"
 
+static NotificationCategoryIdentifier const GeoFenceCatID = @"GeoFenceCatID";
+
+@implementation MKGeoFencePoint
+
+@end
+
 @interface MKLocationManager ()
 
 @property (nonatomic, assign) float speed;
+@property (nonatomic, assign) CLLocationCoordinate2D lastFencedLocation;
 
+// These are set to prevent multiple consecutive calls being processed
+@property (nonatomic, strong) NSTimer *enterRegionTimer;
+@property (nonatomic, strong) NSTimer *updateLocationsTimer;
+@property (nonatomic, strong) NSArray<MKGeoFencePoint *> *geofencedPoints;
 
 @end
 
@@ -45,6 +56,8 @@
         }
         
         [self setMonitoringLocation];
+        
+        self.geofencePointNotificationDelay = 10.0;
     }
     return self;
 }
@@ -120,16 +133,61 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
-    
+    CLLocation *locatoin = [locations lastObject];
+    if ([self calculateDistanceInMetersBetweenCoord:self.lastFencedLocation coord:locatoin.coordinate] >= [Constants GeoFenceRadiousMeter]) {
+        self.speed = locatoin.speed;
+        // walking
+        if (self.speed > 0.5 && self.speed < 2.0) {
+            [self postLocationUpdateNotification];
+        }
+        // driving, update less frequently
+        else if (self.speed >= 10.0 && ![self.updateLocationsTimer isValid]) {
+            self.updateLocationsTimer = [NSTimer scheduledTimerWithTimeInterval:10.0 target:self selector:@selector(stopUpdateLocationsTimer) userInfo:nil repeats:NO];
+            [self postLocationUpdateNotification];
+        }
+    }
 }
 
 #pragma mark - geofencing
 
 - (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region {
+    if ([self.enterRegionTimer isValid]) return;
+    self.enterRegionTimer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(stopEnterRegionTimer) userInfo:nil repeats:NO];
     
+    CLCircularRegion *cRegion = (CLCircularRegion *)region;
+    unsigned int i = 1;
+    for (MKGeoFencePoint *point in self.geofencedPoints) {
+        if (point.point.latitude == cRegion.center.latitude && point.point.longitude == cRegion.center.longitude) {
+            i++;
+            [self createNotificationForGeoFencedPoint:point delay:i];
+            break;
+        }
+    }
 }
 
+- (void)createGeofencedZone:(NSArray<MKGeoFencePoint *> *)geofencedPoints {
+    self.geofencedPoints = geofencedPoints;
+    self.lastFencedLocation = self.location.location.coordinate;
+    for (MKGeoFencePoint *loc in geofencedPoints) {
+        unsigned int i = 1;
+        [self createGeofenceForPoint:loc.point];
+        if ([self locationIsInRegion:loc.point]) {
+            i++;
+            [self createNotificationForGeoFencedPoint:loc delay:i];
+        }
+    }
+}
 
+- (void)createGeofenceForPoint:(CLLocationCoordinate2D)point {
+    CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:point radius:[Constants GeoFenceRadiousMeter] identifier:[[NSUUID UUID] UUIDString]];
+    [self.location startMonitoringForRegion:region];
+}
+
+#pragma mark - notifications
+
+- (void)createNotificationForGeoFencedPoint:(MKGeoFencePoint *)point delay:(NSUInteger)index {
+    [[MKNotificationController instance] scheduleLocalNotificationWithIdentifier:point.identifier categoryID:GeoFenceCatID body:point.title fireTime:self.geofencePointNotificationDelay*index];
+}
 
 
 #pragma mark - helpers
@@ -170,6 +228,26 @@
             [[UIApplication sharedApplication] openURL:url];
         }
     }
+}
+
+- (void)stopUpdateLocationsTimer {
+    if ([self.updateLocationsTimer isValid]) {
+        [self.updateLocationsTimer invalidate];
+    }
+}
+
+- (void)stopEnterRegionTimer {
+    if ([self.enterRegionTimer isValid]) {
+        [self.enterRegionTimer invalidate];
+    }
+}
+
++ (NSNotificationName)MKLocationUpdateNotificationName {
+    return @"MKLocationUpdateNotificationName";
+}
+
+- (void)postLocationUpdateNotification {
+    [[NSNotificationCenter defaultCenter] postNotificationName:[MKLocationManager MKLocationUpdateNotificationName] object:self userInfo:nil];
 }
 
 @end
