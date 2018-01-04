@@ -13,7 +13,7 @@
 
 @implementation ServerController
 
-+ (AFHTTPSessionManager *)auth:(NSString *)username password:(NSString *)password completion:(void (^)(id, NSError *))completion {
++ (AFHTTPSessionManager *)auth:(NSString *)username password:(NSString *)password completion:(ServerResultErrorBlock)completion {
     [[NetworkManager instance] setHeaders:[ServerController headersForUsername:username]];
     NSDictionary *params = @{@"username":username, @"password":password};
     return [[NetworkManager instance] requestURL:[ServerEndpoints AUTH] type:NetworkRequestType_POST parameters:params completion:^(id result, NSError *error) {
@@ -26,7 +26,7 @@
     }];
 }
 
-+ (AFHTTPSessionManager *)logoutUserWithCompletion:(void (^)(id, NSError *))completion {
++ (AFHTTPSessionManager *)logoutUserWithCompletion:(ServerResultErrorBlock)completion {
     return [[NetworkManager instance] requestURL:[ServerEndpoints LOGOUT] type:NetworkRequestType_GET parameters:nil completion:^(id result, NSError *error) {
         if (!error && result) {
             if ([result objectForKey:@"token"]) {
@@ -37,7 +37,7 @@
     }];
 }
 //sample
-+ (AFHTTPSessionManager *)getWithCompletion:(void (^)(id, NSError *))completion {
++ (AFHTTPSessionManager *)getWithCompletion:(ServerResultErrorBlock)completion {
     [[NetworkManager instance] setHeaders:[ServerController basicAuthHeaders]];
     [[NetworkManager instance] resetAuthorizationHeader];
     return [[NetworkManager instance] requestURL:@"" type:NetworkRequestType_GET parameters:nil completion:^(id result, NSError *error) {
@@ -45,7 +45,7 @@
     }];
 }
 //sample
-+ (AFHTTPSessionManager *)getListWithCompletion:(void (^)(id, NSError *))completion {
++ (AFHTTPSessionManager *)getListWithCompletion:(ServerResultErrorBlock)completion {
     [[NetworkManager instance] setHeaders:[ServerController headers]];
     return [[NetworkManager instance] requestURL:@"" type:NetworkRequestType_GET parameters:nil completion:^(id result, NSError *error) {
         [self processResult:result error:error class:[MKModel class] completion:completion];
@@ -54,7 +54,7 @@
 
 #pragma mark - send/get file
 
-+ (AFHTTPSessionManager *)sendFile:(NSData *)data filename:(NSString *)filename endpoint:(NSString *)endpoint completion:(void (^)(id, NSError *))completion {
++ (AFHTTPSessionManager *)sendFile:(NSData *)data filename:(NSString *)filename endpoint:(NSString *)endpoint completion:(ServerResultErrorBlock)completion {
     MultipartInfo *info = [[MultipartInfo alloc] init];
     info.fileName = filename;
     info.data = data;
@@ -66,7 +66,7 @@
     }];
 }
 
-+ (AFHTTPSessionManager *)getFile:(NSString *)filename endpoint:(NSString *)endpoint completion:(void (^)(id, NSError *))completion {
++ (AFHTTPSessionManager *)getFile:(NSString *)filename endpoint:(NSString *)endpoint completion:(ServerResultErrorBlock)completion {
     [[NetworkManager instance] setHeaders:[ServerController headers]];
     NSString *url = [NSString stringWithFormat:@"%@/%@", endpoint, filename];
     return [[NetworkManager instance] downloadURL:url toFile:filename completion:^(id result, NSError *error) {
@@ -95,7 +95,7 @@
     return @{};
 }
 
-+ (void)processResult:(id)result error:(NSError *)error class:(Class)modelClass completion:(void (^)(id, NSError *))completion {
++ (void)processResult:(id)result error:(NSError *)error class:(Class)modelClass completion:(ServerResultErrorBlock)completion {
     if (error || !result || !modelClass) {
         completion(nil, error);
     }
@@ -133,7 +133,7 @@
     }
 }
 
-+ (void)processValuesInResult:(id)result error:(NSError *)error completion:(void (^)(id, NSError *))completion {
++ (void)processValuesInResult:(id)result error:(NSError *)error completion:(ServerResultErrorBlock)completion {
     if (error || !result) {
         completion(nil, error);
     }
@@ -156,7 +156,7 @@
     }
 }
 
-+ (void)processDataURLResult:(id)result error:(NSError *)error completion:(void (^)(id result, NSError *error))completion {
++ (void)processDataURLResult:(id)result error:(NSError *)error completion:(ServerResultErrorBlock)completion {
     if (!error && result) {
         if ([result isKindOfClass:[NSURL class]]) {
             NSError *err = nil;

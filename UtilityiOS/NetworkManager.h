@@ -28,6 +28,8 @@ typedef NS_ENUM(NSUInteger, NetworkContentType) {
     NetworkContentType_JPEG
 };
 
+typedef void (^ServerResultErrorBlock) (id result, NSError *error);
+
 
 @interface MultipartInfo : NSObject
 
@@ -49,10 +51,10 @@ typedef NS_ENUM(NSUInteger, NetworkContentType) {
 - (void)resetHeaders:(NSArray *)headers;
 - (void)resetAuthorizationHeader;
 
-- (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NetworkRequestType)type parameters:(NSDictionary *)parameters completion:(void (^)(id result, NSError *error))completion;
+- (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NetworkRequestType)type parameters:(NSDictionary *)parameters completion:(ServerResultErrorBlock)completion;
 
 - (AFHTTPSessionManager *)requestMultipartFormURL:(NSString *)url type:(NetworkRequestType)type parameters:(NSDictionary *)parameters data:(NSArray<MultipartInfo *> *)data completion:(void (^ _Nullable )(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error))completion;
 
-- (AFHTTPSessionManager *)downloadURL:(NSString *)url toFile:(NSString *)filname completion:(void (^)(id result, NSError *error))completion;
+- (AFHTTPSessionManager *)downloadURL:(NSString *)url toFile:(NSString *)filname completion:(ServerResultErrorBlock)completion;
 
 @end

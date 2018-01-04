@@ -9,8 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "NetworkManager.h"
 
-typedef void (^ServerResultErrorBlock) (id result, NSError *error);
-
 /** @brief Apps should subclass this, the methods here are samples */
 @interface ServerController : NSObject
 
@@ -36,10 +34,10 @@ typedef void (^ServerResultErrorBlock) (id result, NSError *error);
 + (NSDictionary *)basicAuthHeaders;
 
 /** @brief Use when deserialized values from JSON to model objects are needed */
-+ (void)processResult:(id)result error:(NSError *)error class:(Class)modelClass completion:(void (^)(id result, NSError *error))completion;
++ (void)processResult:(id)result error:(NSError *)error class:(Class)modelClass completion:(ServerResultErrorBlock)completion;
 /** @brief Use when raw values from JSON are needed */
-+ (void)processValuesInResult:(id)result error:(NSError *)error completion:(void (^)(id result, NSError *error))completion;
++ (void)processValuesInResult:(id)result error:(NSError *)error completion:(ServerResultErrorBlock)completion;
 /** @brief Use to process data/file downloaded from url, it returns NSData object in completion */
-+ (void)processDataURLResult:(id)result error:(NSError *)error completion:(void (^)(id result, NSError *error))completion;
++ (void)processDataURLResult:(id)result error:(NSError *)error completion:(ServerResultErrorBlock)completion;
 
 @end
