@@ -9,6 +9,7 @@
 #import "MKModel.h"
 
 @class MKDateRange;
+@class MKInterval;
 
 typedef NSArray<MKDateRange *>          DatePairArr;
 typedef NSMutableArray<MKDateRange *>   MDatePairArr;
@@ -17,6 +18,8 @@ typedef NSMutableArray<MKDateRange *>   MDatePairArr;
 
 @property (nonatomic, strong) NSDate *fromDate;
 @property (nonatomic, strong) NSDate *toDate;
+
+@property (nonatomic, strong) __kindof MKInterval *interval;
 
 @property (nonatomic, strong) NSDate *maxDate;
 
@@ -34,10 +37,16 @@ typedef NSMutableArray<MKDateRange *>   MDatePairArr;
 
 @end
 
-@interface MKInterval : MKModel
+@interface MKRange : MKModel
 
 @property (nonatomic, strong) NSNumber *start;
 @property (nonatomic, strong) NSNumber *end;
+
++ (instancetype)rangeWithStart:(NSNumber *)start end:(NSNumber *)end;
+
+@end
+
+@interface MKInterval : MKRange
 
 - (instancetype)initWithDateRange:(MKDateRange *)range;
 - (MKDateRange *)dateRange;

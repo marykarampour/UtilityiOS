@@ -31,8 +31,8 @@
 - (NSArray *)monthStringsWithFormat:(NSString *)format untilDate:(NSDate *)date;
 + (NSUInteger)daysBetweenFromDate:(NSDate *)from toDate:(NSDate *)to;
 
-- (MKDateRange *)yearRange;
-- (MKDateRange *)monthRange;
+- (__kindof MKDateRange *)yearRange;
+- (__kindof MKDateRange *)monthRange;
 
 - (NSUInteger)year;
 - (NSUInteger)month;

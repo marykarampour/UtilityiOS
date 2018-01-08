@@ -7,20 +7,89 @@
 //
 
 #import "JSONModel.h"
+#import "NSString+Utility.h"
 
-@interface MKModel : JSONModel <NSCoding, NSCopying>
+@protocol MKModelCustomKeysProtocol <NSObject>
+
+@optional
+/** @brief Override in subclass if you want properties of ancestors be added to JSON keys, default NO
+ @code
+ + (BOOL)usingAncestors {
+    return YES;
+ }
+ @endcode
+ */
++ (BOOL)usingAncestors;
+
+/** @brief Override in subclass if you want keys be excluded in JSON keys
+ @code
+ + (StringArr *)excludedKeys {
+    return @[NSStringFromSelector(@selector(maxDate)),
+        NSStringFromSelector(@selector(fromDate)),
+        NSStringFromSelector(@selector(toDate))];
+ }
+ @endcode
+ */
++ (StringArr *)excludedKeys;
+
+/** @brief Override in subclass if you want properties have different format than other JSON keys
+ @note Use with + (StringFormat)customFormat
+ @code
+ + (StringArr *)customKeys {
+    return @[NSStringFromSelector(@selector(fromDate)),
+        NSStringFromSelector(@selector(toDate))];
+ }
+ @endcode
+ */
++ (StringArr *)customKeys;
+
+/** @brief Override in subclass if you want properties have different format than other JSON keys
+  @note Use with + (StringArr *)customKeys
+ @code
+ + (StringFormat)customFormat {
+    return StringFormatNone;
+ }
+ @endcode
+ */
++ (StringFormat)customFormat;
+
+/** @brief Override in subclass if you want properties have custom keys in JSON
+ @code
+ + (DictStringString *)customKeyValueDict {
+    return @{NSStringFromSelector(@selector(fromDate)):@"from",
+        NSStringFromSelector(@selector(toDate)):@"to"};
+ }
+ @endcode
+ */
++ (DictStringString *)customKeyValueDict;
+
+@end
+
+@interface MKModel : JSONModel <NSCoding, NSCopying, MKModelCustomKeysProtocol>
 
 - (instancetype)initWithStringsDictionary:(NSDictionary *)values;
+
+/** @brief Call this in initialize of subclass to set the mapper format for object to JSON.
+ @param format default is StringFormatUnderScoreIgnoreDigits
+ */
++ (void)setMapperFormat:(StringFormat)format;
 
 - (NSString *)convertToJson:(NSString *)property;
 - (NSString *)convertToProperty:(NSString *)json;
 
 - (NSString *)titleText;
+
 /** @brief Only copies values which are not nil */
 - (void)copyValues:(__kindof MKModel *)object;
+
 /** @brief Set all values of object
  @param ancestors YES will set values for ancestors of object too, NO only sets values of properties of object
  */
 - (void)setValuesOfObject:(__kindof MKModel *)object ancestors:(BOOL)ancestors;
+
+/** @brief An extension to - (NSDictionary *)toDictionary excluding given keys
+ @note Use with + (StringArr *)excludedKeys 
+ */
+- (NSDictionary *)toDictionaryWithExcludedKeys;
 
 @end

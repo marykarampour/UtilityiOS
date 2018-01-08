@@ -11,7 +11,7 @@
 
 @interface MKDateRange ()
 
-@property (nonatomic, assign) NSCalendarUnit rangeType;
+- (NSDate *)adjustedForMaxDate:(NSDate *)date;
 
 @end
 
@@ -30,7 +30,7 @@
 }
 
 - (NSString *)description {
-    if (self.rangeType == NSCalendarUnitDay) {
+    if ([self calendarUnit] == NSCalendarUnitDay) {
         return self.fromDate ? [NSString stringWithFormat:@"%@", [self.fromDate dateStringWithFormat:DateFormatShortStyle]] : @"";
     }
     
@@ -59,14 +59,20 @@
     return ((self.toDate && (dateTime >= fdate && dateTime <= tdate)) || (dateTime == fdate));
 }
 
+- (void)setInterval:(MKInterval *)interval {
+    _interval = interval;
+    self.fromDate = [NSDate dateWithTimeIntervalSince1970:interval.start.longValue];
+    self.toDate = [NSDate dateWithTimeIntervalSince1970:interval.end.longValue];
+}
+
 - (void)setFromDate:(NSDate *)fromDate {
     _fromDate = [self adjustedForMaxDate:fromDate];
-    self.rangeType = [self calendarUnit];
+    _interval.start = @([_fromDate timeIntervalSince1970]);
 }
 
 - (void)setToDate:(NSDate *)toDate {
     _toDate = [self adjustedForMaxDate:toDate];
-    self.rangeType = [self calendarUnit];
+    _interval.end = @([_toDate timeIntervalSince1970]);
 }
 
 - (NSDate *)adjustedForMaxDate:(NSDate *)date {
@@ -96,7 +102,6 @@
     [fromComps setValue:1 forComponent:range];
     
     MKDateRange *currentPair = [[MKDateRange alloc] init];
-    currentPair.rangeType = range;
     currentPair.fromDate = [[self.fromDate midnightLocal] copy];
     currentPair.toDate = [cal dateByAddingComponents:fromComps toDate:currentPair.fromDate options:0];
     
@@ -159,13 +164,23 @@
 
 @end
 
+@implementation MKRange
+
++ (instancetype)rangeWithStart:(NSNumber *)start end:(NSNumber *)end {
+    id range = [[[self class] alloc] init];
+    [range setStart:start];
+    [range setEnd:end];
+    return range;
+}
+
+@end
 
 @implementation MKInterval
 
 - (instancetype)initWithDateRange:(MKDateRange *)range {
     if (self = [super init]) {
-        self.start = range.fromDate ? @([range.fromDate timeIntervalSince1970]) : nil;
-        self.end = range.toDate ? @([range.toDate timeIntervalSince1970]) : nil;
+        self.start = range.fromDate ? @([[range adjustedForMaxDate:range.fromDate] timeIntervalSince1970]) : nil;
+        self.end = range.toDate ? @([[range adjustedForMaxDate:range.toDate] timeIntervalSince1970]) : nil;
     }
     return self;
 }

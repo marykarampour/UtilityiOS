@@ -415,5 +415,37 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
     return @"";
 }
 
+#pragma mark - regex and predicate
+
++ (NSString *)Predicate_MatchesSelf {
+    return @"SELF MATCHES %@";
+}
+
++ (NSString *)Regex_CharRange_IntPositive {
+    return @"^([0-9]{%zd,%zd})$";
+}
+
++ (NSString *)Regex_CharRange_Int {
+    return @"^([-]?[0-9]{%zd,%zd})$";
+}
+
++ (NSString *)Regex_CharRange_FloatPositive {
+    return @"^([0-9]{%zd,%zd}(\\.[0-9]{%zd,%zd})?)$";
+}
+
++ (NSString *)Regex_CharRange_Float {
+    return @"^([-]?[0-9]{%zd,%zd}(\\.[0-9]{%zd,%zd})?)$";
+}
+
++ (NSString *)Regex_CharRange_Letters {
+    return @"^([a-zA-Z]{%zd,%zd})$";
+}
+
++ (NSString *)Regex_CharRange_Alphanumeric {
+    return @"^([a-zA-Z0-9]{%zd,%zd})$";
+}
+
+
+
 
 @end

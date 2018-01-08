@@ -73,7 +73,7 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
         DEBUGLOG(@"Base url: %@", [Constants BaseURL]);
         
         self.manager.requestSerializer = [AFJSONRequestSerializer serializer];
-        self.manager.requestSerializer.HTTPMethodsEncodingParametersInURI = [NSSet setWithObjects:@"GET", @"HEAD", nil];
+//        self.manager.requestSerializer.HTTPMethodsEncodingParametersInURI = [NSSet setWithObjects:@"GET", @"HEAD", nil];
         self.manager.requestSerializer.timeoutInterval = REQUEST_TIMEOUT;
         [self.manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
         

@@ -8,8 +8,9 @@
 
 #import "MKModel.h"
 #import "NSObject+Utility.h"
-#import "NSString+Utility.h"
 #import <objc/runtime.h>
+
+static StringFormat MapperFormat;
 
 @implementation MKModel
 
@@ -24,6 +25,14 @@
 //
 //    }
 //}
+
++ (void)initialize {
+    MapperFormat = StringFormatUnderScoreIgnoreDigits;
+}
+
++ (void)setMapperFormat:(StringFormat)format {
+    MapperFormat = format;
+}
 
 - (instancetype)initWithStringsDictionary:(NSDictionary *)values {
     return [self initWithStringsDictionary:values mapper:[[self class] keyMapper]];
@@ -99,16 +108,36 @@
 
 #pragma mark - key mapper
 
-+ (DictStringString *)JSONMapperDict {
-    return [self keyMapperDictionaryForClass:[self class] format:StringFormatUnderScoreIgnoreDigits];//[self keyMapperDictionaryWithAncestors];
+- (NSDictionary *)toDictionaryWithExcludedKeys {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    NSArray *excluded = [[self class] excludedKeys];
+    [[self toDictionary] enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        if (![excluded containsObject:key]) {
+            [dict setObject:obj forKey:key];
+        }
+    }];
+    return dict;
 }
 
 + (JSONKeyMapper *)keyMapper {
     return [[JSONKeyMapper alloc] initWithModelToJSONDictionary:[self JSONMapperDict]];
 }
 
++ (DictStringString *)JSONMapperDict {
+    return [self keyMapperWithFormat:MapperFormat];
+}
+
 + (DictStringString *)DBMapperDict {
-    return [self keyMapperDictionaryForClass:[self class] format:StringFormatUnderScoreIgnoreDigits];//[self keyMapperDictionaryWithAncestors];
+    return [self keyMapperWithFormat:StringFormatUnderScoreIgnoreDigits];
+}
+
++ (DictStringString *)keyMapperWithFormat:(StringFormat)format {
+    if ([self usingAncestors]) {
+        return [self keyMapperDictionaryWithAncestorsWithFormat:format];
+    }
+    else {
+        return [self keyMapperDictionaryForClass:self format:format];
+    }
 }
 
 + (JSONKeyMapper *)DBKeyMapper {
@@ -117,7 +146,7 @@
 
 + (NSDictionary *)keyMapperDictionaryWithAncestorsWithFormat:(StringFormat)format {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    Class class = [self class];
+    Class class = self;
     while (class != [MKModel class]) {
         [dict addEntriesFromDictionary:[self keyMapperDictionaryForClass:class format:format]];
         class = [class superclass];
@@ -129,11 +158,22 @@
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     unsigned int count = 0;
     objc_property_t *properties = class_copyPropertyList(class, &count);
+    NSDictionary *customNames = [self customKeyValueDict];
+    NSArray *excluded = [[self class] excludedKeys];
     
     for (unsigned int i=0; i<count; i++) {
         NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
-        NSString *under_score_name = [name format:format];
-        [dict setValue:under_score_name forKey:name];
+        if (![excluded containsObject:name]) {
+            NSString *json_name;
+            if ([customNames.allKeys containsObject:name]) {
+                json_name = customNames[name];
+            }
+            else {
+                json_name = [name format:format];
+            }
+            
+            [dict setValue:json_name forKey:name];
+        }
     }
     free(properties);
     return dict;
@@ -212,6 +252,34 @@
             [self setValue:value forKey:name];
         }
     }
+}
+
+#pragma mark - MKModelCustomKeysProtocol
+
++ (BOOL)usingAncestors {
+    return NO;
+}
+
++ (StringArr *)excludedKeys {
+    return nil;
+}
+
++ (StringArr *)customKeys {
+    return nil;
+}
+
++ (StringFormat)customFormat {
+    return StringFormatNone;
+}
+
++ (DictStringString *)customKeyValueDict {
+    MDictStringString *dict = [[MDictStringString alloc] init];
+    StringFormat format = [self customFormat];
+    StringArr *keys = [self customKeys];
+    for (NSString *name in keys) {
+        [dict setObject:[name format:format] forKey:name];
+    }
+    return dict;
 }
 
 @end

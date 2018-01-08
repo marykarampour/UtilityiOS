@@ -169,6 +169,20 @@ extern NSString * const DateFormatDayMonthYearNumeric;
 + (NSString *)authorizationUsername;
 + (NSString *)authorizationPassword;
 
+#pragma mark - regex and predicate
+
++ (NSString *)Predicate_MatchesSelf;
+
++ (NSString *)Regex_CharRange_IntPositive;
++ (NSString *)Regex_CharRange_Int;
++ (NSString *)Regex_CharRange_FloatPositive;
++ (NSString *)Regex_CharRange_Float;
++ (NSString *)Regex_CharRange_Letters;
++ (NSString *)Regex_CharRange_Alphanumeric;
+
+
+
+
 @end
 
 
