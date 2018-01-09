@@ -89,6 +89,21 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
     return 6.0;
 }
 
++ (float)BorderWidth {
+    return 1.0;
+}
+
++ (float)TextPadding {
+    return 4.0;
+}
+
++ (float)HorizontalSpacing {
+    return 8.0;
+}
+
++ (float)VerticalSpacing {
+    return 8.0;
+}
 
 #pragma mark - defaults
 
@@ -105,55 +120,80 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
 #pragma mark - strings
 
 + (NSString *)ExitTitle_STR {
-    return @"Exit";
+    return LOCALIZED(@"Exit");
 }
 
 + (NSString *)FaceID_STR {
-    return @"Face ID";
+    return LOCALIZED(@"Face ID");
 }
 
 + (NSString *)TouchID_STR {
-    return @"Touch ID";
+    return LOCALIZED(@"Touch ID");
 }
 
 + (NSString *)OK_STR {
-    return @"OK";
+    return LOCALIZED(@"OK");
 }
 
 + (NSString *)Cancel_STR {
-    return @"Cancel";
+    return LOCALIZED(@"Cancel");
 }
 
 + (NSString *)Skip_STR {
-    return @"Skip";
+    return LOCALIZED(@"Skip");
 }
 
 + (NSString *)PIN_STR {
-    return @"PIN";
+    return LOCALIZED(@"PIN");
 }
 
 + (NSString *)Username_STR {
-    return @"Username";
+    return LOCALIZED(@"Username");
 }
 
 + (NSString *)Password_STR {
-    return @"Password";
+    return LOCALIZED(@"Password");
 }
 
 + (NSString *)Enter_BLANK_STR {
-    return @"Please Enter Your %@";
+    return LOCALIZED(@"Please Enter Your %@");
 }
 
 + (NSString *)Incorrect_BLANK_STR {
-    return @"Incorrect %@";
+    return LOCALIZED(@"Incorrect %@");
 }
 
 + (NSString *)LocationRestrictedTitle_STR {
-    return @"Location access is restricted!";
+    return LOCALIZED(@"Location access is restricted!");
 }
 
 + (NSString *)LocationRestrictedMessage_STR {
     return @"";
+}
+
++ (NSString *)CameraDisabledTitle_STR {
+    return LOCALIZED(@"Camera is disabled!");
+}
+
++ (NSString *)CameraAccessMessage_BLANK_STR {
+    return LOCALIZED(@"Camera access is required for %@. Go to settings to enable camera.");
+}
+
++ (NSString *)TakingPicture_STR {
+    return LOCALIZED(@"taking pictures");
+}
+
++ (NSString *)ScanningBarcode_STR {
+    return LOCALIZED(@"scanning barcodes");
+}
+
++ (NSString *)NoCamera_STR {
+    return @"Device has no camera";
+}
+
+
++ (NSString *)Error_STR {
+    return LOCALIZED(@"Error");
 }
 
 + (float)GeoFenceRadiousKiloMeter {

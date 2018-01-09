@@ -44,6 +44,18 @@ typedef NS_ENUM(NSUInteger, AppThemeStyle) {
 + (UIColor *)buttonTextColor;
 + (UIColor *)buttonHighlightedColor;
 
++ (UIColor *)textViewBackgroundColor;
++ (UIColor *)textViewBorderColor;
++ (UIColor *)textViewPlaceholderColor;
++ (UIColor *)textViewTextColor;
++ (UIColor *)textViewCharTextColor;
+
++ (UIColor *)textFieldBackgroundColor;
++ (UIColor *)textFieldBorderColor;
++ (UIColor *)textFieldPlaceholderColor;
++ (UIColor *)textFieldTextColor;
+
+
 //font
 + (UIFont *)smallLabelFont;
 + (UIFont *)mediumLabelFont;
@@ -54,5 +66,7 @@ typedef NS_ENUM(NSUInteger, AppThemeStyle) {
 + (UIFont *)largeBoldLabelFont;
 + (UIFont *)largeBoldTitleFont;
 
++ (UIFont *)textViewFont;
++ (UIFont *)textFieldFont;
 
 @end

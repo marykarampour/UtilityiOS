@@ -23,7 +23,7 @@
 
 #define RaiseExceptionIncorrectMethodUse(...)   [NSException raise:NSInternalInconsistencyException format:@"You are calling %@, use %@ instead", NSStringFromSelector(_cmd), ##__VA_ARGS__];
 
-
+#define LOCALIZED(s)     NSLocalizedString(s, nil)
 
 
 
@@ -46,6 +46,17 @@ enum {
 enum {
     TargetType_NONE = -1,
     TargetType_BASE
+};
+
+typedef NS_ENUM(NSUInteger, TextType) {
+    TextTypeString,
+    TextTypeInt,
+    TextTypeIntPositive,
+    TextTypeFloat,
+    TextTypeFloatPositive,
+    TextTypeAlphabet,
+    TextTypeAlphaNumeric,
+    TextTypeCount
 };
 
 typedef NSArray<NSString *>                                     StringArr;
@@ -118,9 +129,13 @@ extern NSString * const DateFormatDayMonthYearNumeric;
 + (float)PrimaryColumnWidth;
 + (float)PrimaryColumnShrunkenWidth;
 + (float)DefaultRowHeight;
++ (float)BorderWidth;
 + (float)ButtonCornerRadious;
 + (float)GeoFenceRadiousMeter;
 + (float)GeoFenceRadiousKiloMeter;
++ (float)TextPadding;
++ (float)HorizontalSpacing;
++ (float)VerticalSpacing;
 
 #pragma mark - defaults
 
@@ -145,6 +160,13 @@ extern NSString * const DateFormatDayMonthYearNumeric;
 + (NSString *)Incorrect_BLANK_STR;
 + (NSString *)LocationRestrictedTitle_STR;
 + (NSString *)LocationRestrictedMessage_STR;
++ (NSString *)CameraDisabledTitle_STR;
++ (NSString *)CameraAccessMessage_BLANK_STR;
++ (NSString *)TakingPicture_STR;
++ (NSString *)ScanningBarcode_STR;
++ (NSString *)NoCamera_STR;
+
++ (NSString *)Error_STR;
 
 #pragma mark - app
 

@@ -25,8 +25,8 @@
  @code
  + (StringArr *)excludedKeys {
     return @[NSStringFromSelector(@selector(maxDate)),
-        NSStringFromSelector(@selector(fromDate)),
-        NSStringFromSelector(@selector(toDate))];
+             NSStringFromSelector(@selector(fromDate)),
+             NSStringFromSelector(@selector(toDate))];
  }
  @endcode
  */
@@ -37,7 +37,7 @@
  @code
  + (StringArr *)customKeys {
     return @[NSStringFromSelector(@selector(fromDate)),
-        NSStringFromSelector(@selector(toDate))];
+             NSStringFromSelector(@selector(toDate))];
  }
  @endcode
  */
@@ -57,7 +57,7 @@
  @code
  + (DictStringString *)customKeyValueDict {
     return @{NSStringFromSelector(@selector(fromDate)):@"from",
-        NSStringFromSelector(@selector(toDate)):@"to"};
+             NSStringFromSelector(@selector(toDate)):@"to"};
  }
  @endcode
  */

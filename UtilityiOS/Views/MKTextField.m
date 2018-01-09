@@ -8,6 +8,12 @@
 
 #import "MKTextField.h"
 
+@interface MKTextField ()
+
+@property (nonatomic, strong, readwrite) MKText *textObject;
+
+@end
+
 @implementation MKTextField
 
 - (instancetype)init {
@@ -17,6 +23,8 @@
 - (instancetype)initWithPlaceholder:(NSString *)placeholder type:(TextFieldType)type {
     
     if (self = [super init]) {
+        self.textObject = [[MKText alloc] init];
+        
         self.clearButtonMode = UITextFieldViewModeWhileEditing;
         
         switch (type) {

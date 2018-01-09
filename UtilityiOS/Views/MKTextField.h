@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "MKText.h"
+//TODO: fix
 typedef NS_ENUM(NSUInteger, TextFieldType) {
     TextFieldTypeDefault,
     TextFieldTypePlain,
@@ -15,6 +16,8 @@ typedef NS_ENUM(NSUInteger, TextFieldType) {
 };
 
 @interface MKTextField : UITextField
+
+@property (nonatomic, strong, readonly) MKText *textObject;
 
 - (instancetype)initWithPlaceholder:(NSString *)placeholder type:(TextFieldType)type;
 
