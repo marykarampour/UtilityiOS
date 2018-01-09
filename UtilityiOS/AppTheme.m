@@ -187,6 +187,81 @@ static AppThemeStyle const THEME_STYLE = AppThemeStyleLight;
     }
 }
 
++ (UIColor *)textViewBackgroundColor {
+    switch (THEME_STYLE) {
+        case AppThemeStyleLight: return [UIColor whiteColor];
+        case AppThemeStyleDark: return [UIColor blackColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
++ (UIColor *)textViewBorderColor {
+    switch (THEME_STYLE) {
+        case AppThemeStyleLight: return [UIColor whiteColor];
+        case AppThemeStyleDark: return [UIColor blackColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
++ (UIColor *)textViewPlaceholderColor {
+    switch (THEME_STYLE) {
+        case AppThemeStyleLight: return [UIColor whiteColor];
+        case AppThemeStyleDark: return [UIColor blackColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
++ (UIColor *)textViewTextColor {
+    switch (THEME_STYLE) {
+        case AppThemeStyleLight: return [UIColor whiteColor];
+        case AppThemeStyleDark: return [UIColor blackColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
++ (UIColor *)textViewCharTextColor {
+    switch (THEME_STYLE) {
+        case AppThemeStyleLight: return [UIColor whiteColor];
+        case AppThemeStyleDark: return [UIColor blackColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
+
++ (UIColor *)textFieldBackgroundColor {
+    switch (THEME_STYLE) {
+        case AppThemeStyleLight: return [UIColor whiteColor];
+        case AppThemeStyleDark: return [UIColor blackColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
++ (UIColor *)textFieldBorderColor {
+    switch (THEME_STYLE) {
+        case AppThemeStyleLight: return [UIColor whiteColor];
+        case AppThemeStyleDark: return [UIColor blackColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
++ (UIColor *)textFieldPlaceholderColor {
+    switch (THEME_STYLE) {
+        case AppThemeStyleLight: return [UIColor whiteColor];
+        case AppThemeStyleDark: return [UIColor blackColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
++ (UIColor *)textFieldTextColor {
+    switch (THEME_STYLE) {
+        case AppThemeStyleLight: return [UIColor whiteColor];
+        case AppThemeStyleDark: return [UIColor blackColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
+
+
 #pragma mark - font
 
 + (UIFont *)smallLabelFont {
@@ -215,6 +290,15 @@ static AppThemeStyle const THEME_STYLE = AppThemeStyleLight;
 
 + (UIFont *)largeBoldTitleFont {
     return [UIFont boldSystemFontOfSize:24.0];
+}
+
+
++ (UIFont *)textViewFont {
+    return [UIFont boldSystemFontOfSize:16.0];
+}
+
++ (UIFont *)textFieldFont {
+    return [UIFont boldSystemFontOfSize:16.0];
 }
 
 @end
