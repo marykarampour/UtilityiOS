@@ -27,25 +27,25 @@
         
         self.clearButtonMode = UITextFieldViewModeWhileEditing;
         
-        switch (type) {
-            case TextFieldTypePlain: {
-                self.autocorrectionType = UITextAutocorrectionTypeNo;
-                self.autocapitalizationType = UITextAutocapitalizationTypeNone;
-            }
-                break;
-            case TextFieldTypeSecure: {
-                self.autocorrectionType = UITextAutocorrectionTypeNo;
-                self.autocapitalizationType = UITextAutocapitalizationTypeNone;
-                self.secureTextEntry = YES;
-            }
-                break;
-            default:
-                break;
+        if (TextFieldTypePlain & type) {
+            self.autocorrectionType = UITextAutocorrectionTypeNo;
+            self.autocapitalizationType = UITextAutocapitalizationTypeNone;
+        }
+        else if (TextFieldTypeSecure & type) {
+            self.autocorrectionType = UITextAutocorrectionTypeNo;
+            self.autocapitalizationType = UITextAutocapitalizationTypeNone;
+            self.secureTextEntry = YES;
+        }
+        if (TextFieldTypeBorder & type) {
+            self.layer.cornerRadius = [Constants ButtonCornerRadious];
+            self.layer.masksToBounds = YES;
+            self.layer.borderColor = [AppTheme textFieldBorderColor].CGColor;
+            self.layer.borderWidth = [Constants BorderWidth];
         }
         
-        self.font = [AppTheme mediumLabelFont];
-        self.textColor = [AppTheme textDarkColor];
-        self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:placeholder attributes:@{NSForegroundColorAttributeName:[AppTheme textMediumColor]}];
+        self.font = [AppTheme textFieldFont];
+        self.textColor = [AppTheme textFieldTextColor];
+        self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:placeholder attributes:@{NSForegroundColorAttributeName:[AppTheme textFieldPlaceholderColor]}];
         self.backgroundColor = [UIColor whiteColor];
         
         self.placeholder = placeholder;

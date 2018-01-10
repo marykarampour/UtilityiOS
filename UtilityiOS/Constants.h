@@ -49,14 +49,14 @@ enum {
 };
 
 typedef NS_ENUM(NSUInteger, TextType) {
-    TextTypeString,
-    TextTypeInt,
-    TextTypeIntPositive,
-    TextTypeFloat,
-    TextTypeFloatPositive,
-    TextTypeAlphabet,
-    TextTypeAlphaNumeric,
-    TextTypeCount
+    TextType_String,
+    TextType_Int,
+    TextType_IntPositive,
+    TextType_Float,
+    TextType_FloatPositive,
+    TextType_Alphabet,
+    TextType_AlphaNumeric,
+    TextType_Count
 };
 
 typedef NSArray<NSString *>                                     StringArr;

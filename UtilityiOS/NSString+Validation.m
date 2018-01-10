@@ -15,27 +15,27 @@
     NSString *format = [Constants Predicate_MatchesSelf];
     NSString *regex;
     switch (type) {
-        case TextTypeInt: {
+        case TextType_Int: {
             regex = [Constants Regex_CharRange_Int];
         }
             break;
-        case TextTypeIntPositive: {
+        case TextType_IntPositive: {
             regex = [Constants Regex_CharRange_IntPositive];
         }
             break;
-        case TextTypeFloat: {
+        case TextType_Float: {
             regex = [Constants Regex_CharRange_Float];
         }
             break;
-        case TextTypeFloatPositive: {
+        case TextType_FloatPositive: {
             regex = [Constants Regex_CharRange_FloatPositive];
         }
             break;
-        case TextTypeAlphabet: {
+        case TextType_Alphabet: {
             regex = [Constants Regex_CharRange_Letters];
         }
             break;
-        case TextTypeAlphaNumeric: {
+        case TextType_AlphaNumeric: {
             regex = [Constants Regex_CharRange_Alphanumeric];
         }
             break;

@@ -11,8 +11,9 @@
 //TODO: fix
 typedef NS_ENUM(NSUInteger, TextFieldType) {
     TextFieldTypeDefault,
-    TextFieldTypePlain,
-    TextFieldTypeSecure
+    TextFieldTypePlain  = 1 << 0,
+    TextFieldTypeSecure = 1 << 1,
+    TextFieldTypeBorder = 1 << 2
 };
 
 @interface MKTextField : UITextField

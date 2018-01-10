@@ -28,19 +28,19 @@
 - (void)addTextField:(MKTextField *)view {
     if (![self.views containsObject:view]) {
         switch (view.textObject.type) {
-            case TextTypeInt: {
+            case TextType_Int: {
                 view.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
             }
                 break;
-            case TextTypeFloat: {
+            case TextType_Float: {
                 view.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
             }
                 break;
-            case TextTypeIntPositive: {
+            case TextType_IntPositive: {
                 view.keyboardType = UIKeyboardTypeNumberPad;
             }
                 break;
-            case TextTypeFloatPositive: {
+            case TextType_FloatPositive: {
                 view.keyboardType = UIKeyboardTypeDecimalPad;
             }
                 break;
