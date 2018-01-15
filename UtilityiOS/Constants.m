@@ -85,6 +85,18 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
     return 44.0;
 }
 
++ (float)TableSectionHeaderHeight {
+    return 32.0;
+}
+
++ (float)TableSectionFooterHeight {
+    return 0.0;
+}
+
++ (float)TableFooterHeight {
+    return 44.0;
+}
+
 + (float)ButtonCornerRadious {
     return 6.0;
 }

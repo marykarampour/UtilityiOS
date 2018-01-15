@@ -24,4 +24,25 @@
     [self addConstraint:[NSLayoutConstraint constraintWithItem:view1 attribute:attr1 relatedBy:relation toItem:view2 attribute:attr2 multiplier:multiplier constant:c]];
 }
 
+- (void)constraintSizeForView:(__kindof UIView *)view {
+    [self addConstraintWithItem:view attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:view.frame.size.width];
+    [self addConstraintWithItem:view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:view.frame.size.height];
+}
+
+- (void)constraintWidthForView:(__kindof UIView *)view {
+    [self addConstraintWithItem:view attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:view.frame.size.width];
+}
+
+- (void)constraintHeightForView:(__kindof UIView *)view {
+    [self addConstraintWithItem:view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:view.frame.size.height];
+}
+
+- (void)constraint:(NSLayoutAttribute)attr view:(__kindof UIView *)view {
+    [self addConstraintWithItem:view attribute:attr relatedBy:NSLayoutRelationEqual toItem:self attribute:attr multiplier:1.0 constant:0.0];
+}
+
+- (void)constraint:(NSLayoutAttribute)attr view:(__kindof UIView *)view margin:(CGFloat)margin {
+    [self addConstraintWithItem:view attribute:attr relatedBy:NSLayoutRelationEqual toItem:self attribute:attr multiplier:1.0 constant:margin];
+}
+
 @end

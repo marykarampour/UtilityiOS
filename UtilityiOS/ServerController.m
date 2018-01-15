@@ -74,6 +74,10 @@
     }];
 }
 
++ (AFHTTPSessionManager *)getBadgeCountWithCompletion:(ServerResultErrorBlock)completion {
+    return [[NetworkManager instance] requestURL:@"" type:NetworkRequestType_GET parameters:nil completion:completion];
+}
+
 #pragma mark - swizzled in category
 
 + (AFHTTPSessionManager *)authWithUserID:(__kindof NSObject *)userID password:(NSString *)password completion:(ServerResultErrorBlock)completion {

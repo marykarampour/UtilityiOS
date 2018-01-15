@@ -83,6 +83,39 @@ static AppThemeStyle const THEME_STYLE = AppThemeStyleLight;
     }
 }
 
++ (UIColor *)sectionHeaderTextColor {
+    switch (THEME_STYLE) {
+        case AppThemeStyleLight: return [UIColor blackColor];
+        case AppThemeStyleDark: return [UIColor whiteColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
++ (UIColor *)sectionFooterBackgroundColor {
+    switch (THEME_STYLE) {
+        case AppThemeStyleLight: return [UIColor whiteColor];
+        case AppThemeStyleDark: return [UIColor blackColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
+
++ (UIColor *)sectionFooterTextColor {
+    switch (THEME_STYLE) {
+        case AppThemeStyleLight: return [UIColor blackColor];
+        case AppThemeStyleDark: return [UIColor whiteColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
++ (UIColor *)sectionHeaderBackgroundColor {
+    switch (THEME_STYLE) {
+        case AppThemeStyleLight: return [UIColor whiteColor];
+        case AppThemeStyleDark: return [UIColor blackColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
 + (UIColor *)textDefaultColor {
     switch (THEME_STYLE) {
         case AppThemeStyleLight: return [UIColor blackColor];
@@ -300,5 +333,10 @@ static AppThemeStyle const THEME_STYLE = AppThemeStyleLight;
 + (UIFont *)textFieldFont {
     return [UIFont boldSystemFontOfSize:16.0];
 }
+
++ (UIFont *)tableFooterFont {
+    return [UIFont boldSystemFontOfSize:16.0];
+}
+
 
 @end

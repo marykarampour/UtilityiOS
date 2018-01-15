@@ -92,6 +92,8 @@ typedef NSMutableDictionary<NSString *, MStringArr *>           MDictStringStrin
 typedef NSArray<NSValue *>                                      ValueArr;
 typedef NSMutableArray<NSValue *>                               MValueArr;
 
+typedef NSArray<NSIndexPath *>                                  IndexPathArr;
+typedef NSMutableArray<NSIndexPath *>                           MIndexPathArr;
 
 #pragma mark - format
 
@@ -129,6 +131,9 @@ extern NSString * const DateFormatDayMonthYearNumeric;
 + (float)PrimaryColumnWidth;
 + (float)PrimaryColumnShrunkenWidth;
 + (float)DefaultRowHeight;
++ (float)TableSectionHeaderHeight;
++ (float)TableSectionFooterHeight;
++ (float)TableFooterHeight;
 + (float)BorderWidth;
 + (float)ButtonCornerRadious;
 + (float)GeoFenceRadiousMeter;

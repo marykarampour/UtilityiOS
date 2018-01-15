@@ -22,6 +22,10 @@ typedef NS_ENUM(NSUInteger, AppThemeStyle) {
 
 //color
 + (UIColor *)seperatorColor;
++ (UIColor *)sectionHeaderTextColor;
++ (UIColor *)sectionHeaderBackgroundColor;
++ (UIColor *)sectionFooterTextColor;
++ (UIColor *)sectionFooterBackgroundColor;
 + (UIColor *)translusentBackground;
 + (UIColor *)VCBackgroundColor;
 + (UIColor *)VCForgroundColor;
@@ -68,5 +72,6 @@ typedef NS_ENUM(NSUInteger, AppThemeStyle) {
 
 + (UIFont *)textViewFont;
 + (UIFont *)textFieldFont;
++ (UIFont *)tableFooterFont;
 
 @end

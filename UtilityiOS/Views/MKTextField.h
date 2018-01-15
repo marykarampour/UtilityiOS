@@ -9,11 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "MKText.h"
 //TODO: fix
-typedef NS_ENUM(NSUInteger, TextFieldType) {
-    TextFieldTypeDefault,
-    TextFieldTypePlain  = 1 << 0,
-    TextFieldTypeSecure = 1 << 1,
-    TextFieldTypeBorder = 1 << 2
+typedef NS_OPTIONS(NSUInteger, TextFieldType) {
+    TextFieldTypeDefault = 1 << 0,
+    TextFieldTypePlain   = 1 << 1,
+    TextFieldTypeSecure  = 1 << 2,
+    TextFieldTypeBorder  = 1 << 3
 };
 
 @interface MKTextField : UITextField
