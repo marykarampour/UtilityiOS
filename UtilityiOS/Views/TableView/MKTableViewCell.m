@@ -18,4 +18,11 @@
     return [Constants DefaultRowHeight];
 }
 
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        self.backgroundColor = [AppTheme tableCellBackgroundColor];
+    }
+    return self;
+}
+
 @end

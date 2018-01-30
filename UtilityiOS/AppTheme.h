@@ -7,11 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "UIColor+Utility.h"
 
 typedef NS_ENUM(NSUInteger, AppThemeStyle) {
-    AppThemeStyleLight,
-    AppThemeStyleDark
+    AppThemeStyle_LIGHT,
+    AppThemeStyle_DARK
 };
+
+extern AppThemeStyle THEME_STYLE;
 
 @interface AppTheme : NSObject
 
@@ -26,6 +29,10 @@ typedef NS_ENUM(NSUInteger, AppThemeStyle) {
 + (UIColor *)sectionHeaderBackgroundColor;
 + (UIColor *)sectionFooterTextColor;
 + (UIColor *)sectionFooterBackgroundColor;
++ (UIColor *)tableFooterBackgroundColor;
++ (UIColor *)tableCellBackgroundColor;
+
+
 + (UIColor *)translusentBackground;
 + (UIColor *)VCBackgroundColor;
 + (UIColor *)VCForgroundColor;

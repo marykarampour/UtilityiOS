@@ -30,9 +30,9 @@ static dispatch_queue_t dispatch;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [AppTheme VCBackgroundColor];
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 1.0)];
-    view.backgroundColor = [AppTheme VCBackgroundColor];
+    view.backgroundColor = [AppTheme tableFooterBackgroundColor];
     self.tableView.tableFooterView = view;
 
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
