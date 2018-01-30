@@ -133,6 +133,14 @@
     }
 }
 
++ (UIColor *)tableCellAccessoryViewColor {
+    switch (THEME_STYLE) {
+        case AppThemeStyle_LIGHT: return [UIColor blackColor];
+        case AppThemeStyle_DARK: return [UIColor whiteColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
 + (UIImage *)tableCellDisclosureIndicatorImage {
     return [UIImage imageNamed:@""];
 }

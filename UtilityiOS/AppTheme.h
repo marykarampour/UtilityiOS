@@ -31,6 +31,7 @@ extern AppThemeStyle THEME_STYLE;
 + (UIColor *)sectionFooterBackgroundColor;
 + (UIColor *)tableFooterBackgroundColor;
 + (UIColor *)tableCellBackgroundColor;
++ (UIColor *)tableCellAccessoryViewColor;
 + (UIImage *)tableCellDisclosureIndicatorImage;
 
 + (UIColor *)translusentBackground;
