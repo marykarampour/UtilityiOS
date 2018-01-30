@@ -7,10 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "LoginViewController.h"
+#import "KeyboardAdjuster.h"
 
 @interface LoginManager : NSObject
 
-- (instancetype)initWithViewController:(UIViewController *)viewController;
+@property (nonatomic, strong, readonly) KeyboardAdjuster *viewAdjuster;
+
+- (instancetype)initWithViewController:(__kindof LoginViewController *)viewController;
 - (void)performLoginWithUsername:(NSString *)username password:(NSString *)passsword;
 
 @end

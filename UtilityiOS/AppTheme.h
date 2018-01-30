@@ -59,6 +59,8 @@ typedef NS_ENUM(NSUInteger, AppThemeStyle) {
 + (UIColor *)textFieldPlaceholderColor;
 + (UIColor *)textFieldTextColor;
 
++ (UIColor *)badgeBackgroundColor;
++ (UIColor *)badgeTextColor;
 
 //font
 + (UIFont *)smallLabelFont;

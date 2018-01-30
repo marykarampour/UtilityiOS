@@ -7,7 +7,18 @@
 //
 
 #import "UIControl+IndexPath.h"
+#import <objc/runtime.h>
+
+static char UICONTROL_INDEXPATH_KEY;
 
 @implementation UIControl (IndexPath)
+
+- (void)setIndexPath:(NSIndexPath *)indexPath {
+    objc_setAssociatedObject(self, &UICONTROL_INDEXPATH_KEY, indexPath, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSIndexPath *)indexPath {
+    return (NSIndexPath *)objc_getAssociatedObject(self, &UICONTROL_INDEXPATH_KEY);
+}
 
 @end

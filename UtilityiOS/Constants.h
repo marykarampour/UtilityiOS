@@ -26,6 +26,16 @@
 #define LOCALIZED(s)     NSLocalizedString(s, nil)
 
 
+#pragma mark - timers
+
+#define TIMER_DURATION_1_MIN                     60
+#define TIMER_DURATION_5_MIN                     5*TIMER_DURATION_1_MIN
+#define TIMER_DURATION_10_MIN                    10*TIMER_DURATION_1_MIN
+#define TIMER_DURATION_1_HOUR                    60*TIMER_DURATION_1_MIN
+#define TIMER_DURATION_12_HOUR                   12*TIMER_DURATION_1_HOUR
+
+#define BADGE_POOLING_TIMER                      TIMER_DURATION_10_MIN
+
 
 #pragma mark - typedefs
 
@@ -92,6 +102,9 @@ typedef NSMutableDictionary<NSString *, MStringArr *>           MDictStringStrin
 typedef NSArray<NSValue *>                                      ValueArr;
 typedef NSMutableArray<NSValue *>                               MValueArr;
 
+typedef NSArray<__kindof NSObject *>                            ObjectArr;
+typedef NSMutableArray<__kindof NSObject *>                     MObjectArr;
+
 typedef NSArray<NSIndexPath *>                                  IndexPathArr;
 typedef NSMutableArray<NSIndexPath *>                           MIndexPathArr;
 
@@ -129,6 +142,8 @@ extern NSString * const DateFormatDayMonthYearNumeric;
 
 + (float)TransitionAnimationDuration;
 + (float)PrimaryColumnWidth;
++ (float)MaxPrimaryColumnWidth;
++ (float)MinPrimaryColumnWidth;
 + (float)PrimaryColumnShrunkenWidth;
 + (float)DefaultRowHeight;
 + (float)TableSectionHeaderHeight;
@@ -141,6 +156,11 @@ extern NSString * const DateFormatDayMonthYearNumeric;
 + (float)TextPadding;
 + (float)HorizontalSpacing;
 + (float)VerticalSpacing;
++ (CGSize)SpinnerSize;
++ (UIEdgeInsets)TabBarItemImageInsets;
++ (float)LoginViewInset;
++ (float)LoginViewWidth;
++ (float)BadgeHeight;
 
 #pragma mark - defaults
 
@@ -153,6 +173,9 @@ extern NSString * const DateFormatDayMonthYearNumeric;
 #pragma mark - strings
 
 + (NSString *)ExitTitle_STR;
++ (NSString *)ExitMessage_STR;
++ (NSString *)LoginFailedTitle_STR;
++ (NSString *)LoginFailedMessage_STR;
 + (NSString *)FaceID_STR;
 + (NSString *)TouchID_STR;
 + (NSString *)OK_STR;
@@ -161,6 +184,7 @@ extern NSString * const DateFormatDayMonthYearNumeric;
 + (NSString *)PIN_STR;
 + (NSString *)Username_STR;
 + (NSString *)Password_STR;
++ (NSString *)Login_STR;
 + (NSString *)Enter_BLANK_STR;
 + (NSString *)Incorrect_BLANK_STR;
 + (NSString *)LocationRestrictedTitle_STR;

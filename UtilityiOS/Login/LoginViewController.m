@@ -11,6 +11,7 @@
 #import "UIView+Utility.h"
 #import "LoginManager.h"
 #import "MKBasicFormView.h"
+#import "MKLabel.h"
 
 typedef NS_ENUM(NSUInteger, TextFieldIndex) {
     TextFieldIndexUsername,
@@ -21,9 +22,8 @@ typedef NS_ENUM(NSUInteger, TextFieldIndex) {
 @interface LoginViewController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) LoginManager *loginManager;
-@property (nonatomic, strong) MKBasicFormView *loginView;
-
-@property (nonatomic, strong) KeyboardAdjuster *viewAdjuster;
+@property (nonatomic, strong, readwrite) MKBasicFormView *loginView;
+@property (nonatomic, strong) MKLabel *versionLabel;
 
 @end
 
@@ -34,37 +34,51 @@ typedef NS_ENUM(NSUInteger, TextFieldIndex) {
     self.navigationController.navigationBarHidden = YES;
     self.edgesForExtendedLayout = UIRectEdgeNone;
     [self.navigationItem setHidesBackButton:YES];
+    self.view.backgroundColor = [AppTheme VCBackgroundColor];
+
+    self.loginManager = [[LoginManager alloc] initWithViewController:self];
     
-    self.loginView = [[MKBasicFormView alloc] initWithTextFieldPlaceholders:@[@"Username", @"Password"] buttonTitle:@"Login"];
+    self.loginView = [[MKBasicFormView alloc] initWithTextFieldPlaceholders:@[[Constants Username_STR], [Constants Password_STR]] buttonTitle:[Constants Login_STR]];
     [self.loginView setTarget:self selector:@selector(login)];
-    
+    [self.loginView setDelegate:self.loginManager];
+
     [self.view addSubview:self.loginView];
-    self.view.backgroundColor = [UIColor whiteColor];
-    
-    self.viewAdjuster = [[KeyboardAdjuster alloc] initWithViewController:self];
+
+    self.versionLabel = [[MKLabel alloc] init];
+    self.versionLabel.textAlignment = NSTextAlignmentCenter;
+    self.versionLabel.text = [AppCommon versionString];
+    self.versionLabel.textColor = [AppTheme textLightColor];
+    self.versionLabel.font = [AppTheme smallLabelFont];
+    [self.view addSubview:self.versionLabel];
     
     UITapGestureRecognizer *gesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
     gesture.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:gesture];
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    
-    [self.viewAdjuster registerObserver];
-    
-    [self.view removeConstraintsMask];
-    NSDictionary *views = NSDictionaryOfVariableBindings(_loginView);
-    
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[_loginView(%f)]", [self.loginView height]] options:0 metrics:nil views:views]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[_loginView(%f)]", 400.0] options:0 metrics:nil views:views]];
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self.loginView setText:@"" atIndex:TextFieldIndexUsername];
+    [self.loginView setText:@"" atIndex:TextFieldIndexPassword];
+}
 
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.loginView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0]];
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.loginView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:-100.0]];
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.loginManager.viewAdjuster registerObserver];
+
+    [self.view removeConstraintsMask];
+    
+    [self.view constraintWidth:[Constants LoginViewWidth] forView:self.loginView];
+    [self.view constraintHeight:[self.loginView height] forView:self.loginView];
+    [self.view constraint:NSLayoutAttributeCenterX view:self.loginView];
+    [self.view constraint:NSLayoutAttributeCenterY view:self.loginView margin:-[Constants LoginViewInset]];
+    [self.view constraint:NSLayoutAttributeCenterX view:self.versionLabel];
+    [self.view constraint:NSLayoutAttributeBottom view:self.versionLabel margin:-[Constants VerticalSpacing]];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.viewAdjuster removeObserver];
+    [self.loginManager.viewAdjuster removeObserver];
 }
 
 #pragma mark - actions
@@ -76,22 +90,7 @@ typedef NS_ENUM(NSUInteger, TextFieldIndex) {
 }
 
 - (void)login {
-    self.loginManager = [[LoginManager alloc] initWithViewController:self];
     [self.loginManager performLoginWithUsername:[self.loginView textAtIndex:TextFieldIndexUsername] password:[self.loginView textAtIndex:TextFieldIndexPassword]];
-}
-
-#pragma mark - textfields
-
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
-    [self.viewAdjuster setReferenceView:textField];
-}
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    if ([self.loginView performAtTextFieldReturn:textField]) {
-        [self login];
-        return YES;
-    }
-    return NO;
 }
 
 - (void)didReceiveMemoryWarning {

@@ -293,7 +293,21 @@ static AppThemeStyle const THEME_STYLE = AppThemeStyleLight;
     }
 }
 
++ (UIColor *)badgeBackgroundColor {
+    switch (THEME_STYLE) {
+        case AppThemeStyleLight: return [UIColor whiteColor];
+        case AppThemeStyleDark: return [UIColor blackColor];
+        default: return [UIColor whiteColor];
+    }
+}
 
++ (UIColor *)badgeTextColor {
+    switch (THEME_STYLE) {
+        case AppThemeStyleLight: return [UIColor blackColor];
+        case AppThemeStyleDark: return [UIColor whiteColor];
+        default: return [UIColor whiteColor];
+    }
+}
 
 #pragma mark - font
 

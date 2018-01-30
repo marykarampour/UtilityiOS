@@ -14,6 +14,7 @@
 
 @optional
 - (void)handleTextFieldChanges:(__kindof UITextField *)textField;
+- (void)handleTextFieldBeginEditing:(__kindof UITextField *)textField;
 
 @end
 

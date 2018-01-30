@@ -18,7 +18,7 @@
 - (UIViewController *)windowRootViewController;
 - (UINavigationController *)detailSplitViewController;
 
-/** @brief initializes instances and globals, called early when app launches. Call theme, notification, server controller etc. initializations here
+/** @brief initializes instances and globals, called early when app launches. Call theme, notification, server controller etc. initializations here, call super in subclass
  @code
  - (void)initializeInstances {
     [AppTheme applyTheme];

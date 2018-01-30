@@ -24,6 +24,13 @@
     [self addConstraint:[NSLayoutConstraint constraintWithItem:view1 attribute:attr1 relatedBy:relation toItem:view2 attribute:attr2 multiplier:multiplier constant:c]];
 }
 
+- (void)constraintSidesForView:(__kindof UIView *)view {
+    [self constraint:NSLayoutAttributeTop view:view];
+    [self constraint:NSLayoutAttributeBottom view:view];
+    [self constraint:NSLayoutAttributeLeft view:view];
+    [self constraint:NSLayoutAttributeRight view:view];
+}
+
 - (void)constraintSizeForView:(__kindof UIView *)view {
     [self addConstraintWithItem:view attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:view.frame.size.width];
     [self addConstraintWithItem:view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:view.frame.size.height];
@@ -35,6 +42,18 @@
 
 - (void)constraintHeightForView:(__kindof UIView *)view {
     [self addConstraintWithItem:view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:view.frame.size.height];
+}
+
+- (void)constraintWidth:(CGFloat)width forView:(__kindof UIView *)view {
+    [self addConstraintWithItem:view attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:width];
+}
+
+- (void)constraintHeight:(CGFloat)height forView:(__kindof UIView *)view {
+    [self addConstraintWithItem:view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:height];
+}
+
+- (void)constraintSameWidthHeightForView:(__kindof UIView *)view {
+    [self addConstraintWithItem:view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0];
 }
 
 - (void)constraint:(NSLayoutAttribute)attr view:(__kindof UIView *)view {

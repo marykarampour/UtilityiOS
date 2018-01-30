@@ -77,6 +77,14 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
     return 256.0;
 }
 
++ (float)MaxPrimaryColumnWidth {
+    return 256.0;
+}
+
++ (float)MinPrimaryColumnWidth {
+    return 0.0;
+}
+
 + (float)PrimaryColumnShrunkenWidth {
     return 44.0;
 }
@@ -117,6 +125,26 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
     return 8.0;
 }
 
++ (CGSize)SpinnerSize {
+    return CGSizeMake(120.0, 120.0);
+}
+
++ (UIEdgeInsets)TabBarItemImageInsets {
+    return UIEdgeInsetsMake(8.0, 0.0, -8.0, 0.0);
+}
+
++ (float)LoginViewInset {
+    return 100.0;
+}
+
++ (float)LoginViewWidth {
+    return 400.0;
+}
+
++ (float)BadgeHeight {
+    return 20.0;
+}
+
 #pragma mark - defaults
 
 + (NSString *)DefaultsVersion {
@@ -133,6 +161,18 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
 
 + (NSString *)ExitTitle_STR {
     return LOCALIZED(@"Exit");
+}
+
++ (NSString *)ExitMessage_STR {
+    return LOCALIZED(@"Are you sure you want to exit?");
+}
+
++ (NSString *)LoginFailedTitle_STR {
+    return LOCALIZED(@"Login Failed!");
+}
+
++ (NSString *)LoginFailedMessage_STR {
+    return LOCALIZED(@"Please check your credentials and try again.");
 }
 
 + (NSString *)FaceID_STR {
@@ -165,6 +205,10 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
 
 + (NSString *)Password_STR {
     return LOCALIZED(@"Password");
+}
+
++ (NSString *)Login_STR {
+    return LOCALIZED(@"Login");
 }
 
 + (NSString *)Enter_BLANK_STR {
@@ -274,7 +318,11 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
 }
 
 + (NSString *)versionString {
-    return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSDictionary *versionDict = [[NSBundle mainBundle] infoDictionary];
+    NSString *build = [versionDict objectForKey:(NSString *)kCFBundleVersionKey];
+    NSString *version = [versionDict objectForKey:@"CFBundleShortVersionString"];
+    version = [NSString stringWithFormat:@"version %@ (%@)", version, build];
+    return version;
 }
 
 + (NSString *)bundleID {

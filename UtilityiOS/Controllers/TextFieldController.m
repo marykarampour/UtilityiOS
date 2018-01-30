@@ -55,7 +55,7 @@
 #pragma mark - TextField Delegate mathods
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-    
+    [self handleTextFieldBeginEditing:textField];
 }
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
@@ -82,6 +82,14 @@
     if ([textField isKindOfClass:[MKTextField class]]) {
         if ([self.delegate respondsToSelector:@selector(handleTextFieldChanges:)]) {
             [self.delegate handleTextFieldChanges:(MKTextField *)textField];
+        }
+    }
+}
+
+- (void)handleTextFieldBeginEditing:(__kindof UITextField *)textField {
+    if ([textField isKindOfClass:[MKTextField class]]) {
+        if ([self.delegate respondsToSelector:@selector(handleTextFieldBeginEditing:)]) {
+            [self.delegate handleTextFieldBeginEditing:(MKTextField *)textField];
         }
     }
 }

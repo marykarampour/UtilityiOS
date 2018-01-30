@@ -26,12 +26,14 @@
     [self.window makeKeyAndVisible];
     
     [self.window addSubview:[MKSpinner spinner]];
+    [[MKSpinner spinner] setWidth:[Constants SpinnerSize].width height:[Constants SpinnerSize].height];
     [self.window bringSubviewToFront:[MKSpinner spinner]];
     
     return YES;
 }
 
 - (void)initializeInstances {
+    [AppTheme applyTheme];
 }
 
 - (void)setNotificationCateories {

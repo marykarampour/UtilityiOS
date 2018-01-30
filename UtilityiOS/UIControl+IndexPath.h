@@ -10,4 +10,6 @@
 
 @interface UIControl (IndexPath)
 
+@property (nonatomic, strong) NSIndexPath *indexPath;
+
 @end

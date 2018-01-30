@@ -7,7 +7,12 @@
 //
 
 #import "NSObject+SplitView.h"
+#import "MKBasicFormView.h"
 
 @interface LoginViewController : DetailViewController
+
+@property (nonatomic, strong, readonly) MKBasicFormView *loginView;
+
+- (void)login;
 
 @end
