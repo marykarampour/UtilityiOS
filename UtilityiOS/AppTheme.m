@@ -29,6 +29,7 @@
        NSFontAttributeName:[self mediumLabelFont]} forState:UIControlStateSelected];
     [[UISegmentedControl appearance] setBackgroundColor:[AppTheme buttonTextColor]];
     [[UISegmentedControl appearance] setTintColor:[AppTheme buttonBackgroundColor]];
+    
 }
 
 #pragma mark - color
@@ -81,6 +82,8 @@
     }
 }
 
+#pragma mark - table
+
 + (UIColor *)sectionHeaderTextColor {
     switch (THEME_STYLE) {
         case AppThemeStyle_LIGHT: return [UIColor blackColor];
@@ -129,6 +132,12 @@
         default: return [UIColor whiteColor];
     }
 }
+
++ (UIImage *)tableCellDisclosureIndicatorImage {
+    return [UIImage imageNamed:@""];
+}
+
+#pragma mark - text
 
 + (UIColor *)textDefaultColor {
     switch (THEME_STYLE) {

@@ -25,4 +25,26 @@
     return self;
 }
 
++ (UIImageView *)imageAccessoryView {
+    CGSize size = [Constants tableCellDisclosureIndicatorSize];
+    UIImageView *accessoryView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, size.width, size.height)];
+    accessoryView.image = [AppTheme tableCellDisclosureIndicatorImage];
+    return accessoryView;
+}
+
+- (void)setAccessoryView:(UIView *)accessoryView {
+    switch (self.accessoryType) {
+        case UITableViewCellAccessoryDisclosureIndicator: {
+            [super setAccessoryView:[MKTableViewCell imageAccessoryView]];
+        }
+            break;
+        default: {
+            [super setAccessoryView:accessoryView];
+        }
+            break;
+    }
+}
+
+
+
 @end

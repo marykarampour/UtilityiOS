@@ -145,6 +145,10 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
     return 20.0;
 }
 
++ (CGSize)tableCellDisclosureIndicatorSize {
+    return CGSizeMake(20.0, 20.0);
+}
+
 #pragma mark - defaults
 
 + (NSString *)DefaultsVersion {

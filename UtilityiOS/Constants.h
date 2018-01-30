@@ -161,6 +161,7 @@ extern NSString * const DateFormatDayMonthYearNumeric;
 + (float)LoginViewInset;
 + (float)LoginViewWidth;
 + (float)BadgeHeight;
++ (CGSize)tableCellDisclosureIndicatorSize;
 
 #pragma mark - defaults
 

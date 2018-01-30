@@ -12,5 +12,6 @@
 
 + (NSString *)identifier;
 + (CGFloat)estimatedHeight;
++ (UIImageView *)imageAccessoryView;
 
 @end
