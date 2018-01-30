@@ -23,7 +23,7 @@ static dispatch_queue_t dispatch;
     }
 }
 
-- (instancetype)initWithCFIType:(NSInteger)type {
+- (instancetype)initWithType:(NSInteger)type {
     return [self init];
 }
 
@@ -33,14 +33,16 @@ static dispatch_queue_t dispatch;
     self.view.backgroundColor = [UIColor whiteColor];
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 1.0)];
     view.backgroundColor = [AppTheme VCBackgroundColor];
+    self.tableView.tableFooterView = view;
+
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.tableView.separatorColor = [AppTheme seperatorColor];
-    self.tableView.tableFooterView = view;
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.extendedLayoutIncludesOpaqueBars = NO;
     self.tableView.alwaysBounceHorizontal = NO;
     self.edgesForExtendedLayout = UIRectEdgeNone;
+    
     self.tableView.estimatedRowHeight = [Constants DefaultRowHeight];
     self.tableView.estimatedSectionHeaderHeight = 0;
     self.tableView.estimatedSectionFooterHeight = 0;

@@ -38,7 +38,7 @@ typedef NS_ENUM(NSUInteger, ViewControllerTransitionResult) {
 
 @property (nonatomic, strong, nullable) NSString *footerTitle;
 
-- (instancetype _Nonnull)initWithCFIType:(NSInteger)type;
+- (instancetype _Nonnull)initWithType:(NSInteger)type;
 
 - (void)reloadDataAnimated:(BOOL)animated;
 - (void)reloadAllSections;

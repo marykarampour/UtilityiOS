@@ -117,8 +117,8 @@
     MKMenuObject *obj = [self menuItemForIndexPath:indexPath];
     UIViewController *nextViewController;
     
-    if ([obj.VCClass instancesRespondToSelector:@selector(initWithCFIType:)]) {
-        nextViewController = [[obj.VCClass alloc] initWithCFIType:obj.type];
+    if ([obj.VCClass instancesRespondToSelector:@selector(initWithType:)]) {
+        nextViewController = [[obj.VCClass alloc] initWithType:obj.type];
     }
     else {
         nextViewController = [[obj.VCClass alloc] init];
