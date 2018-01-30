@@ -7,6 +7,19 @@
 //
 
 #import "MKCollapsableSectionsTableViewController.h"
+#import "UIControl+IndexPath.h"
+#import "MKButtonImageView.h"
+
+@implementation MKTableViewSection
+
++ (MKTableViewSection *)sectionCollapsable:(BOOL)isCollapsable expanded:(BOOL)isExpanded {
+    MKTableViewSection *section = [[MKTableViewSection alloc] init];
+    section.isCollapsable = isCollapsable;
+    section.isExpanded = isExpanded;
+    return section;
+}
+
+@end
 
 @interface MKCollapsableSectionsTableViewController ()
 
@@ -14,85 +27,82 @@
 
 @implementation MKCollapsableSectionsTableViewController
 
+- (instancetype)init {
+    return [self initWithStyle:UITableViewStyleGrouped];
+}
+
+- (instancetype)initWithStyle:(UITableViewStyle)style {
+    if (self = [super initWithStyle:style])  {
+        self.sections = [[NSMutableArray alloc] init];
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+}
+
+- (MKTableViewSection *)sectionObjectForIndex:(NSUInteger)section {
+    if (section < self.sections.count) {
+        return self.sections[section];
+    }
+    return nil;
+}
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return self.sections.count;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    MKTableViewSection *sect = [self sectionObjectForIndex:section];
+    return (!sect.isCollapsable || (sect.isCollapsable && sect.isExpanded) ? [self numberOfRowsInSectionWhenExpanded:section] : 0);
+}
+
+- (NSUInteger)numberOfRowsInSectionWhenExpanded:(NSUInteger)section {
+    RaiseExceptionMissingMethodInClass
+    return 0;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    MKTableViewSection *sect = [self sectionObjectForIndex:section];
+    if (sect.isCollapsable) {
+        MKButtonImageView *header = [[MKButtonImageView alloc] init];
+        [header setLabelTitle:[self tableView:self.tableView titleForHeaderInSection:section]];
+        [header setTarget:self action:@selector(headerPressed:)];
+        
+        NSIndexPath *indexPath = [NSIndexPath indexPathWithIndex:section];
+        [header setIndexPath:indexPath];
+        [header setImageName:(sect.isExpanded ? @"chevron-down" : @"chevron-right")];
+        return header;
+    }
+    return [self viewForHeaderInSection:section];
+}
+
+- (UIView *)viewForHeaderInSection:(NSInteger)section {
+    return nil;
+}
+
+- (void)headerPressed:(UIButton *)sender {
+    NSIndexPath *indexPath = sender.indexPath;
+    MKTableViewSection *sect = [self sectionObjectForIndex:indexPath.section];
+    if (sect.isCollapsable) {
+        if ([self.tableView numberOfRowsInSection:indexPath.section] > 0) {
+            sect.isExpanded = !sect.isExpanded;
+            [self reloadSection:indexPath.section withHeader:YES];
+        }
+        else {
+            //perform did select section
+        }
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
+    return 2.0;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Incomplete implementation, return the number of sections
-    return 0;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete implementation, return the number of rows
-    return 0;
-}
-
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
-    return cell;
-}
-*/
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

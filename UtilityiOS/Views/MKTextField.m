@@ -54,6 +54,11 @@
     return self;
 }
 
+- (void)setPlaceholderText:(NSString *)placeholder {
+    self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:placeholder attributes:@{NSForegroundColorAttributeName:[AppTheme textFieldPlaceholderColor]}];
+    self.placeholder = placeholder;
+}
+
 // placeholder position
 - (CGRect)textRectForBounds:(CGRect)bounds {
     return CGRectInset(bounds, 16, 4);

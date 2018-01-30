@@ -10,12 +10,27 @@
 
 @implementation BadgeView
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+- (instancetype)init {
+    return [self initWithText:@""];
 }
-*/
+
+- (instancetype)initWithText:(NSString *)text {
+    if (self = [super init]) {
+        self.text = text;
+        self.textAlignment = NSTextAlignmentCenter;
+        self.textColor = [AppTheme badgeTextColor];
+        self.font = [AppTheme smallLabelFont];
+        self.backgroundColor = [AppTheme badgeBackgroundColor];
+        self.clipsToBounds = YES;
+        self.layer.cornerRadius = [Constants BadgeHeight]/2;
+    }
+    return self;
+}
+
+- (void)setText:(NSString *)text {
+    [super setText:text];
+    float width = (text.length > 1 ? ([Constants BadgeHeight]*(1+(float)(text.length/3.0))) : [Constants BadgeHeight]);
+    self.frame = CGRectMake(0.0, 0.0, width, [Constants BadgeHeight]);
+}
 
 @end

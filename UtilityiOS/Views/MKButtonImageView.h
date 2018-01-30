@@ -7,7 +7,21 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "UIControl+IndexPath.h"
 
 @interface MKButtonImageView : UIView
+
+/** @brief default text color is labelMediumColor */
+@property (nonatomic, strong, readonly) UILabel *titleView;
+
+/** @brief Default initializer, if init is used instead the default value of imageHeight is used
+ @param imageHeight Default is 20.0
+ */
+- (instancetype)initWithImageHeight:(CGFloat)imageHeight;
+
+- (void)setTarget:(id)target action:(SEL)action;
+- (void)setLabelTitle:(NSString *)title;
+- (void)setImageName:(NSString *)image;
+- (void)setIndexPath:(NSIndexPath *)indexPath;
 
 @end

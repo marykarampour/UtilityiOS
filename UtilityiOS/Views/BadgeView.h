@@ -10,4 +10,6 @@
 
 @interface BadgeView : UILabel
 
+- (instancetype)initWithText:(NSString *)text;
+
 @end

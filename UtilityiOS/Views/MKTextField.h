@@ -21,5 +21,6 @@ typedef NS_OPTIONS(NSUInteger, TextFieldType) {
 @property (nonatomic, strong, readonly) MKText *textObject;
 
 - (instancetype)initWithPlaceholder:(NSString *)placeholder type:(TextFieldType)type;
+- (void)setPlaceholderText:(NSString *)placeholder;
 
 @end

@@ -232,6 +232,14 @@ static dispatch_queue_t dispatch;
     });
 }
 
+- (void)deselectAllExcept:(NSIndexPath *)indexPath animated:(BOOL)animated {
+    for (NSIndexPath *path in [self.tableView indexPathsForSelectedRows]) {
+        if (path.section == indexPath.section && path.row != indexPath.row) {
+            [self.tableView deselectRowAtIndexPath:path animated:animated];
+        }
+    }
+}
+
 - (void)createTableFooterWithTitle:(NSString *)title {
     if (title.length > 0) {
         UILabel *view = [[UILabel alloc] initWithFrame:CGRectMake([Constants HorizontalSpacing], [Constants VerticalSpacing], self.view.frame.size.width-[Constants HorizontalSpacing]*2, [Constants TableFooterHeight])];

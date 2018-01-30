@@ -29,6 +29,7 @@ typedef NS_OPTIONS(NSUInteger, MultiLabelViewType) {
  labels and left views
  labels and right views
  labels and left and right views
+ single view, pass MultiLabelViewType_NONE and a left or right view
  @param leftView only used if labels or right view is non null, frame.size should be provided
  @param rightView only used if labels or left view is non null, frame.size should be provided
  @param labelsCount number of labels, used if type includes option labels

@@ -13,4 +13,6 @@
 @property (nonatomic, strong) NSNumber *count;
 @property (nonatomic, strong) NSString *name;
 
+- (NSString *)keyForBadge;
+
 @end

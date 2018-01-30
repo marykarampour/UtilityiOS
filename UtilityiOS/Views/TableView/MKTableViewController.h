@@ -28,14 +28,6 @@ typedef NS_ENUM(NSUInteger, ViewControllerTransitionResult) {
 @optional
 - (void)badgeUpdated:(MKBadgeItem * _Nonnull)badge;
 - (void)viewTransition:(UIViewController * _Nullable)viewController withObject:(id _Nullable)object;
-- (void)didShowDatePickerAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
-
-@required
-- (CGFloat)heightForNonDateRowAtIndexPath:(NSIndexPath * _Nullable)indexPath;
-- (UITableViewCell * _Nonnull)tableView:(UITableView * _Nonnull)tableView cellForNonDateRowAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
-- (void)didSelectNonDateRowAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
-- (void)didHideDatePickerAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
-- (NSUInteger)numberOfRowsInNonDateSection:(NSUInteger)section;
 
 @end
 
@@ -57,6 +49,7 @@ typedef NS_ENUM(NSUInteger, ViewControllerTransitionResult) {
 - (void)reloadSection:(NSUInteger)section withHeader:(BOOL)header;
 - (void)removeRowsAtIndexPaths:(IndexPathArr * _Nullable)indexPaths;
 - (void)insertRowsAtIndexPaths:(IndexPathArr * _Nullable)indexPaths;
+- (void)deselectAllExcept:(NSIndexPath *)indexPath animated:(BOOL)animated;
 
 - (void)getBadge:(NSString * _Nonnull)badgeName;
 - (void)updateBadge:(MKBadgeItem * _Nonnull)badge;

@@ -31,7 +31,10 @@ static CGFloat PADDING = 0.0;
 
 - (instancetype)initWithType:(MultiLabelViewType)type leftView:(__kindof UIView *)leftView rightView:(__kindof UIView *)rightView labelsCount:(NSUInteger)labelsCount margin:(CGFloat)margin {
     PADDING = margin;
-    if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[MultiLabelTableViewCell cellIdentifier]]) {
+    if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[MultiLabelTableViewCell identifier]]) {
+        if ((type == MultiLabelViewType_NONE) && (leftView || rightView)) {
+            [self constructWithSingleView:(leftView ? leftView : rightView)];
+        }
         if ((type == MultiLabelViewType_Labels) && labelsCount > 0) {
             [self constructWithLabelsCount:labelsCount];
         }
@@ -64,6 +67,16 @@ static CGFloat PADDING = 0.0;
 }
 
 #pragma mark - constructors
+
+- (void)constructWithSingleView:(__kindof UIView *)view {
+    [self addLeftView:view];
+    [self.contentView removeConstraintsMask];
+    
+    [self.contentView constraint:NSLayoutAttributeLeft view:view margin:PADDING];
+    [self.contentView constraint:NSLayoutAttributeRight view:view margin:-PADDING];
+    [self.contentView constraint:NSLayoutAttributeTop view:view margin:PADDING];
+    [self.contentView constraint:NSLayoutAttributeBottom view:view margin:-PADDING];
+}
 
 - (void)constructWithLabelsCount:(NSUInteger)labelsCount {
     [self createLabels:labelsCount];
