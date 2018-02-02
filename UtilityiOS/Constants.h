@@ -23,6 +23,8 @@
 
 #define RaiseExceptionIncorrectMethodUse(...)   [NSException raise:NSInternalInconsistencyException format:@"You are calling %@, use %@ instead", NSStringFromSelector(_cmd), ##__VA_ARGS__];
 
+#define RaiseExceptionVariableInconsistency(...) [NSException raise:NSInternalInconsistencyException format:@"In method %@, variable %@ is of type %@, you must use type %@ instead", NSStringFromSelector(_cmd), ##__VA_ARGS__];
+
 #define LOCALIZED(s)     NSLocalizedString(s, nil)
 
 
