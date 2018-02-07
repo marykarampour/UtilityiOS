@@ -11,7 +11,7 @@
 @implementation UIBezierPath (Utility)
 
 + (UIBezierPath *)bezierPathForPoints:(NSArray<NSValue *> *)points {
-    if (points.count < 3) {
+    if (points.count < 2) {
         return nil;
     }
     CGMutablePathRef pathRef = CGPathCreateMutable();
