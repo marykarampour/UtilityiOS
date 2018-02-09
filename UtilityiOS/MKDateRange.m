@@ -173,6 +173,18 @@
     return range;
 }
 
+- (void)extendEnd:(NSUInteger)value {
+    self.end = @(self.end.integerValue+value);
+}
+
+- (void)extendStart:(NSUInteger)value {
+    self.start = @(self.start.integerValue-value);
+}
+
+- (NSUInteger)lenght {
+    return abs(self.end.integerValue - self.start.integerValue);
+}
+
 @end
 
 @implementation MKInterval
