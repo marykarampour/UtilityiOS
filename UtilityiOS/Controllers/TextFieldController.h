@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#warning -  make these clusters with text view
 @class MKTextField;
 
 @protocol TextFieldDelegate <NSObject>

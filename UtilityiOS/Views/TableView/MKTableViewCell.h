@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MKCellContentController.h"
 
 @interface MKTableViewCell : UITableViewCell
+
+@property (nonatomic, strong) MKCellContentController *cellController;
 
 + (NSString *)identifier;
 + (CGFloat)estimatedHeight;
