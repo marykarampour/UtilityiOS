@@ -87,7 +87,7 @@
     [self.content constraint:NSLayoutAttributeTop view:view margin:self.insets.top];
     [self.content constraint:NSLayoutAttributeBottom view:view margin:self.insets.bottom];
     [self.content constraint:NSLayoutAttributeLeft view:view margin:self.insets.left];
-    [self.content constraint:NSLayoutAttributeRight view:view margin:-self.insets.right];
+    [self.content constraint:NSLayoutAttributeRight view:view margin:self.insets.right];
 }
 
 @end
