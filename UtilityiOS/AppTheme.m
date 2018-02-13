@@ -342,6 +342,10 @@
 
 #pragma mark - font
 
++ (UIFont *)XsmallLabelFont {
+    return [UIFont systemFontOfSize:8.0];
+}
+
 + (UIFont *)smallLabelFont {
     return [UIFont systemFontOfSize:12.0];
 }

@@ -22,7 +22,7 @@
 }
 
 + (CGSize)estimatedSize {
-    return CGSizeMake(100.0, 44.0);
+    return CGSizeMake(100.0, 120.0);
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
