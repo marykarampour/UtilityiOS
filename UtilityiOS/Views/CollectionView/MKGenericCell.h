@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "MKCellContentController.h"
-#import "MKCollectionView.h"
 #import "MKTableViewCell.h"
+#import "MKCollectionView.h"
 
 @protocol MKHorizontalCellProtocol <NSObject>
 

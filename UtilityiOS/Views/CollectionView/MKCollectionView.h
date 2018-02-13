@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "MKCellContentController.h"
 
-#warning - move collection related code to Utililty
+@class MKHorizontalCollectionViewCell;
 
 typedef NS_OPTIONS(NSUInteger, CollectionViewOrientation) {
     CollectionViewOrientation_Horizontal = 1 << 0,
@@ -35,6 +35,7 @@ typedef NS_OPTIONS(NSUInteger, CollectionViewOrientation) {
 @property (nonatomic, strong) MKCellContentController *cellController;
 
 + (NSString *)identifier;
++ (CGSize)estimatedSize;
 
 @end
 
@@ -80,14 +81,27 @@ typedef NS_OPTIONS(NSUInteger, CollectionViewOrientation) {
 
 @end
 
+@protocol MKVerticalCollectionViewProtocol <NSObject>
 
-@interface MKVerticalCollectionViewController : MKSingleCollectionViewController
+@required
+- (__kindof MKCollectionViewCell *)verticalCellForItemAtIndexPath:(NSIndexPath *)indexPath;
+
+@end
+
+@protocol MKHorizontalCollectionViewProtocol <NSObject>
+
+@required
+- (__kindof MKCollectionViewCell *)horizontalCellForItemAtIndexPath:(NSIndexPath *)indexPath;
+
+@end
+
+@interface MKVerticalCollectionViewController : MKSingleCollectionViewController <MKVerticalCollectionViewProtocol>
 
 @property (nonatomic, assign) NSUInteger sectionCount;
 
 @end
 
-@interface MKHorizontalCollectionViewController : MKSingleCollectionViewController
+@interface MKHorizontalCollectionViewController : MKSingleCollectionViewController <MKHorizontalCollectionViewProtocol>
 
 @property (nonatomic, assign) NSUInteger itemCount;
 

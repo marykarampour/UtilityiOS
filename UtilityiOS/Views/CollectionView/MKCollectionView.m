@@ -9,6 +9,7 @@
 #import "MKCollectionView.h"
 #import "UIView+Utility.h"
 #import "KCSectionDateLabel.h"
+#import "MKGenericCell.h"
 
 @interface MKCollectionViewCell ()
 
@@ -18,6 +19,10 @@
 
 + (NSString *)identifier {
     return [NSString stringWithFormat:@"%@Identifier", NSStringFromClass(self)];
+}
+
++ (CGSize)estimatedSize {
+    return CGSizeMake(100.0, 44.0);
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -256,6 +261,14 @@ static CGFloat const PADDING = 8.0;
     return 1;
 }
 
+- (MKCollectionViewCell *)cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return [self verticalCellForItemAtIndexPath:indexPath];
+}
+
+- (MKCollectionViewCell *)verticalCellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return [[MKCollectionViewCell alloc] init];
+}
+
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         MKVerticalCollectionHeaderView *view = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:[MKVerticalCollectionHeaderView identifier] forIndexPath:indexPath];
@@ -301,6 +314,13 @@ static CGFloat const PADDING = 8.0;
     return self.itemCount;
 }
 
+- (MKCollectionViewCell *)cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return [self horizontalCellForItemAtIndexPath:indexPath];
+}
+
+- (MKCollectionViewCell *)horizontalCellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    return [[MKCollectionViewCell alloc] init];
+}
 
 @end
 
