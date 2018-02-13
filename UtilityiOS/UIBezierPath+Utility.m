@@ -7,6 +7,7 @@
 //
 
 #import "UIBezierPath+Utility.h"
+#import "MKMath.h"
 
 @implementation UIBezierPath (Utility)
 
@@ -26,6 +27,26 @@
         }
     }
     
+    UIBezierPath *path = [UIBezierPath bezierPathWithCGPath:pathRef];
+    CGPathRelease(pathRef);
+    return path;
+}
+
++ (UIBezierPath *)starBezierPathForPolygon:(NSUInteger)vertexCount ofSize:(CGFloat)size {
+    ValueArr *vertices = [MKMath verticesForPolygon:vertexCount ofSize:size];
+    CGMutablePathRef pathRef = CGPathCreateMutable();
+    NSUInteger currentVertexIndex = 0;
+    NSUInteger skipIndex = (int)((vertexCount-1)/2);
+    CGPoint initialVertex = [vertices[currentVertexIndex] CGPointValue];
+    CGPathMoveToPoint(pathRef, NULL, initialVertex.x, initialVertex.y);
+    
+    do {
+        CGPoint vertex = [vertices[currentVertexIndex] CGPointValue];
+        CGPathAddLineToPoint(pathRef, NULL, vertex.x, vertex.y);
+        currentVertexIndex = (currentVertexIndex + skipIndex)%vertexCount;
+    } while (currentVertexIndex > 0);
+    
+    CGPathAddLineToPoint(pathRef, NULL, initialVertex.x, initialVertex.y);
     UIBezierPath *path = [UIBezierPath bezierPathWithCGPath:pathRef];
     CGPathRelease(pathRef);
     return path;

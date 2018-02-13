@@ -11,5 +11,6 @@
 @interface UIBezierPath (Utility)
 
 + (UIBezierPath *)bezierPathForPoints:(NSArray<NSValue *> *)points;
++ (UIBezierPath *)starBezierPathForPolygon:(NSUInteger)vertexCount ofSize:(CGFloat)size;
 
 @end
