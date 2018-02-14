@@ -69,6 +69,12 @@
     return [NSString stringWithFormat:@"%@Identifier", NSStringFromClass([self class])];
 }
 
+- (void)reload {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self reloadData];
+    });
+}
+
 @end
 
 
@@ -119,6 +125,9 @@
     if (index < self.views.count) {
         [self.views removeObjectAtIndex:index];
     }
+}
+
+- (void)loadData {
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {

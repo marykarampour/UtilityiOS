@@ -44,6 +44,7 @@ typedef NS_OPTIONS(NSUInteger, CollectionViewOrientation) {
 
 + (NSString *)identifier;
 - (instancetype)initWithCollectionViewAttributes:(MKCollectionViewAttributes *)attributes orientation:(CollectionViewOrientation)orientation;
+- (void)reload;
 
 @end
 
@@ -69,6 +70,8 @@ typedef NS_OPTIONS(NSUInteger, CollectionViewOrientation) {
 - (void)replaceViewAtIndex:(NSUInteger)index withView:(__kindof MKCollectionView *)view;
 - (void)removeView:(__kindof MKCollectionView *)view;
 - (void)removeViewAtIndex:(NSUInteger)index;
+/** @brief subclassmust implement to load data source for collection views */
+- (void)loadData;
 
 @end
 

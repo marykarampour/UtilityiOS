@@ -14,5 +14,6 @@
 @property (nonatomic, strong) UIColor *color;
 /**@breif padding for drawing the arrow in view's frame */
 @property (nonatomic, assign) CGFloat margin;
+@property (nonatomic, assign) CGFloat depth;
 
 @end

@@ -18,26 +18,23 @@
 - (void)drawRect:(CGRect)rect {
     
     CGRect frame = CGRectMake(self.margin, self.margin, rect.size.width-2*self.margin, rect.size.height-2*self.margin);
-    CGPoint center = CGPointMake(frame.size.width/2.0, frame.size.height/2.0);
-    CGPoint point = CGPointMake(frame.size.width, frame.size.height/2.0);
-    CGFloat arrowDepth = 6.0;
+    CGPoint center = CGPointMake(rect.size.width/2.0, rect.size.height/2.0);
+    CGPoint point = CGPointMake(rect.size.width - self.margin, rect.size.height/2.0);
     
     CGMutablePathRef pathRef = CGPathCreateMutable();
-    CGPathMoveToPoint(pathRef, NULL, center.x, center.y);
+    CGPathMoveToPoint(pathRef, NULL, frame.origin.x, point.y);
     CGPathAddLineToPoint(pathRef, NULL, point.x, point.y);
     
-    CGPathMoveToPoint(pathRef, NULL, point.x-arrowDepth, point.y-arrowDepth);
+    CGPathMoveToPoint(pathRef, NULL, point.x-self.depth, point.y-self.depth);
     CGPathAddLineToPoint(pathRef, NULL, point.x, point.y);
-    CGPathAddLineToPoint(pathRef, NULL, point.x-arrowDepth, point.y+arrowDepth);
+    CGPathAddLineToPoint(pathRef, NULL, point.x-self.depth, point.y+self.depth);
     
     UIBezierPath *path = [UIBezierPath bezierPathWithCGPath:pathRef];
     CGPathRelease(pathRef);
     
-    CGAffineTransform transform = CGAffineTransformMakeTranslation(-center.x, -center.y);
-    [path applyTransform:transform];
-    transform = CGAffineTransformMakeRotation(self.angle);
-    [path applyTransform:transform];
-    transform = CGAffineTransformMakeTranslation(center.x, center.y);
+    CGAffineTransform transform = CGAffineTransformMakeTranslation(center.x, center.y);
+    transform = CGAffineTransformRotate(transform, self.angle);
+    transform = CGAffineTransformTranslate(transform, -center.x, -center.y);
     [path applyTransform:transform];
     
     [self.color setStroke];
