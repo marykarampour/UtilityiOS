@@ -8,7 +8,6 @@
 
 #import "MKCollectionView.h"
 #import "UIView+Utility.h"
-#import "KCSectionDateLabel.h"
 #import "MKGenericCell.h"
 
 @interface MKCollectionViewCell ()
@@ -168,17 +167,41 @@
 
 @end
 
-static CGFloat const PADDING = 8.0;
+@interface MKVerticalCollectionHeaderView : UICollectionReusableView
 
-@interface KCSectionHeaderView : UIView
+@property (nonatomic, strong) UILabel *textLabel;
 
 @end
 
-@implementation KCSectionHeaderView
+@implementation MKVerticalCollectionHeaderView
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        self.textLabel = [[UILabel alloc] init];
+        self.textLabel.numberOfLines = 0;
+        self.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
+        self.textLabel.backgroundColor = [UIColor clearColor];
+        self.textLabel.textAlignment = NSTextAlignmentCenter;
+        self.textLabel.textColor = [AppTheme brightGoldColor];
+        self.textLabel.font = [AppTheme mediumLabelFont];
+        self.textLabel.text = @"Tuesday, 22th";
+        [self.textLabel sizeToFit];
+        
+        [self addSubview:self.textLabel];
+        
+        [self removeConstraintsMask];
+        [self constraint:NSLayoutAttributeCenterX view:self.textLabel];
+        [self constraint:NSLayoutAttributeCenterY view:self.textLabel];
+        [self removeConstraintsMask];
+
+    }
+    return self;
+}
 
 - (void)drawRect:(CGRect)rect {
     CGFloat width = rect.size.width;
     CGFloat height = rect.size.height;
+    CGFloat PADDING = 8.0;
     
     CGMutablePathRef pathRef = CGPathCreateMutable();
     CGPathMoveToPoint(pathRef, NULL, rect.origin.x+PADDING, height/2);
@@ -200,39 +223,8 @@ static CGFloat const PADDING = 8.0;
     [encapsulatingPath stroke];
 }
 
-@end
-
-@interface MKVerticalCollectionHeaderView : UICollectionReusableView
-
-@property (nonatomic, strong) KCSectionHeaderView *view;
-@property (nonatomic, strong) KCSectionDateLabel *dateLabel;
-
-@end
-
-@implementation MKVerticalCollectionHeaderView
-
-- (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-        self.view = [[KCSectionHeaderView alloc] init];
-        self.dateLabel = [[KCSectionDateLabel alloc] init];
-        self.dateLabel.numberOfLines = 0;
-        self.dateLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        self.dateLabel.backgroundColor = [UIColor clearColor];
-        self.dateLabel.textAlignment = NSTextAlignmentCenter;
-        [self.dateLabel setDate:@"Tuesday, 22th"];
-        [self.dateLabel sizeToFit];
-        
-        [self addSubview:self.view];
-        [self removeConstraintsMask];
-        [self constraintSidesForView:self.view];
-        
-        [self.view addSubview:self.dateLabel];
-        [self.view constraint:NSLayoutAttributeCenterX view:self.dateLabel];
-        [self.view constraint:NSLayoutAttributeCenterY view:self.dateLabel];
-        [self.view removeConstraintsMask];
-
-    }
-    return self;
+- (void)setText:(NSString *)text {
+    self.textLabel.text = text;
 }
 
 + (NSString *)identifier {
@@ -272,7 +264,7 @@ static CGFloat const PADDING = 8.0;
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         MKVerticalCollectionHeaderView *view = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:[MKVerticalCollectionHeaderView identifier] forIndexPath:indexPath];
-        view.backgroundColor = [UIColor blackColor];
+        [view setText:@"Tuesday 22nd"];//TODO: set
         return view;
     }
     return nil;
