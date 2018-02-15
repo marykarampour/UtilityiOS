@@ -79,6 +79,8 @@ typedef NS_OPTIONS(NSUInteger, CollectionViewOrientation) {
 @interface MKSingleCollectionViewController : MKCollectionViewController
 //TODO: temporary property
 @property (nonatomic, assign) NSUInteger index;
+/** @breif this property is used in loadData method, e.g object can be a date, used to retrieve items */
+@property (nonatomic, strong) id object;
 @property (nonatomic, strong) NSIndexPath *currentFirstItem;
 @property (nonatomic, strong) MKCollectionViewAttributes *attributes;
 
