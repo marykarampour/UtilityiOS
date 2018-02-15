@@ -39,7 +39,9 @@
 
 - (NSNumber *)unixtimestamp;
 
-
+/** @brief array of the first character of day symbols */
++ (StringArr *)charDaysOfWeek;
++ (StringArr *)daysOfWeek;
 + (StringArr *)monthsOfYear;
 
 @end
