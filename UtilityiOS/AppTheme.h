@@ -71,15 +71,19 @@ extern AppThemeStyle THEME_STYLE;
 + (UIColor *)badgeTextColor;
 
 //font
++ (UIFont *)XXsmallLabelFont;
 + (UIFont *)XsmallLabelFont;
 + (UIFont *)smallLabelFont;
 + (UIFont *)mediumLabelFont;
 + (UIFont *)largeLabelFont;
++ (UIFont *)XlargeLabelFont;
 
++ (UIFont *)XXsmallBoldLabelFont;
++ (UIFont *)XsmallBoldLabelFont;
 + (UIFont *)smallBoldLabelFont;
 + (UIFont *)mediumBoldLabelFont;
 + (UIFont *)largeBoldLabelFont;
-+ (UIFont *)largeBoldTitleFont;
++ (UIFont *)XlargeBoldLabelFont;
 
 + (UIFont *)textViewFont;
 + (UIFont *)textFieldFont;

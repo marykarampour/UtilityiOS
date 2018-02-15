@@ -110,12 +110,16 @@ static StringFormat MapperFormat;
     objc_property_t property = class_getProperty(objectClass, [name UTF8String]);
     NSString *attrs = [NSString stringWithCString:property_getAttributes(property) encoding:NSUTF8StringEncoding];
     NSArray *components = [attrs componentsSeparatedByString:@","];
-    
+    //no primitives are allowed
     if (components.count > 0) {
         if ([components[0] characterAtIndex:1] == 'c' || [components[0] characterAtIndex:1] == 'B') {
             return nil;
         }
-        class = NSClassFromString([components[0] componentsSeparatedByString:@"\""][1]);
+        components = [components[0] componentsSeparatedByString:@"\""];
+        if (components.count < 2) {
+            return nil;
+        }
+        class = NSClassFromString(components[1]);
     }
     return class;
 }

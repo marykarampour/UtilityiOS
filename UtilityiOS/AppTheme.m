@@ -342,8 +342,12 @@
 
 #pragma mark - font
 
-+ (UIFont *)XsmallLabelFont {
++ (UIFont *)XXsmallLabelFont {
     return [UIFont systemFontOfSize:8.0];
+}
+
++ (UIFont *)XsmallLabelFont {
+    return [UIFont systemFontOfSize:10.0];
 }
 
 + (UIFont *)smallLabelFont {
@@ -358,6 +362,18 @@
     return [UIFont systemFontOfSize:22.0];
 }
 
++ (UIFont *)XlargeLabelFont {
+    return [UIFont systemFontOfSize:24.0];
+}
+
++ (UIFont *)XXsmallBoldLabelFont {
+    return [UIFont boldSystemFontOfSize:8.0];
+}
+
++ (UIFont *)XsmallBoldLabelFont {
+    return [UIFont boldSystemFontOfSize:10.0];
+}
+
 + (UIFont *)smallBoldLabelFont {
     return [UIFont boldSystemFontOfSize:12.0];
 }
@@ -370,10 +386,9 @@
     return [UIFont boldSystemFontOfSize:22.0];
 }
 
-+ (UIFont *)largeBoldTitleFont {
++ (UIFont *)XlargeBoldLabelFont {
     return [UIFont boldSystemFontOfSize:24.0];
 }
-
 
 + (UIFont *)textViewFont {
     return [UIFont boldSystemFontOfSize:16.0];
