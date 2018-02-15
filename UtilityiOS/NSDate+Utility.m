@@ -268,4 +268,9 @@
     return @([self timeIntervalSince1970]);
 }
 
++ (StringArr *)monthsOfYear {
+    return [[NSDateFormatter alloc] init].shortMonthSymbols;
+}
+
+
 @end

@@ -39,4 +39,7 @@
 
 - (NSNumber *)unixtimestamp;
 
+
++ (StringArr *)monthsOfYear;
+
 @end
