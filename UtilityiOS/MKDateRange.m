@@ -173,11 +173,11 @@
     return range;
 }
 
-- (void)extendEnd:(NSUInteger)value {
+- (void)extendEnd:(NSInteger)value {
     self.end = @(self.end.integerValue+value);
 }
 
-- (void)extendStart:(NSUInteger)value {
+- (void)extendStart:(NSInteger)value {
     self.start = @(self.start.integerValue-value);
 }
 

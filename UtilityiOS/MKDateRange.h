@@ -43,9 +43,9 @@ typedef NSMutableArray<MKDateRange *>   MDatePairArr;
 @property (nonatomic, strong) NSNumber *end;
 
 //increases the value of end
-- (void)extendEnd:(NSUInteger)value;
+- (void)extendEnd:(NSInteger)value;
 //decreases the value of start
-- (void)extendStart:(NSUInteger)value;
+- (void)extendStart:(NSInteger)value;
 
 - (NSUInteger)lenght;
 
