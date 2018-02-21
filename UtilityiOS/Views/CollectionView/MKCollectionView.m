@@ -193,7 +193,6 @@
         self.textLabel.textAlignment = NSTextAlignmentCenter;
         self.textLabel.textColor = [AppTheme brightGoldColor];
         self.textLabel.font = [AppTheme mediumLabelFont];
-        self.textLabel.text = @"Tuesday, 22th";
         [self.textLabel sizeToFit];
         
         [self addSubview:self.textLabel];
@@ -273,7 +272,7 @@
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         MKVerticalCollectionHeaderView *view = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:[MKVerticalCollectionHeaderView identifier] forIndexPath:indexPath];
-        [view setText:@"Tuesday 22nd"];//TODO: set
+        [view setText:[self titleForHeaderInSection:indexPath.section]];//TODO: set
         return view;
     }
     return nil;
@@ -281,6 +280,10 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
     return CGSizeMake(collectionView.frame.size.width-16.0, 44.0);
+}
+
+- (NSString *)titleForHeaderInSection:(NSUInteger)section {
+    return @"";
 }
 
 @end

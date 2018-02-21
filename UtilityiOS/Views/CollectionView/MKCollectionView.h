@@ -90,6 +90,7 @@ typedef NS_OPTIONS(NSUInteger, CollectionViewOrientation) {
 
 @required
 - (__kindof MKCollectionViewCell *)verticalCellForItemAtIndexPath:(NSIndexPath *)indexPath;
+- (NSString *)titleForHeaderInSection:(NSUInteger)section;
 
 @end
 
