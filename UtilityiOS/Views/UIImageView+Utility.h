@@ -8,8 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSUInteger, IconType) {
+    IconType_Small,
+    IconType_Medium,
+    IconType_Large
+};
+
 @interface UIImageView (Utility)
 
++ (UIImageView *)imageViewWithImageName:(NSString *)imageName iconType:(IconType)iconType color:(UIColor *)color;
 + (UIImageView *)imageViewWithTemplateImageName:(NSString *)imageName color:(UIColor *)color;
 - (void)setImageWithTemplateImageName:(NSString *)imageName color:(UIColor *)color;
 
