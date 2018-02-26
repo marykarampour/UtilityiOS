@@ -12,7 +12,7 @@
 
 @interface TextFieldController () <UITextFieldDelegate>
 
-@property (nonatomic, strong) NSMutableArray<MKTextField *> *views;
+@property (nonatomic, strong, readwrite) NSMutableArray<MKTextField *> *views;
 
 @end
 
@@ -72,10 +72,14 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    if ([textField isKindOfClass:[MKTextField class]]) return YES;
+    if (![textField isKindOfClass:[MKTextField class]]) return NO;
     NSString *newString = [textField.text stringByReplacingCharactersInRange:range withString:string];
     MKTextField *view = (MKTextField *)textField;
-    return [newString isValidStringOfType:view.textObject.type maxLength:view.textObject.maxChars];
+    BOOL shouldChange = [newString isValidStringOfType:view.textObject.type maxLength:view.textObject.maxChars];
+    if (shouldChange) {
+        [self handleTextFieldChanges:textField];
+    }
+    return shouldChange;
 }
 
 - (void)handleTextFieldChanges:(UITextField *)textField {

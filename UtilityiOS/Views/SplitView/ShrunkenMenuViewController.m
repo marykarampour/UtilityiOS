@@ -59,7 +59,7 @@
 
     if (!cell) {
         
-        cell = [[MultiLabelTableViewCell alloc] initWithType:MultiLabelViewType_NONE leftView:img rightView:nil labelsCount:0 margin:4.0];
+        cell = [[MultiLabelTableViewCell alloc] initWithType:MultiLabelViewType_NONE leftView:img rightView:nil labelsCount:0 insets:UIEdgeInsetsMake(4.0, 4.0, 4.0, 4.0)];
     }
     return cell;
 }

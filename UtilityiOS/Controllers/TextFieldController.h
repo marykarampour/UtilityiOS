@@ -21,10 +21,10 @@
 @interface TextFieldController : NSObject
 
 @property (nonatomic, weak) id<TextFieldDelegate> delegate;
-@property (nonatomic, weak) MKTextField *textField;
+@property (nonatomic, strong, readonly) NSMutableArray<__kindof MKTextField *> *views;
 @property (nonatomic, assign) NSUInteger maxLenght;
 @property (nonatomic, assign) TextType type;
 
-- (void)addTextField:(MKTextField *)view;
+- (void)addTextField:(__kindof MKTextField *)view;
 
 @end

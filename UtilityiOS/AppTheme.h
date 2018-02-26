@@ -23,6 +23,10 @@ extern AppThemeStyle THEME_STYLE;
 
 //Abstracts
 
+//Appearance
+
++ (UIKeyboardAppearance)keyboardAppearance;
+
 //color
 + (UIColor *)seperatorColor;
 + (UIColor *)sectionHeaderTextColor;

@@ -17,29 +17,37 @@
     switch (type) {
         case TextType_Int: {
             regex = [Constants Regex_CharRange_Int];
+            regex = [NSString stringWithFormat:regex, 0, length];
         }
             break;
         case TextType_IntPositive: {
             regex = [Constants Regex_CharRange_IntPositive];
+            regex = [NSString stringWithFormat:regex, 0, length];
         }
             break;
         case TextType_Float: {
             regex = [Constants Regex_CharRange_Float];
+            regex = [NSString stringWithFormat:regex, 0, length, 0, 2];
         }
             break;
         case TextType_FloatPositive: {
             regex = [Constants Regex_CharRange_FloatPositive];
+            regex = [NSString stringWithFormat:regex, 0, length, 0, 2];
         }
             break;
         case TextType_Alphabet: {
             regex = [Constants Regex_CharRange_Letters];
+            regex = [NSString stringWithFormat:regex, 0, length];
         }
             break;
-        case TextType_AlphaNumeric: {
+        case TextType_AlphaNumeric: { 
             regex = [Constants Regex_CharRange_Alphanumeric];
+            regex = [NSString stringWithFormat:regex, 0, length];
         }
             break;
         default:
+            regex = [Constants Regex_CharRange];
+            regex = [NSString stringWithFormat:regex, 0, length];
             break;
     }
     if (regex) {

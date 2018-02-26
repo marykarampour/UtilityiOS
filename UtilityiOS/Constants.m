@@ -105,6 +105,14 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
     return 44.0;
 }
 
++ (float)TableIconImageSmallSize {
+    return 32.0;
+}
+
++ (float)TableIconImageLargeSize {
+    return 64.0;
+}
+
 + (float)ButtonCornerRadious {
     return 6.0;
 }
@@ -523,6 +531,10 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
 
 + (NSString *)Predicate_MatchesSelf {
     return @"SELF MATCHES %@";
+}
+
++ (NSString *)Regex_CharRange {
+    return @"^([\\s\\.a-zA-Z0-9@-]{%zd,%zd})$";
 }
 
 + (NSString *)Regex_CharRange_IntPositive {

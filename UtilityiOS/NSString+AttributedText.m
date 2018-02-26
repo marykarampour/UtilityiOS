@@ -61,6 +61,17 @@
     return attrStr;
 }
 
++ (NSAttributedString *)attributedTextWithAttributes:(NSArray<StringAttributes *> *)attrs {
+    NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:@""];
+    for (StringAttributes *attr in attrs) {
+        if (attr.text) {
+            NSAttributedString *nextStr = [[NSMutableAttributedString alloc] initWithString:attr.text attributes:@{NSFontAttributeName:attr.font, NSForegroundColorAttributeName:attr.color}];
+            [attrStr appendAttributedString:nextStr];
+        }
+    }
+    return attrStr;
+}
+
 + (NSAttributedString *)attributedTextWithIndent:(CGFloat)indent firstLineIndent:(CGFloat)firstLineIndent attributes:(StringAttributes *)attrs {
     
     NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];

@@ -151,6 +151,8 @@ extern NSString * const DateFormatDayMonthYearNumeric;
 + (float)TableSectionHeaderHeight;
 + (float)TableSectionFooterHeight;
 + (float)TableFooterHeight;
++ (float)TableIconImageSmallSize;
++ (float)TableIconImageLargeSize;
 + (float)BorderWidth;
 + (float)ButtonCornerRadious;
 + (float)GeoFenceRadiousMeter;
@@ -227,6 +229,7 @@ extern NSString * const DateFormatDayMonthYearNumeric;
 
 + (NSString *)Predicate_MatchesSelf;
 
++ (NSString *)Regex_CharRange;
 + (NSString *)Regex_CharRange_IntPositive;
 + (NSString *)Regex_CharRange_Int;
 + (NSString *)Regex_CharRange_FloatPositive;

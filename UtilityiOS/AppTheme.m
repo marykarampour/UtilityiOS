@@ -30,6 +30,12 @@
     [[UISegmentedControl appearance] setBackgroundColor:[AppTheme buttonTextColor]];
     [[UISegmentedControl appearance] setTintColor:[AppTheme buttonBackgroundColor]];
     
+    [UITextField appearance].keyboardAppearance = [AppTheme keyboardAppearance];
+    
+}
+
++ (UIKeyboardAppearance)keyboardAppearance {
+    return UIKeyboardAppearanceDefault;
 }
 
 #pragma mark - color

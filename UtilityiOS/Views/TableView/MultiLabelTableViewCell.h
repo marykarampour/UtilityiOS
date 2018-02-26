@@ -35,9 +35,12 @@ typedef NS_OPTIONS(NSUInteger, MultiLabelViewType) {
  @param labelsCount number of labels, used if type includes option labels
  */
 
-- (instancetype)initWithType:(MultiLabelViewType)type leftView:(__kindof UIView *)leftView rightView:(__kindof UIView *)rightView labelsCount:(NSUInteger)labelsCount margin:(CGFloat)margin;
+- (instancetype)initWithType:(MultiLabelViewType)type leftView:(__kindof UIView *)leftView rightView:(__kindof UIView *)rightView labelsCount:(NSUInteger)labelsCount insets:(UIEdgeInsets)insets;
 
 - (void)setText:(NSString *)text forLabelAtIndex:(NSUInteger)index;
 - (void)setAttributedText:(NSAttributedString *)text forLabelAtIndex:(NSUInteger)index;
+
+/** @brief subclass can override to create custom labels */
+- (__kindof MKLabel *)createLabel;
 
 @end

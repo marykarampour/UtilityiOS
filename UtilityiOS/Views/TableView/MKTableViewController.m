@@ -99,17 +99,17 @@ static dispatch_queue_t dispatch;
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    if ([header respondsToSelector:NSSelectorFromString(@"textLabel")]) {
+    if ([header respondsToSelector:@selector(textLabel)]) {
         [header.textLabel setTextColor:[AppTheme sectionHeaderTextColor]];
     }
-    if ([header respondsToSelector:NSSelectorFromString(@"backgroundView")]) {
+    if ([header respondsToSelector:@selector(backgroundView)]) {
         header.backgroundView.backgroundColor = [AppTheme sectionHeaderBackgroundColor];
     }
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section {
     UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *)view;
-    if ([footer respondsToSelector:NSSelectorFromString(@"backgroundView")]) {
+    if ([footer respondsToSelector:@selector(backgroundView)]) {
         footer.backgroundView.backgroundColor = [AppTheme sectionFooterBackgroundColor];
     }
 }

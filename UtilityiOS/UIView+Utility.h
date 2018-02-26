@@ -14,6 +14,7 @@
 - (void)addConstraintsWithFormat:(NSString * _Nullable)format options:(NSLayoutFormatOptions)opts metrics:(nullable NSDictionary<NSString *,id> *)metrics views:(NSDictionary<NSString *, id> *_Nullable)views;
 - (void)addConstraintWithItem:(id _Nullable)view1 attribute:(NSLayoutAttribute)attr1 relatedBy:(NSLayoutRelation)relation toItem:(nullable id)view2 attribute:(NSLayoutAttribute)attr2 multiplier:(CGFloat)multiplier constant:(CGFloat)c;
 
+- (void)constraintSidesForView:(__kindof UIView *)view insets:(UIEdgeInsets)insets;
 - (void)constraintSidesForView:(__kindof UIView *)view;
 - (void)constraintSizeForView:(__kindof UIView *)view;
 - (void)constraintWidthForView:(__kindof UIView *)view;

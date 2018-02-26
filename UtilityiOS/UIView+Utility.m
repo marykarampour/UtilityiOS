@@ -31,6 +31,13 @@
     [self constraint:NSLayoutAttributeRight view:view];
 }
 
+- (void)constraintSidesForView:(__kindof UIView *)view insets:(UIEdgeInsets)insets {
+    [self constraint:NSLayoutAttributeTop view:view margin:insets.top];
+    [self constraint:NSLayoutAttributeBottom view:view margin:-insets.bottom];
+    [self constraint:NSLayoutAttributeLeft view:view margin:insets.left];
+    [self constraint:NSLayoutAttributeRight view:view margin:-insets.right];
+}
+
 - (void)constraintSizeForView:(__kindof UIView *)view {
     [self addConstraintWithItem:view attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:view.frame.size.width];
     [self addConstraintWithItem:view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:view.frame.size.height];

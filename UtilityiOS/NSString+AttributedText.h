@@ -21,6 +21,7 @@
 
 @interface NSString (AttributedText)
 
++ (NSAttributedString *)attributedTextWithAttributes:(NSArray <StringAttributes *> *)attrs;
 + (NSAttributedString *)multiLineTextWithAttributes:(NSArray <StringAttributes *> *)attrs;
 + (NSAttributedString *)dashedTextWithAttributes:(NSArray<StringAttributes *> *)attrs;
 + (NSAttributedString *)attributedTextWithIndent:(CGFloat)indent firstLineIndent:(CGFloat)firstLineIndent attributes:(StringAttributes *)attrs;

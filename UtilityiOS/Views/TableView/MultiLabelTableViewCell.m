@@ -9,7 +9,7 @@
 #import "MultiLabelTableViewCell.h"
 #import "UIView+Utility.h"
 
-static CGFloat PADDING = 0.0;
+static UIEdgeInsets EDGE_INSETS;
 
 @interface MultiLabelTableViewCell ()
 
@@ -29,8 +29,8 @@ static CGFloat PADDING = 0.0;
 
 @implementation MultiLabelTableViewCell
 
-- (instancetype)initWithType:(MultiLabelViewType)type leftView:(__kindof UIView *)leftView rightView:(__kindof UIView *)rightView labelsCount:(NSUInteger)labelsCount margin:(CGFloat)margin {
-    PADDING = margin;
+- (instancetype)initWithType:(MultiLabelViewType)type leftView:(__kindof UIView *)leftView rightView:(__kindof UIView *)rightView labelsCount:(NSUInteger)labelsCount insets:(UIEdgeInsets)insets {
+    EDGE_INSETS = insets;
     if (self = [super initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[MultiLabelTableViewCell identifier]]) {
         if ((type == MultiLabelViewType_NONE) && (leftView || rightView)) {
             [self constructWithSingleView:(leftView ? leftView : rightView)];
@@ -72,18 +72,18 @@ static CGFloat PADDING = 0.0;
     [self addLeftView:view];
     [self.contentView removeConstraintsMask];
     
-    [self.contentView constraint:NSLayoutAttributeLeft view:view margin:PADDING];
-    [self.contentView constraint:NSLayoutAttributeRight view:view margin:-PADDING];
-    [self.contentView constraint:NSLayoutAttributeTop view:view margin:PADDING];
-    [self.contentView constraint:NSLayoutAttributeBottom view:view margin:-PADDING];
+    [self.contentView constraint:NSLayoutAttributeLeft view:view margin:EDGE_INSETS.left];
+    [self.contentView constraint:NSLayoutAttributeRight view:view margin:-EDGE_INSETS.right];
+    [self.contentView constraint:NSLayoutAttributeTop view:view margin:EDGE_INSETS.top];
+    [self.contentView constraint:NSLayoutAttributeBottom view:view margin:-EDGE_INSETS.bottom];
 }
 
 - (void)constructWithLabelsCount:(NSUInteger)labelsCount {
     [self createLabels:labelsCount];
     [self.contentView removeConstraintsMask];
     
-    [self.contentView constraint:NSLayoutAttributeLeft view:self.labels.firstObject margin:PADDING];
-    [self.contentView constraint:NSLayoutAttributeRight view:self.labels.firstObject margin:-PADDING];
+    [self.contentView constraint:NSLayoutAttributeLeft view:self.labels.firstObject margin:EDGE_INSETS.left];
+    [self.contentView constraint:NSLayoutAttributeRight view:self.labels.firstObject margin:-EDGE_INSETS.right];
     
     [self constraintLabels];
 }
@@ -97,12 +97,12 @@ static CGFloat PADDING = 0.0;
     
     [self.contentView addConstraintWithItem:self.labels.lastObject attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:self.labels.firstObject attribute:NSLayoutAttributeTop multiplier:1.0 constant:leftView.frame.size.height];
     
-    [self.contentView addConstraintWithItem:self.labels.firstObject attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.leftView attribute:NSLayoutAttributeRight multiplier:1.0 constant:PADDING];
+    [self.contentView addConstraintWithItem:self.labels.firstObject attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.leftView attribute:NSLayoutAttributeRight multiplier:1.0 constant:[Constants HorizontalSpacing]];
     
     [self.contentView addConstraintWithItem:self.labels.firstObject attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.leftView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
     
-    [self.contentView constraint:NSLayoutAttributeLeft view:self.leftView];
-    [self.contentView constraint:NSLayoutAttributeRight view:self.labels.firstObject margin:-PADDING];
+    [self.contentView constraint:NSLayoutAttributeLeft view:self.leftView margin:EDGE_INSETS.left];
+    [self.contentView constraint:NSLayoutAttributeRight view:self.labels.firstObject margin:-EDGE_INSETS.right];
     
     [self constraintLabels];
 }
@@ -116,12 +116,12 @@ static CGFloat PADDING = 0.0;
     
     [self.contentView addConstraintWithItem:self.labels.lastObject attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:self.labels.firstObject attribute:NSLayoutAttributeTop multiplier:1.0 constant:rightView.frame.size.height];
     
-    [self.contentView addConstraintWithItem:self.labels.firstObject attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.rightView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:PADDING];
+    [self.contentView addConstraintWithItem:self.labels.firstObject attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.rightView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:[Constants HorizontalSpacing]];
     
     [self.contentView addConstraintWithItem:self.labels.firstObject attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.rightView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
     
-    [self.contentView constraint:NSLayoutAttributeRight view:self.rightView];
-    [self.contentView constraint:NSLayoutAttributeLeft view:self.labels.firstObject margin:PADDING];
+    [self.contentView constraint:NSLayoutAttributeRight view:self.rightView margin:-EDGE_INSETS.right];
+    [self.contentView constraint:NSLayoutAttributeLeft view:self.labels.firstObject margin:EDGE_INSETS.left];
     
     [self constraintLabels];
 }
@@ -184,9 +184,9 @@ static CGFloat PADDING = 0.0;
     
     [self.contentView constraint:NSLayoutAttributeRight view:self.rightView];
     
-    [self.contentView addConstraintWithItem:self.rightView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.labels.firstObject attribute:NSLayoutAttributeRight multiplier:1.0 constant:PADDING];
+    [self.contentView addConstraintWithItem:self.rightView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.labels.firstObject attribute:NSLayoutAttributeRight multiplier:1.0 constant:[Constants HorizontalSpacing]];
     
-    [self.contentView addConstraintWithItem:self.labels.firstObject attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.leftView attribute:NSLayoutAttributeRight multiplier:1.0 constant:PADDING];
+    [self.contentView addConstraintWithItem:self.labels.firstObject attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.leftView attribute:NSLayoutAttributeRight multiplier:1.0 constant:[Constants HorizontalSpacing]];
     
     [self.contentView constraint:NSLayoutAttributeLeft view:self.leftView];
     
@@ -203,17 +203,22 @@ static CGFloat PADDING = 0.0;
     self.labels = [[NSMutableArray alloc] init];
     
     for (NSUInteger i=0; i<labelsCount; i++) {
-        MKLabel *label = [[MKLabel alloc] init];
-        label.numberOfLines = 0;
-        label.lineBreakMode = NSLineBreakByWordWrapping;
+        MKLabel *label = [self createLabel];
         [self.labels addObject:label];
         [self.contentView addSubview:label];
     }
 }
 
+- (MKLabel *)createLabel {
+    MKLabel *label = [[MKLabel alloc] init];
+    label.numberOfLines = 0;
+    label.lineBreakMode = NSLineBreakByWordWrapping;
+    return label;
+}
+
 - (void)constraintLabels {
-    [self.contentView constraint:NSLayoutAttributeTop view:self.labels.firstObject margin:PADDING];
-    [self.contentView constraint:NSLayoutAttributeBottom view:self.labels.lastObject margin:-PADDING];
+    [self.contentView constraint:NSLayoutAttributeTop view:self.labels.firstObject margin:EDGE_INSETS.top];
+    [self.contentView constraint:NSLayoutAttributeBottom view:self.labels.lastObject margin:-EDGE_INSETS.bottom];
     
     if (self.labels.count > 1) {
         for (NSUInteger i=1; i<self.labels.count; i++) {
