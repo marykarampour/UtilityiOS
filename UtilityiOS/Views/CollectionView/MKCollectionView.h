@@ -86,6 +86,15 @@ typedef NS_OPTIONS(NSUInteger, CollectionViewOrientation) {
 
 @end
 
+
+@interface MKVerticalCollectionHeaderAttributes : NSObject
+
+@property (nonatomic, strong) UIColor *textColor;
+@property (nonatomic, strong) UIColor *borderColor;
+@property (nonatomic, strong) UIFont *font;
+
+@end
+
 @protocol MKVerticalCollectionViewProtocol <NSObject>
 
 @required
@@ -104,6 +113,7 @@ typedef NS_OPTIONS(NSUInteger, CollectionViewOrientation) {
 @interface MKVerticalCollectionViewController : MKSingleCollectionViewController <MKVerticalCollectionViewProtocol>
 
 @property (nonatomic, assign) NSUInteger sectionCount;
+@property (nonatomic, strong) MKVerticalCollectionHeaderAttributes *headerAttributes;
 
 @end
 

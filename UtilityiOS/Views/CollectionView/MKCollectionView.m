@@ -176,9 +176,15 @@
 
 @end
 
+@implementation MKVerticalCollectionHeaderAttributes
+
+
+@end
+
 @interface MKVerticalCollectionHeaderView : UICollectionReusableView
 
 @property (nonatomic, strong) UILabel *textLabel;
+@property (nonatomic, strong) UIColor *borderColor;
 
 @end
 
@@ -191,8 +197,6 @@
         self.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
         self.textLabel.backgroundColor = [UIColor clearColor];
         self.textLabel.textAlignment = NSTextAlignmentCenter;
-        self.textLabel.textColor = [AppTheme brightGoldColor];
-        self.textLabel.font = [AppTheme mediumLabelFont];
         [self.textLabel sizeToFit];
         
         [self addSubview:self.textLabel];
@@ -220,14 +224,13 @@
     
     UIBezierPath *path = [UIBezierPath bezierPathWithCGPath:pathRef];
     CGPathRelease(pathRef);
-    
-    [[UIColor darkGrayColor] setStroke];
     [path setLineWidth:2.0];
-    [path stroke];
-    
+
     UIBezierPath *encapsulatingPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(width/4, height/2 - height/4, width/2, height/2) cornerRadius:30.0];
-    [[UIColor darkGrayColor] setStroke];
     [encapsulatingPath setLineWidth:2.0];
+    //TODO: these could be set in attrs
+    [self.borderColor setStroke];
+    [path stroke];
     [encapsulatingPath stroke];
 }
 
@@ -272,6 +275,9 @@
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
         MKVerticalCollectionHeaderView *view = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:[MKVerticalCollectionHeaderView identifier] forIndexPath:indexPath];
+        view.textLabel.font = self.headerAttributes.font;
+        view.textLabel.textColor = self.headerAttributes.textColor;
+        view.borderColor = self.headerAttributes.borderColor;
         [view setText:[self titleForHeaderInSection:indexPath.section]];//TODO: set
         return view;
     }
