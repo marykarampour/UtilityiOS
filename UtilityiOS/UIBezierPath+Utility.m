@@ -52,4 +52,31 @@
     return path;
 }
 
++ (void)drawArrowBezierPathInRect:(CGRect)rect angle:(CGFloat)angle color:(UIColor *)color margin:(CGFloat)margin depth:(CGFloat)depth {
+    CGRect frame = CGRectMake(margin, margin, rect.size.width-2*margin, rect.size.height-2*margin);
+    CGPoint center = CGPointMake(rect.size.width/2.0, rect.size.height/2.0);
+    CGPoint point = CGPointMake(rect.size.width - margin, rect.size.height/2.0);
+    
+    CGMutablePathRef pathRef = CGPathCreateMutable();
+    CGPathMoveToPoint(pathRef, NULL, frame.origin.x, point.y);
+    CGPathAddLineToPoint(pathRef, NULL, point.x, point.y);
+    
+    CGPathMoveToPoint(pathRef, NULL, point.x-depth, point.y-depth);
+    CGPathAddLineToPoint(pathRef, NULL, point.x, point.y);
+    CGPathAddLineToPoint(pathRef, NULL, point.x-depth, point.y+depth);
+    
+    UIBezierPath *path = [UIBezierPath bezierPathWithCGPath:pathRef];
+    CGPathRelease(pathRef);
+    
+    CGAffineTransform transform = CGAffineTransformMakeTranslation(center.x, center.y);
+    transform = CGAffineTransformRotate(transform, angle);
+    transform = CGAffineTransformTranslate(transform, -center.x, -center.y);
+    [path applyTransform:transform];
+    
+    [path setLineWidth:2.0];
+    path.lineJoinStyle = kCGLineJoinRound;
+    [color setStroke];
+    [path stroke];
+}
+
 @end

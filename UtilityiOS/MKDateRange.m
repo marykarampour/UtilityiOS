@@ -185,6 +185,37 @@
     return abs(self.end.integerValue - self.start.integerValue);
 }
 
+- (BOOL)rangeContainsNumber:(NSNumber *)number {
+    //we want to include same
+    return self.start && self.end && [self.start compare:number] != NSOrderedDescending && [self.end compare:number] != NSOrderedAscending;
+}
+
+- (void)adjustContinuousRangeWithNumber:(NSNumber *)number {
+    if (!self.start) {
+        self.start = number;
+        self.end = number;
+    }
+    else if ([self.start compare:number] == NSOrderedSame) {
+        if ([self.start compare:self.end] == NSOrderedAscending) {
+            self.start = @(number.integerValue+1);
+        }
+    }
+    else if ([self.end compare:number] == NSOrderedSame) {
+        if ([self.start compare:self.end] == NSOrderedDescending) {
+            self.end = @(number.integerValue-1);
+        }
+    }
+    else if ([self rangeContainsNumber:number]) {
+        self.end = number;
+    }
+    else if ([self.start compare:number] == NSOrderedAscending) {
+        self.end = number;
+    }
+    else {
+        self.start = number;
+    }
+}
+
 @end
 
 @implementation MKInterval

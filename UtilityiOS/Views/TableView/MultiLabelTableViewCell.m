@@ -203,13 +203,13 @@ static UIEdgeInsets EDGE_INSETS;
     self.labels = [[NSMutableArray alloc] init];
     
     for (NSUInteger i=0; i<labelsCount; i++) {
-        MKLabel *label = [self createLabel];
+        MKLabel *label = [self createLabelAtIndex:i];
         [self.labels addObject:label];
         [self.contentView addSubview:label];
     }
 }
 
-- (MKLabel *)createLabel {
+- (MKLabel *)createLabelAtIndex:(NSUInteger)index {
     MKLabel *label = [[MKLabel alloc] init];
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;

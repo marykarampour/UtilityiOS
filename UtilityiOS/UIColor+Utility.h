@@ -11,5 +11,6 @@
 @interface UIColor (Utility)
 
 + (UIColor *)colorWithRGB:(UInt32)hexValue;
++ (UIColor *)colorWithRGB:(UInt32)hexValue alpha:(CGFloat)alpha;
 
 @end

@@ -41,6 +41,7 @@ typedef NS_OPTIONS(NSUInteger, MultiLabelViewType) {
 - (void)setAttributedText:(NSAttributedString *)text forLabelAtIndex:(NSUInteger)index;
 
 /** @brief subclass can override to create custom labels */
-- (__kindof MKLabel *)createLabel;
+- (__kindof MKLabel *)createLabelAtIndex:(NSUInteger)index;
+
 
 @end

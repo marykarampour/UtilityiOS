@@ -13,4 +13,9 @@
 + (UIBezierPath *)bezierPathForPoints:(NSArray<NSValue *> *)points;
 + (UIBezierPath *)starBezierPathForPolygon:(NSUInteger)vertexCount ofSize:(CGFloat)size;
 
+/** @brief draws a bezier path inside th given rect
+ @param margin padding for drawing the arrow in view's frame
+ */
++ (void)drawArrowBezierPathInRect:(CGRect)rect angle:(CGFloat)angle color:(UIColor *)color margin:(CGFloat)margin depth:(CGFloat)depth;
+
 @end

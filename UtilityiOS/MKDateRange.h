@@ -51,6 +51,9 @@ typedef NSMutableArray<MKDateRange *>   MDatePairArr;
 
 + (instancetype)rangeWithStart:(NSNumber *)start end:(NSNumber *)end;
 
+- (BOOL)rangeContainsNumber:(NSNumber *)number;
+- (void)adjustContinuousRangeWithNumber:(NSNumber *)number;
+
 @end
 
 @interface MKInterval : MKRange
