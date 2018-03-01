@@ -66,6 +66,14 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
     return @"://";
 }
 
++ (NSString *)TestUsername {
+    return @"";
+}
+
++ (NSString *)TestPassword {
+    return @"";
+}
+
 
 #pragma mark - constants
 

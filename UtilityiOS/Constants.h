@@ -139,6 +139,8 @@ extern NSString * const DateFormatDayMonthYearNumeric;
 + (NSString *)BaseProductionURL;
 + (NSString *)BaseURLString;
 + (NSString *)BasePort;
++ (NSString *)TestUsername;
++ (NSString *)TestPassword;
 
 #pragma mark - constants
 
