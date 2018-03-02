@@ -26,7 +26,7 @@ NSString * const DateFormatMonthDayYearStyle      = @"MMMM dd, yyyy";
 NSString * const DateFormatMonthYear              = @"MMMM yyyy";
 NSString * const DateFormatDayMonthYear           = @"dd MMMM yyyy";
 NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
-NSString * const DateFormatWeekdayDay             = @"EEEE, d";
+NSString * const DateFormatWeekdayDay             = @"EEEE d";
 
 
 #pragma mark - classes
