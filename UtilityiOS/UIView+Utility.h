@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIView (Utility)
+@interface UIView (Constraints)
 
 - (void)removeConstraintsMask;
 - (void)addConstraintsWithFormat:(NSString * _Nullable)format options:(NSLayoutFormatOptions)opts metrics:(nullable NSDictionary<NSString *,id> *)metrics views:(NSDictionary<NSString *, id> *_Nullable)views;
@@ -26,3 +26,13 @@
 - (void)constraint:(NSLayoutAttribute)attr view:(__kindof UIView *)view margin:(CGFloat)margin;
 
 @end
+
+
+@interface UIView (Shapes)
+
+
+
+@end
+
+
+

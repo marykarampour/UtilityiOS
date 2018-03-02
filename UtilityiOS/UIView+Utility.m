@@ -8,7 +8,7 @@
 
 #import "UIView+Utility.h"
 
-@implementation UIView (Utility)
+@implementation UIView (Constraints)
 
 - (void)removeConstraintsMask {
     for (UIView *view in self.subviews) {
