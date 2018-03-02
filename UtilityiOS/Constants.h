@@ -119,6 +119,7 @@ extern NSString * const DateFormatMonthDayYearStyle;
 extern NSString * const DateFormatMonthYear;
 extern NSString * const DateFormatDayMonthYear;
 extern NSString * const DateFormatDayMonthYearNumeric;
+extern NSString * const DateFormatWeekdayDay;
 
 
 #pragma mark - classes
