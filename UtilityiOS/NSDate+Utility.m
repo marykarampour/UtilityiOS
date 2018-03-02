@@ -198,9 +198,10 @@
 }
 
 - (NSString *)dateStringWithFormat:(NSString *)format {
-    
+
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:format];
+    formatter.locale = [NSLocale currentLocale];
+    [formatter setLocalizedDateFormatFromTemplate:DateFormatWeekdayDay];
     return [formatter stringFromDate:self];
 }
 
