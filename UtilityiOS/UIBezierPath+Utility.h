@@ -8,6 +8,19 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSUInteger, ShapeType) {
+    ShapeTypeRect,
+    ShapeTypeRectFill,
+    ShapeTypeRoundedRect,
+    ShapeTypeRoundedRectFill,
+    ShapeTypeEllipse,
+    ShapeTypeEllipseFill,
+    ShapeTypeTriangleRightTop,
+    ShapeTypeTriangleLeftTop,
+    ShapeTypeTriangleRightBottom,
+    ShapeTypeTriangleLeftBottom
+};
+
 @interface UIBezierPath (Utility)
 
 + (UIBezierPath *)bezierPathForPoints:(NSArray<NSValue *> *)points;

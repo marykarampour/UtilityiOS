@@ -114,12 +114,13 @@ typedef NSMutableArray<NSIndexPath *>                           MIndexPathArr;
 
 extern NSString * const DateFormatServerStyle;
 extern NSString * const DateFormatShortStyle;
+extern NSString * const DateFormatWeekdayShortStyle;
 extern NSString * const DateFormatFullStyle;
 extern NSString * const DateFormatMonthDayYearStyle;
-extern NSString * const DateFormatMonthYear;
-extern NSString * const DateFormatDayMonthYear;
-extern NSString * const DateFormatDayMonthYearNumeric;
-extern NSString * const DateFormatWeekdayDay;
+extern NSString * const DateFormatMonthYearStyle;
+extern NSString * const DateFormatDayMonthYearStyle;
+extern NSString * const DateFormatDayMonthYearNumericStyle;
+extern NSString * const DateFormatWeekdayDayStyle;
 
 
 #pragma mark - classes

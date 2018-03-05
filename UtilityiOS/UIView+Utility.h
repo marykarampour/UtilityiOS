@@ -24,15 +24,11 @@
 - (void)constraintSameWidthHeightForView:(__kindof UIView *)view;
 - (void)constraint:(NSLayoutAttribute)attr view:(__kindof UIView *)view;
 - (void)constraint:(NSLayoutAttribute)attr view:(__kindof UIView *)view margin:(CGFloat)margin;
+- (void)constraintSame:(NSLayoutAttribute)attr view1:(__kindof UIView *)view1 view2:(__kindof UIView *)view2;
 
 @end
 
 
-@interface UIView (Shapes)
-
-
-
-@end
 
 
 

@@ -21,12 +21,13 @@ static NSString * const DefaultPushNotificationDeviceTokenKey    = @"DefaultPush
 
 NSString * const DateFormatServerStyle            = @"YYYY-MM-dd HH:mm:ss";
 NSString * const DateFormatShortStyle             = @"yyyy-MM-dd";
+NSString * const DateFormatWeekdayShortStyle      = @"EEEE MMM dd";
 NSString * const DateFormatFullStyle              = @"EEEE, MMMM dd, yyyy";
 NSString * const DateFormatMonthDayYearStyle      = @"MMMM dd, yyyy";
-NSString * const DateFormatMonthYear              = @"MMMM yyyy";
-NSString * const DateFormatDayMonthYear           = @"dd MMMM yyyy";
-NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
-NSString * const DateFormatWeekdayDay             = @"EEEE d";
+NSString * const DateFormatMonthYearStyle         = @"MMMM yyyy";
+NSString * const DateFormatDayMonthYearStyle      = @"dd MMMM yyyy";
+NSString * const DateFormatDayMonthYearNumericStyle = @"dd MM yyyy";
+NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
 
 
 #pragma mark - classes
