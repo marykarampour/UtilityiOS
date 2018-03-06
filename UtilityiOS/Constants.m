@@ -347,6 +347,10 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
     return version;
 }
 
++ (NSURL *)appDocumentsDirectory {
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
 + (NSString *)bundleID {
     return [[NSBundle mainBundle] bundleIdentifier];
 }

@@ -49,6 +49,7 @@
         return _managedObjectModel;
     }
     NSURL *modelURL = [[NSBundle mainBundle] URLForResource:self.modelPath withExtension:@"momd"];
+    DEBUGLOG(@"%@", modelURL.description);
     _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     return _managedObjectModel;
 }
@@ -57,7 +58,8 @@
     if (_persistentStoreCoordinator) {
         return _persistentStoreCoordinator;
     }
-    NSURL *storeURL = [[MKCoreDataManager appDocumentsDirectory] URLByAppendingPathComponent:self.storePath];
+    NSURL *storeURL = [[Constants appDocumentsDirectory] URLByAppendingPathComponent:self.storePath];
+    DEBUGLOG(@"%@", storeURL.description);
     NSError *error;
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
@@ -65,10 +67,6 @@
         return nil;
     }
     return _persistentStoreCoordinator;
-}
-
-+ (NSURL *)appDocumentsDirectory {
-    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
 @end

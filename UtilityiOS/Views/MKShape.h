@@ -10,7 +10,7 @@
 #import "UIBezierPath+Utility.h"
 
 @interface MKShape : UIView
-
+/** @brief color is RGBA */
 @property (nonatomic, strong) UIColor *color;
 @property (nonatomic, assign) CGFloat cornerRadius;
 @property (nonatomic, assign) ShapeType type;

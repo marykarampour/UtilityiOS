@@ -39,7 +39,6 @@
             break;
         case ShapeTypeEllipseFill: {
             CGContextRef context = UIGraphicsGetCurrentContext();
-            CGContextSetLineWidth(context, [Constants BorderWidth]);
             CGContextSetFillColor(context, CGColorGetComponents(color.CGColor));
             CGContextFillEllipseInRect(context, rect);
         }

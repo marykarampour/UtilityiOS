@@ -20,6 +20,5 @@
 - (instancetype)initWithModelPath:(NSString *)modelPath storePath:(NSString *)storePath;
 
 - (void)saveContext;
-+ (NSURL *)appDocumentsDirectory;
 
 @end

@@ -213,6 +213,7 @@ extern NSString * const DateFormatWeekdayDayStyle;
 + (CGFloat)screenWidth;
 + (CGFloat)screenHeight;
 + (NSString *)versionString;
++ (NSURL *)appDocumentsDirectory;
 + (NSString *)bundleID;
 + (NSString *)targetName;
 
