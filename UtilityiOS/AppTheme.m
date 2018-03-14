@@ -12,7 +12,7 @@
 
 + (void)applyTheme {
     [[UINavigationBar appearance] setBarTintColor:[self barTintColor]];
-    [[UINavigationBar appearance] setTintColor:[self textHighlightColor]];
+    [[UINavigationBar appearance] setTintColor:[self barTextColor]];
     [[UINavigationBar appearance] setTranslucent:NO];
     [[UINavigationBar appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:[self textMediumColor], NSFontAttributeName:[self mediumLabelFont]}];
     
@@ -52,6 +52,14 @@
     switch (THEME_STYLE) {
         case AppThemeStyle_LIGHT: return [UIColor whiteColor];
         case AppThemeStyle_DARK: return [UIColor blackColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
++ (UIColor *)barTextColor {
+    switch (THEME_STYLE) {
+        case AppThemeStyle_LIGHT: return [UIColor blackColor];
+        case AppThemeStyle_DARK: return [UIColor whiteColor];
         default: return [UIColor whiteColor];
     }
 }

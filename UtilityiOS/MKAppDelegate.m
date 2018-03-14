@@ -63,6 +63,7 @@
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
+    [[NSNotificationCenter defaultCenter] postNotificationName:[Constants NotificationName_App_Terminated] object:self];
 }
 
 - (UIViewController *)visibleViewController {

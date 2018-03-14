@@ -527,6 +527,13 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
     return @"APNS";
 }
 
+#pragma mark - Notification Center
+
++ (NSNotificationName)NotificationName_App_Terminated {
+    return @"NotificationName_App_Terminated";
+}
+
+
 #pragma mark - AppCommon abstracts
 
 + (TargetType)appTargetType {
@@ -576,6 +583,16 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
 }
 
 
+
+#pragma mark - core date
+
++ (NSString *)CoreData_StorePath {
+    return @"Model";
+}
+
++ (NSString *)CoreData_ModelPath {
+    return @"db.sqlite";
+}
 
 
 @end

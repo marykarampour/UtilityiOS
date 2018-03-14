@@ -28,6 +28,8 @@ extern AppThemeStyle THEME_STYLE;
 + (UIKeyboardAppearance)keyboardAppearance;
 
 //color
++ (UIColor *)barTintColor;
++ (UIColor *)barTextColor;
 + (UIColor *)seperatorColor;
 + (UIColor *)sectionHeaderTextColor;
 + (UIColor *)sectionHeaderBackgroundColor;

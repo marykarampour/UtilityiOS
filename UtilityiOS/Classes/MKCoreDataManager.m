@@ -7,11 +7,12 @@
 //
 
 #import "MKCoreDataManager.h"
-//TODO: if not singlton it should save all contexts in aplicationWillTerminate or it can contain an array of contexts
+#import "NSObject+Utility.h"
 
 @implementation MKCoreDataManager
 
-@synthesize managedObjectContext = _managedObjectContext;
+@synthesize mainManagedObjectContext = _mainManagedObjectContext;
+@synthesize writerManagedObjectContext = _writerManagedObjectContext;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 
@@ -19,29 +20,118 @@
     if (self = [super init]) {
         _modelPath = modelPath;
         _storePath = storePath;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(terminatingSave:) name:[Constants NotificationName_App_Terminated] object:nil];
     }
     return self;
 }
 
-- (void)saveContext {
+- (void)terminatingSave:(NSNotification *)object {
+    [self saveContext:self.writerManagedObjectContext completion:nil];
+}
+//TODO: in applicationWillTerminate how about the writer save?
+- (void)saveContext:(NSManagedObjectContext *)context {
     NSError *error;
-    if (self.managedObjectContext) {
-        if ([self.managedObjectContext hasChanges] && ![_managedObjectContext save:&error]) {
+    if (context) {
+        if ([context hasChanges] && ![context save:&error]) {
             NSAssert(error, error.localizedDescription);
             return;
         }
     }
 }
 
-- (NSManagedObjectContext *)managedObjectContext {
-    if (_managedObjectContext) {
-        return _managedObjectContext;
+- (void)saveContext:(NSManagedObjectContext *)context completion:(void (^)(void))completion {
+    [context performBlock:^{
+        [self saveContext:context];
+        if (completion) completion();
+    }];
+}
+
+- (NSManagedObjectContext *)temporaryContext {
+    NSManagedObjectContext *moc = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    moc.parentContext = self.mainManagedObjectContext;
+    return moc;
+}
+
+- (void)saveItems:(NSArray<__kindof MKModel *> *)items ofClass:(Class)itemClass entityName:(NSString *)entityName completion:(void (^)(NSError *))completion {
+    
+    StringArr *propertyNames = [NSObject propertyNamesOfClass:itemClass];
+    NSError *error;
+    NSManagedObjectContext *context = [self temporaryContext];
+    
+    [context performBlock:^{
+        for (MKModel *item in items) {
+            NSManagedObject *newItem = [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:context];
+            for (NSString *key in propertyNames) {
+                [newItem setPrimitiveValue:[item valueForKey:key] forKey:key];
+            }
+        }
+        [self saveContext:context];
+        [self saveContext:self.mainManagedObjectContext completion:^{
+            [self saveContext:self.writerManagedObjectContext completion:^{
+                if (completion) completion(error);
+            }];
+        }];
+    }];
+}
+
+- (NSArray <__kindof MKModel *> *)loadItemsOfClass:(Class)itemClass predicate:(NSPredicate *)predicate sortDescriptor:(NSSortDescriptor * _Nullable)sortDescriptor entityName:(NSString *)entityName {
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:entityName];
+    if (predicate) {
+        [fetchRequest setPredicate:predicate];
+    }
+    if (sortDescriptor) {
+        fetchRequest.sortDescriptors = @[sortDescriptor];
+    }
+    
+    NSError *error;
+    NSArray *result = [self.mainManagedObjectContext executeFetchRequest:fetchRequest error:&error];
+    NSMutableArray <MKModel *> *arr = [[NSMutableArray alloc] init];
+    
+    StringArr *propertyNames = [NSObject propertyNamesOfClass:itemClass];
+    
+    for (NSManagedObject *object in result) {
+        id item = [[itemClass alloc] init];
+        for (NSString * name in propertyNames) {
+            if ([object respondsToSelector:NSSelectorFromString(name)]) {
+                [item setValue:[object valueForKey:name] forKey:name];
+            }
+        }
+        [arr addObject:item];
+    }
+    if (error) {
+        DEBUGLOG(@"%@", error.localizedDescription);
+    }
+    return arr;
+}
+
+- (NSArray <__kindof MKModel *> *)loadItemsOfClass:(Class)itemClass inInterval:(__kindof MKInterval *)interval dateKey:(NSString *)dateKey entityName:(NSString *)entityName ascending:(BOOL)ascending {
+    NSPredicate *predicate = interval ? [NSPredicate predicateWithFormat:@"((%@ >= %@) AND (%@ <= %@))", dateKey, [NSDate dateWithTimeIntervalSince1970:interval.start.integerValue], dateKey, [NSDate dateWithTimeIntervalSince1970:interval.end.integerValue]] : nil;
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:dateKey ascending:ascending];
+
+    return [self loadItemsOfClass:itemClass predicate:predicate sortDescriptor:sortDescriptor entityName:entityName];
+}
+
+- (NSManagedObjectContext *)mainManagedObjectContext {
+    if (_mainManagedObjectContext) {
+        return _mainManagedObjectContext;
+    }
+    _mainManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSMainQueueConcurrencyType];
+    _mainManagedObjectContext.parentContext = [self writerManagedObjectContext];
+    return _mainManagedObjectContext;
+}
+
+- (NSManagedObjectContext *)writerManagedObjectContext {
+    if (_writerManagedObjectContext) {
+        return _writerManagedObjectContext;
     }
     if ([self persistentStoreCoordinator]) {
-        _managedObjectContext = [[NSManagedObjectContext alloc] init];
-        [_managedObjectContext setPersistentStoreCoordinator:_persistentStoreCoordinator];
+        _writerManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        [_writerManagedObjectContext setPersistentStoreCoordinator:_persistentStoreCoordinator];
+        //TODO: could be set
+        _writerManagedObjectContext.mergePolicy = NSOverwriteMergePolicy;
     }
-    return _managedObjectContext;
+    return _writerManagedObjectContext;
 }
 
 - (NSManagedObjectModel *)managedObjectModel {

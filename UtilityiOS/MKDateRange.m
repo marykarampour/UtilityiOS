@@ -182,12 +182,37 @@
 }
 
 - (NSUInteger)lenght {
-    return abs(self.end.integerValue - self.start.integerValue);
+    return labs(self.end.integerValue - self.start.integerValue);
 }
 
-- (BOOL)rangeContainsNumber:(NSNumber *)number {
+- (BOOL)containsNumber:(NSNumber *)number {
     //we want to include same
     return self.start && self.end && [self.start compare:number] != NSOrderedDescending && [self.end compare:number] != NSOrderedAscending;
+}
+
+- (BOOL)containsRange:(MKRange *)range {
+    //we want to include same
+    return self.start && self.end && range.start && range.end && [self.start compare:range.start] != NSOrderedDescending && [self.end compare:range.end] != NSOrderedAscending;
+}
+
+- (NSArray<MKRange *> *)differenceWithRange:(MKRange *)range {
+    if ([self containsRange:range]) {
+        return @[];
+    }
+    else if ([range containsRange:self]) {
+        MKRange *leftRange = [MKRange rangeWithStart:range.start end:self.start];
+        MKRange *rightRange = [MKRange rangeWithStart:self.end end:range.end];
+        return @[leftRange, rightRange];
+    }
+    else if ([range containsNumber:self.end]) {
+        MKRange *leftRange = [MKRange rangeWithStart:self.start end:range.start];
+        return @[leftRange];
+    }
+    else if ([range containsNumber:self.start]) {
+        MKRange *rightRange = [MKRange rangeWithStart:range.end end:self.end];
+        return @[rightRange];
+    }
+    return @[];
 }
 
 - (void)adjustContinuousRangeWithNumber:(NSNumber *)number {
@@ -205,7 +230,7 @@
             self.end = @(number.integerValue-1);
         }
     }
-    else if ([self rangeContainsNumber:number]) {
+    else if ([self containsNumber:number]) {
         self.end = number;
     }
     else if ([self.start compare:number] == NSOrderedAscending) {

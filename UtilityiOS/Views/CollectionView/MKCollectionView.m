@@ -193,35 +193,31 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.textLabel = [[UILabel alloc] init];
-        self.textLabel.numberOfLines = 0;
-        self.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        self.textLabel.backgroundColor = [UIColor clearColor];
+        self.textLabel.numberOfLines = 1;
         self.textLabel.textAlignment = NSTextAlignmentCenter;
-        [self.textLabel sizeToFit];
         
         [self addSubview:self.textLabel];
         
         [self removeConstraintsMask];
         [self constraint:NSLayoutAttributeCenterX view:self.textLabel];
         [self constraint:NSLayoutAttributeCenterY view:self.textLabel];
-        [self removeConstraintsMask];
-
+        self.backgroundColor = [UIColor clearColor];
     }
     return self;
 }
-
+//TODO: fix sizes
 - (void)drawRect:(CGRect)rect {
     CGFloat width = rect.size.width;
     CGFloat height = rect.size.height;
     CGFloat PADDING = 8.0;
-    
+
     CGMutablePathRef pathRef = CGPathCreateMutable();
     CGPathMoveToPoint(pathRef, NULL, rect.origin.x+PADDING, height/2);
     CGPathAddLineToPoint(pathRef, NULL, width/4, height/2);
-    
+
     CGPathMoveToPoint(pathRef, NULL, width/4 * 3, height/2);
     CGPathAddLineToPoint(pathRef, NULL, width - PADDING, height/2);
-    
+
     UIBezierPath *path = [UIBezierPath bezierPathWithCGPath:pathRef];
     CGPathRelease(pathRef);
     [path setLineWidth:2.0];
@@ -278,7 +274,7 @@
         view.textLabel.font = self.headerAttributes.font;
         view.textLabel.textColor = self.headerAttributes.textColor;
         view.borderColor = self.headerAttributes.borderColor;
-        [view setText:[self titleForHeaderInSection:indexPath.section]];//TODO: set
+        [view setText:[self titleForHeaderInSection:indexPath.section]];
         return view;
     }
     return nil;

@@ -223,6 +223,11 @@ extern NSString * const DateFormatWeekdayDayStyle;
 + (NSString *)pushNotificationDeviceToken;
 + (NSString *)pushNotificationPlatform;
 
+#pragma mark - Notification Center
+
++ (NSNotificationName)NotificationName_App_Terminated;
+
+
 #pragma mark - abstracts
 
 + (NSURL *)BaseURL;
@@ -243,7 +248,10 @@ extern NSString * const DateFormatWeekdayDayStyle;
 + (NSString *)Regex_CharRange_Alphanumeric;
 
 
+#pragma mark - core date
 
++ (NSString *)CoreData_StorePath;
++ (NSString *)CoreData_ModelPath;
 
 @end
 
