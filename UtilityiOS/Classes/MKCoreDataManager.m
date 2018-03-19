@@ -74,42 +74,45 @@
     }];
 }
 
-- (NSArray <__kindof MKModel *> *)loadItemsOfClass:(Class)itemClass predicate:(NSPredicate *)predicate sortDescriptor:(NSSortDescriptor * _Nullable)sortDescriptor entityName:(NSString *)entityName {
+- (void)loadItemsOfClass:(Class)itemClass predicate:(NSPredicate *)predicate sortDescriptor:(NSSortDescriptor * _Nullable)sortDescriptor entityName:(NSString *)entityName completion:(void (^)(NSArray *, NSError *))completion {
     
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:entityName];
-    if (predicate) {
-        [fetchRequest setPredicate:predicate];
-    }
-    if (sortDescriptor) {
-        fetchRequest.sortDescriptors = @[sortDescriptor];
-    }
-    
-    NSError *error;
-    NSArray *result = [self.mainManagedObjectContext executeFetchRequest:fetchRequest error:&error];
-    NSMutableArray <MKModel *> *arr = [[NSMutableArray alloc] init];
-    
-    StringArr *propertyNames = [NSObject propertyNamesOfClass:itemClass];
-    
-    for (NSManagedObject *object in result) {
-        id item = [[itemClass alloc] init];
-        for (NSString * name in propertyNames) {
-            if ([object respondsToSelector:NSSelectorFromString(name)]) {
-                [item setValue:[object valueForKey:name] forKey:name];
-            }
+    [self.mainManagedObjectContext performBlock:^{
+        
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:entityName];
+        if (predicate) {
+            [fetchRequest setPredicate:predicate];
         }
-        [arr addObject:item];
-    }
-    if (error) {
-        DEBUGLOG(@"%@", error.localizedDescription);
-    }
-    return arr;
+        if (sortDescriptor) {
+            fetchRequest.sortDescriptors = @[sortDescriptor];
+        }
+        
+        NSError *error;
+        NSArray *result = [self.mainManagedObjectContext executeFetchRequest:fetchRequest error:&error];
+        NSMutableArray <MKModel *> *arr = [[NSMutableArray alloc] init];
+        
+        StringArr *propertyNames = [NSObject propertyNamesOfClass:itemClass];
+        
+        for (NSManagedObject *object in result) {
+            id item = [[itemClass alloc] init];
+            for (NSString * name in propertyNames) {
+                if ([object respondsToSelector:NSSelectorFromString(name)]) {
+                    [item setValue:[object valueForKey:name] forKey:name];
+                }
+            }
+            [arr addObject:item];
+        }
+        if (error) {
+            DEBUGLOG(@"%@", error.localizedDescription);
+        }
+        completion(arr, error);
+    }];
 }
 
-- (NSArray <__kindof MKModel *> *)loadItemsOfClass:(Class)itemClass inInterval:(__kindof MKInterval *)interval dateKey:(NSString *)dateKey entityName:(NSString *)entityName ascending:(BOOL)ascending {
-    NSPredicate *predicate = interval ? [NSPredicate predicateWithFormat:@"((%@ >= %@) AND (%@ <= %@))", dateKey, [NSDate dateWithTimeIntervalSince1970:interval.start.integerValue], dateKey, [NSDate dateWithTimeIntervalSince1970:interval.end.integerValue]] : nil;
+- (void)loadItemsOfClass:(Class)itemClass inInterval:(__kindof MKInterval *)interval dateKey:(NSString *)dateKey entityName:(NSString *)entityName ascending:(BOOL)ascending completion:(void (^)(NSArray *, NSError *))completion {
+    NSPredicate *predicate = interval ? [NSPredicate predicateWithFormat:@"((%K >= %@) AND (%K <= %@))", dateKey, [NSDate dateWithTimeIntervalSince1970:interval.start.integerValue], dateKey, [NSDate dateWithTimeIntervalSince1970:interval.end.integerValue]] : nil;
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:dateKey ascending:ascending];
 
-    return [self loadItemsOfClass:itemClass predicate:predicate sortDescriptor:sortDescriptor entityName:entityName];
+    [self loadItemsOfClass:itemClass predicate:predicate sortDescriptor:sortDescriptor entityName:entityName completion:completion];
 }
 
 - (NSManagedObjectContext *)mainManagedObjectContext {

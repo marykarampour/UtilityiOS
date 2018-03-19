@@ -45,6 +45,7 @@ typedef NS_OPTIONS(NSUInteger, CollectionViewOrientation) {
 + (NSString *)identifier;
 - (instancetype)initWithCollectionViewAttributes:(MKCollectionViewAttributes *)attributes orientation:(CollectionViewOrientation)orientation;
 - (void)reload;
+- (void)reloadWithCompletion:(void (^)(void))completion;
 
 @end
 

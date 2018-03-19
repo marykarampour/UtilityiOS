@@ -75,6 +75,16 @@
     });
 }
 
+- (void)reloadWithCompletion:(void (^)(void))completion {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self reloadData];
+        [self performBatchUpdates:^{
+        } completion:^(BOOL finished) {
+            if (completion) completion();
+        }];
+    });
+}
+
 @end
 
 

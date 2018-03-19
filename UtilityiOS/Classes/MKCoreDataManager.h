@@ -30,11 +30,11 @@
 
 - (void)saveItems:(NSArray<__kindof MKModel *> *)items ofClass:(Class)itemClass entityName:(NSString *)entityName completion:(void (^)(NSError *error))completion;
 
-- (NSArray <__kindof MKModel *> *)loadItemsOfClass:(Class)itemClass predicate:(NSPredicate *)predicate sortDescriptor:(NSSortDescriptor * _Nullable)sortDescriptor entityName:(NSString *)entityName;
+- (void)loadItemsOfClass:(Class)itemClass predicate:(NSPredicate *)predicate sortDescriptor:(NSSortDescriptor * _Nullable)sortDescriptor entityName:(NSString *)entityName completion:(void (^)(NSArray *result, NSError *error))completion;
 /** @brief utility method for fetching items by date range
  @param dateKey name of date property
  */
-- (NSArray <__kindof MKModel *> *)loadItemsOfClass:(Class)itemClass inInterval:(__kindof MKInterval *)interval dateKey:(NSString *)dateKey entityName:(NSString *)entityName ascending:(BOOL)ascending;
+- (void)loadItemsOfClass:(Class)itemClass inInterval:(__kindof MKInterval *)interval dateKey:(NSString *)dateKey entityName:(NSString *)entityName ascending:(BOOL)ascending completion:(void (^)(NSArray *result, NSError *error))completion;
 
 @end
 //TODO: can create a singlton and add this as property, the app sets the property to the app's subclass of this ? 

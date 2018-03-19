@@ -25,6 +25,7 @@
 }
 
 - (void)resetDates {
+    self.interval = [[MKInterval alloc] init];
     self.fromDate = nil;
     self.toDate = nil;
 }
@@ -193,6 +194,12 @@
 - (BOOL)containsRange:(MKRange *)range {
     //we want to include same
     return self.start && self.end && range.start && range.end && [self.start compare:range.start] != NSOrderedDescending && [self.end compare:range.end] != NSOrderedAscending;
+}
+
+- (MKRange *)unionWithRange:(MKRange *)range {
+    NSInteger from = range.start ? MIN(range.start.integerValue, self.start.integerValue) : self.start.integerValue;
+    NSInteger to = range.end ? MAX(range.end.integerValue, self.end.integerValue) : self.end.integerValue;
+    return [MKInterval rangeWithStart:@(from) end:@(to)];
 }
 
 - (NSArray<MKRange *> *)differenceWithRange:(MKRange *)range {

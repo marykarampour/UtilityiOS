@@ -52,9 +52,10 @@ typedef NSMutableArray<MKDateRange *>   MDatePairArr;
 + (instancetype)rangeWithStart:(NSNumber *)start end:(NSNumber *)end;
 
 - (BOOL)containsNumber:(NSNumber *)number;
-- (BOOL)containsRange:(MKRange *)range;
-- (NSArray<MKRange *> *)differenceWithRange:(MKRange *)range;
+- (BOOL)containsRange:(__kindof MKRange *)range;
+- (NSArray<__kindof MKRange *> *)differenceWithRange:(__kindof MKRange *)range;
 - (void)adjustContinuousRangeWithNumber:(NSNumber *)number;
+- (__kindof MKRange *)unionWithRange:(__kindof MKRange *)range;
 
 @end
 
