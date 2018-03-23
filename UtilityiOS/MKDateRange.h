@@ -53,7 +53,9 @@ typedef NSMutableArray<MKDateRange *>   MDatePairArr;
 
 - (BOOL)containsNumber:(NSNumber *)number;
 - (BOOL)containsRange:(__kindof MKRange *)range;
-- (NSArray<__kindof MKRange *> *)differenceWithRange:(__kindof MKRange *)range;
+- (BOOL)strictlyContainsNumber:(NSNumber *)number;
+- (BOOL)strictlyContainsRange:(__kindof MKRange *)range;
++ (NSArray<__kindof MKRange *> *)setMinusOfRange:(__kindof MKRange *)range1 withRange:(__kindof MKRange *)range2;
 - (void)adjustContinuousRangeWithNumber:(NSNumber *)number;
 - (__kindof MKRange *)unionWithRange:(__kindof MKRange *)range;
 

@@ -20,6 +20,7 @@
 - (NSDate *)endOfDay;
 
 - (NSDate *)weekStartDate;
+- (NSInteger)dayDifferenceWithWeekStartDate;
 
 - (NSDate *)updateCalendarUnit:(NSCalendarUnit)unit value:(NSInteger)value;
 - (NSUInteger)valueForCalendarUnit:(NSCalendarUnit)unit;

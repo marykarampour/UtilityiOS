@@ -112,6 +112,12 @@
     [components setDay:(components.day - components.weekday + 1)];
     return [cal dateFromComponents:components];
 }
+
+- (NSInteger)dayDifferenceWithWeekStartDate {
+    NSDate *startDate = [self weekStartDate];
+    return [NSDate daysBetweenFromDate:self toDate:startDate];
+}
+
 #warning - fix these
 #pragma mark - update
 

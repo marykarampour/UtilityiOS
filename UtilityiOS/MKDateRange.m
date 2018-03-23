@@ -188,12 +188,22 @@
 
 - (BOOL)containsNumber:(NSNumber *)number {
     //we want to include same
-    return self.start && self.end && [self.start compare:number] != NSOrderedDescending && [self.end compare:number] != NSOrderedAscending;
+    return self.start && self.end && number && [self.start compare:number] != NSOrderedDescending && [self.end compare:number] != NSOrderedAscending;
+}
+
+- (BOOL)strictlyContainsNumber:(NSNumber *)number {
+    //we don't want to include same
+    return self.start && self.end && number && [self.start compare:number] == NSOrderedAscending && [self.end compare:number] == NSOrderedDescending;
 }
 
 - (BOOL)containsRange:(MKRange *)range {
     //we want to include same
     return self.start && self.end && range.start && range.end && [self.start compare:range.start] != NSOrderedDescending && [self.end compare:range.end] != NSOrderedAscending;
+}
+
+- (BOOL)strictlyContainsRange:(MKRange *)range {
+    //we don't want to include same
+    return self.start && self.end && range.start && range.end && [self.start compare:range.start] == NSOrderedAscending && [self.end compare:range.end] == NSOrderedDescending;
 }
 
 - (MKRange *)unionWithRange:(MKRange *)range {
@@ -202,21 +212,21 @@
     return [MKInterval rangeWithStart:@(from) end:@(to)];
 }
 
-- (NSArray<MKRange *> *)differenceWithRange:(MKRange *)range {
-    if ([self containsRange:range]) {
++ (NSArray<MKRange *> *)setMinusOfRange:(__kindof MKRange *)range1 withRange:(__kindof MKRange *)range2 {
+    if ([range2 containsRange:range1]) {
         return @[];
     }
-    else if ([range containsRange:self]) {
-        MKRange *leftRange = [MKRange rangeWithStart:range.start end:self.start];
-        MKRange *rightRange = [MKRange rangeWithStart:self.end end:range.end];
+    else if ([range1 strictlyContainsRange:range2]) {
+        MKRange *leftRange = [MKRange rangeWithStart:range1.start end:range2.start];
+        MKRange *rightRange = [MKRange rangeWithStart:range2.end end:range1.end];
         return @[leftRange, rightRange];
     }
-    else if ([range containsNumber:self.end]) {
-        MKRange *leftRange = [MKRange rangeWithStart:self.start end:range.start];
+    else if ([range2 strictlyContainsNumber:range1.start]) {
+        MKRange *leftRange = [MKRange rangeWithStart:range1.start end:range2.start];
         return @[leftRange];
     }
-    else if ([range containsNumber:self.start]) {
-        MKRange *rightRange = [MKRange rangeWithStart:range.end end:self.end];
+    else if ([range1 strictlyContainsNumber:range2.end]) {
+        MKRange *rightRange = [MKRange rangeWithStart:range2.end end:range1.end];
         return @[rightRange];
     }
     return @[];

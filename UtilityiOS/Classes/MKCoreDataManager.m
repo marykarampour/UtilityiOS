@@ -55,14 +55,18 @@
 - (void)saveItems:(NSArray<__kindof MKModel *> *)items ofClass:(Class)itemClass entityName:(NSString *)entityName completion:(void (^)(NSError *))completion {
     
     StringArr *propertyNames = [NSObject propertyNamesOfClass:itemClass];
-    NSError *error;
+    __block NSError *error;
     NSManagedObjectContext *context = [self temporaryContext];
-    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:entityName];
+
     [context performBlock:^{
         for (MKModel *item in items) {
-            NSManagedObject *newItem = [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:context];
-            for (NSString *key in propertyNames) {
-                [newItem setPrimitiveValue:[item valueForKey:key] forKey:key];
+            NSUInteger count = [self.mainManagedObjectContext countForFetchRequest:fetchRequest error:nil];
+            if (count == 0) {
+                NSManagedObject *newItem = [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:context];
+                for (NSString *key in propertyNames) {
+                    [newItem setPrimitiveValue:[item valueForKey:key] forKey:key];
+                }
             }
         }
         [self saveContext:context];
@@ -132,7 +136,7 @@
         _writerManagedObjectContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
         [_writerManagedObjectContext setPersistentStoreCoordinator:_persistentStoreCoordinator];
         //TODO: could be set
-        _writerManagedObjectContext.mergePolicy = NSOverwriteMergePolicy;
+        _writerManagedObjectContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy;
     }
     return _writerManagedObjectContext;
 }
