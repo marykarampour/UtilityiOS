@@ -36,7 +36,7 @@
         }
             break;
         case TextType_Alphabet: {
-            regex = [Constants Regex_CharRange_Letters];
+            regex = [Constants Regex_CharRange_Alphabet];
             regex = [NSString stringWithFormat:regex, 0, length];
         }
             break;
@@ -45,13 +45,38 @@
             regex = [NSString stringWithFormat:regex, 0, length];
         }
             break;
+        case TextType_AlphaSpaceDot: {
+            regex = [Constants Regex_CharRange_AlphaSpaceDot];
+            regex = [NSString stringWithFormat:regex, 0, length];
+        }
+            break;
+        case TextType_Email: {
+            regex = [Constants Regex_Email];
+        }
+            break;
+        case TextType_Phone: {
+            regex = [Constants Regex_Phone];
+        }
+            break;
+        case TextType_Address: {
+            regex = [Constants Regex_Address];
+        }
+            break;
+        case TextType_Date: {
+            regex = [Constants Regex_Date];
+        }
+            break;
+        case TextType_Gender: {
+            regex = [Constants Regex_Gender];
+        }
+            break;
         default:
             regex = [Constants Regex_CharRange];
             regex = [NSString stringWithFormat:regex, 0, length];
             break;
     }
     if (regex) {
-        predicate = [NSPredicate predicateWithFormat:format, [NSString stringWithFormat:regex, 0, length]];
+        predicate = [NSPredicate predicateWithFormat:format, regex];
         return [predicate evaluateWithObject:self];
     }
     return YES;

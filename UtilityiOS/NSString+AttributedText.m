@@ -27,9 +27,7 @@
 
 @implementation NSString (AttributedText)
 
-+ (NSAttributedString *)multiLineTextWithAttributes:(NSArray<StringAttributes *> *)attrs {
-    
-    NSAttributedString *lineBreak = [[NSMutableAttributedString alloc] initWithString:@"\n"];
++ (NSAttributedString *)attributedTextWithAttributes:(NSArray<StringAttributes *> *)attrs attributedDelimiter:(NSAttributedString *)delimiter {
     NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:@""];
     
     for (StringAttributes *attr in attrs) {
@@ -37,24 +35,7 @@
             NSAttributedString *nextStr = [[NSMutableAttributedString alloc] initWithString:attr.text attributes:@{NSFontAttributeName:attr.font, NSForegroundColorAttributeName:attr.color}];
             [attrStr appendAttributedString:nextStr];
             if (![[attrs lastObject] isEqual:attr]) {
-                [attrStr appendAttributedString:lineBreak];
-            }
-        }
-    }
-    return attrStr;
-}
-
-+ (NSAttributedString *)dashedTextWithAttributes:(NSArray<StringAttributes *> *)attrs {
-    
-    NSAttributedString *dash = [[NSMutableAttributedString alloc] initWithString:@" - " attributes:@{NSForegroundColorAttributeName:[UIColor blueColor]}];
-    NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:@""];
-    
-    for (StringAttributes *attr in attrs) {
-        if (attr.text) {
-            NSAttributedString *nextStr = [[NSMutableAttributedString alloc] initWithString:attr.text attributes:@{NSFontAttributeName:attr.font, NSForegroundColorAttributeName:attr.color}];
-            [attrStr appendAttributedString:nextStr];
-            if (![[attrs lastObject] isEqual:attr]) {
-                [attrStr appendAttributedString:dash];
+                [attrStr appendAttributedString:delimiter];
             }
         }
     }

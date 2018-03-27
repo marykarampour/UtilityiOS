@@ -68,6 +68,13 @@ typedef NS_ENUM(NSUInteger, TextType) {
     TextType_FloatPositive,
     TextType_Alphabet,
     TextType_AlphaNumeric,
+    TextType_AlphaSpaceDot,
+    TextType_Name,
+    TextType_Email,
+    TextType_Phone,
+    TextType_Address,
+    TextType_Date,
+    TextType_Gender,
     TextType_Count
 };
 
@@ -244,9 +251,14 @@ extern NSString * const DateFormatWeekdayDayStyle;
 + (NSString *)Regex_CharRange_Int;
 + (NSString *)Regex_CharRange_FloatPositive;
 + (NSString *)Regex_CharRange_Float;
-+ (NSString *)Regex_CharRange_Letters;
++ (NSString *)Regex_CharRange_Alphabet;
 + (NSString *)Regex_CharRange_Alphanumeric;
-
++ (NSString *)Regex_CharRange_AlphaSpaceDot;
++ (NSString *)Regex_Email;
++ (NSString *)Regex_Phone;
++ (NSString *)Regex_Address;
++ (NSString *)Regex_Date;
++ (NSString *)Regex_Gender;
 
 #pragma mark - core date
 

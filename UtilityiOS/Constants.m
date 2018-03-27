@@ -574,7 +574,7 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
     return @"^([-]?[0-9]{%zd,%zd}(\\.[0-9]{%zd,%zd})?)$";
 }
 
-+ (NSString *)Regex_CharRange_Letters {
++ (NSString *)Regex_CharRange_Alphabet {
     return @"^([a-zA-Z]{%zd,%zd})$";
 }
 
@@ -582,7 +582,29 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
     return @"^([a-zA-Z0-9]{%zd,%zd})$";
 }
 
++ (NSString *)Regex_CharRange_AlphaSpaceDot {
+    return @"^([\\s\\.a-zA-Z0-9]{%zd,%zd})$";
+}
 
++ (NSString *)Regex_Email {
+    return @"^([A-Z0-9a-z\\._%+-]){1,64}+(@([A-Za-z0-9-]+\\.)){4,64}+([A-Za-z]{2,4}){1,100}$";
+}
+
++ (NSString *)Regex_Phone {
+    return @"^([0-9]{10})$";
+}
+
++ (NSString *)Regex_Address {
+    return @"^([\\s\\.\\,a-zA-Z0-9-]{0,100})$";
+}
+
++ (NSString *)Regex_Date {
+    return @"^([0-9]{4}-[0-9]{2}-[0-9]{2})$";
+}
+
++ (NSString *)Regex_Gender {
+    return @"^([fFmM]{1})$";
+}
 
 #pragma mark - core date
 
