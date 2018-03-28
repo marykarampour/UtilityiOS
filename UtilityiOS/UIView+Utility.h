@@ -28,7 +28,11 @@
 
 @end
 
+@interface UIView (Utility)
 
+- (void)removeAllSubviews;
+
+@end
 
 
 

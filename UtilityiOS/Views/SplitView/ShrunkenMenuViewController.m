@@ -58,8 +58,11 @@
     [img setImage:[UIImage imageNamed:(indexPath.row < [self tabCount] ? self.images[indexPath.row] : @"")]];
 
     if (!cell) {
-        
-        cell = [[MultiLabelTableViewCell alloc] initWithType:MultiLabelViewType_NONE leftView:img rightView:nil labelsCount:0 insets:UIEdgeInsetsMake(4.0, 4.0, 4.0, 4.0)];
+        cell = [[MultiLabelTableViewCell alloc] init];
+        [cell.viewObject constructWithType:MultiLabelViewType_NONE leftView:img rightView:nil labelsCount:0 insets:UIEdgeInsetsMake(4.0, 4.0, 4.0, 4.0)];
+    }
+    else {
+        [cell.viewObject addLeftView:img];
     }
     return cell;
 }

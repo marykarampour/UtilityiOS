@@ -77,3 +77,14 @@
 
 @end
 
+
+@implementation UIView (Utility)
+
+- (void)removeAllSubviews {
+    for (UIView *view in self.subviews) {
+        [view removeFromSuperview];
+    }
+}
+
+@end
+
