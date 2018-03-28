@@ -32,7 +32,7 @@ static UIEdgeInsets EDGE_INSETS;
 
 - (instancetype)initWithContentView:(__kindof UIView *)contentView {
     if (self = [super init]) {
-        self.contentView = contentView;
+        self.contentView = contentView ? contentView : [[UIView alloc] init];
     }
     return self;
 }

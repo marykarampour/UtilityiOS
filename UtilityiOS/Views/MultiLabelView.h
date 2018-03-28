@@ -11,6 +11,7 @@
 
 typedef NS_OPTIONS(NSUInteger, MultiLabelViewType) {
     MultiLabelViewType_NONE = 0,
+
     MultiLabelViewType_Labels = 1 << 0,
     MultiLabelViewType_LeftView = 1 << 1,
     MultiLabelViewType_rightView = 1 << 2
@@ -23,6 +24,8 @@ typedef NS_OPTIONS(NSUInteger, MultiLabelViewType) {
 @property (nonatomic, strong, readonly) __kindof UIView *rightView;
 @property (nonatomic, strong, readonly) NSMutableArray<__kindof MKLabel *> *labels;
 
+/** @brief Default initializer
+ @param contentView Pass nil if you want a default UIView be set as contentView */
 - (instancetype)initWithContentView:(__kindof UIView *)contentView;
 
 /** @brief Creats a cell based on type
