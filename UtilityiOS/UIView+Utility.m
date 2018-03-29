@@ -7,6 +7,7 @@
 //
 
 #import "UIView+Utility.h"
+#import <CoreText/CoreText.h>
 
 @implementation UIView (Constraints)
 
@@ -84,6 +85,43 @@
     for (UIView *view in self.subviews) {
         [view removeFromSuperview];
     }
+}
+
+@end
+
+
+@implementation UIView (CoreText)
+
+- (void)rotateAttributedText:(NSAttributedString *)text angle:(CGFloat)angle rect:(CGRect)rect {
+    CTFramesetterRef frameSetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)text);
+    CGMutablePathRef pathRef = CGPathCreateMutable();
+    CGPathAddRect(pathRef, NULL, rect);
+    CTFrameRef frameRef = CTFramesetterCreateFrame(frameSetter, CFRangeMake(0, 0), pathRef, NULL);
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(context);
+    
+    CGPoint center = CGPointMake(rect.size.width/2.0, rect.size.height/2.0);
+    
+    CGAffineTransform transform = CGAffineTransformMakeTranslation(center.x, center.y);
+    transform = CGAffineTransformRotate(transform, angle);
+    transform = CGAffineTransformTranslate(transform, -center.x, -center.x);
+    CGContextConcatCTM(context, transform);
+    
+    CGContextSaveGState(context);
+    
+    CGContextSetTextMatrix(context, CGAffineTransformIdentity);
+    CGContextTranslateCTM(context, 0, rect.size.height);
+    CGContextScaleCTM(context, 1.0, -1.0);
+    
+    CTFrameDraw(frameRef, context);
+    
+    CGContextRestoreGState(context);
+    CGContextRestoreGState(context);
+    
+    CFRelease(pathRef);
+    CFRelease(frameRef);
+    CFRelease(frameSetter);
 }
 
 @end

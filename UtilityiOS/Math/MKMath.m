@@ -26,4 +26,8 @@
     return vertices;
 }
 
++ (CGPoint)midPointOfPoint:(CGPoint)first andPoint:(CGPoint)second {
+    return CGPointMake((first.x+second.x)/2.0, (first.y+second.y)/2.0);
+}
+
 @end

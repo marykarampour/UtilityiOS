@@ -176,7 +176,7 @@ extern NSString * const DateFormatWeekdayDayStyle;
 + (float)LoginViewInset;
 + (float)LoginViewWidth;
 + (float)BadgeHeight;
-+ (CGSize)tableCellDisclosureIndicatorSize;
++ (CGSize)TableCellDisclosureIndicatorSize;
 
 #pragma mark - defaults
 
@@ -194,6 +194,7 @@ extern NSString * const DateFormatWeekdayDayStyle;
 + (NSString *)LoginFailedMessage_STR;
 + (NSString *)FaceID_STR;
 + (NSString *)TouchID_STR;
++ (NSString *)Done_STR;
 + (NSString *)OK_STR;
 + (NSString *)Cancel_STR;
 + (NSString *)Skip_STR;
@@ -223,6 +224,8 @@ extern NSString * const DateFormatWeekdayDayStyle;
 + (NSURL *)appDocumentsDirectory;
 + (NSString *)bundleID;
 + (NSString *)targetName;
++ (CGFloat)statusBarHeight;
++ (CGFloat)safeAreaInsets;
 
 #pragma mark - Push Notification
 

@@ -15,5 +15,6 @@
  @param size the diameter of the enclosing circle 
  */
 + (ValueArr *)verticesForPolygon:(NSUInteger)vertexCount ofSize:(CGFloat)size;
++ (CGPoint)midPointOfPoint:(CGPoint)first andPoint:(CGPoint)second;
 
 @end

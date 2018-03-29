@@ -163,7 +163,7 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
     return 20.0;
 }
 
-+ (CGSize)tableCellDisclosureIndicatorSize {
++ (CGSize)TableCellDisclosureIndicatorSize {
     return CGSizeMake(20.0, 20.0);
 }
 
@@ -203,6 +203,10 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
 
 + (NSString *)TouchID_STR {
     return LOCALIZED(@"Touch ID");
+}
+
++ (NSString *)Done_STR {
+    return LOCALIZED(@"Done");
 }
 
 + (NSString *)OK_STR {

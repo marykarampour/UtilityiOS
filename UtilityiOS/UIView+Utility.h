@@ -34,5 +34,12 @@
 
 @end
 
+@interface UIView (CoreText)
+
+- (void)rotateAttributedText:(NSAttributedString *)text angle:(CGFloat)angle rect:(CGRect)rect;
+
+@end
+
+
 
 
