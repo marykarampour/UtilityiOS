@@ -211,7 +211,7 @@ extern NSString * const DateFormatWeekdayDayStyle;
 + (NSString *)TakingPicture_STR;
 + (NSString *)ScanningBarcode_STR;
 + (NSString *)NoCamera_STR;
-
++ (NSString *)Invalid_STR;
 + (NSString *)Error_STR;
 
 #pragma mark - app
@@ -257,7 +257,11 @@ extern NSString * const DateFormatWeekdayDayStyle;
 + (NSString *)Regex_CharRange_Alphabet;
 + (NSString *)Regex_CharRange_Alphanumeric;
 + (NSString *)Regex_CharRange_AlphaSpaceDot;
++ (NSString *)Regex_CharRange_Dash_Numeric;
 + (NSString *)Regex_Email;
++ (NSString *)Regex_Email_NoCheck;
++ (NSString *)Regex_Email_Has_AT;
++ (NSString *)Regex_Email_Has_AT_Dot;
 + (NSString *)Regex_Phone;
 + (NSString *)Regex_Address;
 + (NSString *)Regex_Date;

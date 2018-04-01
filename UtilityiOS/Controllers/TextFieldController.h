@@ -13,6 +13,7 @@
 @protocol TextFieldDelegate <NSObject>
 
 @optional
+- (void)handleTextFieldReturn:(__kindof UITextField *)textField isValid:(BOOL)isValid;
 - (void)handleTextFieldChanges:(__kindof UITextField *)textField;
 - (void)handleTextFieldBeginEditing:(__kindof UITextField *)textField;
 

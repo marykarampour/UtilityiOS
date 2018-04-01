@@ -270,9 +270,12 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
 }
 
 + (NSString *)NoCamera_STR {
-    return @"Device has no camera";
+    return LOCALIZED(@"Device has no camera");
 }
 
++ (NSString *)Invalid_STR {
+    return LOCALIZED(@"Invalid %@");
+}
 
 + (NSString *)Error_STR {
     return LOCALIZED(@"Error");
@@ -587,11 +590,27 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
 }
 
 + (NSString *)Regex_CharRange_AlphaSpaceDot {
-    return @"^([\\s\\.a-zA-Z0-9]{%zd,%zd})$";
+    return @"^([\\s\\.a-zA-Z]{%zd,%zd})$";
+}
+
++ (NSString *)Regex_CharRange_Dash_Numeric {
+    return @"^([0-9-]{%zd,%zd})$";
 }
 
 + (NSString *)Regex_Email {
-    return @"^([A-Z0-9a-z\\._%+-]){1,64}+(@([A-Za-z0-9-]+\\.)){4,64}+([A-Za-z]{2,4}){1,100}$";
+    return @"^([A-Z0-9a-z\\._%+-]){1,64}+@([A-Za-z0-9-]{2,64})+\\.+([A-Za-z\\.]{2,32})$";
+}
+
++ (NSString *)Regex_Email_NoCheck {
+    return @"^([A-Z0-9a-z\\._%+-@]){1,256}$";
+}
+
++ (NSString *)Regex_Email_Has_AT {
+    return @"^([A-Z0-9a-z\\._%+-]){1,64}+@([A-Za-z0-9-]{0,64})$";
+}
+
++ (NSString *)Regex_Email_Has_AT_Dot {
+    return @"^([A-Z0-9a-z\\._%+-]){1,64}+@([A-Za-z0-9-]{2,64})+\\.+([A-Za-z\\.]{0,32})$";
 }
 
 + (NSString *)Regex_Phone {
@@ -603,7 +622,7 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
 }
 
 + (NSString *)Regex_Date {
-    return @"^([0-9]{4}-[0-9]{2}-[0-9]{2})$";
+    return @"^(((1[0-9][0-9][0-9])|(20[0-9][0-9]))-(0[0-9]|1[0-2])-((0[0-9])|([1-2][0-9])|(3[0-1])))$";
 }
 
 + (NSString *)Regex_Gender {

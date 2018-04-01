@@ -10,7 +10,7 @@
 
 @implementation NSString (Validation)
 
-- (BOOL)isValidStringOfType:(TextType)type maxLength:(NSUInteger)length {
+- (BOOL)isValidStringOfType:(TextType)type maxLength:(NSUInteger)length isEditing:(BOOL)isEditing {
     NSPredicate *predicate;
     NSString *format = [Constants Predicate_MatchesSelf];
     NSString *regex;
@@ -51,11 +51,30 @@
         }
             break;
         case TextType_Email: {
-            regex = [Constants Regex_Email];
+            if (isEditing) {
+                if (![self containsString:@"@"]) {
+                    regex = [Constants Regex_Email_NoCheck];
+                }
+                else if (![self containsString:@"."] || [self rangeOfString:@"." options:NSBackwardsSearch].location < [self rangeOfString:@"@"].location) {
+                    regex = [Constants Regex_Email_Has_AT];
+                }
+                else {
+                    regex = [Constants Regex_Email_Has_AT_Dot];
+                }
+            }
+            else {
+                regex = [Constants Regex_Email];
+            }
         }
             break;
         case TextType_Phone: {
-            regex = [Constants Regex_Phone];
+            if (isEditing) {
+                regex = [Constants Regex_CharRange_Int];
+                regex = [NSString stringWithFormat:regex, 0, 10];
+            }
+            else {
+                regex = [Constants Regex_Phone];
+            }
         }
             break;
         case TextType_Address: {
@@ -63,7 +82,13 @@
         }
             break;
         case TextType_Date: {
-            regex = [Constants Regex_Date];
+            if (isEditing) {
+                regex = [Constants Regex_CharRange_Dash_Numeric];
+                regex = [NSString stringWithFormat:regex, 0, 10];
+            }
+            else {
+                regex = [Constants Regex_Date];
+            }
         }
             break;
         case TextType_Gender: {

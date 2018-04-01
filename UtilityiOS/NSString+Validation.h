@@ -10,6 +10,6 @@
 
 @interface NSString (Validation)
 
-- (BOOL)isValidStringOfType:(TextType)type maxLength:(NSUInteger)length;
+- (BOOL)isValidStringOfType:(TextType)type maxLength:(NSUInteger)length isEditing:(BOOL)isEditing;
 
 @end
