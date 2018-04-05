@@ -23,7 +23,6 @@
 
 @interface MKDrawingView ()
 
-@property (nonatomic, strong) UIImage *image;
 @property (nonatomic, strong) NSMutableArray<MKBezierPath *> *paths;
 
 @property (nonatomic, assign) CGPoint firstPoint;
@@ -35,17 +34,25 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        self.image = [[UIImage alloc] init];
         self.paths = [[NSMutableArray alloc] init];
     }
     return self;
 }
 
 - (UIImage *)image {
-    UIGraphicsBeginImageContext(self.frame.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGColorRef borderColor = self.layer.borderColor;
+    self.layer.borderColor = [UIColor clearColor].CGColor;
+    UIGraphicsBeginImageContextWithOptions(self.frame.size, self.opaque, 0.0);
+    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    self.layer.borderColor = borderColor;
     return img;
+}
+
+- (void)clearView {
+    [self.paths removeAllObjects];
+    [self setNeedsDisplay];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -74,7 +81,9 @@
 }
 
 - (void)touchesEnded:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    UITouch *touch = [touches anyObject];
+    if ([self.delegate respondsToSelector:@selector(touchesEndedWithImage:)]) {
+        [self.delegate touchesEndedWithImage:[self image]];
+    }
 }
 
 - (void)drawRect:(CGRect)rect {

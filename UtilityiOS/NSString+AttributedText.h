@@ -22,6 +22,7 @@
 @interface NSString (AttributedText)
 
 + (NSAttributedString *)attributedTextWithAttributes:(NSArray <StringAttributes *> *)attrs;
++ (NSAttributedString *)attributedTextWithAttributes:(NSArray <StringAttributes *> *)attrs delimiter:(NSString *)delimiter;
 + (NSAttributedString *)attributedTextWithAttributes:(NSArray <StringAttributes *> *)attrs attributedDelimiter:(NSAttributedString *)delimiter;
 + (NSAttributedString *)attributedTextWithIndent:(CGFloat)indent firstLineIndent:(CGFloat)firstLineIndent attributes:(StringAttributes *)attrs;
 + (NSAttributedString *)bulletedTextWithArray:(StringArr *)strings;

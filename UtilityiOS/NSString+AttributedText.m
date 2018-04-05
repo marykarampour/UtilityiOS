@@ -34,7 +34,7 @@
         if (attr.text) {
             NSAttributedString *nextStr = [[NSMutableAttributedString alloc] initWithString:attr.text attributes:@{NSFontAttributeName:attr.font, NSForegroundColorAttributeName:attr.color}];
             [attrStr appendAttributedString:nextStr];
-            if (![[attrs lastObject] isEqual:attr]) {
+            if (delimiter && ![[attrs lastObject] isEqual:attr]) {
                 [attrStr appendAttributedString:delimiter];
             }
         }
@@ -42,15 +42,13 @@
     return attrStr;
 }
 
++ (NSAttributedString *)attributedTextWithAttributes:(NSArray<StringAttributes *> *)attrs delimiter:(NSString *)delimiter {
+    NSMutableAttributedString *attrDelimiter = [[NSMutableAttributedString alloc] initWithString:delimiter];
+    return [self attributedTextWithAttributes:attrs attributedDelimiter:attrDelimiter];
+}
+
 + (NSAttributedString *)attributedTextWithAttributes:(NSArray<StringAttributes *> *)attrs {
-    NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:@""];
-    for (StringAttributes *attr in attrs) {
-        if (attr.text) {
-            NSAttributedString *nextStr = [[NSMutableAttributedString alloc] initWithString:attr.text attributes:@{NSFontAttributeName:attr.font, NSForegroundColorAttributeName:attr.color}];
-            [attrStr appendAttributedString:nextStr];
-        }
-    }
-    return attrStr;
+    return [self attributedTextWithAttributes:attrs attributedDelimiter:nil];
 }
 
 + (NSAttributedString *)attributedTextWithIndent:(CGFloat)indent firstLineIndent:(CGFloat)firstLineIndent attributes:(StringAttributes *)attrs {

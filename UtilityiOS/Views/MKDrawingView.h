@@ -8,6 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+@protocol MKDrawingViewProtocol <NSObject>
+
+@optional
+- (void)touchesEndedWithImage:(UIImage *)image;
+
+@end
+
 @interface MKBezierPath : NSObject
 
 @property (nonatomic, strong) UIBezierPath *path;
@@ -18,6 +25,9 @@
 
 @interface MKDrawingView : UIView
 
+@property (nonatomic, weak) id<MKDrawingViewProtocol> delegate;
+
 - (UIImage *)image;
+- (void)clearView;
 
 @end

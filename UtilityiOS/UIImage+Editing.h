@@ -14,5 +14,7 @@
 - (NSData *)resize:(CGSize)size;
 - (UIImage *)rotate:(float)radian;
 - (BOOL)hasNonWhitePixelsForMinimumPercent:(float)minimumPercent;
+- (UIImage *)resizeToWidth:(float)width;
+- (UIImage *)roundedImage:(CGRect)frame WithRadious:(float)radious;
 
 @end

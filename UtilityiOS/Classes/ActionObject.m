@@ -23,4 +23,13 @@
     return [[ActionObject alloc] initWithTitle:title target:target action:action];
 }
 
++ (NSArray<ActionObject *> *)actionsWithTitles:(StringArr *)titles target:(id)target action:(SEL)action {
+    NSMutableArray *actions = [[NSMutableArray alloc] init];
+    for (NSString *title in titles) {
+        ActionObject *act = [ActionObject actionWithTitle:title target:target action:action];
+        [actions addObject:act];
+    }
+    return actions;
+}
+
 @end

@@ -16,5 +16,6 @@
 
 - (instancetype)initWithTitle:(NSString *)title target:(id)target action:(SEL)action;
 + (instancetype)actionWithTitle:(NSString *)title target:(id)target action:(SEL)action;
++ (NSArray <ActionObject *> *)actionsWithTitles:(StringArr *)titles target:(id)target action:(SEL)action;
 
 @end

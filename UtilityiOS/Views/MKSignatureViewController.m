@@ -7,15 +7,14 @@
 //
 
 #import "MKSignatureViewController.h"
-#import "MKRotatedTextView.h"
 #import "UIView+Utility.h"
-#import "MKDrawingView.h"
+#import "UIImage+Editing.h"
 
-@interface MKSignatureViewController ()
+@interface MKSignatureViewController () <MKDrawingViewProtocol>
 
-@property (nonatomic, strong) MKDrawingView *signatureView;
-@property (nonatomic, strong) MKRotatedTextLabel *titleLabel;
-@property (nonatomic, strong) MKRotatedTextButton *clearButton;
+@property (nonatomic, strong, readwrite) MKDrawingView *signatureView;
+@property (nonatomic, strong, readwrite) MKRotatedTextLabel *titleLabel;
+@property (nonatomic, strong, readwrite) MKRotatedTextButton *clearButton;
 
 @property (nonatomic, strong) UIBarButtonItem *doneButton;
 
@@ -26,27 +25,22 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.doneButton = [[UIBarButtonItem alloc] initWithTitle:[Constants Done_STR] style:UIBarButtonItemStyleDone target:self action:@selector(donePressed:)];
+    self.doneButton = [[UIBarButtonItem alloc] initWithTitle:self.doneButtonTitle style:UIBarButtonItemStyleDone target:self action:@selector(donePressed:)];
     self.navigationItem.rightBarButtonItem = self.doneButton;
     
-    
+    //TODO: for orientation
     self.view.backgroundColor = [UIColor whiteColor];
     self.titleLabel = [[MKRotatedTextLabel alloc] init];
-    self.titleLabel.textColor = [UIColor blackColor];
     self.titleLabel.angle = M_PI_2;
-    
-    NSAttributedString *attr = [[NSAttributedString alloc] initWithString:@"Failed to register for remote notifications with error: REMOTE_NOTIFICATION_SIMULATOR_NOT_SUPPORTED_NSERROR_DESCRIPTION"];
-    self.titleLabel.attributedText = attr;
-    
+
     self.clearButton = [[MKRotatedTextButton alloc] init];
-    self.clearButton.titleLabel.attributedText = [[NSAttributedString alloc] initWithString:@"clear"];
     self.clearButton.titleLabel.textAlignment = NSTextAlignmentRight;
     self.clearButton.angle = M_PI_2;
+    [self.clearButton addTarget:self action:@selector(clearPressed:) forControlEvents:UIControlEventTouchUpInside];
     
     self.signatureView = [[MKDrawingView alloc] init];
+    self.signatureView.delegate = self;
     self.signatureView.backgroundColor = [UIColor whiteColor];
-    self.signatureView.layer.borderColor = [UIColor blueColor].CGColor;
-    self.signatureView.layer.borderWidth = 2.0;
     
     [self.view addSubview:self.titleLabel];
     [self.view addSubview:self.clearButton];
@@ -55,6 +49,8 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    self.navigationController.interactivePopGestureRecognizer.enabled = NO;
+
     [self.view bringSubviewToFront:self.signatureView];
     
     CGFloat navHeight =  self.navigationController.navigationBar.frame.size.height;
@@ -84,10 +80,31 @@
     [self.view constraintWidth:256.0 forView:self.signatureView];
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    self.navigationController.interactivePopGestureRecognizer.enabled = YES;
+}
+
 - (void)donePressed:(UIBarButtonItem *)sender {
-    UIImage *image = [self.signatureView image];
+    UIImage *image = [[self.signatureView image] rotate:-self.titleLabel.angle];
     NSData *data = UIImagePNGRepresentation(image);
     
+    if ([self.signatureDelegate respondsToSelector:@selector(doneWithSignatureData:)]) {
+        [self.signatureDelegate doneWithSignatureData:data];
+    }
+}
+
+- (void)clearPressed:(UIButton *)sender {
+    [self.signatureView clearView];
+    [self checkSaveEnabledWithImage:[self.signatureView image]];
+}
+
+- (void)touchesEndedWithImage:(UIImage *)image {
+    [self checkSaveEnabledWithImage:image];
+}
+
+- (void)checkSaveEnabledWithImage:(UIImage *)image {
+    [self.doneButton setEnabled:[image hasNonWhitePixelsForMinimumPercent:self.minimumSignatureProportion]];
 }
 
 - (void)didReceiveMemoryWarning {

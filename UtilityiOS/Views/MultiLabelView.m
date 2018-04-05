@@ -39,8 +39,8 @@ static UIEdgeInsets EDGE_INSETS;
 
 - (void)constructWithType:(MultiLabelViewType)type leftView:(__kindof UIView *)leftView rightView:(__kindof UIView *)rightView labelsCount:(NSUInteger)labelsCount insets:(UIEdgeInsets)insets {
     EDGE_INSETS = insets;
-    self.leftView = [[UIView alloc] init];
-    self.rightView = [[UIView alloc] init];
+    self.leftView = [[UIView alloc] initWithFrame:leftView.frame];
+    self.rightView = [[UIView alloc] initWithFrame:rightView.frame];
     [self.contentView addSubview:self.leftView];
     [self.contentView addSubview:self.rightView];
     
@@ -99,7 +99,7 @@ static UIEdgeInsets EDGE_INSETS;
     [self createLabels:labelsCount];
     [self.contentView removeConstraintsMask];
     
-    [self.leftView constraintSizeForView:leftView];
+    [self.contentView constraintSizeForView:self.leftView];
     
     [self.contentView addConstraintWithItem:self.labels.lastObject attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:self.labels.firstObject attribute:NSLayoutAttributeTop multiplier:1.0 constant:leftView.frame.size.height];
     
@@ -118,7 +118,7 @@ static UIEdgeInsets EDGE_INSETS;
     [self createLabels:labelsCount];
     [self.contentView removeConstraintsMask];
     
-    [self.rightView constraintSizeForView:rightView];
+    [self.contentView constraintSizeForView:self.rightView];
     
     [self.contentView addConstraintWithItem:self.labels.lastObject attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:self.labels.firstObject attribute:NSLayoutAttributeTop multiplier:1.0 constant:rightView.frame.size.height];
     
@@ -138,7 +138,7 @@ static UIEdgeInsets EDGE_INSETS;
     [self.contentView removeConstraintsMask];
     
     if (leftView.frame.size.width > 0.0 && leftView.frame.size.height > 0.0) {
-        [self.leftView constraintSizeForView:leftView];
+        [self.contentView constraintSizeForView:self.leftView];
     }
     else if (leftView.frame.size.width > 0.0) {
         [self.contentView constraintWidthForView:leftView];
@@ -147,7 +147,7 @@ static UIEdgeInsets EDGE_INSETS;
         [self.contentView constraintHeightForView:leftView];
     }
     else {
-        [self.rightView constraintSizeForView:rightView];
+        [self.contentView constraintSizeForView:self.rightView];
     }
     
     UIView *bottom = (leftView.frame.size.height > rightView.frame.size.height ? leftView : rightView);
@@ -169,7 +169,7 @@ static UIEdgeInsets EDGE_INSETS;
     [self.contentView removeConstraintsMask];
     
     if (leftView.frame.size.width > 0.0 && leftView.frame.size.height > 0.0) {
-        [self.leftView constraintSizeForView:leftView];
+        [self.contentView constraintSizeForView:self.leftView];
     }
     else if (leftView.frame.size.width > 0.0) {
         [self.contentView constraintWidthForView:leftView];
@@ -178,7 +178,7 @@ static UIEdgeInsets EDGE_INSETS;
         [self.contentView constraintHeightForView:leftView];
     }
     
-    [self.rightView constraintSizeForView:rightView];
+    [self.contentView constraintSizeForView:self.rightView];
     [self.contentView constraint:NSLayoutAttributeRight view:self.rightView];
     [self.contentView constraint:NSLayoutAttributeLeft view:self.leftView];
     [self.contentView constraint:NSLayoutAttributeTop view:self.leftView];

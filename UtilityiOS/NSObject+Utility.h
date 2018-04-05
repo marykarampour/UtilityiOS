@@ -12,6 +12,7 @@
 
 - (BOOL)MKIsEqual:(id)object;
 - (id)MKCopyWithZone:(NSZone *)zone;
+- (id)MKCopyWithZone:(NSZone *)zone baseClass:(Class)baseClass;
 - (void)MKInitWithCoder:(NSCoder *)aDecoder;
 - (void)MKEncodeWithCoder:(NSCoder *)aCoder;
 - (NSUInteger)MKHash;

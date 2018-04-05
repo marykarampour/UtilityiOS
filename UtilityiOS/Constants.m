@@ -209,12 +209,20 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
     return LOCALIZED(@"Done");
 }
 
++ (NSString *)Save_STR {
+    return LOCALIZED(@"Save");
+}
+
 + (NSString *)OK_STR {
     return LOCALIZED(@"OK");
 }
 
 + (NSString *)Cancel_STR {
     return LOCALIZED(@"Cancel");
+}
+
++ (NSString *)Clear_STR {
+    return LOCALIZED(@"Clear");
 }
 
 + (NSString *)Skip_STR {
