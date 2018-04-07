@@ -27,6 +27,23 @@
 
 @implementation NSString (AttributedText)
 
++ (NSAttributedString *)attributedTextWithAttributedStrings:(NSArray<NSAttributedString *> *)attrs attributedDelimiter:(NSAttributedString *)delimiter {
+    NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:@""];
+    
+    for (NSAttributedString *attr in attrs) {
+        [attrStr appendAttributedString:attr];
+        if (delimiter && ![[attrs lastObject] isEqual:attr]) {
+            [attrStr appendAttributedString:delimiter];
+        }
+    }
+    return attrStr;
+}
+
++ (NSAttributedString *)attributedTextWithAttributedStrings:(NSArray<NSAttributedString *> *)attrs delimiter:(NSString *)delimiter {
+    NSMutableAttributedString *attrDelimiter = [[NSMutableAttributedString alloc] initWithString:delimiter];
+    return [self attributedTextWithAttributedStrings:attrs attributedDelimiter:attrDelimiter];
+}
+
 + (NSAttributedString *)attributedTextWithAttributes:(NSArray<StringAttributes *> *)attrs attributedDelimiter:(NSAttributedString *)delimiter {
     NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:@""];
     

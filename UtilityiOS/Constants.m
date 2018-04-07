@@ -229,6 +229,10 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
     return LOCALIZED(@"Skip");
 }
 
++ (NSString *)Sign_STR {
+    return LOCALIZED(@"Sign");
+}
+
 + (NSString *)PIN_STR {
     return LOCALIZED(@"PIN");
 }

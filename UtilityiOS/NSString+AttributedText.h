@@ -25,6 +25,8 @@
 + (NSAttributedString *)attributedTextWithAttributes:(NSArray <StringAttributes *> *)attrs delimiter:(NSString *)delimiter;
 + (NSAttributedString *)attributedTextWithAttributes:(NSArray <StringAttributes *> *)attrs attributedDelimiter:(NSAttributedString *)delimiter;
 + (NSAttributedString *)attributedTextWithIndent:(CGFloat)indent firstLineIndent:(CGFloat)firstLineIndent attributes:(StringAttributes *)attrs;
++ (NSAttributedString *)attributedTextWithAttributedStrings:(NSArray<NSAttributedString *> *)attrs attributedDelimiter:(NSAttributedString *)delimiter;
++ (NSAttributedString *)attributedTextWithAttributedStrings:(NSArray<NSAttributedString *> *)attrs delimiter:(NSString *)delimiter;
 + (NSAttributedString *)bulletedTextWithArray:(StringArr *)strings;
 
 @end
