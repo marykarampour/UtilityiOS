@@ -249,6 +249,10 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
     return LOCALIZED(@"Login");
 }
 
++ (NSString *)Register_STR {
+    return LOCALIZED(@"Register");
+}
+
 + (NSString *)Enter_BLANK_STR {
     return LOCALIZED(@"Please Enter Your %@");
 }
