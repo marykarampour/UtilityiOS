@@ -184,4 +184,8 @@
 }
 
 
+- (NSString *)timestampGUID {
+    return [NSString stringWithFormat:@"%d-%@", (int)[[NSDate date] timeIntervalSince1970], [NSUUID UUID]];
+}
+
 @end

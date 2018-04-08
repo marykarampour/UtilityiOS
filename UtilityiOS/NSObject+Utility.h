@@ -25,4 +25,6 @@
  @note The corresponding swizzled method with format swizzled_XXX should be implemeneted in your class for selector named XXX */
 + (void)swizzleSelector:(SEL)selector;
 
+- (NSString *)timestampGUID;
+
 @end
