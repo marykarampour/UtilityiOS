@@ -10,6 +10,7 @@
 #import "UIView+Utility.h"
 
 static UIEdgeInsets EDGE_INSETS;
+static CGFloat CONSTANT_WIDTH_SUM;
 
 @interface MultiLabelView ()
 
@@ -82,6 +83,8 @@ static UIEdgeInsets EDGE_INSETS;
     [self addLeftView:view];
     [self.contentView removeConstraintsMask];
     [self.contentView constraintSidesForView:self.leftView insets:EDGE_INSETS];
+    
+    CONSTANT_WIDTH_SUM = EDGE_INSETS.left+EDGE_INSETS.right;
 }
 
 - (void)constructWithLabelsCount:(NSUInteger)labelsCount {
@@ -92,6 +95,8 @@ static UIEdgeInsets EDGE_INSETS;
     [self.contentView constraint:NSLayoutAttributeRight view:self.labels.firstObject margin:-EDGE_INSETS.right];
     
     [self constraintLabels];
+    
+    CONSTANT_WIDTH_SUM = EDGE_INSETS.left+EDGE_INSETS.right;
 }
 
 - (void)constructWithLabelsCount:(NSUInteger)labelsCount leftView:(__kindof UIView *)leftView {
@@ -111,6 +116,8 @@ static UIEdgeInsets EDGE_INSETS;
     [self.contentView constraint:NSLayoutAttributeRight view:self.labels.firstObject margin:-EDGE_INSETS.right];
     
     [self constraintLabels];
+    
+    CONSTANT_WIDTH_SUM = EDGE_INSETS.left+EDGE_INSETS.right+self.leftView.frame.size.width+[Constants HorizontalSpacing];
 }
 
 - (void)constructWithLabelsCount:(NSUInteger)labelsCount rightView:(__kindof UIView *)rightView {
@@ -122,7 +129,7 @@ static UIEdgeInsets EDGE_INSETS;
     
     [self.contentView addConstraintWithItem:self.labels.lastObject attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:self.labels.firstObject attribute:NSLayoutAttributeTop multiplier:1.0 constant:rightView.frame.size.height];
     
-    [self.contentView addConstraintWithItem:self.labels.firstObject attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.rightView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:[Constants HorizontalSpacing]];
+    [self.contentView addConstraintWithItem:self.labels.firstObject attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.rightView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:-[Constants HorizontalSpacing]];
     
     [self.contentView addConstraintWithItem:self.labels.firstObject attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.rightView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
     
@@ -130,12 +137,16 @@ static UIEdgeInsets EDGE_INSETS;
     [self.contentView constraint:NSLayoutAttributeLeft view:self.labels.firstObject margin:EDGE_INSETS.left];
     
     [self constraintLabels];
+    
+    CONSTANT_WIDTH_SUM = EDGE_INSETS.left+EDGE_INSETS.right+self.rightView.frame.size.width+[Constants HorizontalSpacing];
 }
 
 - (void)constructWithLeftView:(__kindof UIView *)leftView rightView:(__kindof UIView *)rightView {
     [self addRightView:rightView];
     [self addLeftView:leftView];
     [self.contentView removeConstraintsMask];
+    
+    CGFloat width = self.leftView.frame.size.width;
     
     if (leftView.frame.size.width > 0.0 && leftView.frame.size.height > 0.0) {
         [self.contentView constraintSizeForView:self.leftView];
@@ -145,9 +156,11 @@ static UIEdgeInsets EDGE_INSETS;
     }
     else if (leftView.frame.size.height > 0.0) {
         [self.contentView constraintHeightForView:leftView];
+        width = self.rightView.frame.size.width;
     }
     else {
         [self.contentView constraintSizeForView:self.rightView];
+        width = self.rightView.frame.size.width;
     }
     
     UIView *bottom = (leftView.frame.size.height > rightView.frame.size.height ? leftView : rightView);
@@ -160,6 +173,8 @@ static UIEdgeInsets EDGE_INSETS;
     [self.contentView addConstraintWithItem:self.leftView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.rightView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0];
     [self.contentView addConstraintWithItem:self.rightView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.leftView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0.0];
     [self.contentView addConstraintWithItem:self.leftView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.rightView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+    
+    CONSTANT_WIDTH_SUM = EDGE_INSETS.left+EDGE_INSETS.right+width+[Constants HorizontalSpacing];
 }
 
 - (void)constructWithLabelsCount:(NSUInteger)labelsCount leftView:(__kindof UIView *)leftView rightView:(__kindof UIView *)rightView {
@@ -190,6 +205,8 @@ static UIEdgeInsets EDGE_INSETS;
     [self.contentView addConstraintWithItem:self.leftView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.rightView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
     
     [self constraintLabels];
+    
+    CONSTANT_WIDTH_SUM = EDGE_INSETS.left+EDGE_INSETS.right+self.leftView.frame.size.width+self.rightView.frame.size.width+2*[Constants HorizontalSpacing];
 }
 
 #pragma mark - helpers
@@ -208,6 +225,7 @@ static UIEdgeInsets EDGE_INSETS;
     MKLabel *label = [[MKLabel alloc] init];
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
+    [label sizeToFit];
     return label;
 }
 
@@ -256,6 +274,24 @@ static UIEdgeInsets EDGE_INSETS;
     if (index < self.labels.count) {
         self.labels[index].attributedText = text;
     }
+}
+
+- (CGFloat)constantWidthSum {
+    return CONSTANT_WIDTH_SUM;
+}
+
+- (CGFloat)heightForWidth:(CGFloat)width {
+    CGSize size = CGSizeMake(width-CONSTANT_WIDTH_SUM-2*[Constants TextPadding], CGFLOAT_MAX);
+    CGFloat height = 0.0;
+    for (MKLabel *label in self.labels) {
+        NSStringDrawingContext *context = [[NSStringDrawingContext alloc] init];
+        NSRange range;
+        //TODO: should loop through all fonts
+        id fontAttr = [label.attributedText attribute:NSFontAttributeName atIndex:0 effectiveRange:&range];
+        CGRect rect = [label.text boundingRectWithSize:size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:fontAttr} context:context];
+        height += rect.size.height + 2*[Constants TextPadding] + 1.0;
+    }
+    return fmaxf(fmaxf(height, self.leftView.frame.size.height), fmaxf(height, self.rightView.frame.size.height)) + EDGE_INSETS.top + EDGE_INSETS.bottom;
 }
 
 @end

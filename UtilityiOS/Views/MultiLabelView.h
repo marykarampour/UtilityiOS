@@ -55,4 +55,9 @@ typedef NS_OPTIONS(NSUInteger, MultiLabelViewType) {
 /** @brief Call only after construct, the method does not add aditional views, only replaces the view */
 - (void)addRightView:(__kindof UIView *)rightView;
 
+/** @brief Sum of all constant widths of the view including insets */
+- (CGFloat)constantWidthSum;
+
+- (CGFloat)heightForWidth:(CGFloat)width;
+
 @end
