@@ -196,6 +196,7 @@ extern NSString * const DateFormatWeekdayDayStyle;
 + (NSString *)TouchID_STR;
 + (NSString *)Done_STR;
 + (NSString *)Save_STR;
++ (NSString *)Replace_STR;
 + (NSString *)OK_STR;
 + (NSString *)Cancel_STR;
 + (NSString *)Clear_STR;

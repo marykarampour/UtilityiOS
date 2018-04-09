@@ -213,6 +213,10 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
     return LOCALIZED(@"Save");
 }
 
++ (NSString *)Replace_STR {
+    return LOCALIZED(@"Replace");
+}
+
 + (NSString *)OK_STR {
     return LOCALIZED(@"OK");
 }
