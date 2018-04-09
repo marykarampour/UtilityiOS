@@ -57,6 +57,10 @@
     self.preview.view.delegate = self;
     self.preview.hidden = YES;
     
+    if ([self.mainVC respondsToSelector:@selector(customizePreview:)]) {
+        [self.mainVC customizePreview:self.preview];
+    }
+    
     [self.view addSubview:mainView];
     [self.view addSubview:self.preview];
 }

@@ -25,6 +25,11 @@
 /** @brief no need to set this, this is automatically set to container when maiinVC is set */
 @property (nonatomic, weak) __kindof MKPreviewContainerViewController *containerVC;
 
+
+@optional
+/** @brief implement to set fonts and colors */
+- (void)customizePreview:(MKPreviewView *)preview;
+
 @end
 
 
