@@ -273,6 +273,14 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
     return @"";
 }
 
++ (NSString *)Camera_STR {
+    return LOCALIZED(@"Camera");
+}
+
++ (NSString *)Photo_Library_STR {
+    return LOCALIZED(@"Photo Library");
+}
+
 + (NSString *)CameraDisabledTitle_STR {
     return LOCALIZED(@"Camera is disabled!");
 }

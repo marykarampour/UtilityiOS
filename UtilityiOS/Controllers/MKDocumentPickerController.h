@@ -10,7 +10,6 @@
 #import <MobileCoreServices/MobileCoreServices.h>
 #import <QuickLook/QuickLook.h>
 
-
 typedef NS_ENUM(NSUInteger, DocumentPickerType) {
     DocumentPickerType_Picker,
     DocumentPickerType_Menu,

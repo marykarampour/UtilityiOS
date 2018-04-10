@@ -211,6 +211,8 @@ extern NSString * const DateFormatWeekdayDayStyle;
 + (NSString *)Incorrect_BLANK_STR;
 + (NSString *)LocationRestrictedTitle_STR;
 + (NSString *)LocationRestrictedMessage_STR;
++ (NSString *)Camera_STR;
++ (NSString *)Photo_Library_STR;
 + (NSString *)CameraDisabledTitle_STR;
 + (NSString *)CameraAccessMessage_BLANK_STR;
 + (NSString *)TakingPicture_STR;

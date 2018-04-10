@@ -7,6 +7,7 @@
 //
 
 #import "MKDocumentPickerController.h"
+#import "UIViewController+Alert.h"
 
 static StringArr *docTypes;
 
@@ -35,6 +36,10 @@ static StringArr *docTypes;
             }
         }
             break;
+        case DocumentPickerType_MenuCamera: {
+            [self presentMenuCamera];
+        }
+            break;
         default: {
             [self presentMenu];
         }
@@ -53,14 +58,32 @@ static StringArr *docTypes;
 - (void)presentMenu {
     UIDocumentMenuViewController *pickerVC = [[UIDocumentMenuViewController alloc] initWithDocumentTypes:docTypes inMode:UIDocumentPickerModeImport];
     pickerVC.delegate = self;
-    [pickerVC addOptionWithTitle:@"Photos" image:nil order:UIDocumentMenuOrderFirst handler:^{
-        UIImagePickerController *imgVC = [[UIImagePickerController alloc] init];
-        imgVC.delegate = self;
-        [self.viewController presentViewController:imgVC animated:YES completion:^{
-            
-        }];
-    }];
+    [self addImagePickerWithType:UIImagePickerControllerSourceTypePhotoLibrary toMenu:pickerVC title:[Constants Photo_Library_STR] image:nil];
     [self.viewController presentViewController:pickerVC animated:YES completion:^{}];
+}
+
+- (void)presentMenuCamera {
+    UIDocumentMenuViewController *pickerVC = [[UIDocumentMenuViewController alloc] initWithDocumentTypes:docTypes inMode:UIDocumentPickerModeImport];
+    pickerVC.delegate = self;
+    [self addImagePickerWithType:UIImagePickerControllerSourceTypePhotoLibrary toMenu:pickerVC title:[Constants Photo_Library_STR] image:nil];
+    [self addImagePickerWithType:UIImagePickerControllerSourceTypeCamera toMenu:pickerVC title:[Constants Camera_STR] image:nil];
+
+    [self.viewController presentViewController:pickerVC animated:YES completion:^{}];
+}
+
+- (void)addImagePickerWithType:(UIImagePickerControllerSourceType)type toMenu:(UIDocumentMenuViewController *)menuVC title:(NSString *)title image:(UIImage *)image {
+    if (![UIImagePickerController isSourceTypeAvailable:type]) {
+        [self.viewController OKAlertWithTitle:[Constants Error_STR] message:[Constants NoCamera_STR]];
+    }
+    else {
+        [menuVC addOptionWithTitle:title image:image order:UIDocumentMenuOrderFirst handler:^{
+            UIImagePickerController *imgVC = [[UIImagePickerController alloc] init];
+            imgVC.delegate = self;
+            imgVC.allowsEditing = NO;
+            imgVC.sourceType = type;
+            [self.viewController presentViewController:imgVC animated:YES completion:^{}];
+        }];
+    }
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
@@ -68,6 +91,10 @@ static StringArr *docTypes;
     [picker dismissViewControllerAnimated:YES completion:^{}];
     NSData *data = UIImagePNGRepresentation(img);
     [self dispatchVCWithData:data];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [picker dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)documentMenu:(UIDocumentMenuViewController *)documentMenu didPickDocumentPicker:(UIDocumentPickerViewController *)documentPicker {
