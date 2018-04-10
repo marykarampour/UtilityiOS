@@ -14,9 +14,6 @@
 @protocol MKPreviewProtocol <NSObject>
 
 @required
-- (void)preViewDidFinishLoadWithThumbnailData:(NSData *)data;
-
-
 /** @breif actions associated with different states of the right button, e.g. save, replace, etc.
  @note call in or after viewDidLoad
  */
@@ -44,5 +41,6 @@
 - (void)setRightButtonTitleAtIndex:(NSUInteger)index;
 
 - (void)loadPreviewWithData:(NSData *)data URL:(NSURL *)URL;
+- (NSData *)previewThumbnailData;
 
 @end

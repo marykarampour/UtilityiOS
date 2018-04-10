@@ -98,21 +98,20 @@
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     [MKSpinner hide];
-    
+}
+
+- (NSData *)previewThumbnailData {
     UIGraphicsBeginImageContextWithOptions(self.preview.view.frame.size, self.preview.view.opaque, 1.0);
     [self.preview.view.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     
-    NSData *data = [img shrink];
-    
-    if ([self.mainVC respondsToSelector:@selector(preViewDidFinishLoadWithThumbnailData:)]) {
-        [self.mainVC preViewDidFinishLoadWithThumbnailData:data];
-    }
+    return [img shrink];
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
     [MKSpinner hide];
+    self.preview.hidden = YES;
     DEBUGLOG(@"%@", error.localizedDescription);
 }
 
