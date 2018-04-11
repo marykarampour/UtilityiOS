@@ -17,4 +17,6 @@
 - (UIImage *)resizeToWidth:(float)width;
 - (UIImage *)roundedImage:(CGRect)frame WithRadious:(float)radious;
 
+- (UIImage *)templateImage;
+
 @end

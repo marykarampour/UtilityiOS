@@ -8,6 +8,7 @@
 
 #import "MKDocumentPickerController.h"
 #import "UIViewController+Alert.h"
+#import "MKAssets.h"
 
 static StringArr *docTypes;
 
@@ -58,24 +59,21 @@ static StringArr *docTypes;
 - (void)presentMenu {
     UIDocumentMenuViewController *pickerVC = [[UIDocumentMenuViewController alloc] initWithDocumentTypes:docTypes inMode:UIDocumentPickerModeImport];
     pickerVC.delegate = self;
-    [self addImagePickerWithType:UIImagePickerControllerSourceTypePhotoLibrary toMenu:pickerVC title:[Constants Photo_Library_STR] image:nil];
+    [self addImagePickerWithType:UIImagePickerControllerSourceTypePhotoLibrary toMenu:pickerVC title:[Constants Photo_Library_STR] image:[MKAssets Photo_Library_Icon]];
     [self.viewController presentViewController:pickerVC animated:YES completion:^{}];
 }
 
 - (void)presentMenuCamera {
     UIDocumentMenuViewController *pickerVC = [[UIDocumentMenuViewController alloc] initWithDocumentTypes:docTypes inMode:UIDocumentPickerModeImport];
     pickerVC.delegate = self;
-    [self addImagePickerWithType:UIImagePickerControllerSourceTypePhotoLibrary toMenu:pickerVC title:[Constants Photo_Library_STR] image:nil];
-    [self addImagePickerWithType:UIImagePickerControllerSourceTypeCamera toMenu:pickerVC title:[Constants Camera_STR] image:nil];
+    [self addImagePickerWithType:UIImagePickerControllerSourceTypePhotoLibrary toMenu:pickerVC title:[Constants Photo_Library_STR] image:[MKAssets Photo_Library_Icon]];
+    [self addImagePickerWithType:UIImagePickerControllerSourceTypeCamera toMenu:pickerVC title:[Constants Camera_STR] image:[MKAssets Camera_Icon]];
 
     [self.viewController presentViewController:pickerVC animated:YES completion:^{}];
 }
 
 - (void)addImagePickerWithType:(UIImagePickerControllerSourceType)type toMenu:(UIDocumentMenuViewController *)menuVC title:(NSString *)title image:(UIImage *)image {
-    if (![UIImagePickerController isSourceTypeAvailable:type]) {
-        [self.viewController OKAlertWithTitle:[Constants Error_STR] message:[Constants NoCamera_STR]];
-    }
-    else {
+    if ([UIImagePickerController isSourceTypeAvailable:type]) {
         [menuVC addOptionWithTitle:title image:image order:UIDocumentMenuOrderFirst handler:^{
             UIImagePickerController *imgVC = [[UIImagePickerController alloc] init];
             imgVC.delegate = self;
@@ -89,7 +87,7 @@ static StringArr *docTypes;
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     UIImage *img = info[UIImagePickerControllerOriginalImage];
     [picker dismissViewControllerAnimated:YES completion:^{}];
-    NSData *data = UIImagePNGRepresentation(img);
+    NSData *data = UIImageJPEGRepresentation(img, 1.0);
     [self dispatchVCWithData:data];
 }
 
@@ -145,5 +143,6 @@ static StringArr *docTypes;
     }
     return data;
 }
+
 
 @end

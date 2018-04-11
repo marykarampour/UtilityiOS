@@ -10,6 +10,10 @@
 
 @implementation UIImage (Editing)
 
+- (UIImage *)templateImage {
+    return [self imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+}
+
 - (UIImage *)resizeToWidth:(float)width {
     
     UIImage *scaledImage = nil;
