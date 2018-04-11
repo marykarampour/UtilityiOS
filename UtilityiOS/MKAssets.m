@@ -16,7 +16,7 @@
 }
 
 + (UIImage *)Photo_Library_Icon {
-    return [UIImage imageNamed:@"photo-library-icon-small"];
+    return [UIImage imageNamed:@"photo-library-border-icon"];
 }
 
 @end
