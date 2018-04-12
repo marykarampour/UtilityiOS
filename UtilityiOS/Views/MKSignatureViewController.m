@@ -55,15 +55,14 @@
     
     CGFloat tabHeight = self.tabBarController.tabBar.frame.size.height;
     CGFloat padding = 8.0;
-    CGFloat topMargin = padding;
     CGFloat topBarHeight = [self topBarHeight];
     CGFloat buttonHeight = 80.0;
-    CGFloat signHeight = self.view.frame.size.height - (topBarHeight+tabHeight + 2*padding);
+    CGFloat signHeight = self.view.frame.size.height - (topBarHeight + tabHeight + 2*padding);
     CGFloat titleHeight = signHeight - (padding + buttonHeight);
     
     [self.view removeConstraintsMask];
     
-    [self.view constraint:NSLayoutAttributeTop view:self.titleLabel margin:topMargin];
+    [self.view constraint:NSLayoutAttributeTop view:self.titleLabel margin:padding];
     [self.view constraint:NSLayoutAttributeRight view:self.titleLabel margin:-padding];
     [self.view constraintHeight:titleHeight forView:self.titleLabel];
     [self.view constraintWidth:titleHeight forView:self.titleLabel];
@@ -73,7 +72,7 @@
     [self.view constraintHeight:buttonHeight forView:self.clearButton];
     [self.view constraintWidth:buttonHeight forView:self.clearButton];
     
-    [self.view constraint:NSLayoutAttributeTop view:self.signatureView margin:topMargin];
+    [self.view constraint:NSLayoutAttributeTop view:self.signatureView margin:padding];
     [self.view constraint:NSLayoutAttributeLeft view:self.signatureView margin:padding];
     [self.view constraintHeight:signHeight forView:self.signatureView];
     [self.view constraintWidth:256.0 forView:self.signatureView];

@@ -124,7 +124,7 @@
 + (NSAttributedString *)bulletedTextWithAttributedStrings:(NSArray<NSAttributedString *> *)attrs bullet:(NSString *)symbol {
     NSMutableAttributedString *fullStr = [[NSMutableAttributedString alloc] init];
     for (NSAttributedString *attr in attrs) {
-        NSString *symbolSTR = symbol ? symbol : [NSString stringWithFormat:@"%d", [attrs indexOfObject:attr]+1];
+        NSString *symbolSTR = symbol ? symbol : [NSString stringWithFormat:@"%d.", [attrs indexOfObject:attr]+1];
         NSString *bullet = [NSString stringWithFormat:@"%@\t", symbolSTR];
         NSMutableAttributedString *multi = [[NSMutableAttributedString alloc] initWithString:bullet];
         [multi appendAttributedString:attr];
