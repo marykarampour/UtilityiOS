@@ -87,6 +87,14 @@
     return [formatter numberFromString:self];
 }
 
+- (NSString *)amount {
+    if (![self stringToNumber]) {
+        return nil;
+    }
+    NSString *str = ([self containsString:@"."] && [self rangeOfString:@"."].location < self.length-2) ? self : [self stringByAppendingString:@".00"];
+    return str;
+}
+
 - (NSString *)randomStringWithLenght:(NSUInteger)length {
     NSString *seed = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     NSMutableString *randomStr = [[NSMutableString alloc] initWithCapacity:length];

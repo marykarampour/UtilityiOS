@@ -7,6 +7,7 @@
 //
 
 #import "MKSignatureViewController.h"
+#import "UIViewController+Utility.h"
 #import "UIView+Utility.h"
 #import "UIImage+Editing.h"
 
@@ -34,7 +35,6 @@
     self.titleLabel.angle = M_PI_2;
 
     self.clearButton = [[MKRotatedTextButton alloc] init];
-    self.clearButton.titleLabel.textAlignment = NSTextAlignmentRight;
     self.clearButton.angle = M_PI_2;
     [self.clearButton addTarget:self action:@selector(clearPressed:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -53,14 +53,13 @@
 
     [self.view bringSubviewToFront:self.signatureView];
     
-    CGFloat navHeight =  self.navigationController.navigationBar.frame.size.height;
     CGFloat tabHeight = self.tabBarController.tabBar.frame.size.height;
-    CGFloat statusHeight = [Constants safeAreaInsets];
     CGFloat padding = 8.0;
+    CGFloat topMargin = padding;
+    CGFloat topBarHeight = [self topBarHeight];
     CGFloat buttonHeight = 80.0;
-    CGFloat signHeight = self.view.frame.size.height - (navHeight+statusHeight+tabHeight + 2*padding);
+    CGFloat signHeight = self.view.frame.size.height - (topBarHeight+tabHeight + 2*padding);
     CGFloat titleHeight = signHeight - (padding + buttonHeight);
-    CGFloat topMargin = navHeight+statusHeight+padding;
     
     [self.view removeConstraintsMask];
     

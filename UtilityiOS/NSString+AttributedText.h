@@ -29,5 +29,15 @@
 + (NSAttributedString *)attributedTextWithAttributedStrings:(NSArray<NSAttributedString *> *)attrs delimiter:(NSString *)delimiter;
 + (NSAttributedString *)bulletedTextWithArray:(StringArr *)strings;
 
+/** @brief indented bulleted text
+ @param symbol pass null to use numeric */
++ (NSAttributedString *)bulletedTextWithAttributes:(NSArray<StringAttributes *> *)attrs bullet:(NSString *)symbol;
+
++ (NSAttributedString *)bulletedTextWithAttributedStrings:(NSArray<NSAttributedString *> *)attrs bullet:(NSString *)symbol;
+
+
++ (NSString *)bullet;
++ (NSString *)tabBullet;
+
 @end
 

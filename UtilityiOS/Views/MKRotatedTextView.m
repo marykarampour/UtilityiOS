@@ -17,7 +17,7 @@
 }
 
 - (void)drawRect:(CGRect)rect {
-    [self rotateAttributedText:self.attributedText angle:self.angle rect:rect];
+    [self rotateAttributedText:self.attributedText angle:self.angle rect:rect alignCenter:NO];
 }
 
 @end
@@ -31,7 +31,7 @@
 }
 
 - (void)drawRect:(CGRect)rect {
-    [self rotateAttributedText:self.titleLabel.attributedText angle:self.angle rect:rect];
+    [self rotateAttributedText:self.titleLabel.attributedText angle:self.angle rect:rect alignCenter:YES];
 }
 
 @end

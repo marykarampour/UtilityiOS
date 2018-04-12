@@ -92,7 +92,7 @@
 
 @implementation UIView (CoreText)
 
-- (void)rotateAttributedText:(NSAttributedString *)text angle:(CGFloat)angle rect:(CGRect)rect {
+- (void)rotateAttributedText:(NSAttributedString *)text angle:(CGFloat)angle rect:(CGRect)rect alignCenter:(BOOL)alignCenter {
     CTFramesetterRef frameSetter = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)text);
     CGMutablePathRef pathRef = CGPathCreateMutable();
     CGPathAddRect(pathRef, NULL, rect);
@@ -102,10 +102,11 @@
     CGContextSaveGState(context);
     
     CGPoint center = CGPointMake(rect.size.width/2.0, rect.size.height/2.0);
+    CGFloat transformAdjustment = alignCenter ? 2.0 : 1.0;
     
     CGAffineTransform transform = CGAffineTransformMakeTranslation(center.x, center.y);
     transform = CGAffineTransformRotate(transform, angle);
-    transform = CGAffineTransformTranslate(transform, -center.x, -center.x);
+    transform = CGAffineTransformTranslate(transform, -center.x/transformAdjustment, -center.x/transformAdjustment);
     CGContextConcatCTM(context, transform);
     
     CGContextSaveGState(context);

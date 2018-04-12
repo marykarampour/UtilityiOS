@@ -288,8 +288,10 @@ static CGFloat CONSTANT_WIDTH_SUM;
         NSRange range;
         //TODO: should loop through all fonts
         id fontAttr = [label.attributedText attribute:NSFontAttributeName atIndex:0 effectiveRange:&range];
-        CGRect rect = [label.text boundingRectWithSize:size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:fontAttr} context:context];
-        height += rect.size.height + 2*[Constants TextPadding] + 1.0;
+        if (fontAttr) {
+            CGRect rect = [label.text boundingRectWithSize:size options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:fontAttr} context:context];
+            height += rect.size.height + 2*[Constants TextPadding] + 1.0;
+        }
     }
     return fmaxf(fmaxf(height, self.leftView.frame.size.height), fmaxf(height, self.rightView.frame.size.height)) + EDGE_INSETS.top + EDGE_INSETS.bottom;
 }

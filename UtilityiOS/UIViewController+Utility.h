@@ -14,4 +14,7 @@
  @param view will get the value of childVC.view. If view = nil self.view is used instead */
 - (void)setChildView:(UIViewController * _Nonnull)childVC forSubView:(UIView * __strong *)view;
 
+/** @brief height of safe areas, status bar and/or nav bar when applicable. Only relevent in iOS lower than 11.0 */
+- (CGFloat)topBarHeight;
+
 @end

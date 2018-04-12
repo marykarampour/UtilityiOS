@@ -24,4 +24,13 @@
     [childVC didMoveToParentViewController:self];
 }
 
+- (CGFloat)topBarHeight {
+    if (@available(iOS 11.0, *)) {
+        return 0.0;
+    }
+    else {
+        return self.navigationController.navigationBar.frame.size.height + [Constants safeAreaInsets];
+    }
+}
+
 @end

@@ -108,6 +108,55 @@
     return fullStr;
 }
 
++ (NSArray<NSAttributedString *> *)attributedStringsFromAttributes:(NSArray<StringAttributes *> *)attrs {
+    NSMutableArray *strings = [[NSMutableArray alloc] init];
+    for (StringAttributes *attr in attrs) {
+        NSAttributedString *nextStr = [[NSMutableAttributedString alloc] initWithString:attr.text attributes:@{NSFontAttributeName:attr.font, NSForegroundColorAttributeName:attr.color}];
+        [strings addObject:nextStr];
+    }
+    return strings;
+}
+
++ (NSAttributedString *)bulletedTextWithAttributes:(NSArray<StringAttributes *> *)attrs bullet:(NSString *)symbol {
+    return [self bulletedTextWithAttributedStrings:[self attributedStringsFromAttributes:attrs] bullet:symbol];
+}
+
++ (NSAttributedString *)bulletedTextWithAttributedStrings:(NSArray<NSAttributedString *> *)attrs bullet:(NSString *)symbol {
+    NSMutableAttributedString *fullStr = [[NSMutableAttributedString alloc] init];
+    for (NSAttributedString *attr in attrs) {
+        NSString *symbolSTR = symbol ? symbol : [NSString stringWithFormat:@"%d", [attrs indexOfObject:attr]+1];
+        NSString *bullet = [NSString stringWithFormat:@"%@\t", symbolSTR];
+        NSMutableAttributedString *multi = [[NSMutableAttributedString alloc] initWithString:bullet];
+        [multi appendAttributedString:attr];
+        [multi appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
+        
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        CGFloat tab = 24.0;
+        style.paragraphSpacing = 4;
+        style.paragraphSpacingBefore = 4;
+        style.firstLineHeadIndent = 0.0;
+        style.headIndent = 24.0;
+        style.defaultTabInterval = tab;
+        style.tabStops = @[[[NSTextTab alloc] initWithTextAlignment:NSTextAlignmentLeft location:tab options:@{}]];
+        
+        NSRange range = NSMakeRange(0, attr.length);
+        [multi addAttribute:NSParagraphStyleAttributeName value:style range:range];
+        
+        [fullStr appendAttributedString:multi];
+    }
+    return fullStr;
+}
+
+#pragma mark - helpers
+
++ (NSString *)bullet {
+    return  @"●";
+}
+
++ (NSString *)tabBullet {
+    return  @"\t●";
+}
+
 - (NSString *)tabNewLines {
     return [self stringByReplacingOccurrencesOfString:@"\n" withString:@"\n\t"];
 }
