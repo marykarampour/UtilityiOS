@@ -28,7 +28,7 @@
 }
 
 + (UIImageView *)imageAccessoryView {
-    CGSize size = [Constants tableCellDisclosureIndicatorSize];
+    CGSize size = [Constants TableCellDisclosureIndicatorSize];
     UIImageView *accessoryView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, size.width, size.height)];
     accessoryView.image = [[AppTheme tableCellDisclosureIndicatorImage] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     [accessoryView setTintColor:[AppTheme tableCellAccessoryViewColor]];

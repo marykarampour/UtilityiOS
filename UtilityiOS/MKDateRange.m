@@ -229,7 +229,7 @@
         MKRange *rightRange = [MKRange rangeWithStart:range2.end end:range1.end];
         return @[rightRange];
     }
-    return @[];
+    return @[range1];
 }
 
 - (void)adjustContinuousRangeWithNumber:(NSNumber *)number {
