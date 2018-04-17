@@ -57,17 +57,13 @@
     StringArr *propertyNames = [NSObject propertyNamesOfClass:itemClass];
     __block NSError *error;
     NSManagedObjectContext *context = [self temporaryContext];
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:entityName];
 
     [context performBlock:^{
         for (MKModel *item in items) {
-            NSUInteger count = [self.mainManagedObjectContext countForFetchRequest:fetchRequest error:&error];
-//            if (count == 0) {
-                NSManagedObject *newItem = [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:context];
-                for (NSString *key in propertyNames) {
-                    [newItem setPrimitiveValue:[item valueForKey:key] forKey:key];
-                }
-//            }
+            NSManagedObject *newItem = [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:context];
+            for (NSString *key in propertyNames) {
+                [newItem setPrimitiveValue:[item valueForKey:key] forKey:key];
+            }
         }
         [self saveContext:context];
         [self saveContext:self.mainManagedObjectContext completion:^{
