@@ -205,7 +205,7 @@
         self.textLabel = [[UILabel alloc] init];
         self.textLabel.numberOfLines = 1;
         self.textLabel.textAlignment = NSTextAlignmentCenter;
-        
+        self.textLabel.backgroundColor = [UIColor clearColor];
         [self addSubview:self.textLabel];
         
         [self removeConstraintsMask];
