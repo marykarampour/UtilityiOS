@@ -250,4 +250,9 @@ static NotificationCategoryIdentifier const GeoFenceCatID = @"GeoFenceCatID";
     [[NSNotificationCenter defaultCenter] postNotificationName:[MKLocationManager MKLocationUpdateNotificationName] object:self userInfo:nil];
 }
 
++ (CLLocationCoordinate2D)DefaultLocation {
+    return CLLocationCoordinate2DMake(43.667320, -79.385510);
+}
+
+
 @end

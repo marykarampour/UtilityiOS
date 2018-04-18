@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MKCellContentController.h"
+#import "MKDateRange.h"
 
 @class MKHorizontalCollectionViewCell;
 
@@ -46,6 +47,9 @@ typedef NS_OPTIONS(NSUInteger, CollectionViewOrientation) {
 - (instancetype)initWithCollectionViewAttributes:(MKCollectionViewAttributes *)attributes orientation:(CollectionViewOrientation)orientation;
 - (void)reload;
 - (void)reloadWithCompletion:(void (^)(void))completion;
+
+- (NSIndexPath *)indexPathForFirstItem;
+- (MKRange *)indexRangeForVisibleItems;
 
 @end
 

@@ -40,4 +40,7 @@
 - (void)createGeofencedZone:(NSArray<MKGeoFencePoint *> *)geofencedPoints;
 - (void)createGeofenceForPoint:(CLLocationCoordinate2D)point;
 
+
++ (CLLocationCoordinate2D)DefaultLocation;
+
 @end

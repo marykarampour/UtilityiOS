@@ -85,6 +85,20 @@
     });
 }
 
+- (NSIndexPath *)indexPathForFirstItem {
+    return [self indexPathForItemAtPoint:self.bounds.origin];
+}
+
+- (NSIndexPath *)indexPathForLastItem {
+    CGPoint point = CGPointMake(self.bounds.origin.x, self.bounds.origin.y+self.bounds.size.height);
+    return [self indexPathForItemAtPoint:point];
+}
+
+- (MKRange *)indexRangeForVisibleItems {
+    IndexPathArr *sortedVisiblePaths = [[self indexPathsForVisibleItems] sortedArrayUsingSelector:@selector(compare:)];
+    return [MKRange rangeWithStart:@(sortedVisiblePaths.firstObject.item) end:@(sortedVisiblePaths.lastObject.item)];
+}
+
 @end
 
 
