@@ -250,9 +250,18 @@ static NotificationCategoryIdentifier const GeoFenceCatID = @"GeoFenceCatID";
     [[NSNotificationCenter defaultCenter] postNotificationName:[MKLocationManager MKLocationUpdateNotificationName] object:self userInfo:nil];
 }
 
+#pragma mark - utiltiy
+
 + (CLLocationCoordinate2D)DefaultLocation {
     return CLLocationCoordinate2DMake(43.667320, -79.385510);
 }
 
++ (void)addressWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude completion:(void (^)(StringArr *))completion {
+    CLLocation *location = [[CLLocation alloc] initWithLatitude:latitude longitude:longitude];
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder reverseGeocodeLocation:location completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+        if (completion) completion(placemarks.firstObject.addressDictionary[@"FormattedAddressLines"]);
+    }];
+}
 
 @end
