@@ -151,6 +151,15 @@
             }
             completion(arr, error);
         }
+        else if ([result isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *dict = (NSDictionary *)result;
+            if (dict.count == 1) {
+                completion(dict.allValues.firstObject, nil);
+            }
+            else {
+                completion(dict, error);
+            }
+        }
         else {
             completion(result, error);
         }

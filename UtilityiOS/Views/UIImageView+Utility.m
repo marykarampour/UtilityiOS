@@ -38,4 +38,18 @@
     [self setImageWithURLRequest:request placeholderImage:nil success:nil failure:nil];
 }
 
++ (UIImageView *)roundedImageViewWithSize:(CGFloat)size {
+    UIImageView *img = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, size, size)];
+    img.layer.cornerRadius = size/2.0;
+    img.clipsToBounds = YES;
+    return img;
+}
+
++ (UIImageView *)roundedImageViewWithSize:(CGFloat)size borderWidth:(CGFloat)borderWidth borderColor:(UIColor *)borderColor {
+    UIImageView *img = [self roundedImageViewWithSize:size];
+    img.layer.borderWidth = borderWidth;
+    img.layer.borderColor = borderColor.CGColor;
+    return img;
+}
+
 @end

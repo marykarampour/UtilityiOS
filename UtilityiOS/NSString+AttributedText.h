@@ -16,6 +16,7 @@
 
 - (instancetype)initWithText:(NSString *)text font:(UIFont *)font color:(UIColor *)color;
 + (StringAttributes *)attributesWithText:(NSString *)text font:(UIFont *)font color:(UIColor *)color;
+- (BOOL)isValid;
 
 @end
 
