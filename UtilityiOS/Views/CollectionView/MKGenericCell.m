@@ -46,3 +46,24 @@
 }
 
 @end
+
+
+@interface MKHorizontalOptionsView ()
+
+@property (nonatomic, strong, readwrite) __kindof MKHorizontalCollectionViewController *controller;
+
+@end
+
+@implementation MKHorizontalOptionsView
+
+@synthesize controller;
+
++ (CGSize)estimatedSize {
+    return CGSizeMake(80.0, 80.0);
+}
+
+- (void)setAttributes:(MKCollectionViewAttributes *)attributes {
+    self.controller = [[attributes.controllerClass alloc] initWithAttributes:attributes];
+}
+
+@end

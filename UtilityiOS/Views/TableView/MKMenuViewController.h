@@ -30,11 +30,11 @@
 /** @brief Subclass must subclass MKTableViewCell and return this as base cell for menu items
  @code
  - (MKTableViewCell *)baseCellForRowAtIndexPath:(NSIndexPath *)indexPath {
- MKTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[MKTableViewCell identifier]];
- if (!cell) {
- cell = [[MKTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[MKTableViewCell identifier]];
- }
- return cell;
+     MKTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[MKTableViewCell identifier]];
+     if (!cell) {
+        cell = [[MKTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[MKTableViewCell identifier]];
+     }
+     return cell;
  }
  @ebdcode
  */
@@ -54,7 +54,13 @@ static NSString * const typeKey  = @"type";
 
 @property (nonatomic, assign) Class VCClass;
 @property (nonatomic, strong) NSString *title;
+
+/** @brief type is used if the VC being pushed uses initWithType */
 @property (nonatomic, assign) NSUInteger type;
+
+/** @brief if this action is provided, instead of transitioning to VC the action will be performed */
+@property (nonatomic, assign) SEL action;
+
 @property (nonatomic, assign) BOOL hasSpinner;
 @property (nonatomic, assign) BOOL hasBadge;
 /** @brief only used if hasSpinner is YES */

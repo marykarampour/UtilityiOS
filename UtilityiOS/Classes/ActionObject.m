@@ -33,3 +33,20 @@
 }
 
 @end
+
+
+@implementation OptionObject
+
+- (instancetype)initWithTitle:(NSString *)title iconName:(NSString *)iconName {
+    if (self = [super init]) {
+        self.title = title;
+        self.iconName = iconName;
+    }
+    return self;
+}
+
++ (instancetype)optionWithTitle:(NSString *)title iconName:(NSString *)iconName {
+    return [[OptionObject alloc] initWithTitle:title iconName:iconName];
+}
+
+@end

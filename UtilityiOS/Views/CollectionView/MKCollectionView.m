@@ -52,7 +52,6 @@
     layout.minimumLineSpacing = attributes.verticalPadding;
     layout.minimumInteritemSpacing = attributes.itemSpacing;
     layout.scrollDirection = (orientation & CollectionViewOrientation_Vertical) ? UICollectionViewScrollDirectionVertical : UICollectionViewScrollDirectionHorizontal;
-    layout.sectionInset = UIEdgeInsetsMake(8.0, 0.0, 8.0, 0.0);
     if (self = [super initWithFrame:attributes.frame collectionViewLayout:layout]) {
         self.showsVerticalScrollIndicator = NO;
         self.showsHorizontalScrollIndicator = NO;
