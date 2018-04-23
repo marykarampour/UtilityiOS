@@ -25,8 +25,9 @@
 
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *iconName;
+@property (nonatomic, strong) UIColor *iconColor;
 
-- (instancetype)initWithTitle:(NSString *)title iconName:(NSString *)iconName;
-+ (instancetype)optionWithTitle:(NSString *)title iconName:(NSString *)iconName;
+- (instancetype)initWithTitle:(NSString *)title iconName:(NSString *)iconName iconColor:(UIColor *)iconColor;
++ (instancetype)optionWithTitle:(NSString *)title iconName:(NSString *)iconName iconColor:(UIColor *)iconColor;
 
 @end

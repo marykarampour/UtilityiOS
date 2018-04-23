@@ -12,21 +12,11 @@
 
 @class MKHorizontalCollectionViewCell;
 
-typedef NS_OPTIONS(NSUInteger, CollectionViewOrientation) {
-    CollectionViewOrientation_Horizontal = 1 << 0,
-    CollectionViewOrientation_Vertical = 1 << 1
-};
-
-
-@interface MKCollectionViewAttributes : NSObject
+@interface MKCollectionViewAttributes : UICollectionViewFlowLayout <NSCopying>
 
 @property (nonatomic, assign) Class controllerClass;
 @property (nonatomic, assign) Class cellClass;
 @property (nonatomic, assign) CGRect frame;
-@property (nonatomic, assign) CGSize cellSize;
-@property (nonatomic, assign) CGFloat horizontalPadding;
-@property (nonatomic, assign) CGFloat verticalPadding;
-@property (nonatomic, assign) CGFloat itemSpacing;
 
 @end
 
@@ -44,7 +34,7 @@ typedef NS_OPTIONS(NSUInteger, CollectionViewOrientation) {
 @interface MKCollectionView : UICollectionView
 
 + (NSString *)identifier;
-- (instancetype)initWithCollectionViewAttributes:(MKCollectionViewAttributes *)attributes orientation:(CollectionViewOrientation)orientation;
+- (instancetype)initWithCollectionViewAttributes:(MKCollectionViewAttributes *)attributes;
 - (void)reload;
 - (void)reloadWithCompletion:(void (^)(void))completion;
 

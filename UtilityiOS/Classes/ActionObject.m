@@ -37,16 +37,17 @@
 
 @implementation OptionObject
 
-- (instancetype)initWithTitle:(NSString *)title iconName:(NSString *)iconName {
+- (instancetype)initWithTitle:(NSString *)title iconName:(NSString *)iconName iconColor:(UIColor *)iconColor {
     if (self = [super init]) {
         self.title = title;
         self.iconName = iconName;
+        self.iconColor = iconColor;
     }
     return self;
 }
 
-+ (instancetype)optionWithTitle:(NSString *)title iconName:(NSString *)iconName {
-    return [[OptionObject alloc] initWithTitle:title iconName:iconName];
++ (instancetype)optionWithTitle:(NSString *)title iconName:(NSString *)iconName iconColor:(UIColor *)iconColor {
+    return [[OptionObject alloc] initWithTitle:title iconName:iconName iconColor:iconColor];
 }
 
 @end

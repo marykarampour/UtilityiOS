@@ -48,18 +48,18 @@
 @end
 
 
-@interface MKHorizontalOptionsView ()
+@interface MKHorizontalContentView ()
 
 @property (nonatomic, strong, readwrite) __kindof MKHorizontalCollectionViewController *controller;
 
 @end
 
-@implementation MKHorizontalOptionsView
+@implementation MKHorizontalContentView
 
 @synthesize controller;
 
-+ (CGSize)estimatedSize {
-    return CGSizeMake(80.0, 80.0);
++ (CGFloat)estimatedHeight {
+    return 80.0;
 }
 
 - (void)setAttributes:(MKCollectionViewAttributes *)attributes {

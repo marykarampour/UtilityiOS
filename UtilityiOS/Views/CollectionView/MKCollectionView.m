@@ -7,6 +7,7 @@
 //
 
 #import "MKCollectionView.h"
+#import "NSObject+Utility.h"
 #import "UIView+Utility.h"
 #import "MKGenericCell.h"
 
@@ -41,24 +42,23 @@
 
 @implementation MKCollectionViewAttributes
 
+- (id)copyWithZone:(NSZone *)zone {
+    return [self MKCopyWithZone:zone baseClass:[UICollectionViewLayout class]];
+}
+
 @end
 
 
 @implementation MKCollectionView
 
-- (instancetype)initWithCollectionViewAttributes:(MKCollectionViewAttributes *)attributes orientation:(CollectionViewOrientation)orientation {
-    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    layout.itemSize = attributes.cellSize;
-    layout.minimumLineSpacing = attributes.verticalPadding;
-    layout.minimumInteritemSpacing = attributes.itemSpacing;
-    layout.scrollDirection = (orientation & CollectionViewOrientation_Vertical) ? UICollectionViewScrollDirectionVertical : UICollectionViewScrollDirectionHorizontal;
-    if (self = [super initWithFrame:attributes.frame collectionViewLayout:layout]) {
+- (instancetype)initWithCollectionViewAttributes:(MKCollectionViewAttributes *)attributes {
+    if (self = [super initWithFrame:attributes.frame collectionViewLayout:attributes]) {
         self.showsVerticalScrollIndicator = NO;
         self.showsHorizontalScrollIndicator = NO;
         self.scrollEnabled = YES;
         self.bounces = YES;
-        self.alwaysBounceVertical = (orientation & CollectionViewOrientation_Vertical);
-        self.alwaysBounceHorizontal = (orientation & CollectionViewOrientation_Horizontal);
+        self.alwaysBounceVertical = (attributes.scrollDirection == UICollectionViewScrollDirectionVertical);
+        self.alwaysBounceHorizontal = (attributes.scrollDirection == UICollectionViewScrollDirectionHorizontal);
         self.allowsMultipleSelection = NO;
     }
     return self;
@@ -323,9 +323,11 @@
 
 - (instancetype)initWithAttributes:(MKCollectionViewAttributes *)attributes {
     if (self = [super init]) {
-        MKCollectionView *view = [[MKCollectionView alloc] initWithCollectionViewAttributes:attributes orientation:CollectionViewOrientation_Horizontal];
-        [view registerClass:attributes.cellClass forCellWithReuseIdentifier:[attributes.cellClass identifier]];
-        self.attributes = attributes;
+        self.attributes = [attributes copy];
+        self.attributes.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+        
+        MKCollectionView *view = [[MKCollectionView alloc] initWithCollectionViewAttributes:self.attributes];
+        [view registerClass:self.attributes.cellClass forCellWithReuseIdentifier:[self.attributes.cellClass identifier]];
         [self addView:view];
     }
     return self;
@@ -333,6 +335,7 @@
 
 - (void)setItemCount:(NSUInteger)itemCount {
     _itemCount = itemCount;
+    [self.views.firstObject reload];
 }
 
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {

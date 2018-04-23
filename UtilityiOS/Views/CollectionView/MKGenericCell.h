@@ -37,7 +37,7 @@
 
 @end
 
-@interface MKHorizontalOptionsView : UIView <MKHorizontalCellProtocol>
+@interface MKHorizontalContentView : UIView <MKHorizontalCellProtocol>
 
 @property (nonatomic, strong, readonly) __kindof MKHorizontalCollectionViewController *controller;
 
