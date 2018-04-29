@@ -95,7 +95,7 @@
     return str;
 }
 
-- (NSString *)randomStringWithLenght:(NSUInteger)length {
++ (NSString *)randomStringWithLenght:(NSUInteger)length {
     NSString *seed = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     NSMutableString *randomStr = [[NSMutableString alloc] initWithCapacity:length];
     for (unsigned int i=0; i<length; i++) {

@@ -590,39 +590,39 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
 }
 
 + (NSString *)Regex_CharRange {
-    return @"^([\\s\\.a-zA-Z0-9@-]{%zd,%zd})$";
+    return @"^([\\s\\.a-zA-Z0-9@-]{%d,%d})$";
 }
 
 + (NSString *)Regex_CharRange_IntPositive {
-    return @"^([0-9]{%zd,%zd})$";
+    return @"^([0-9]{%d,%d})$";
 }
 
 + (NSString *)Regex_CharRange_Int {
-    return @"^([-]?[0-9]{%zd,%zd})$";
+    return @"^([-]?[0-9]{%d,%d})$";
 }
 
 + (NSString *)Regex_CharRange_FloatPositive {
-    return @"^([0-9]{%zd,%zd}(\\.[0-9]{%zd,%zd})?)$";
+    return @"^([0-9]{%d,%d}(\\.[0-9]{%d,%d})?)$";
 }
 
 + (NSString *)Regex_CharRange_Float {
-    return @"^([-]?[0-9]{%zd,%zd}(\\.[0-9]{%zd,%zd})?)$";
+    return @"^([-]?[0-9]{%d,%d}(\\.[0-9]{%d,%d})?)$";
 }
 
 + (NSString *)Regex_CharRange_Alphabet {
-    return @"^([a-zA-Z]{%zd,%zd})$";
+    return @"^([a-zA-Z]{%d,%d})$";
 }
 
 + (NSString *)Regex_CharRange_Alphanumeric {
-    return @"^([a-zA-Z0-9]{%zd,%zd})$";
+    return @"^([a-zA-Z0-9]{%d,%d})$";
 }
 
 + (NSString *)Regex_CharRange_AlphaSpaceDot {
-    return @"^([\\s\\.a-zA-Z]{%zd,%zd})$";
+    return @"^([\\s\\.a-zA-Z]{%d,%d})$";
 }
 
 + (NSString *)Regex_CharRange_Dash_Numeric {
-    return @"^([0-9-]{%zd,%zd})$";
+    return @"^([0-9-]{%d,%d})$";
 }
 
 + (NSString *)Regex_Email {
