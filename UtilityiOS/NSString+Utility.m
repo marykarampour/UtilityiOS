@@ -33,6 +33,9 @@
         case StringFormatUnderScoreIgnoreDigitsUpperCaseAll:
             return [self camelCaseToUnderScoreIgnoreDigits:YES upperCaseAll:YES];
             break;
+        case StringFormatCamelCase:
+            return [self underScoreToCamelCaseUpperCaseAll:NO];
+            break;
         default:
             return self;
             break;
@@ -41,6 +44,10 @@
 
 - (NSString *)capitalizeFirstChar {
     return [[[self substringToIndex:1] uppercaseString] stringByAppendingString:[self substringFromIndex:1]];
+}
+
+- (NSString *)lowercaseFirstChar {
+    return [[[self substringToIndex:1] lowercaseString] stringByAppendingString:[self substringFromIndex:1]];
 }
 
 - (NSString *)camelCaseToUnderScoreIgnoreDigits:(BOOL)ignoreDigits upperCaseAll:(BOOL)upperCaseAll {
@@ -71,6 +78,33 @@
     
     if ([result characterAtIndex:0] == '_') {
         [result replaceCharactersInRange:NSMakeRange(0, 1) withString:@""];
+    }
+    
+    if (upperCaseAll) {
+        result = [NSMutableString stringWithString:[result uppercaseString]];
+    }
+    
+    return result;
+}
+
+- (NSString *)underScoreToCamelCaseUpperCaseAll:(BOOL)upperCaseAll {
+    
+    NSMutableString *result = [NSMutableString stringWithString:self];
+    if ([result characterAtIndex:0] == '_') {
+        [result replaceCharactersInRange:NSMakeRange(0, 1) withString:@""];
+    }
+    
+    NSRange underScoreRange = [result rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"_"]];
+    
+    while (underScoreRange.location != NSNotFound) {
+        [result replaceCharactersInRange:underScoreRange withString:[NSString stringWithFormat:@""]];
+        
+        if (underScoreRange.location < result.length) {
+            NSString *upperCase = [[result substringWithRange:underScoreRange] uppercaseString];
+            [result replaceCharactersInRange:underScoreRange withString:upperCase];
+        }
+
+        underScoreRange = [result rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"_"]];
     }
     
     if (upperCaseAll) {

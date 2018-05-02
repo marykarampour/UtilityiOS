@@ -22,7 +22,9 @@ static StringArr *docTypes;
                      (NSString *)kUTTypeJPEG2000,
                      (NSString *)kUTTypeTIFF,
                      (NSString *)kUTTypePNG,
-                     (NSString *)kUTTypeText];
+                     (NSString *)kUTTypeText,
+                     (NSString *)kUTTypeContent,
+                     @"com.microsoft.word.doc"];
     }
 }
 

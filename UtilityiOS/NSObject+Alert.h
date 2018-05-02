@@ -22,6 +22,7 @@
  @param successAction target and selector used when auth succeeded. The property title in ActionObject is not used
  */
 - (void)textFieldAlertWithUserID:(__kindof NSObject *)userID passName:(NSString *)passName successAction:(ActionObject *)successAction;
+- (void)textFieldAlertWithTitle:(NSString *)title userID:(__kindof NSObject *)userID passName:(NSString *)passName successAction:(ActionObject *)successAction;
 
 - (void)textFieldAlertWithTitle:(NSString *)title message:(NSString *)message target:(NSObject <UITextFieldDelegate> *)target alertAction:(SEL)alertAction;
 

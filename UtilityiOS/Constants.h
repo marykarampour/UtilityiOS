@@ -203,6 +203,7 @@ extern NSString * const DateFormatWeekdayDayStyle;
 + (NSString *)Skip_STR;
 + (NSString *)Sign_STR;
 + (NSString *)Register_STR;
++ (NSString *)Update_STR;
 + (NSString *)PIN_STR;
 + (NSString *)Username_STR;
 + (NSString *)Password_STR;

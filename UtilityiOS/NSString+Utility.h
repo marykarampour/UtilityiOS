@@ -43,13 +43,19 @@ typedef NS_ENUM(NSUInteger, StringFormat) {
     //camelCase to under_score with all characters uppercased - this option will not underscore digits
     //1. exampleString -> EXAMPLE_STRING
     //2. exampleString0 -> EXAMPLE_STRING0
-    StringFormatUnderScoreIgnoreDigitsUpperCaseAll
+    StringFormatUnderScoreIgnoreDigitsUpperCaseAll,
+    
+    //under_score to camelCase
+    //1. example_string -> exampleString
+    //2. example_string_0 -> exampleString0
+    StringFormatCamelCase
 };
 
 @interface NSString (Utility)
 
 - (NSString *)format:(StringFormat)format;
 - (NSString *)capitalizeFirstChar;
+- (NSString *)lowercaseFirstChar;
 
 /** @brief under_score to camelCase
  @remark Only use for one word property names
