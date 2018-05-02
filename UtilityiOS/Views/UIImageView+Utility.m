@@ -7,6 +7,7 @@
 //
 
 #import "UIImageView+Utility.h"
+#import "UIImageView+AFNetworking.h"
 
 @implementation UIImageView (Utility)
 
@@ -30,6 +31,25 @@
     self.image = [im imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     self.tintColor = color;
     self.contentMode = UIViewContentModeScaleAspectFit;
+}
+
+- (void)setImageWithURLString:(NSString *)url {
+    NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30.0];
+    [self setImageWithURLRequest:request placeholderImage:nil success:nil failure:nil];
+}
+
++ (UIImageView *)roundedImageViewWithSize:(CGFloat)size {
+    UIImageView *img = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, 0.0, size, size)];
+    img.layer.cornerRadius = size/2.0;
+    img.clipsToBounds = YES;
+    return img;
+}
+
++ (UIImageView *)roundedImageViewWithSize:(CGFloat)size borderWidth:(CGFloat)borderWidth borderColor:(UIColor *)borderColor {
+    UIImageView *img = [self roundedImageViewWithSize:size];
+    img.layer.borderWidth = borderWidth;
+    img.layer.borderColor = borderColor.CGColor;
+    return img;
 }
 
 @end

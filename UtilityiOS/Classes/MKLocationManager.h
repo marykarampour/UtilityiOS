@@ -40,4 +40,10 @@
 - (void)createGeofencedZone:(NSArray<MKGeoFencePoint *> *)geofencedPoints;
 - (void)createGeofenceForPoint:(CLLocationCoordinate2D)point;
 
+
+#pragma mark - utility
+
++ (CLLocationCoordinate2D)DefaultLocation;
++ (void)addressWithLatitude:(CGFloat)latitude longitude:(CGFloat)longitude completion:(void (^)(StringArr * address))completion;
+
 @end

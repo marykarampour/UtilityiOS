@@ -46,3 +46,24 @@
 }
 
 @end
+
+
+@interface MKHorizontalContentView ()
+
+@property (nonatomic, strong, readwrite) __kindof MKHorizontalCollectionViewController *controller;
+
+@end
+
+@implementation MKHorizontalContentView
+
+@synthesize controller;
+
++ (CGFloat)estimatedHeight {
+    return 80.0;
+}
+
+- (void)setAttributes:(MKCollectionViewAttributes *)attributes {
+    self.controller = [[attributes.controllerClass alloc] initWithAttributes:attributes];
+}
+
+@end

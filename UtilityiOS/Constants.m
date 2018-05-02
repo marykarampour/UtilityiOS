@@ -664,11 +664,11 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
 #pragma mark - core date
 
 + (NSString *)CoreData_StorePath {
-    return @"Model";
+    return @"db.sqlite";
 }
 
 + (NSString *)CoreData_ModelPath {
-    return @"db.sqlite";
+    return @"Model";
 }
 
 

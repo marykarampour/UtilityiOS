@@ -23,6 +23,10 @@
     return [[StringAttributes alloc] initWithText:text font:font color:color];
 }
 
+- (BOOL)isValid {
+    return self.text && self.font && self.color;
+}
+
 @end
 
 @implementation NSString (AttributedText)
@@ -48,7 +52,7 @@
     NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:@""];
     
     for (StringAttributes *attr in attrs) {
-        if (attr.text) {
+        if ([attr isValid]) {
             NSAttributedString *nextStr = [[NSMutableAttributedString alloc] initWithString:attr.text attributes:@{NSFontAttributeName:attr.font, NSForegroundColorAttributeName:attr.color}];
             [attrStr appendAttributedString:nextStr];
             if (delimiter && ![[attrs lastObject] isEqual:attr]) {

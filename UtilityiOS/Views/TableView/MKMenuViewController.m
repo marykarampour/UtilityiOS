@@ -177,7 +177,12 @@
         if (obj.hasSpinner && obj.spinner.inProgress) {
             return;
         }
-        [self transitionToView:indexPath];
+        if (obj.action && [self respondsToSelector:obj.action]) {
+            [self performSelector:obj.action];
+        }
+        else {
+            [self transitionToView:indexPath];
+        }
     }
     self.selectedOption = indexPath;
 }

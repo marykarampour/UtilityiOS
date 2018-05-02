@@ -37,5 +37,12 @@
 
 @end
 
+@interface MKHorizontalContentView : UIView <MKHorizontalCellProtocol>
+
+@property (nonatomic, strong, readonly) __kindof MKHorizontalCollectionViewController *controller;
+
++ (CGFloat)estimatedHeight;
+
+@end
 
 

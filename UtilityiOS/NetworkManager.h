@@ -29,7 +29,8 @@ typedef NS_ENUM(NSUInteger, NetworkContentType) {
 };
 
 typedef void (^ServerResultErrorBlock) (id result, NSError *error);
-
+typedef void (^ServerNumberErrorBlock) (NSNumber *num, NSError *error);
+typedef void (^ServerArrayErrorBlock) (NSArray *arr, NSError *error);
 
 @interface MultipartInfo : NSObject
 

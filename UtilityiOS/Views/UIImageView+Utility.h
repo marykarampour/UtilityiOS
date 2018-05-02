@@ -19,5 +19,8 @@ typedef NS_ENUM(NSUInteger, IconType) {
 + (UIImageView *)imageViewWithImageName:(NSString *)imageName iconType:(IconType)iconType color:(UIColor *)color;
 + (UIImageView *)imageViewWithTemplateImageName:(NSString *)imageName color:(UIColor *)color;
 - (void)setImageWithTemplateImageName:(NSString *)imageName color:(UIColor *)color;
+- (void)setImageWithURLString:(NSString *)url;
++ (UIImageView *)roundedImageViewWithSize:(CGFloat)size;
++ (UIImageView *)roundedImageViewWithSize:(CGFloat)size borderWidth:(CGFloat)borderWidth borderColor:(UIColor *)borderColor;
 
 @end

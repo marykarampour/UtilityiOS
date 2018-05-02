@@ -84,13 +84,15 @@
         
         for (unsigned int i=0; i<count; i++) {
             NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
-            id value = [self valueForKey:name];
-            if ([value isKindOfClass:[NSArray class]]) {
-                NSArray *array = [[NSArray alloc] initWithArray:value copyItems:YES];
-                [object setValue:array forKey:name];
-            }
-            else {
-                [object setValue:[value copyWithZone:zone] forKey:name];
+            if ([self respondsToSelector:NSSelectorFromString(name)]) {
+                id value = [self valueForKey:name];
+                if ([value isKindOfClass:[NSArray class]]) {
+                    NSArray *array = [[NSArray alloc] initWithArray:value copyItems:YES];
+                    [object setValue:array forKey:name];
+                }
+                else {
+                    [object setValue:[value copyWithZone:zone] forKey:name];
+                }
             }
         }
         free(properties);

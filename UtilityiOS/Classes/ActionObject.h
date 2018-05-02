@@ -19,3 +19,15 @@
 + (NSArray <ActionObject *> *)actionsWithTitles:(StringArr *)titles target:(id)target action:(SEL)action;
 
 @end
+
+
+@interface OptionObject : NSObject
+
+@property (nonatomic, strong) NSString *title;
+@property (nonatomic, strong) NSString *iconName;
+@property (nonatomic, strong) UIColor *iconColor;
+
+- (instancetype)initWithTitle:(NSString *)title iconName:(NSString *)iconName iconColor:(UIColor *)iconColor;
++ (instancetype)optionWithTitle:(NSString *)title iconName:(NSString *)iconName iconColor:(UIColor *)iconColor;
+
+@end

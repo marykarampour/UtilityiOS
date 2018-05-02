@@ -57,16 +57,12 @@
     StringArr *propertyNames = [NSObject propertyNamesOfClass:itemClass];
     __block NSError *error;
     NSManagedObjectContext *context = [self temporaryContext];
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] initWithEntityName:entityName];
 
     [context performBlock:^{
         for (MKModel *item in items) {
-            NSUInteger count = [self.mainManagedObjectContext countForFetchRequest:fetchRequest error:nil];
-            if (count == 0) {
-                NSManagedObject *newItem = [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:context];
-                for (NSString *key in propertyNames) {
-                    [newItem setPrimitiveValue:[item valueForKey:key] forKey:key];
-                }
+            NSManagedObject *newItem = [NSEntityDescription insertNewObjectForEntityForName:entityName inManagedObjectContext:context];
+            for (NSString *key in propertyNames) {
+                [newItem setPrimitiveValue:[item valueForKey:key] forKey:key];
             }
         }
         [self saveContext:context];
@@ -146,7 +142,7 @@
         return _managedObjectModel;
     }
     NSURL *modelURL = [[NSBundle mainBundle] URLForResource:self.modelPath withExtension:@"momd"];
-    DEBUGLOG(@"%@", modelURL.description);
+    DEBUGLOG(@"Core data model path: %@", modelURL.description);
     _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
     return _managedObjectModel;
 }
@@ -156,7 +152,7 @@
         return _persistentStoreCoordinator;
     }
     NSURL *storeURL = [[Constants appDocumentsDirectory] URLByAppendingPathComponent:self.storePath];
-    DEBUGLOG(@"%@", storeURL.description);
+    DEBUGLOG(@"Core data store path: %@", storeURL.description);
     NSError *error;
     _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
     if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
