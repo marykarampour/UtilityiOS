@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "AFNetworking.h"
-#import "JSONModel.h"
 #import "Constants.h"
 
 typedef NS_ENUM(NSUInteger, NetworkRequestType) {
