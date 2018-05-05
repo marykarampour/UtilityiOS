@@ -52,26 +52,7 @@
 }
 
 - (id)MKCopyWithZone:(NSZone *)zone {
-    Class type = [self class];
-    id object = [[type allocWithZone:zone] init];
-    
-    unsigned int count = 0;
-    objc_property_t *properties = class_copyPropertyList(type, &count);
-    
-    for (unsigned int i=0; i<count; i++) {
-        NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
-        id value = [self valueForKey:name];
-        if ([value isKindOfClass:[NSArray class]]) {
-            NSArray *array = [[NSArray alloc] initWithArray:value copyItems:YES];
-            [object setValue:array forKey:name];
-        }
-        else {
-            [object setValue:[value copyWithZone:zone] forKey:name];
-        }
-    }
-    free(properties);
-    
-    return object;
+    return [self MKCopyWithZone:zone baseClass:[self superclass]];
 }
 
 - (id)MKCopyWithZone:(NSZone *)zone baseClass:(Class)baseClass {
@@ -79,52 +60,87 @@
     id object = [[currentClass allocWithZone:zone] init];
 
     while (currentClass != baseClass) {
-        unsigned int count = 0;
-        objc_property_t *properties = class_copyPropertyList(currentClass, &count);
-        
-        for (unsigned int i=0; i<count; i++) {
-            NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
-            if ([self respondsToSelector:NSSelectorFromString(name)]) {
-                id value = [self valueForKey:name];
-                if ([value isKindOfClass:[NSArray class]]) {
-                    NSArray *array = [[NSArray alloc] initWithArray:value copyItems:YES];
-                    [object setValue:array forKey:name];
-                }
-                else {
-                    [object setValue:[value copyWithZone:zone] forKey:name];
-                }
-            }
-        }
-        free(properties);
+        [self copyWithZone:zone toObject:object ofKind:currentClass];
         currentClass = [currentClass superclass];
     }
     return object;
 }
 
-- (void)MKInitWithCoder:(NSCoder *)aDecoder {
+- (void)copyWithZone:(NSZone *)zone toObject:(id)object ofKind:(Class)objectClass {
+    if (![object isKindOfClass:objectClass]) {
+        return;
+    }
     unsigned int count = 0;
-    objc_property_t *properties = class_copyPropertyList([self class], &count);
+    objc_property_t *properties = class_copyPropertyList(objectClass, &count);
+    
+    for (unsigned int i=0; i<count; i++) {
+        NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
+        if ([self respondsToSelector:NSSelectorFromString(name)]) {
+            id value = [self valueForKey:name];
+            if ([value isKindOfClass:[NSArray class]]) {
+                NSArray *array = [[NSArray alloc] initWithArray:value copyItems:YES];
+                [object setValue:array forKey:name];
+            }
+            else {
+                [object setValue:[value copyWithZone:zone] forKey:name];
+            }
+        }
+    }
+    free(properties);
+}
+
+- (void)MKInitWithCoder:(NSCoder *)aDecoder ofKind:(Class)objectClass {
+    unsigned int count = 0;
+    objc_property_t *properties = class_copyPropertyList(objectClass, &count);
     
     for (unsigned int i=0; i<count; i++) {
         NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
         id value = [aDecoder decodeObjectForKey:name];
-        if (value) {
+        if (value && [self respondsToSelector:NSSelectorFromString(name)]) {
             [self setValue:value forKey:name];
         }
     }
     free(properties);
 }
 
-- (void)MKEncodeWithCoder:(NSCoder *)aCoder {
+- (void)MKInitWithCoder:(NSCoder *)aDecoder baseClass:(Class)baseClass {
+    Class currentClass = [self class];
+    
+    while (currentClass != baseClass) {
+        [self MKInitWithCoder:aDecoder ofKind:currentClass];
+        currentClass = [currentClass superclass];
+    }
+}
+
+- (void)MKInitWithCoder:(NSCoder *)aDecoder {
+    [self MKInitWithCoder:aDecoder ofKind:[self superclass]];
+}
+
+- (void)MKEncodeWithCoder:(NSCoder *)aCoder ofKind:(Class)objectClass {
     unsigned int count = 0;
-    objc_property_t *properties = class_copyPropertyList([self class], &count);
+    objc_property_t *properties = class_copyPropertyList(objectClass, &count);
     
     for (unsigned int i=0; i<count; i++) {
         NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
-        id value = [self valueForKey:name];
-        [aCoder encodeObject:value forKey:name];
+        if ([self respondsToSelector:NSSelectorFromString(name)]) {
+            id value = [self valueForKey:name];
+            [aCoder encodeObject:value forKey:name];
+        }
     }
     free(properties);
+}
+
+- (void)MKEncodeWithCoder:(NSCoder *)aCoder baseClass:(Class)baseClass {
+    Class currentClass = [self class];
+    
+    while (currentClass != baseClass) {
+        [self MKEncodeWithCoder:aCoder ofKind:currentClass];
+        currentClass = [currentClass superclass];
+    }
+}
+
+- (void)MKEncodeWithCoder:(NSCoder *)aCoder {
+    [self MKEncodeWithCoder:aCoder baseClass:[self superclass]];
 }
 
 - (NSUInteger)MKHash {
