@@ -21,11 +21,13 @@ static NSString * const DefaultPushNotificationDeviceTokenKey    = @"DefaultPush
 
 NSString * const DateFormatServerStyle            = @"YYYY-MM-dd HH:mm:ss";
 NSString * const DateFormatShortStyle             = @"yyyy-MM-dd";
+NSString * const DateFormatWeekdayShortStyle      = @"EEEE MMM dd";
 NSString * const DateFormatFullStyle              = @"EEEE, MMMM dd, yyyy";
 NSString * const DateFormatMonthDayYearStyle      = @"MMMM dd, yyyy";
-NSString * const DateFormatMonthYear              = @"MMMM yyyy";
-NSString * const DateFormatDayMonthYear           = @"dd MMMM yyyy";
-NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
+NSString * const DateFormatMonthYearStyle         = @"MMMM yyyy";
+NSString * const DateFormatDayMonthYearStyle      = @"dd MMMM yyyy";
+NSString * const DateFormatDayMonthYearNumericStyle = @"dd MM yyyy";
+NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
 
 
 #pragma mark - classes
@@ -47,7 +49,7 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
 }
 
 + (NSString *)BaseTestingInURL {
-    return @"://10.1.0.119";//same as @"://morpheus.baldhead.com"
+    return @"://10.1.0.119";//same as @"://kaching.baldhead.com"
 }
 
 + (NSString *)BaseTestingOutURL {
@@ -66,6 +68,14 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
     return @"://";
 }
 
++ (NSString *)TestUsername {
+    return @"";
+}
+
++ (NSString *)TestPassword {
+    return @"";
+}
+
 
 #pragma mark - constants
 
@@ -75,6 +85,14 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
 
 + (float)PrimaryColumnWidth {
     return 256.0;
+}
+
++ (float)MaxPrimaryColumnWidth {
+    return 256.0;
+}
+
++ (float)MinPrimaryColumnWidth {
+    return 0.0;
 }
 
 + (float)PrimaryColumnShrunkenWidth {
@@ -97,6 +115,14 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
     return 44.0;
 }
 
++ (float)TableIconImageSmallSize {
+    return 32.0;
+}
+
++ (float)TableIconImageLargeSize {
+    return 64.0;
+}
+
 + (float)ButtonCornerRadious {
     return 6.0;
 }
@@ -117,6 +143,30 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
     return 8.0;
 }
 
++ (CGSize)SpinnerSize {
+    return CGSizeMake(120.0, 120.0);
+}
+
++ (UIEdgeInsets)TabBarItemImageInsets {
+    return UIEdgeInsetsMake(8.0, 0.0, -8.0, 0.0);
+}
+
++ (float)LoginViewInset {
+    return 100.0;
+}
+
++ (float)LoginViewWidth {
+    return 400.0;
+}
+
++ (float)BadgeHeight {
+    return 20.0;
+}
+
++ (CGSize)TableCellDisclosureIndicatorSize {
+    return CGSizeMake(20.0, 20.0);
+}
+
 #pragma mark - defaults
 
 + (NSString *)DefaultsVersion {
@@ -135,12 +185,36 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
     return LOCALIZED(@"Exit");
 }
 
++ (NSString *)ExitMessage_STR {
+    return LOCALIZED(@"Are you sure you want to exit?");
+}
+
++ (NSString *)LoginFailedTitle_STR {
+    return LOCALIZED(@"Login Failed!");
+}
+
++ (NSString *)LoginFailedMessage_STR {
+    return LOCALIZED(@"Please check your credentials and try again.");
+}
+
 + (NSString *)FaceID_STR {
     return LOCALIZED(@"Face ID");
 }
 
 + (NSString *)TouchID_STR {
     return LOCALIZED(@"Touch ID");
+}
+
++ (NSString *)Done_STR {
+    return LOCALIZED(@"Done");
+}
+
++ (NSString *)Save_STR {
+    return LOCALIZED(@"Save");
+}
+
++ (NSString *)Replace_STR {
+    return LOCALIZED(@"Replace");
 }
 
 + (NSString *)OK_STR {
@@ -151,8 +225,16 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
     return LOCALIZED(@"Cancel");
 }
 
++ (NSString *)Clear_STR {
+    return LOCALIZED(@"Clear");
+}
+
 + (NSString *)Skip_STR {
     return LOCALIZED(@"Skip");
+}
+
++ (NSString *)Sign_STR {
+    return LOCALIZED(@"Sign");
 }
 
 + (NSString *)PIN_STR {
@@ -165,6 +247,18 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
 
 + (NSString *)Password_STR {
     return LOCALIZED(@"Password");
+}
+
++ (NSString *)Login_STR {
+    return LOCALIZED(@"Login");
+}
+
++ (NSString *)Register_STR {
+    return LOCALIZED(@"Register");
+}
+
++ (NSString *)Update_STR {
+    return LOCALIZED(@"Update");
 }
 
 + (NSString *)Enter_BLANK_STR {
@@ -181,6 +275,14 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
 
 + (NSString *)LocationRestrictedMessage_STR {
     return @"";
+}
+
++ (NSString *)Camera_STR {
+    return LOCALIZED(@"Camera");
+}
+
++ (NSString *)Photo_Library_STR {
+    return LOCALIZED(@"Photo Library");
 }
 
 + (NSString *)CameraDisabledTitle_STR {
@@ -200,9 +302,12 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
 }
 
 + (NSString *)NoCamera_STR {
-    return @"Device has no camera";
+    return LOCALIZED(@"Device has no camera");
 }
 
++ (NSString *)Invalid_STR {
+    return LOCALIZED(@"Invalid %@");
+}
 
 + (NSString *)Error_STR {
     return LOCALIZED(@"Error");
@@ -274,7 +379,15 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
 }
 
 + (NSString *)versionString {
-    return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSDictionary *versionDict = [[NSBundle mainBundle] infoDictionary];
+    NSString *build = [versionDict objectForKey:(NSString *)kCFBundleVersionKey];
+    NSString *version = [versionDict objectForKey:@"CFBundleShortVersionString"];
+    version = [NSString stringWithFormat:@"version %@ (%@)", version, build];
+    return version;
+}
+
++ (NSURL *)appDocumentsDirectory {
+    return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
 + (NSString *)bundleID {
@@ -453,6 +566,13 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
     return @"APNS";
 }
 
+#pragma mark - Notification Center
+
++ (NSNotificationName)NotificationName_App_Terminated {
+    return @"NotificationName_App_Terminated";
+}
+
+
 #pragma mark - AppCommon abstracts
 
 + (TargetType)appTargetType {
@@ -473,31 +593,83 @@ NSString * const DateFormatDayMonthYearNumeric    = @"dd MM yyyy";
     return @"SELF MATCHES %@";
 }
 
++ (NSString *)Regex_CharRange {
+    return @"^([\\s\\.a-zA-Z0-9@-]{%d,%d})$";
+}
+
 + (NSString *)Regex_CharRange_IntPositive {
-    return @"^([0-9]{%zd,%zd})$";
+    return @"^([0-9]{%d,%d})$";
 }
 
 + (NSString *)Regex_CharRange_Int {
-    return @"^([-]?[0-9]{%zd,%zd})$";
+    return @"^([-]?[0-9]{%d,%d})$";
 }
 
 + (NSString *)Regex_CharRange_FloatPositive {
-    return @"^([0-9]{%zd,%zd}(\\.[0-9]{%zd,%zd})?)$";
+    return @"^([0-9]{%d,%d}(\\.[0-9]{%d,%d})?)$";
 }
 
 + (NSString *)Regex_CharRange_Float {
-    return @"^([-]?[0-9]{%zd,%zd}(\\.[0-9]{%zd,%zd})?)$";
+    return @"^([-]?[0-9]{%d,%d}(\\.[0-9]{%d,%d})?)$";
 }
 
-+ (NSString *)Regex_CharRange_Letters {
-    return @"^([a-zA-Z]{%zd,%zd})$";
++ (NSString *)Regex_CharRange_Alphabet {
+    return @"^([a-zA-Z]{%d,%d})$";
 }
 
 + (NSString *)Regex_CharRange_Alphanumeric {
-    return @"^([a-zA-Z0-9]{%zd,%zd})$";
+    return @"^([a-zA-Z0-9]{%d,%d})$";
 }
 
++ (NSString *)Regex_CharRange_AlphaSpaceDot {
+    return @"^([\\s\\.a-zA-Z]{%d,%d})$";
+}
 
++ (NSString *)Regex_CharRange_Dash_Numeric {
+    return @"^([0-9-]{%d,%d})$";
+}
+
++ (NSString *)Regex_Email {
+    return @"^([A-Z0-9a-z\\._%+-]){1,64}+@([A-Za-z0-9-]{2,64})+\\.+([A-Za-z\\.]{2,32})$";
+}
+
++ (NSString *)Regex_Email_NoCheck {
+    return @"^([A-Z0-9a-z\\._%+-@]){1,256}$";
+}
+
++ (NSString *)Regex_Email_Has_AT {
+    return @"^([A-Z0-9a-z\\._%+-]){1,64}+@([A-Za-z0-9-]{0,64})$";
+}
+
++ (NSString *)Regex_Email_Has_AT_Dot {
+    return @"^([A-Z0-9a-z\\._%+-]){1,64}+@([A-Za-z0-9-]{2,64})+\\.+([A-Za-z\\.]{0,32})$";
+}
+
++ (NSString *)Regex_Phone {
+    return @"^([0-9]{10})$";
+}
+
++ (NSString *)Regex_Address {
+    return @"^([\\s\\.\\,a-zA-Z0-9-]{0,100})$";
+}
+
++ (NSString *)Regex_Date {
+    return @"^(((1[0-9][0-9][0-9])|(20[0-9][0-9]))-(0[0-9]|1[0-2])-((0[0-9])|([1-2][0-9])|(3[0-1])))$";
+}
+
++ (NSString *)Regex_Gender {
+    return @"^([fFmM]{1})$";
+}
+
+#pragma mark - core date
+
++ (NSString *)CoreData_StorePath {
+    return @"db.sqlite";
+}
+
++ (NSString *)CoreData_ModelPath {
+    return @"Model";
+}
 
 
 @end

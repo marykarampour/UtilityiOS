@@ -37,10 +37,30 @@ static StringFormat MapperFormat;
 - (instancetype)initWithStringsDictionary:(NSDictionary *)values {
     return [self initWithStringsDictionary:values mapper:[[self class] keyMapper]];
 }
+//overriding this only to support date formates not supporeted by JSONModel
+- (instancetype)initWithDictionary:(NSDictionary *)dict error:(NSError *__autoreleasing *)err {
+    if (self = [super initWithDictionary:dict error:err]) {
+        NSArray *names = [[self class] propertyNames];
+        for (NSString *name in names) {
+            NSString *propertyName = [self convertToJson:name];
+            
+            Class class = [self classOfProperty:name forObjectClass:[self class]];
+            if (class == [NSDate class]) {
+                id value = dict[propertyName];
+                if (value && ![value isKindOfClass:[NSNull class]]) {
+                    NSDate * date = [[self dateFormatter] dateFromString:value];
+                    if ([date isKindOfClass:[NSDate class]]) {
+                        [self setValue:date forKey:name];
+                    }
+                }
+            }
+        }
+    }
+    return self;
+}
 
 - (instancetype)initWithStringsDictionary:(NSDictionary *)values mapper:(JSONKeyMapper *)mapper {
     if (self = [super init]) {
-        
         NSArray *names = [[self class] propertyNames];
         for (NSString *name in names) {
             NSString *propertyName = [self convertToJson:name];
@@ -90,12 +110,16 @@ static StringFormat MapperFormat;
     objc_property_t property = class_getProperty(objectClass, [name UTF8String]);
     NSString *attrs = [NSString stringWithCString:property_getAttributes(property) encoding:NSUTF8StringEncoding];
     NSArray *components = [attrs componentsSeparatedByString:@","];
-    
+    //no primitives are allowed
     if (components.count > 0) {
         if ([components[0] characterAtIndex:1] == 'c' || [components[0] characterAtIndex:1] == 'B') {
             return nil;
         }
-        class = NSClassFromString([components[0] componentsSeparatedByString:@"\""][1]);
+        components = [components[0] componentsSeparatedByString:@"\""];
+        if (components.count < 2) {
+            return nil;
+        }
+        class = NSClassFromString(components[1]);
     }
     return class;
 }
@@ -189,6 +213,14 @@ static StringFormat MapperFormat;
         return keys[0];
     }
     return nil;
+}
+
+- (NSDateFormatter *)dateFormatter {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
+    [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
+    return formatter;
 }
 
 #pragma mark - override NSObject

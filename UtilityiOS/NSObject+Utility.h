@@ -12,8 +12,14 @@
 
 - (BOOL)MKIsEqual:(id)object;
 - (id)MKCopyWithZone:(NSZone *)zone;
+- (id)MKCopyWithZone:(NSZone *)zone baseClass:(Class)baseClass;
+
 - (void)MKInitWithCoder:(NSCoder *)aDecoder;
+- (void)MKInitWithCoder:(NSCoder *)aDecoder baseClass:(Class)baseClass;
+
 - (void)MKEncodeWithCoder:(NSCoder *)aCoder;
+- (void)MKEncodeWithCoder:(NSCoder *)aCoder baseClass:(Class)baseClass;
+
 - (NSUInteger)MKHash;
 
 + (StringArr *)propertyNamesOfClass:(Class)objectClass;
@@ -23,5 +29,7 @@
  @param selector to be swizzled.
  @note The corresponding swizzled method with format swizzled_XXX should be implemeneted in your class for selector named XXX */
 + (void)swizzleSelector:(SEL)selector;
+
+- (NSString *)timestampGUID;
 
 @end

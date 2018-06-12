@@ -7,11 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "UIColor+Utility.h"
 
 typedef NS_ENUM(NSUInteger, AppThemeStyle) {
-    AppThemeStyleLight,
-    AppThemeStyleDark
+    AppThemeStyle_LIGHT,
+    AppThemeStyle_DARK
 };
+
+extern AppThemeStyle THEME_STYLE;
 
 @interface AppTheme : NSObject
 
@@ -20,12 +23,23 @@ typedef NS_ENUM(NSUInteger, AppThemeStyle) {
 
 //Abstracts
 
+//Appearance
+
++ (UIKeyboardAppearance)keyboardAppearance;
+
 //color
++ (UIColor *)barTintColor;
++ (UIColor *)barTextColor;
 + (UIColor *)seperatorColor;
 + (UIColor *)sectionHeaderTextColor;
 + (UIColor *)sectionHeaderBackgroundColor;
 + (UIColor *)sectionFooterTextColor;
 + (UIColor *)sectionFooterBackgroundColor;
++ (UIColor *)tableFooterBackgroundColor;
++ (UIColor *)tableCellBackgroundColor;
++ (UIColor *)tableCellAccessoryViewColor;
++ (UIImage *)tableCellDisclosureIndicatorImage;
+
 + (UIColor *)translusentBackground;
 + (UIColor *)VCBackgroundColor;
 + (UIColor *)VCForgroundColor;
@@ -59,16 +73,23 @@ typedef NS_ENUM(NSUInteger, AppThemeStyle) {
 + (UIColor *)textFieldPlaceholderColor;
 + (UIColor *)textFieldTextColor;
 
++ (UIColor *)badgeBackgroundColor;
++ (UIColor *)badgeTextColor;
 
 //font
++ (UIFont *)XXsmallLabelFont;
++ (UIFont *)XsmallLabelFont;
 + (UIFont *)smallLabelFont;
 + (UIFont *)mediumLabelFont;
 + (UIFont *)largeLabelFont;
++ (UIFont *)XlargeLabelFont;
 
++ (UIFont *)XXsmallBoldLabelFont;
++ (UIFont *)XsmallBoldLabelFont;
 + (UIFont *)smallBoldLabelFont;
 + (UIFont *)mediumBoldLabelFont;
 + (UIFont *)largeBoldLabelFont;
-+ (UIFont *)largeBoldTitleFont;
++ (UIFont *)XlargeBoldLabelFont;
 
 + (UIFont *)textViewFont;
 + (UIFont *)textFieldFont;

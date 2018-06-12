@@ -25,6 +25,7 @@
 }
 
 - (void)resetDates {
+    self.interval = [[MKInterval alloc] init];
     self.fromDate = nil;
     self.toDate = nil;
 }
@@ -171,6 +172,90 @@
     [range setStart:start];
     [range setEnd:end];
     return range;
+}
+
+- (void)extendEnd:(NSInteger)value {
+    self.end = @(self.end.integerValue+value);
+}
+
+- (void)extendStart:(NSInteger)value {
+    self.start = @(self.start.integerValue-value);
+}
+
+- (NSUInteger)lenght {
+    return labs(self.end.integerValue - self.start.integerValue);
+}
+
+- (BOOL)containsNumber:(NSNumber *)number {
+    //we want to include same
+    return self.start && self.end && number && [self.start compare:number] != NSOrderedDescending && [self.end compare:number] != NSOrderedAscending;
+}
+
+- (BOOL)strictlyContainsNumber:(NSNumber *)number {
+    //we don't want to include same
+    return self.start && self.end && number && [self.start compare:number] == NSOrderedAscending && [self.end compare:number] == NSOrderedDescending;
+}
+
+- (BOOL)containsRange:(MKRange *)range {
+    //we want to include same
+    return self.start && self.end && range.start && range.end && [self.start compare:range.start] != NSOrderedDescending && [self.end compare:range.end] != NSOrderedAscending;
+}
+
+- (BOOL)strictlyContainsRange:(MKRange *)range {
+    //we don't want to include same
+    return self.start && self.end && range.start && range.end && [self.start compare:range.start] == NSOrderedAscending && [self.end compare:range.end] == NSOrderedDescending;
+}
+
+- (MKRange *)unionWithRange:(MKRange *)range {
+    NSInteger from = range.start ? MIN(range.start.integerValue, self.start.integerValue) : self.start.integerValue;
+    NSInteger to = range.end ? MAX(range.end.integerValue, self.end.integerValue) : self.end.integerValue;
+    return [MKInterval rangeWithStart:@(from) end:@(to)];
+}
+
++ (NSArray<MKRange *> *)setMinusOfRange:(__kindof MKRange *)range1 withRange:(__kindof MKRange *)range2 {
+    if ([range2 containsRange:range1]) {
+        return @[];
+    }
+    else if ([range1 strictlyContainsRange:range2]) {
+        MKRange *leftRange = [MKRange rangeWithStart:range1.start end:range2.start];
+        MKRange *rightRange = [MKRange rangeWithStart:range2.end end:range1.end];
+        return @[leftRange, rightRange];
+    }
+    else if ([range2 strictlyContainsNumber:range1.start]) {
+        MKRange *leftRange = [MKRange rangeWithStart:range1.start end:range2.start];
+        return @[leftRange];
+    }
+    else if ([range1 strictlyContainsNumber:range2.end]) {
+        MKRange *rightRange = [MKRange rangeWithStart:range2.end end:range1.end];
+        return @[rightRange];
+    }
+    return @[range1];
+}
+
+- (void)adjustContinuousRangeWithNumber:(NSNumber *)number {
+    if (!self.start) {
+        self.start = number;
+        self.end = number;
+    }
+    else if ([self.start compare:number] == NSOrderedSame) {
+        if ([self.start compare:self.end] == NSOrderedAscending) {
+            self.start = @(number.integerValue+1);
+        }
+    }
+    else if ([self.end compare:number] == NSOrderedSame) {
+        if ([self.start compare:self.end] == NSOrderedDescending) {
+            self.end = @(number.integerValue-1);
+        }
+    }
+    else if ([self containsNumber:number]) {
+        self.end = number;
+    }
+    else if ([self.start compare:number] == NSOrderedAscending) {
+        self.end = number;
+    }
+    else {
+        self.start = number;
+    }
 }
 
 @end

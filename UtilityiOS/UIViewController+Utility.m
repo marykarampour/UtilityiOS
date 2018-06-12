@@ -24,4 +24,35 @@
     [childVC didMoveToParentViewController:self];
 }
 
+- (CGFloat)topBarHeight {
+    if (@available(iOS 11.0, *)) {
+        return 0.0;
+    }
+    else {
+        return self.navigationController.navigationBar.frame.size.height + [Constants safeAreaInsets];
+    }
+}
+
+- (void)presentViewController:(UIViewController *)VC animationType:(NSString *)type timingFunction:(NSString *)timingFunction completion:(void (^)(void))completion {
+    CATransition *transition = [[CATransition alloc] init];
+    transition.duration = [Constants TransitionAnimationDuration];
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:timingFunction];
+    transition.type = kCATransitionPush;
+    transition.subtype = type;
+    
+    [self.view.window.layer addAnimation:transition forKey:nil];
+    [self presentViewController:VC animated:NO completion:completion];
+}
+
+- (void)dismissViewControllerAnimationType:(NSString *)type timingFunction:(NSString *)timingFunction completion:(void (^)(void))completion {
+    CATransition *transition = [[CATransition alloc] init];
+    transition.duration = [Constants TransitionAnimationDuration];
+    transition.timingFunction = [CAMediaTimingFunction functionWithName:timingFunction];
+    transition.type = kCATransitionPush;
+    transition.subtype = type;
+    
+    [self.view.window.layer addAnimation:transition forKey:nil];
+    [self dismissViewControllerAnimated:NO completion:completion];
+}
+
 @end

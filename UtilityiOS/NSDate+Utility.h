@@ -20,6 +20,7 @@
 - (NSDate *)endOfDay;
 
 - (NSDate *)weekStartDate;
+- (NSInteger)dayDifferenceWithWeekStartDate;
 
 - (NSDate *)updateCalendarUnit:(NSCalendarUnit)unit value:(NSInteger)value;
 - (NSUInteger)valueForCalendarUnit:(NSCalendarUnit)unit;
@@ -38,5 +39,10 @@
 - (NSUInteger)month;
 
 - (NSNumber *)unixtimestamp;
+
+/** @brief array of the first character of day symbols */
++ (StringArr *)charDaysOfWeek;
++ (StringArr *)daysOfWeek;
++ (StringArr *)monthsOfYear;
 
 @end

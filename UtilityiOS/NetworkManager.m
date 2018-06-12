@@ -89,7 +89,8 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
     operator requestOperator = (operator)[self.manager methodForSelector:selector];
     DEBUGLOG(@"Request Headers: %@", [self.manager.requestSerializer HTTPRequestHeaders]);
     DEBUGLOG(@"Parameters: %@", parameters.description);
-
+    [NetworkManager prettyPrintJSON:parameters];
+    
     return requestOperator(self.manager, selector, url, parameters,
                            ^(NSURLSessionDataTask *task, id responseObject) {
                                DEBUGLOG(@"Success Response: %@ - %@", task.response, responseObject);
@@ -102,8 +103,6 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
                            },
                            ^(NSURLSessionDataTask *task, NSError *error) {
                                DEBUGLOG(@"Error Response: %@ - %@", task.response, error.localizedDescription);
-                               DEBUGLOG(@"Parameters: %@", parameters.description);
-
                                completion(nil, error);
                            });
 }
@@ -186,5 +185,15 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
     [self.manager.requestSerializer setAuthorizationHeaderFieldWithUsername:[Constants authorizationUsername] password:[Constants authorizationPassword]];
 }
 
+
++ (void)prettyPrintJSON:(NSDictionary *)dictionaryData {
+    if (dictionaryData) {
+        NSError *error;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionaryData options:0 error:&error];
+        if (jsonData) {
+            DEBUGLOG(@"Prettyprinted parameters: %@", [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding]);
+        }
+    }
+}
 
 @end

@@ -23,24 +23,26 @@ static dispatch_queue_t dispatch;
     }
 }
 
-- (instancetype)initWithCFIType:(NSInteger)type {
+- (instancetype)initWithType:(NSInteger)type {
     return [self init];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.view.backgroundColor = [UIColor whiteColor];
+    self.view.backgroundColor = [AppTheme VCBackgroundColor];
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 1.0)];
-    view.backgroundColor = [AppTheme VCBackgroundColor];
+    view.backgroundColor = [AppTheme tableFooterBackgroundColor];
+    self.tableView.tableFooterView = view;
+
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.tableView.separatorColor = [AppTheme seperatorColor];
-    self.tableView.tableFooterView = view;
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.extendedLayoutIncludesOpaqueBars = NO;
     self.tableView.alwaysBounceHorizontal = NO;
     self.edgesForExtendedLayout = UIRectEdgeNone;
+    
     self.tableView.estimatedRowHeight = [Constants DefaultRowHeight];
     self.tableView.estimatedSectionHeaderHeight = 0;
     self.tableView.estimatedSectionFooterHeight = 0;
@@ -97,17 +99,17 @@ static dispatch_queue_t dispatch;
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
     
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    if ([header respondsToSelector:NSSelectorFromString(@"textLabel")]) {
+    if ([header respondsToSelector:@selector(textLabel)]) {
         [header.textLabel setTextColor:[AppTheme sectionHeaderTextColor]];
     }
-    if ([header respondsToSelector:NSSelectorFromString(@"backgroundView")]) {
+    if ([header respondsToSelector:@selector(backgroundView)]) {
         header.backgroundView.backgroundColor = [AppTheme sectionHeaderBackgroundColor];
     }
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section {
     UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *)view;
-    if ([footer respondsToSelector:NSSelectorFromString(@"backgroundView")]) {
+    if ([footer respondsToSelector:@selector(backgroundView)]) {
         footer.backgroundView.backgroundColor = [AppTheme sectionFooterBackgroundColor];
     }
 }
@@ -230,6 +232,14 @@ static dispatch_queue_t dispatch;
             [self.tableView endUpdates];
         });
     });
+}
+
+- (void)deselectAllExcept:(NSIndexPath *)indexPath animated:(BOOL)animated {
+    for (NSIndexPath *path in [self.tableView indexPathsForSelectedRows]) {
+        if (path.section == indexPath.section && path.row != indexPath.row) {
+            [self.tableView deselectRowAtIndexPath:path animated:animated];
+        }
+    }
 }
 
 - (void)createTableFooterWithTitle:(NSString *)title {

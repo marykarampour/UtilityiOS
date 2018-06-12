@@ -8,17 +8,38 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIView (Utility)
+@interface UIView (Constraints)
 
 - (void)removeConstraintsMask;
 - (void)addConstraintsWithFormat:(NSString * _Nullable)format options:(NSLayoutFormatOptions)opts metrics:(nullable NSDictionary<NSString *,id> *)metrics views:(NSDictionary<NSString *, id> *_Nullable)views;
 - (void)addConstraintWithItem:(id _Nullable)view1 attribute:(NSLayoutAttribute)attr1 relatedBy:(NSLayoutRelation)relation toItem:(nullable id)view2 attribute:(NSLayoutAttribute)attr2 multiplier:(CGFloat)multiplier constant:(CGFloat)c;
 
+- (void)constraintSidesForView:(__kindof UIView *)view insets:(UIEdgeInsets)insets;
+- (void)constraintSidesForView:(__kindof UIView *)view;
 - (void)constraintSizeForView:(__kindof UIView *)view;
 - (void)constraintWidthForView:(__kindof UIView *)view;
 - (void)constraintHeightForView:(__kindof UIView *)view;
-
+- (void)constraintWidth:(CGFloat)width forView:(__kindof UIView *)view;
+- (void)constraintHeight:(CGFloat)height forView:(__kindof UIView *)view;
+- (void)constraintSameWidthHeightForView:(__kindof UIView *)view;
 - (void)constraint:(NSLayoutAttribute)attr view:(__kindof UIView *)view;
 - (void)constraint:(NSLayoutAttribute)attr view:(__kindof UIView *)view margin:(CGFloat)margin;
+- (void)constraintSame:(NSLayoutAttribute)attr view1:(__kindof UIView *)view1 view2:(__kindof UIView *)view2;
 
 @end
+
+@interface UIView (Utility)
+
+- (void)removeAllSubviews;
+
+@end
+
+@interface UIView (CoreText)
+
+- (void)rotateAttributedText:(NSAttributedString *)text angle:(CGFloat)angle rect:(CGRect)rect alignCenter:(BOOL)alignCenter;
+
+@end
+
+
+
+

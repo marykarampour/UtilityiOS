@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "AFNetworking.h"
-#import "JSONModel.h"
 #import "Constants.h"
 
 typedef NS_ENUM(NSUInteger, NetworkRequestType) {
@@ -29,7 +28,8 @@ typedef NS_ENUM(NSUInteger, NetworkContentType) {
 };
 
 typedef void (^ServerResultErrorBlock) (id result, NSError *error);
-
+typedef void (^ServerNumberErrorBlock) (NSNumber *num, NSError *error);
+typedef void (^ServerArrayErrorBlock) (NSArray *arr, NSError *error);
 
 @interface MultipartInfo : NSObject
 
@@ -50,6 +50,7 @@ typedef void (^ServerResultErrorBlock) (id result, NSError *error);
 - (void)setHeaders:(NSDictionary *)headers;
 - (void)resetHeaders:(NSArray *)headers;
 - (void)resetAuthorizationHeader;
++ (void)prettyPrintJSON:(NSDictionary *)dictionaryData;
 
 - (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NetworkRequestType)type parameters:(NSDictionary *)parameters completion:(ServerResultErrorBlock)completion;
 

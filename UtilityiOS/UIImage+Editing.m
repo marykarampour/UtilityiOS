@@ -10,6 +10,33 @@
 
 @implementation UIImage (Editing)
 
+- (UIImage *)templateImage {
+    return [self imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+}
+
+- (UIImage *)resizeToWidth:(float)width {
+    
+    UIImage *scaledImage = nil;
+    if (self.size.width != width) {
+        CGFloat height = floorf(self.size.height * (width / self.size.width));
+        CGSize size = CGSizeMake(width, height);
+        UIGraphicsBeginImageContext(size);
+        [self drawInRect:CGRectMake(0.0f, 0.0f, size.width, size.height)];
+        scaledImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+    }
+    return scaledImage;
+}
+
+- (UIImage *)roundedImage:(CGRect)frame WithRadious:(float)radious {
+    UIGraphicsBeginImageContextWithOptions(frame.size, NO, 1.0);
+    [[UIBezierPath bezierPathWithRoundedRect:frame cornerRadius:radious] addClip];
+    [self drawInRect:frame];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image;
+}
+
 - (NSData *)shrink {
     
     long maxVal = 200000;
@@ -80,11 +107,11 @@
     unsigned char *allBytes = (unsigned char *)pixelData.bytes;
     
     for (unsigned int i=0; i<pixelData.length; i+=4) {
-        if ((CGFloat)allBytes[i+3] < 1.0) {
-            whiteCount ++;
+        if ((CGFloat)allBytes[i] < 1.0 || (CGFloat)allBytes[i+1] < 1.0 || (CGFloat)allBytes[i+2] < 1.0 || (CGFloat)allBytes[i+3] < 1.0) {
+            nonWhiteCount ++;
         }
         else {
-            nonWhiteCount ++;
+            whiteCount ++;
         }
     }
     

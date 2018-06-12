@@ -10,6 +10,10 @@
 
 @implementation MKBadgeItem
 
+- (NSString *)keyForBadge {
+    return self.name;
+}
+
 - (NSString *)description {
     NSInteger count = self.count.integerValue;
     if (count > 0) {

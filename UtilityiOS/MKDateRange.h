@@ -42,7 +42,22 @@ typedef NSMutableArray<MKDateRange *>   MDatePairArr;
 @property (nonatomic, strong) NSNumber *start;
 @property (nonatomic, strong) NSNumber *end;
 
+//increases the value of end
+- (void)extendEnd:(NSInteger)value;
+//decreases the value of start
+- (void)extendStart:(NSInteger)value;
+
+- (NSUInteger)lenght;
+
 + (instancetype)rangeWithStart:(NSNumber *)start end:(NSNumber *)end;
+
+- (BOOL)containsNumber:(NSNumber *)number;
+- (BOOL)containsRange:(__kindof MKRange *)range;
+- (BOOL)strictlyContainsNumber:(NSNumber *)number;
+- (BOOL)strictlyContainsRange:(__kindof MKRange *)range;
++ (NSArray<__kindof MKRange *> *)setMinusOfRange:(__kindof MKRange *)range1 withRange:(__kindof MKRange *)range2;
+- (void)adjustContinuousRangeWithNumber:(NSNumber *)number;
+- (__kindof MKRange *)unionWithRange:(__kindof MKRange *)range;
 
 @end
 
@@ -52,3 +67,6 @@ typedef NSMutableArray<MKDateRange *>   MDatePairArr;
 - (MKDateRange *)dateRange;
 
 @end
+
+
+typedef NSArray<MKRange *>              MKRangeArr;

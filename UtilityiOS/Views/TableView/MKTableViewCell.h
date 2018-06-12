@@ -1,16 +1,20 @@
 //
 //  MKTableViewCell.h
-//  KaChing-v2
+//  UtilityiOS
 //
-//  Created by Maryam Karampour on 2018-01-15.
-//  Copyright © 2018 BHS Consultants. All rights reserved.
+//  Created by Maryam Karampour on 2017-04-23.
+//  Copyright © 2017 Maryam Karampour. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
+#import "MKCellContentController.h"
 
 @interface MKTableViewCell : UITableViewCell
 
-+ (NSString *)cellIdentifier;
+@property (nonatomic, strong) MKCellContentController *cellController;
+
++ (NSString *)identifier;
 + (CGFloat)estimatedHeight;
++ (UIImageView *)imageAccessoryView;
 
 @end

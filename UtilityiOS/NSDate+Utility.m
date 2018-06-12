@@ -112,6 +112,12 @@
     [components setDay:(components.day - components.weekday + 1)];
     return [cal dateFromComponents:components];
 }
+
+- (NSInteger)dayDifferenceWithWeekStartDate {
+    NSDate *startDate = [self weekStartDate];
+    return [NSDate daysBetweenFromDate:self toDate:startDate];
+}
+
 #warning - fix these
 #pragma mark - update
 
@@ -198,9 +204,10 @@
 }
 
 - (NSString *)dateStringWithFormat:(NSString *)format {
-    
+
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:format];
+    [formatter setLocale:[NSLocale currentLocale]];
+    [formatter setLocalizedDateFormatFromTemplate:format];
     return [formatter stringFromDate:self];
 }
 
@@ -267,5 +274,23 @@
 - (NSNumber *)unixtimestamp {
     return @([self timeIntervalSince1970]);
 }
+
++ (StringArr *)charDaysOfWeek {
+    StringArr *days = [[NSDateFormatter alloc] init].shortWeekdaySymbols;
+    MStringArr *arr = [[NSMutableArray alloc] init];
+    [days enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        [arr addObject:[obj substringToIndex:1]];
+    }];
+    return arr;
+}
+
++ (StringArr *)daysOfWeek {
+    return [[NSDateFormatter alloc] init].shortWeekdaySymbols;
+}
+
++ (StringArr *)monthsOfYear {
+    return [[NSDateFormatter alloc] init].shortMonthSymbols;
+}
+
 
 @end

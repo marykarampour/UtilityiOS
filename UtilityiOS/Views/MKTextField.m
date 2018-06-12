@@ -25,7 +25,7 @@
     if (self = [super init]) {
         self.textObject = [[MKText alloc] init];
         
-        self.clearButtonMode = UITextFieldViewModeWhileEditing;
+        self.clearButtonMode = UITextFieldViewModeNever;
         
         if (TextFieldTypePlain & type) {
             self.autocorrectionType = UITextAutocorrectionTypeNo;
@@ -45,13 +45,16 @@
         
         self.font = [AppTheme textFieldFont];
         self.textColor = [AppTheme textFieldTextColor];
-        self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:placeholder attributes:@{NSForegroundColorAttributeName:[AppTheme textFieldPlaceholderColor]}];
+        [self setPlaceholderText:placeholder];
         self.backgroundColor = [UIColor whiteColor];
-        
-        self.placeholder = placeholder;
     }
     
     return self;
+}
+
+- (void)setPlaceholderText:(NSString *)placeholder {
+    self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:placeholder attributes:@{NSForegroundColorAttributeName:[AppTheme textFieldPlaceholderColor]}];
+    self.placeholder = placeholder;
 }
 
 // placeholder position
