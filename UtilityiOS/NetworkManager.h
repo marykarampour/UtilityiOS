@@ -50,6 +50,7 @@ typedef void (^ServerArrayErrorBlock) (NSArray *arr, NSError *error);
 - (void)setHeaders:(NSDictionary *)headers;
 - (void)resetHeaders:(NSArray *)headers;
 - (void)resetAuthorizationHeader;
++ (void)prettyPrintJSON:(NSDictionary *)dictionaryData;
 
 - (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NetworkRequestType)type parameters:(NSDictionary *)parameters completion:(ServerResultErrorBlock)completion;
 

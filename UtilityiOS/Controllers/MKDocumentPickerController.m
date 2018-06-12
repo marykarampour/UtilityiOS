@@ -10,27 +10,46 @@
 #import "UIViewController+Alert.h"
 #import "MKAssets.h"
 
-static StringArr *docTypes;
+static DictNumString *supportedDocTypes;
+static StringArr *acceptedDocTypes;
 
 @implementation MKDocumentPickerController
 
 + (void)initialize {
-    if (!docTypes) {
-        docTypes = @[(NSString *)kUTTypePDF,
-                     (NSString *)kUTTypeImage,
-                     (NSString *)kUTTypeJPEG,
-                     (NSString *)kUTTypeJPEG2000,
-                     (NSString *)kUTTypeTIFF,
-                     (NSString *)kUTTypePNG,
-                     (NSString *)kUTTypeText,
-                     (NSString *)kUTTypeContent,
-                     @"com.microsoft.word.doc"];
+    if (!supportedDocTypes) {
+        supportedDocTypes = @{@(MKDocumentType_PDF):(NSString *)kUTTypePDF,
+                              @(MKDocumentType_IMAGE):(NSString *)kUTTypeImage,
+                              @(MKDocumentType_JPEG):(NSString *)kUTTypeJPEG,
+                              @(MKDocumentType_JPEG2000):(NSString *)kUTTypeJPEG2000,
+                              @(MKDocumentType_TIFF):(NSString *)kUTTypeTIFF,
+                              @(MKDocumentType_PNG):(NSString *)kUTTypePNG,
+                              @(MKDocumentType_TEXT):(NSString *)kUTTypeText,
+                              @(MKDocumentType_CONTENT):(NSString *)kUTTypeContent,
+                              @(MKDocumentType_DOC): @"com.microsoft.word.doc"};
     }
+}
+
+- (void)setAcceptedDocumentTypes:(MKDocumentType)docType {
+    MStringArr *types = [[NSMutableArray alloc] init];
+    NSUInteger type = MKDocumentType_PDF;
+    for (unsigned int i=1; type < MKDocumentType_COUNT; type = 1U << i, i++) {
+        if (docType & type) {
+            NSString *doc = [self docTypeNameForType:type];
+            if (doc) {
+                [types addObject:doc];
+            }
+        }
+    }
+    acceptedDocTypes = types;
+}
+
+- (NSString *)docTypeNameForType:(MKDocumentType)type {
+    return [supportedDocTypes objectForKey:@(type)];
 }
 
 - (void)showDocumentPicker {
     switch (self.type) {
-        case DocumentPickerType_Browser: {
+        case MKDocumentPickerType_Browser: {
             if (@available(iOS 11.0, *)) {
                 [self presentBrowser];
             }
@@ -39,7 +58,7 @@ static StringArr *docTypes;
             }
         }
             break;
-        case DocumentPickerType_MenuCamera: {
+        case MKDocumentPickerType_MenuCamera: {
             [self presentMenuCamera];
         }
             break;
@@ -52,21 +71,21 @@ static StringArr *docTypes;
 
 - (void)presentBrowser {
     if (@available(iOS 11.0, *)) {
-        UIDocumentBrowserViewController *pickerVC = [[UIDocumentBrowserViewController alloc] initForOpeningFilesWithContentTypes:docTypes];
+        UIDocumentBrowserViewController *pickerVC = [[UIDocumentBrowserViewController alloc] initForOpeningFilesWithContentTypes:acceptedDocTypes];
         pickerVC.delegate = self;
         [self.viewController presentViewController:pickerVC animated:YES completion:^{}];
     }
 }
 
 - (void)presentMenu {
-    UIDocumentMenuViewController *pickerVC = [[UIDocumentMenuViewController alloc] initWithDocumentTypes:docTypes inMode:UIDocumentPickerModeImport];
+    UIDocumentMenuViewController *pickerVC = [[UIDocumentMenuViewController alloc] initWithDocumentTypes:acceptedDocTypes inMode:UIDocumentPickerModeImport];
     pickerVC.delegate = self;
     [self addImagePickerWithType:UIImagePickerControllerSourceTypePhotoLibrary toMenu:pickerVC title:[Constants Photo_Library_STR] image:[MKAssets Photo_Library_Icon]];
     [self.viewController presentViewController:pickerVC animated:YES completion:^{}];
 }
 
 - (void)presentMenuCamera {
-    UIDocumentMenuViewController *pickerVC = [[UIDocumentMenuViewController alloc] initWithDocumentTypes:docTypes inMode:UIDocumentPickerModeImport];
+    UIDocumentMenuViewController *pickerVC = [[UIDocumentMenuViewController alloc] initWithDocumentTypes:acceptedDocTypes inMode:UIDocumentPickerModeImport];
     pickerVC.delegate = self;
     [self addImagePickerWithType:UIImagePickerControllerSourceTypePhotoLibrary toMenu:pickerVC title:[Constants Photo_Library_STR] image:[MKAssets Photo_Library_Icon]];
     [self addImagePickerWithType:UIImagePickerControllerSourceTypeCamera toMenu:pickerVC title:[Constants Camera_STR] image:[MKAssets Camera_Icon]];

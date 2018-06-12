@@ -49,7 +49,7 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
 }
 
 + (NSString *)BaseTestingInURL {
-    return @"://10.1.0.119";//same as @"://morpheus.baldhead.com"
+    return @"://10.1.0.119";//same as @"://kaching.baldhead.com"
 }
 
 + (NSString *)BaseTestingOutURL {

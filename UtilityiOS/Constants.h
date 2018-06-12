@@ -105,6 +105,9 @@ typedef NSDictionary<NSString *, NSNumber *>                    DictStringNum;
 typedef NSDictionary<NSNumber *, NSNumber *>                    DictNumNum;
 typedef NSMutableDictionary<NSNumber *, NSNumber *>             MDictNumNum;
 
+typedef NSDictionary<NSNumber *, NSString *>                    DictNumString;
+typedef NSMutableDictionary<NSNumber *, NSString *>             MDictNumString;
+
 typedef NSDictionary<NSString *, StringArr *>                   DictStringStringArr;
 typedef NSMutableDictionary<NSString *, MStringArr *>           MDictStringStringArr;
 
