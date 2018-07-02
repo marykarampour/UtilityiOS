@@ -225,6 +225,9 @@ extern NSString * const DateFormatWeekdayDayStyle;
 + (NSString *)Invalid_STR;
 + (NSString *)Error_STR;
 
++ (NSString *)Placeholder_Date_STR;
++ (NSString *)Placeholder_Phone_STR;
+
 #pragma mark - app
 
 + (BOOL)isIPhone;

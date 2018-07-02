@@ -313,6 +313,14 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
     return LOCALIZED(@"Error");
 }
 
++ (NSString *)Placeholder_Date_STR {
+    return LOCALIZED(@"1980-02-28");
+}
+
++ (NSString *)Placeholder_Phone_STR {
+    return LOCALIZED(@"12223334444");
+}
+
 + (float)GeoFenceRadiousKiloMeter {
     return 1.0;
 }
