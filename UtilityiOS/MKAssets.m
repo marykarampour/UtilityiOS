@@ -19,4 +19,8 @@
     return [UIImage imageNamed:@"photo-library-border-icon"];
 }
 
++ (UIImage *)App_Placeholder_Icon {
+    return [UIImage imageNamed:@"AppIcon"];
+}
+
 @end

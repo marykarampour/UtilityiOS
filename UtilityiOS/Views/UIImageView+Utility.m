@@ -8,6 +8,7 @@
 
 #import "UIImageView+Utility.h"
 #import "UIImageView+AFNetworking.h"
+#import "MKAssets.h"
 
 @implementation UIImageView (Utility)
 
@@ -35,7 +36,7 @@
 
 - (void)setImageWithURLString:(NSString *)url {
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30.0];
-    [self setImageWithURLRequest:request placeholderImage:nil success:nil failure:nil];
+    [self setImageWithURLRequest:request placeholderImage:[MKAssets App_Placeholder_Icon] success:nil failure:nil];
 }
 
 + (UIImageView *)roundedImageViewWithSize:(CGFloat)size {
