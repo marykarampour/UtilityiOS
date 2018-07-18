@@ -12,5 +12,6 @@
 
 + (UIImage *)Camera_Icon;
 + (UIImage *)Photo_Library_Icon;
++ (UIImage *)App_Placeholder_Icon;
 
 @end

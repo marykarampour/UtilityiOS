@@ -276,16 +276,16 @@ static dispatch_queue_t dispatch;
 }
 
 - (void)getBadge:(NSString *)badgeName {
-    [ServerController getBadgeCountWithCompletion:^(id result, NSError *error) {
-        if (!error && result) {
-            for (MKBadgeItem *badge in result) {
-                if ([badge.name caseInsensitiveCompare:badgeName] == NSOrderedSame) {
-                    [self updateBadge:badge];
-                    break;
-                }
-            }
+    for (MKBadgeItem *badge in [self updatedBadges]) {
+        if ([badge.name caseInsensitiveCompare:badgeName] == NSOrderedSame) {
+            [self updateBadge:badge];
+            break;
         }
-    }];
+    }
+}
+
+- (NSArray<MKBadgeItem *> *)updatedBadges {
+    return @[];
 }
 
 - (void)updateBadge:(MKBadgeItem *)badge {
