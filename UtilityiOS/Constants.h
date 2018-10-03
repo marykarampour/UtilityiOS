@@ -51,6 +51,7 @@ enum {
     ServerEnvironment_TESTING_IN,
     ServerEnvironment_TESTING_OUT,
     ServerEnvironment_LOCAL,
+    ServerEnvironment_QA,
     ServerEnvironment_PROD,
     ServerEnvironment_BASE
 };
@@ -149,6 +150,7 @@ extern NSString * const DateFormatWeekdayDayStyle;
 + (NSString *)BaseDevInURL;
 + (NSString *)BaseDevOutURL;
 + (NSString *)BaseProductionURL;
++ (NSString *)BaseQAURL;
 + (NSString *)BaseURLString;
 + (NSString *)BasePort;
 + (NSString *)TestUsername;

@@ -54,6 +54,10 @@ typedef NS_ENUM(NSUInteger, ViewControllerTransitionResult) {
 - (void)getBadge:(NSString * _Nonnull)badgeName;
 - (void)updateBadge:(MKBadgeItem * _Nonnull)badge;
 
+//Abstract
+/** @brief subclass must return updated badges to be used on badge rows **/
+- (NSArray<MKBadgeItem *> *)updatedBadges;
+
 #pragma mark - custom views
 
 - (UIView *)defaultSectionFooter;
