@@ -642,7 +642,7 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
 }
 
 + (NSString *)Regex_Email_NoCheck {
-    return @"^([A-Z0-9a-z\\._%+-@]){1,256}$";
+    return @"^([A-Z0-9a-z\\._%+-@]){0,256}$";
 }
 
 + (NSString *)Regex_Email_Has_AT {
