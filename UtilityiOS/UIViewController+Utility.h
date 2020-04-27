@@ -18,7 +18,7 @@
 /** @brief height of safe areas, status bar and/or nav bar when applicable. Only relevent in iOS lower than 11.0 */
 - (CGFloat)topBarHeight;
 
-- (void)presentViewController:(__kindof UIViewController *)VC timingFunction:(NSString *)timingFunction animationType:(NSString *)type completion:(void (^)(void))completion;
+- (void)presentViewController:(__kindof UIViewController *)VC animationType:(NSString *)type timingFunction:(NSString *)timingFunction completion:(void (^)(void))completion;
 - (void)dismissViewControllerAnimationType:(NSString *)type timingFunction:(NSString *)timingFunction completion:(void (^)(void))completion;
 
 @end
