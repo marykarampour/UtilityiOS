@@ -47,7 +47,7 @@
         VC.modalPresentationStyle = UIModalPresentationFullScreen;
     }
     
-    [self presentViewController:VC animated:NO completion:completion];
+    [self presentViewController:VC animated:(type.length == 0) completion:completion];
 }
 
 - (void)dismissViewControllerAnimationType:(NSString *)type timingFunction:(NSString *)timingFunction completion:(void (^)(void))completion {
