@@ -34,13 +34,19 @@
 }
 
 - (void)presentViewController:(UIViewController *)VC animationType:(NSString *)type timingFunction:(NSString *)timingFunction completion:(void (^)(void))completion {
-    CATransition *transition = [[CATransition alloc] init];
-    transition.duration = [Constants TransitionAnimationDuration];
-    transition.timingFunction = [CAMediaTimingFunction functionWithName:timingFunction];
-    transition.type = kCATransitionPush;
-    transition.subtype = type;
+    if (type.length) {
+        CATransition *transition = [[CATransition alloc] init];
+        transition.duration = [Constants TransitionAnimationDuration];
+        transition.timingFunction = [CAMediaTimingFunction functionWithName:timingFunction];
+        transition.type = kCATransitionPush;
+        transition.subtype = type;
+        [self.view.window.layer addAnimation:transition forKey:nil];
+    }
+
+    if (@available(iOS 13.0, *)) {
+        VC.modalPresentationStyle = UIModalPresentationFullScreen;
+    }
     
-    [self.view.window.layer addAnimation:transition forKey:nil];
     [self presentViewController:VC animated:NO completion:completion];
 }
 
