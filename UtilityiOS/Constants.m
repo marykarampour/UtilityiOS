@@ -64,6 +64,10 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
     return @"://neomorpheus.baldhead.com";
 }
 
++ (NSString *)BaseQAURL {
+    return @"://";
+}
+
 + (NSString *)BaseProductionURL {
     return @"://";
 }
@@ -313,6 +317,14 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
     return LOCALIZED(@"Error");
 }
 
++ (NSString *)Placeholder_Date_STR {
+    return LOCALIZED(@"1980-02-28");
+}
+
++ (NSString *)Placeholder_Phone_STR {
+    return LOCALIZED(@"12223334444");
+}
+
 + (float)GeoFenceRadiousKiloMeter {
     return 1.0;
 }
@@ -324,6 +336,7 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
 + (NSString *)BaseURLString {
     NSString *https = [Constants USING_HTTPS] ? @"https" : @"http";
     NSString *url = @"";
+    NSString *port = [Constants BasePort].length ? [NSString stringWithFormat:@":%@", [Constants BasePort]] : @"";
     switch ([Constants ServerEnvironmentVariable]) {
         case ServerEnvironment_PROD:
             url = [Constants BaseProductionURL];
@@ -351,7 +364,7 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
             url = [Constants BaseDevOutURL];
             break;
     }
-    return [NSString stringWithFormat:@"%@%@:%@", https, url, [Constants BasePort]];
+    return [NSString stringWithFormat:@"%@%@%@", https, url, port];
 }
 
 + (NSURL *)BaseURL {
@@ -634,7 +647,7 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
 }
 
 + (NSString *)Regex_Email_NoCheck {
-    return @"^([A-Z0-9a-z\\._%+-@]){1,256}$";
+    return @"^([A-Z0-9a-z\\._%+-@]){0,256}$";
 }
 
 + (NSString *)Regex_Email_Has_AT {

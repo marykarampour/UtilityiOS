@@ -95,10 +95,9 @@
             regex = [Constants Regex_Gender];
         }
             break;
+        case TextType_String:
         default:
-            regex = [Constants Regex_CharRange];
-            regex = [NSString stringWithFormat:regex, 0, length];
-            break;
+            return self.length <= length;
     }
     if (regex) {
         predicate = [NSPredicate predicateWithFormat:format, regex];

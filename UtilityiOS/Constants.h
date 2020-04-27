@@ -51,6 +51,7 @@ enum {
     ServerEnvironment_TESTING_IN,
     ServerEnvironment_TESTING_OUT,
     ServerEnvironment_LOCAL,
+    ServerEnvironment_QA,
     ServerEnvironment_PROD,
     ServerEnvironment_BASE
 };
@@ -149,6 +150,7 @@ extern NSString * const DateFormatWeekdayDayStyle;
 + (NSString *)BaseDevInURL;
 + (NSString *)BaseDevOutURL;
 + (NSString *)BaseProductionURL;
++ (NSString *)BaseQAURL;
 + (NSString *)BaseURLString;
 + (NSString *)BasePort;
 + (NSString *)TestUsername;
@@ -224,6 +226,9 @@ extern NSString * const DateFormatWeekdayDayStyle;
 + (NSString *)NoCamera_STR;
 + (NSString *)Invalid_STR;
 + (NSString *)Error_STR;
+
++ (NSString *)Placeholder_Date_STR;
++ (NSString *)Placeholder_Phone_STR;
 
 #pragma mark - app
 
