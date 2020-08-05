@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "WebKit/WebKit.h"
 
 @interface MKPreviewView : UIView
 
 @property (nonatomic, strong) UIButton *leftButton;
 @property (nonatomic, strong) UIButton *rightButton;
-@property (nonatomic, strong) UIWebView *view;
+@property (nonatomic, strong) WKWebView *view;
 
 @end
