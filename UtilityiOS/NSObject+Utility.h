@@ -10,7 +10,10 @@
 
 @interface NSObject (Utility)
 
+/** @brief checks properties of self.class */
 - (BOOL)MKIsEqual:(id)object;
+/** @brief checks properties given */
+- (BOOL)MKIsEqual:(id)object properties:(StringArr *)properties;
 - (id)MKCopyWithZone:(NSZone *)zone;
 - (id)MKCopyWithZone:(NSZone *)zone baseClass:(Class)baseClass;
 
@@ -22,14 +25,21 @@
 
 - (NSUInteger)MKHash;
 
-+ (StringArr *)propertyNamesOfClass:(Class)objectClass;
+/** @brief Returns YES if all properties are null */
+- (BOOL)allIsNull;
 
-+ (void)swizzleSelectorOriginal:(SEL)originalSelector swizzled:(SEL)swizzledSelector;
-/** @brief This method uses above to swizzle a method
++ (StringArr *)propertyNamesOfClass:(Class)objectClass;
++ (NSDictionary *)attributePropertyNamesOfClass:(Class)objectClass;
++ (Class)classOfProperty:(NSString *)name forObjectClass:(Class)objectClass;
+
++ (void)swizzleSelectorOriginal:(SEL)originalSelector swizzled:(SEL)swizzledSelector isClassMethod:(BOOL)isClassMethod;
+
+/** @brief This method uses swizzleSelectorOriginal:swizzled:isClassMethod to swizzle a method
  @param selector to be swizzled.
  @note The corresponding swizzled method with format swizzled_XXX should be implemeneted in your class for selector named XXX */
-+ (void)swizzleSelector:(SEL)selector;
++ (void)swizzleSelector:(SEL)selector isClassMethod:(BOOL)isClassMethod;
 
-- (NSString *)timestampGUID;
++ (NSString *)GUID;
++ (NSString *)timestampGUID;
 
 @end

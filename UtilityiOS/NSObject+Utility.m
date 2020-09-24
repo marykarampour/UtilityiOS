@@ -7,47 +7,43 @@
 //
 
 #import "NSObject+Utility.h"
+#import "NSString+Utility.h"
 #import <objc/runtime.h>
 
 @implementation NSObject (Utility)
 
 - (BOOL)MKIsEqual:(id)object {
+    return [self MKIsEqual:object properties:[self.class propertyNamesOfClass:self.class]];
+}
+
+- (BOOL)MKIsEqual:(id)object properties:(StringArr *)properties {
     if (object == self) {
         return YES;
     }
     if (!object || ([object class] != [self class])) {
         return NO;
     }
-    
-    unsigned int count = 0;
-    objc_property_t *properties = class_copyPropertyList([self class], &count);
-    
-    for (unsigned int i=0; i<count; i++) {
-        NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
+    for (NSString *name in properties) {
         id valueObject = [object valueForKey:name];
         id valueSelf = [self valueForKey:name];
         if (valueObject || valueSelf) {
             if ([valueSelf isKindOfClass:[NSObject class]] && [valueObject isKindOfClass:[NSObject class]]) {
                 if (valueObject && valueSelf) {
                     if (![valueObject isEqual:valueSelf]) {
-                        free(properties);
                         return NO;
                     }
                 }
                 else {
-                    free(properties);
                     return NO;
                 }
             }
             else {
                 if (valueObject != valueSelf) {
-                    free(properties);
                     return NO;
                 }
             }
         }
     }
-    free(properties);
     return YES;
 }
 
@@ -58,7 +54,7 @@
 - (id)MKCopyWithZone:(NSZone *)zone baseClass:(Class)baseClass {
     Class currentClass = [self class];
     id object = [[currentClass allocWithZone:zone] init];
-
+    
     while (currentClass != baseClass) {
         [self copyWithZone:zone toObject:object ofKind:currentClass];
         currentClass = [currentClass superclass];
@@ -76,9 +72,17 @@
     for (unsigned int i=0; i<count; i++) {
         NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
         if ([self respondsToSelector:NSSelectorFromString(name)]) {
+            
             id value = [self valueForKey:name];
             if ([value isKindOfClass:[NSArray class]]) {
-                NSArray *array = [[NSArray alloc] initWithArray:value copyItems:YES];
+                
+                NSArray *array;
+                if ([value isKindOfClass:[NSMutableArray class]]) {
+                    array = [[NSMutableArray alloc] initWithArray:value copyItems:YES];
+                }
+                else {
+                    array = [[NSArray alloc] initWithArray:value copyItems:YES];
+                }
                 [object setValue:array forKey:name];
             }
             else {
@@ -113,7 +117,7 @@
 }
 
 - (void)MKInitWithCoder:(NSCoder *)aDecoder {
-    [self MKInitWithCoder:aDecoder ofKind:[self superclass]];
+    [self MKInitWithCoder:aDecoder ofKind:[self class]];
 }
 
 - (void)MKEncodeWithCoder:(NSCoder *)aCoder ofKind:(Class)objectClass {
@@ -168,23 +172,83 @@
 }
 
 + (StringArr *)propertyNamesOfClass:(Class)objectClass {
-    unsigned int varCount = 0;
-    objc_property_t *vars = class_copyPropertyList(objectClass, &varCount);
-    MStringArr *arr = [[NSMutableArray alloc] init];
+    MStringArr *fields = [[MStringArr alloc] init];
+    unsigned int count = 0;
+    Ivar *properties = class_copyIvarList(objectClass, &count);
     
-    for (unsigned int i=0; i<varCount; i++) {
-        objc_property_t var = vars[i];
-        NSString *name = [NSString stringWithUTF8String:property_getName(var)];
-        [arr addObject:name];
+    for (unsigned int i=0; i<count; i++) {
+        Ivar var = properties[i];
+        NSString *name = [[NSString stringWithUTF8String:ivar_getName(var)] trimCharSet:@"_"];
+        if (name) {
+            [fields addObject:name];
+        }
     }
-    free(vars);
-    return arr;
+    free(properties);
+    return fields;
 }
 
-+ (void)swizzleSelectorOriginal:(SEL)originalSelector swizzled:(SEL)swizzledSelector {
-    Class class = object_getClass(self);
-    Method originalMethod =class_getInstanceMethod(class, originalSelector);
-    Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
++ (NSDictionary *)attributePropertyNamesOfClass:(Class)objectClass {
+    NSMutableDictionary *fields = [[NSMutableDictionary alloc] init];
+    unsigned int count = 0;
+    Ivar *properties = class_copyIvarList(objectClass, &count);
+    
+    for (unsigned int i=0; i<count; i++) {
+        Ivar var = properties[i];
+        NSString *name = [[NSString stringWithUTF8String:ivar_getName(var)] trimCharSet:@"_"];
+        objc_property_t property = class_getProperty(objectClass, [name UTF8String]);
+        if (property) {
+            NSString *attribute = [NSString stringWithCString:property_getAttributes(property) encoding:NSUTF8StringEncoding];
+            if (name && attribute) {
+                [fields setObject:attribute forKey:name];
+            }
+        }
+    }
+    free(properties);
+    return fields;
+}
+
++ (Class)classOfProperty:(NSString *)name forObjectClass:(Class)objectClass {
+    
+    Class class = nil;
+    objc_property_t property = class_getProperty(objectClass, [name UTF8String]);
+    if (!property) return nil;
+    
+    NSString *attrs = [NSString stringWithCString:property_getAttributes(property) encoding:NSUTF8StringEncoding];
+    NSArray *components = [attrs componentsSeparatedByString:@","];
+    //no primitives are allowed
+    if (components.count > 0) {
+        if ([components[0] characterAtIndex:1] == 'c' || [components[0] characterAtIndex:1] == 'B') {
+            return nil;
+        }
+        components = [components[0] componentsSeparatedByString:@"\""];
+        if (components.count < 2) {
+            return nil;
+        }
+        class = NSClassFromString(components[1]);
+    }
+    return class;
+}
+
+- (BOOL)allIsNull {
+    unsigned int count = 0;
+    objc_property_t *properties = class_copyPropertyList([self class], &count);
+    
+    for (unsigned int i=0; i<count; i++) {
+        NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
+        id value = [self valueForKey:name];
+        if (value) {
+            return NO;
+        }
+    }
+    free(properties);
+    
+    return YES;
+}
+
++ (void)swizzleSelectorOriginal:(SEL)originalSelector swizzled:(SEL)swizzledSelector isClassMethod:(BOOL)isClassMethod {
+    Class class = isClassMethod ? object_getClass(self) : self.class;
+    Method originalMethod = isClassMethod ? class_getClassMethod(class, originalSelector) : class_getInstanceMethod(class, originalSelector);
+    Method swizzledMethod = isClassMethod ? class_getClassMethod(class, swizzledSelector) : class_getInstanceMethod(class, swizzledSelector);
     
     BOOL addMethod = class_addMethod(class, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));
     if (addMethod) {
@@ -195,15 +259,18 @@
     }
 }
 
-+ (void)swizzleSelector:(SEL)selector {
++ (void)swizzleSelector:(SEL)selector isClassMethod:(BOOL)isClassMethod {
     NSString *swizzledSelectorName = [NSString stringWithFormat:@"swizzled_%@", NSStringFromSelector(selector)];
     SEL swizzledSelector = NSSelectorFromString(swizzledSelectorName);
-    [self swizzleSelectorOriginal:selector swizzled:swizzledSelector];
+    [self swizzleSelectorOriginal:selector swizzled:swizzledSelector isClassMethod:isClassMethod];
 }
 
++ (NSString *)GUID {
+    return [NSUUID UUID].UUIDString;
+}
 
-- (NSString *)timestampGUID {
-    return [NSString stringWithFormat:@"%d-%@", (int)[[NSDate date] timeIntervalSince1970], [NSUUID UUID].UUIDString];
++ (NSString *)timestampGUID {
+    return [NSString stringWithFormat:@"%d-%@", (int)[[NSDate date] timeIntervalSince1970], [self GUID]];
 }
 
 @end
