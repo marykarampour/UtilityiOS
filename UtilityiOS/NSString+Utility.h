@@ -65,9 +65,31 @@ typedef NS_ENUM(NSUInteger, StringFormat) {
 //Made public just for Unit Testing
 - (NSString *)camelCaseToUnderScoreIgnoreDigits:(BOOL)ignoreDigits upperCaseAll:(BOOL)upperCaseAll;
 
+- (NSString *)pluralToSingle;
+- (NSString *)singleToPlural;
 
 - (NSNumber *)stringToNumber;
+- (NSNumber *)stringToNumberWithFormat:(NSNumberFormatterStyle)format;
 - (NSString *)amount;
 + (NSString *)randomStringWithLenght:(NSUInteger)length;
++ (NSString *)telFromString:(NSString *)string;
+
++ (NSString *)notnullString:(NSString *)string;
++ (NSString *)notnullString:(NSString *)string defaultText:(NSString * __nonnull)defaultText;
+- (NSString *)quotations;
+- (NSString *)spaced;
+- (NSString *)removeSubstring:(NSString *)str;
+- (NSString *)trimCharSet:(NSString *)chars;
+/** @brief concatinates the same string count times */
+- (NSString *)multiplyWithCount:(NSUInteger)count;
+
+/** @brief splits a string based on uppercase letters
+ @code
+ UpperCaseString --> Upper Case String
+ @endcode
+ */
+- (NSString *)splitedStringForUppercaseComponents;
+
+- (NSString *)numbersOnly;
 
 @end

@@ -50,6 +50,10 @@
     return [[[self substringToIndex:1] lowercaseString] stringByAppendingString:[self substringFromIndex:1]];
 }
 
+- (NSString *)CapitalizedCamelCase {
+    return [[self underScoreToCamelCaseUpperCaseAll:NO] capitalizedString];
+}
+
 - (NSString *)camelCaseToUnderScoreIgnoreDigits:(BOOL)ignoreDigits upperCaseAll:(BOOL)upperCaseAll {
     
     NSMutableString *result = [NSMutableString stringWithString:self];
@@ -89,7 +93,7 @@
 
 - (NSString *)underScoreToCamelCaseUpperCaseAll:(BOOL)upperCaseAll {
     
-    NSMutableString *result = [NSMutableString stringWithString:self];
+    NSMutableString *result = [NSMutableString stringWithString:[self lowercaseFirstChar]];
     if ([result characterAtIndex:0] == '_') {
         [result replaceCharactersInRange:NSMakeRange(0, 1) withString:@""];
     }
@@ -103,7 +107,7 @@
             NSString *upperCase = [[result substringWithRange:underScoreRange] uppercaseString];
             [result replaceCharactersInRange:underScoreRange withString:upperCase];
         }
-
+        
         underScoreRange = [result rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"_"]];
     }
     
@@ -121,12 +125,44 @@
     return [formatter numberFromString:self];
 }
 
+- (NSNumber *)stringToNumberWithFormat:(NSNumberFormatterStyle)format {
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    formatter.numberStyle = format;
+    return [formatter numberFromString:self];
+}
+
+- (NSString *)pluralToSingle {
+    NSString *name = self;
+    if ([[self substringFromIndex:self.length-1] isEqualToString:@"s"]) {
+        if ([[self substringFromIndex:self.length-3] isEqualToString:@"ies"]) {
+            name = [self stringByReplacingCharactersInRange:NSMakeRange(self.length-3, 3) withString:@"ys"];//Objectiv-C doesn't know grammer XD
+        }
+        name = [name stringByReplacingCharactersInRange:NSMakeRange(name.length-1, 1) withString:@""];
+    }
+    return name;
+}
+
+- (NSString *)singleToPlural {
+    NSString *name;
+    if ([[self substringFromIndex:self.length-1] isEqualToString:@"y"]) {
+        name = [self stringByReplacingCharactersInRange:NSMakeRange(self.length-1, 1) withString:@"ies"];//Objectiv-C doesn't know grammer XD
+    }
+    else {
+        name = [self stringByAppendingString:@"s"];
+    }
+    return name;
+}
+
 - (NSString *)amount {
     if (![self stringToNumber]) {
         return nil;
     }
     NSString *str = ([self containsString:@"."] && [self rangeOfString:@"."].location < self.length-2) ? self : [self stringByAppendingString:@".00"];
     return str;
+}
+
+- (NSString *)numbersOnly {
+    return [[self componentsSeparatedByCharactersInSet:[NSCharacterSet decimalDigitCharacterSet].invertedSet] componentsJoinedByString:@""];
 }
 
 + (NSString *)randomStringWithLenght:(NSUInteger)length {
@@ -136,6 +172,70 @@
         [randomStr appendFormat:@"%C", [seed characterAtIndex:arc4random_uniform(seed.length)]];
     }
     return randomStr;
+}
+
++ (NSString *)telFromString:(NSString *)string {
+    return [NSString stringWithFormat:@"tel://%@", string];
+}
+
++ (NSString *)notnullString:(NSString *)string {
+    return [self notnullString:string defaultText:@""];
+}
+
++ (NSString *)notnullString:(NSString *)string defaultText:(NSString * __nonnull)defaultText {
+    return (string && ![string isEqualToString:@"null"]) ? string : defaultText;
+}
+
+- (NSString *)quotations {
+    return [NSString stringWithFormat:@"\"%@\"", self];
+}
+
+- (NSString *)spaced {
+    return [NSString stringWithFormat:@" %@ ", self];
+}
+
+- (NSString *)removeSubstring:(NSString *)str {
+    return [self stringByReplacingOccurrencesOfString:str withString:@""];
+}
+
+- (NSString *)trimCharSet:(NSString *)chars {
+    NSCharacterSet *set = [NSCharacterSet characterSetWithCharactersInString:chars];
+    return [self stringByTrimmingCharactersInSet:set];
+}
+
+- (NSString *)multiplyWithCount:(NSUInteger)count {
+    NSString *string = @"";
+    for (NSUInteger i=0; i<count; i++) {
+        string = [string stringByAppendingString:self];
+    }
+    return string;
+}
+
+- (NSString *)splitedStringForUppercaseComponents {
+    if (self.length < 2) {
+        return self;
+    }
+    
+    NSMutableString *result = [NSMutableString stringWithString:self];
+    NSRange range = [result rangeOfCharacterFromSet:[NSCharacterSet uppercaseLetterCharacterSet]];
+    NSString *croppedString = self;
+    NSRange croppedRange = NSMakeRange(range.location+range.length, croppedString.length-range.length);
+    
+    while (range.location != NSNotFound && croppedRange.length > 0) {
+        
+        croppedString = [result substringWithRange:croppedRange];
+        NSRange newRange = [croppedString rangeOfCharacterFromSet:[NSCharacterSet uppercaseLetterCharacterSet]];
+        if (newRange.location == NSNotFound) {
+            break;
+        }
+        if (newRange.location > range.location) {
+            range = NSMakeRange(newRange.location+croppedRange.location, newRange.length);
+            [result insertString:@" " atIndex:range.location];
+        }
+        range = NSMakeRange(range.location+1, range.length);
+        croppedRange = NSMakeRange(range.location+range.length, result.length-range.location-range.length);
+    }
+    return result;
 }
 
 @end
