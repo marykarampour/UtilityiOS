@@ -13,7 +13,7 @@
 #import "UIView+Utility.h"
 #import "MKSpinner.h"
 
-@interface MKPreviewContainerViewController () <UIWebViewDelegate> {
+@interface MKPreviewContainerViewController () <WKUIDelegate> {
     UIView *mainView;
 }
 
@@ -54,7 +54,7 @@
     [self.preview.leftButton setTitle:@"X" forState:UIControlStateNormal];
     [self.preview.leftButton addTarget:self action:@selector(leftPreviewButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     [self.preview.rightButton addTarget:self action:@selector(rightPreviewButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
-    self.preview.view.delegate = self;
+    self.preview.view.UIDelegate = self;
     self.preview.hidden = YES;
     
     if ([self.mainVC respondsToSelector:@selector(customizePreview:)]) {
@@ -89,14 +89,14 @@
 
 - (void)loadPreviewWithData:(NSData *)data URL:(NSURL *)URL {
     self.preview.hidden = NO;
-    [self.preview.view loadData:data MIMEType:[data contentType] textEncodingName:@"utf-8" baseURL:URL];
+    [self.preview.view loadData:data MIMEType:[data contentType] characterEncodingName:@"utf-8" baseURL:URL];
 }
 
-- (void)webViewDidStartLoad:(UIWebView *)webView {
+- (void)webViewDidStartLoad:(WKWebView *)webView {
     [MKSpinner show];
 }
 
-- (void)webViewDidFinishLoad:(UIWebView *)webView {
+- (void)webViewDidFinishLoad:(WKWebView *)webView {
     [MKSpinner hide];
 }
 
@@ -109,7 +109,7 @@
     return [img shrink];
 }
 
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
+- (void)webView:(WKWebView *)webView didFailLoadWithError:(NSError *)error {
     [MKSpinner hide];
     self.preview.hidden = YES;
     DEBUGLOG(@"%@", error.localizedDescription);
