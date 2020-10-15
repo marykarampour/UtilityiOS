@@ -8,7 +8,8 @@
 
 #import "MKHamburgerMenuManager.h"
 #import "UIViewController+Utility.h"
-#import "MKAssets+KaChing.h"
+//#import "MKAssets+KaChing.h" fix in util library
+#import "MKAssets.h"
 
 @interface MKHamburgerMenuManager ()
 
@@ -44,7 +45,7 @@
 
 - (UIBarButtonItem *)barButtonItem {
     UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[MKAssets Hamburger_Icon] style:UIBarButtonItemStylePlain target:self action:@selector(menuButtonPressed:)];
-    menuButton.tintColor = [AppTheme brightGoldColorWithAlpha:1.0];
+    menuButton.tintColor = [AppTheme barTintColor];
     return menuButton;
 }
 

@@ -6,9 +6,9 @@
 //  Copyright © 2017 BHS Consultants. All rights reserved.
 //
 
-#import "KeychainWrapper.h"
+#import "MKKeychainWrapper.h"
 
-@interface KeychainWrapper (User)
+@interface MKKeychainWrapper (User)
 
 - (void)setUsername:(NSString *)username;
 - (void)setPassword:(NSString *)password;

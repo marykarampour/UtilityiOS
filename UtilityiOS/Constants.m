@@ -412,10 +412,17 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
 }
 
 + (CGFloat)statusBarHeight {
+#ifdef AF_APP_EXTENSIONS
+    return 0.0;
+#else
     return [UIApplication sharedApplication].statusBarFrame.size.height;
+#endif
 }
 
 + (CGFloat)safeAreaInsets {
+#ifdef AF_APP_EXTENSIONS
+    return 0.0;
+#else
     UIWindow *window = ((AppDelegate *)[UIApplication sharedApplication].delegate).window;
     if ([window respondsToSelector:@selector(safeAreaInsets)]) {
         if (@available(iOS 11.0, *)) {
@@ -424,6 +431,7 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
         }
     }
     return [Constants statusBarHeight];
+#endif
 }
 
 #pragma mark - biometrics

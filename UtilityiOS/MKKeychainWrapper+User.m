@@ -6,9 +6,9 @@
 //  Copyright © 2017 BHS Consultants. All rights reserved.
 //
 
-#import "KeychainWrapper+User.h"
+#import "MKKeychainWrapper+User.h"
 
-@implementation KeychainWrapper (User)
+@implementation MKKeychainWrapper (User)
 
 - (void)setUsername:(NSString *)username {
     [self KWSetObject:username forKey:(__bridge id)kSecAttrAccount];

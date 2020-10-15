@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface KeychainWrapper : NSObject
+@interface MKKeychainWrapper : NSObject
 
 - (void)KWSetObject:(id)object forKey:(id)key;
 - (id)KWObjectForKey:(id)key;

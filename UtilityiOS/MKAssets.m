@@ -23,4 +23,8 @@
     return [UIImage imageNamed:@"AppIcon"];
 }
 
++ (UIImage *)Hamburger_Icon {
+    return [UIImage imageNamed:@""];
+}
+
 @end

@@ -6,20 +6,20 @@
 //  Copyright © 2017 BHS Consultants. All rights reserved.
 //
 
-#import "KeychainWrapper.h"
+#import "MKKeychainWrapper.h"
 #import <Security/Security.h>
 
 //Unique string used to identify the keychain item:
 static const UInt8 kKeychainItemIdentifier[]    = "com.apple.dts.KeychainUI\0";
 
-@interface KeychainWrapper ()
+@interface MKKeychainWrapper ()
 
 @property (nonatomic, strong) NSMutableDictionary *keychainData;
 @property (nonatomic, strong) NSMutableDictionary *genericPasswordQuery;
 
 @end
 
-@implementation KeychainWrapper
+@implementation MKKeychainWrapper
 
 - (instancetype)init {
     if (self = [super init]) {
