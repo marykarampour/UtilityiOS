@@ -8,14 +8,14 @@
 
 #import "Constants.h"
 #import "AppDelegate.h"
-
+#import "NSString+Utility.h"
 
 #pragma mark - defaults
 
-static NSString * const DefaultLoggedInUsersKey = @"DefaultLoggedInUsersKey";
-static NSString * const DefaultVersionKey       = @"DefaultVersionKey";
-static NSString * const DefaultSavedUsersKey    = @"DefaultSavedUsersKey";
-static NSString * const DefaultPushNotificationDeviceTokenKey    = @"DefaultPushNotificationDeviceTokenKey";
+NSString * const DefaultLoggedInUsersKey = @"DefaultLoggedInUsersKey";
+NSString * const DefaultVersionKey       = @"DefaultVersionKey";
+NSString * const DefaultSavedUsersKey    = @"DefaultSavedUsersKey";
+NSString * const DefaultPushNotificationDeviceTokenKey    = @"DefaultPushNotificationDeviceTokenKey";
 
 #pragma mark - format
 
@@ -29,6 +29,9 @@ NSString * const DateFormatDayMonthYearStyle      = @"dd MMMM yyyy";
 NSString * const DateFormatDayMonthYearNumericStyle = @"dd MM yyyy";
 NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
 
+NSString * const DateFormatFullTimeStyle          = @"HH:mm:ss EEEE, MMMM dd, yyyy";
+NSString * const DateFormatTimeStyle              = @"HH:mm:ss a";
+NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
 
 #pragma mark - classes
 
@@ -49,27 +52,27 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
 }
 
 + (NSString *)BaseTestingInURL {
-    return @"://10.1.0.119";//same as @"://kaching.baldhead.com"
+    return @"";
 }
 
 + (NSString *)BaseTestingOutURL {
-    return @"://testing.baldhead.com";
+    return @"";
 }
 
 + (NSString *)BaseDevInURL {
-    return @"://10.1.0.129";
+    return @"";
 }
 
 + (NSString *)BaseDevOutURL {
-    return @"://neomorpheus.baldhead.com";
+    return @"";
 }
 
 + (NSString *)BaseQAURL {
-    return @"://";
+    return @"";
 }
 
 + (NSString *)BaseProductionURL {
-    return @"://";
+    return @"";
 }
 
 + (NSString *)TestUsername {
@@ -171,6 +174,14 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
     return CGSizeMake(20.0, 20.0);
 }
 
++ (CGFloat)Toast_Length_Seconds {
+    return 1.0;
+}
+
++ (CGFloat)Subsection_Left_Spacing {
+    return 22.0;
+}
+
 #pragma mark - defaults
 
 + (NSString *)DefaultsVersion {
@@ -253,6 +264,14 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
     return LOCALIZED(@"Password");
 }
 
++ (NSString *)First_Name_STR {
+    return LOCALIZED(@"First Name");
+}
+
++ (NSString *)Last_Name_STR {
+    return LOCALIZED(@"Last Name");
+}
+
 + (NSString *)Login_STR {
     return LOCALIZED(@"Login");
 }
@@ -325,6 +344,11 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
     return LOCALIZED(@"12223334444");
 }
 
++ (NSString *)NO_Connection_Title_STR {
+    return LOCALIZED(@"No Network Connection is available");
+}
+
+
 + (float)GeoFenceRadiousKiloMeter {
     return 1.0;
 }
@@ -335,37 +359,28 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
 
 + (NSString *)BaseURLString {
     NSString *https = [Constants USING_HTTPS] ? @"https" : @"http";
-    NSString *url = @"";
-    NSString *port = [Constants BasePort].length ? [NSString stringWithFormat:@":%@", [Constants BasePort]] : @"";
-    switch ([Constants ServerEnvironmentVariable]) {
-        case ServerEnvironment_PROD:
-            url = [Constants BaseProductionURL];
-            break;
-            
-        case ServerEnvironment_TESTING_IN:
-            url = [Constants BaseTestingInURL];
-            break;
-            
-        case ServerEnvironment_TESTING_OUT: {
-            url = [Constants BaseTestingOutURL];
-        }
-            break;
-            
-        case ServerEnvironment_LOCAL:
-            url = [Constants BaseLocalHostURL];
-            break;
-            
-        case ServerEnvironment_DEV_IN:
-            url = [Constants BaseDevInURL];
-            break;
-            
-        case ServerEnvironment_DEV_OUT:
-        default:
-            url = [Constants BaseDevOutURL];
-            break;
-    }
+    NSString *url = [self CommonURLString];
+    return [self URLStringWithHttps:https url:url port: [Constants BasePort]];
+}
+
++ (NSString *)URLStringWithHttps:(NSString *)https url:(NSString *)url port:(NSString *)port {
     return [NSString stringWithFormat:@"%@%@%@", https, url, port];
 }
+
++ (NSString *)CommonURLString {
+   
+    switch ([Constants ServerEnvironmentVariable]) {
+        case ServerEnvironment_PROD:        return [Constants BaseProductionURL];
+        case ServerEnvironment_QA:          return [Constants BaseQAURL];
+        case ServerEnvironment_TESTING_IN:  return [Constants BaseTestingInURL];
+        case ServerEnvironment_TESTING_OUT: return [Constants BaseTestingOutURL];
+        case ServerEnvironment_LOCAL:       return [Constants BaseLocalHostURL];
+        case ServerEnvironment_DEV_IN:      return [Constants BaseDevInURL];
+        case ServerEnvironment_DEV_OUT:
+        default: return  [Constants BaseDevOutURL];
+    }
+}
+
 
 + (NSURL *)BaseURL {
     return [NSURL URLWithString:[self BaseURLString]];
@@ -395,7 +410,7 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
     NSDictionary *versionDict = [[NSBundle mainBundle] infoDictionary];
     NSString *build = [versionDict objectForKey:(NSString *)kCFBundleVersionKey];
     NSString *version = [versionDict objectForKey:@"CFBundleShortVersionString"];
-    version = [NSString stringWithFormat:@"version %@ (%@)", version, build];
+    version = [NSString stringWithFormat:@"%@ (%@)", version, build];
     return version;
 }
 
@@ -419,15 +434,62 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
 #endif
 }
 
-+ (CGFloat)safeAreaInsets {
++ (UIEdgeInsets)safeAreaInsets {
+#ifdef AF_APP_EXTENSIONS
+    return UIEdgeInsetsZero;
+#else
+    UIWindow *window = ((AppDelegate *)[UIApplication sharedApplication].delegate).window;
+    if ([window respondsToSelector:@selector(safeAreaInsets)]) {
+        if (@available(iOS 11.0, *)) {
+            return window.safeAreaInsets;
+        }
+    }
+    return UIEdgeInsetsZero;
+#endif
+}
+
++ (CGFloat)safeAreaHeight {
 #ifdef AF_APP_EXTENSIONS
     return 0.0;
 #else
     UIWindow *window = ((AppDelegate *)[UIApplication sharedApplication].delegate).window;
     if ([window respondsToSelector:@selector(safeAreaInsets)]) {
         if (@available(iOS 11.0, *)) {
-            CGFloat topInset = window.safeAreaInsets.top;
-            return topInset > 0.0 ? topInset : [Constants statusBarHeight];
+            CGFloat inset = 0.0;
+            switch ([UIDevice currentDevice].orientation) {
+                case UIDeviceOrientationPortrait:           inset = window.safeAreaInsets.top; break;
+                case UIDeviceOrientationPortraitUpsideDown: inset = window.safeAreaInsets.bottom; break;
+                case UIDeviceOrientationLandscapeLeft:      inset = window.safeAreaInsets.right; break;
+                case UIDeviceOrientationLandscapeRight:     inset = window.safeAreaInsets.left; break;
+                default:
+                    break;
+            }
+            
+            return inset > 0.0 ? inset : [Constants statusBarHeight];
+        }
+    }
+    return [Constants statusBarHeight];
+#endif
+}
+
++ (CGFloat)bottomSafeAreaHeight {
+#ifdef AF_APP_EXTENSIONS
+    return 0.0;
+#else
+    UIWindow *window = ((AppDelegate *)[UIApplication sharedApplication].delegate).window;
+    if ([window respondsToSelector:@selector(safeAreaInsets)]) {
+        if (@available(iOS 11.0, *)) {
+            CGFloat inset = 0.0;
+            switch ([UIDevice currentDevice].orientation) {
+                case UIDeviceOrientationPortrait:           inset = window.safeAreaInsets.bottom; break;
+                case UIDeviceOrientationPortraitUpsideDown: inset = window.safeAreaInsets.top; break;
+                case UIDeviceOrientationLandscapeLeft:      inset = window.safeAreaInsets.left; break;
+                case UIDeviceOrientationLandscapeRight:     inset = window.safeAreaInsets.right; break;
+                default:
+                    break;
+            }
+            
+            return inset > 0.0 ? inset : 0.0;
         }
     }
     return [Constants statusBarHeight];
@@ -569,15 +631,28 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
 #pragma mark - Push Notification
 
 + (void)setPushNotificationDeviceToken:(NSData *)deviceToken {
-    NSString *token = [[deviceToken description] stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@"<>"]];
-    token = [token stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSString *token = [self tokenStringFromTokenDate:deviceToken];
+    
     [[NSUserDefaults standardUserDefaults] setObject:token forKey:DefaultPushNotificationDeviceTokenKey];
     [[NSUserDefaults standardUserDefaults] synchronize];
 }
 
++ (NSString *)tokenStringFromTokenDate:(NSData *)deviceToken {
+    NSUInteger length = deviceToken.length;
+    if (length == 0) {
+        return nil;
+    }
+    const unsigned char *buffer = deviceToken.bytes;
+    NSMutableString *hexString  = [NSMutableString stringWithCapacity:(length * 2)];
+    for (int i = 0; i < length; ++i) {
+        [hexString appendFormat:@"%02x", buffer[i]];
+    }
+    return [hexString copy];
+}
+
 + (NSString *)pushNotificationDeviceToken {
     NSString *token = [[NSUserDefaults standardUserDefaults] objectForKey:DefaultPushNotificationDeviceTokenKey];
-    return token ? token : @"";
+    return token ? token : @"PUSH_NOTIFICATION_TOKEN_NONE";
 }
 
 + (NSString *)pushNotificationPlatform {
@@ -670,6 +745,14 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
     return @"^([0-9]{10})$";
 }
 
++ (NSString *)Regex_Password {
+    return @"^(?=.*?([A-Z]|[\\W]))(?=.*?[a-z])(?=.*?[0-9]).{8,48}$";
+}
+
++ (NSString *)Regex_Password_Strong {
+    return @"^(?=.{10,48}$)(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[@$!%*#?&])(([\\w\\s-\\/!-.:-@\\[-\\`{-~])\\2?(?!\\2))+$";
+}
+
 + (NSString *)Regex_Address {
     return @"^([\\s\\.\\,a-zA-Z0-9-]{0,100})$";
 }
@@ -683,6 +766,19 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
 }
 
 #pragma mark - core date
++ (NSString *)Search_Predicate_Format_Begins {
+    return @"SELF.%K BEGINSWITH[cd] %@";
+}
+
++ (NSString *)Search_Predicate_Format_Contains {
+    return @"SELF.%K CONTAINS[cd] %@";
+}
+
++ (NSString *)Search_Predicate_Format_Int_Equals {
+    return @"SELF.%K == %d";
+}
+
+#pragma mark - core date and archive
 
 + (NSString *)CoreData_StorePath {
     return @"db.sqlite";
@@ -692,5 +788,106 @@ NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
     return @"Model";
 }
 
++ (NSString *)Archive_Data_Path {
+    return @"DATA_PATH.plist";
+}
+
++ (NSString *)Archive_Data_Key {
+    return @"DATA_KEY";
+}
+
++ (NSString *)Archive_File_ID_Key {
+    return @"FILE_IDS_KEY";
+}
+
+#pragma mark - util update
+
++ (CGFloat)CheckBoxSize {
+    return 44.0;
+}
+
++ (UIEdgeInsets)CheckBoxInsets {
+    return UIEdgeInsetsMake(4.0, 4.0, 4.0, 4.0);
+}
+
++ (UIEdgeInsets)CheckBoxSubsectionInsets {
+    return UIEdgeInsetsMake(8.0, 32.0, 8.0, 16.0);
+}
+
++ (CGFloat)LoginLogoHeight {
+    return 100.0;
+}
+
++ (CGFloat)TableHeaderPadding {
+    return 8.0;
+}
+
++ (CGFloat)textFieldContentHorizontalPadding {
+    return 16.0;
+}
+
++ (CGFloat)textFieldContentVerticalPadding {
+    return 4.0;
+}
+
++ (CGSize)textFieldOverlayViewSize {
+    return CGSizeMake(24.0, 24.0);
+}
+
++ (NSUInteger)Image_Shrink_Max_Size_Bytes {
+    return 200000;
+}
+
++ (NSUInteger)Image_Shrink_Compression_Ratio {
+    return 0.5;
+}
+
++ (NSUInteger)Image_Shrink_Resize_Factor {
+    return 2.0;
+}
+
++ (NSString *)Remember_Me_STR {
+    return LOCALIZED(@"Remember Me");
+}
+
++ (NSString *)OR_STR {
+    return LOCALIZED(@"OR");
+}
+
++ (NSString *)Next_STR {
+    return LOCALIZED(@"Next");
+}
+
++ (NSString *)Month_s_STR {
+    return LOCALIZED(@"Month(s)");
+}
+
++ (NSString *)Day_s_STR {
+    return LOCALIZED(@"Day(s)");
+}
+
++ (NSString *)Hour_s_STR {
+    return LOCALIZED(@"Hour(s)");
+}
+
++ (NSString *)Minute_s_STR {
+    return LOCALIZED(@"Minute(s)");
+}
+
++ (NSString *)documentsDirectory {
+    return NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0];
+}
+
+
+#pragma mark - methods and actions
+
++ (void)callPhoneNumber:(NSString *)num {
+#ifdef AF_APP_EXTENSIONS
+    return;
+#else
+    NSString *phoneNum = [NSString telFromString:num];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phoneNum]];
+#endif
+}
 
 @end

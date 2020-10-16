@@ -29,7 +29,7 @@
         return 0.0;
     }
     else {
-        return self.navigationController.navigationBar.frame.size.height + [Constants safeAreaInsets];
+        return self.navigationController.navigationBar.frame.size.height + [Constants safeAreaHeight];
     }
 }
 

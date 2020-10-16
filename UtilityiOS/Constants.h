@@ -13,7 +13,9 @@
 
 #pragma mark - macros
 
-#ifdef DEBUG
+#define LOGGING YES
+
+#if defined(DEBUG) && defined(LOGGING)
 #define DEBUGLOG(s, ...) NSLog( @"<%@:%d> %@", [[NSString stringWithUTF8String:__FILE__] lastPathComponent], __LINE__,  [NSString stringWithFormat:(s), ##__VA_ARGS__] )
 #else
 #define DEBUGLOG(s, ...)
@@ -76,7 +78,21 @@ typedef NS_ENUM(NSUInteger, TextType) {
     TextType_Address,
     TextType_Date,
     TextType_Gender,
+    TextType_Password,
     TextType_Count
+};
+
+typedef NS_ENUM(NSUInteger, ViewPosition) {
+    ViewPosition_TOP,
+    ViewPosition_LEFT,
+    ViewPosition_BOTTOM,
+    ViewPosition_RIGHT
+};
+
+typedef NS_ENUM(NSUInteger, MoveDirection) {
+    MoveDirection_NONE,
+    MoveDirection_FORWARD,
+    MoveDirection_BACKWARD
 };
 
 typedef NSArray<NSString *>                                     StringArr;
@@ -121,6 +137,15 @@ typedef NSMutableArray<__kindof NSObject *>                     MObjectArr;
 typedef NSArray<NSIndexPath *>                                  IndexPathArr;
 typedef NSMutableArray<NSIndexPath *>                           MIndexPathArr;
 
+typedef NSDictionary <Class, NSString *>                        ClassStringDict;
+
+#pragma mark - defaults
+
+extern NSString * const DefaultLoggedInUsersKey;
+extern NSString * const DefaultVersionKey;
+extern NSString * const DefaultSavedUsersKey;
+extern NSString * const DefaultPushNotificationDeviceTokenKey;
+
 #pragma mark - format
 
 extern NSString * const DateFormatServerStyle;
@@ -133,6 +158,9 @@ extern NSString * const DateFormatDayMonthYearStyle;
 extern NSString * const DateFormatDayMonthYearNumericStyle;
 extern NSString * const DateFormatWeekdayDayStyle;
 
+extern NSString * const DateFormatFullTimeStyle;
+extern NSString * const DateFormatTimeStyle;
+extern NSString * const DateFormatShortAPMStyle;
 
 #pragma mark - classes
 /** @brief This class contains the constants used throughout the app
@@ -149,10 +177,12 @@ extern NSString * const DateFormatWeekdayDayStyle;
 + (NSString *)BaseTestingOutURL;
 + (NSString *)BaseDevInURL;
 + (NSString *)BaseDevOutURL;
-+ (NSString *)BaseProductionURL;
 + (NSString *)BaseQAURL;
++ (NSString *)BaseProductionURL;
 + (NSString *)BaseURLString;
++ (NSString *)CommonURLString;
 + (NSString *)BasePort;
++ (NSString *)URLStringWithHttps:(NSString *)https url:(NSString *)url port:(NSString *)port;
 + (NSString *)TestUsername;
 + (NSString *)TestPassword;
 
@@ -182,6 +212,8 @@ extern NSString * const DateFormatWeekdayDayStyle;
 + (float)LoginViewWidth;
 + (float)BadgeHeight;
 + (CGSize)TableCellDisclosureIndicatorSize;
++ (CGFloat)Toast_Length_Seconds;
++ (CGFloat)Subsection_Left_Spacing;
 
 #pragma mark - defaults
 
@@ -226,9 +258,11 @@ extern NSString * const DateFormatWeekdayDayStyle;
 + (NSString *)NoCamera_STR;
 + (NSString *)Invalid_STR;
 + (NSString *)Error_STR;
-
++ (NSString *)First_Name_STR;
++ (NSString *)Last_Name_STR;
 + (NSString *)Placeholder_Date_STR;
 + (NSString *)Placeholder_Phone_STR;
++ (NSString *)NO_Connection_Title_STR;
 
 #pragma mark - app
 
@@ -241,11 +275,15 @@ extern NSString * const DateFormatWeekdayDayStyle;
 + (NSString *)bundleID;
 + (NSString *)targetName;
 + (CGFloat)statusBarHeight;
-+ (CGFloat)safeAreaInsets;
++ (UIEdgeInsets)safeAreaInsets;
++ (CGFloat)safeAreaHeight;
++ (CGFloat)bottomSafeAreaHeight;
 
 #pragma mark - Push Notification
 
+/** @brief By default removes the "<>" and spaces */
 + (void)setPushNotificationDeviceToken:(NSData *)deviceToken;
++ (NSString *)tokenStringFromTokenDate:(NSData *)deviceToken;
 + (NSString *)pushNotificationDeviceToken;
 + (NSString *)pushNotificationPlatform;
 
@@ -282,11 +320,52 @@ extern NSString * const DateFormatWeekdayDayStyle;
 + (NSString *)Regex_Address;
 + (NSString *)Regex_Date;
 + (NSString *)Regex_Gender;
++ (NSString *)Regex_Password;
++ (NSString *)Regex_Password_Strong;
++ (NSString *)Search_Predicate_Format_Begins;
++ (NSString *)Search_Predicate_Format_Contains;
++ (NSString *)Search_Predicate_Format_Int_Equals;
 
-#pragma mark - core date
+#pragma mark - core date and archive
 
 + (NSString *)CoreData_StorePath;
 + (NSString *)CoreData_ModelPath;
+
++ (NSString *)Archive_Data_Path;
++ (NSString *)Archive_Data_Key;
+/** @biref File ID is timestamp-GUID */
++ (NSString *)Archive_File_ID_Key;
+
+#pragma mark - util update
+
++ (CGFloat)CheckBoxSize;
++ (UIEdgeInsets)CheckBoxInsets;
++ (UIEdgeInsets)CheckBoxSubsectionInsets;
++ (CGFloat)LoginLogoHeight;
++ (CGFloat)TableHeaderPadding;
+
++ (NSString *)OR_STR;
++ (NSString *)Remember_Me_STR;
++ (NSString *)Next_STR;
+
++ (NSString *)Month_s_STR;
++ (NSString *)Day_s_STR;
++ (NSString *)Hour_s_STR;
++ (NSString *)Minute_s_STR;
+
++ (NSString *)documentsDirectory;
+
++ (CGFloat)textFieldContentHorizontalPadding;
++ (CGFloat)textFieldContentVerticalPadding;
++ (CGSize)textFieldOverlayViewSize;
+
++ (NSUInteger)Image_Shrink_Max_Size_Bytes;
++ (NSUInteger)Image_Shrink_Compression_Ratio;
++ (NSUInteger)Image_Shrink_Resize_Factor;
+
+#pragma mark - methods and actions
+
++ (void)callPhoneNumber:(NSString *)num;
 
 @end
 
