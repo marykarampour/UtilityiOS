@@ -67,15 +67,26 @@
 
 @interface MKModel : JSONModel <NSCoding, NSCopying, MKModelCustomKeysProtocol>
 
+@property (class, nonatomic, strong, readonly) StringArr *propertyNames;
+@property (class, nonatomic, strong, readonly) DictStringString *propertyAttributeNames;
+@property (class, nonatomic, strong, readonly) DictStringString *propertyClassNames;
+@property (class, nonatomic, strong, readonly) StringArr *dateProperties;
+
+/** @brief Used to set the mapper format for object to JSON.
+ @note default is StringFormatNONE, override + (StringFormat)classMapperFormat in subclass to customize */
+@property (class, nonatomic, assign, readonly) StringFormat mapperFormat;
+
+
 - (instancetype)initWithStringsDictionary:(NSDictionary *)values;
 
-/** @brief Call this in initialize of subclass to set the mapper format for object to JSON.
- @param format default is StringFormatUnderScoreIgnoreDigits
- */
-+ (void)setMapperFormat:(StringFormat)format;
+/** @brief Override in subclass to set the mapper format for object to JSON. */
++ (StringFormat)classMapperFormat;
 
-- (NSString *)convertToJson:(NSString *)property;
-- (NSString *)convertToProperty:(NSString *)json;
+/** @brief override in subclass to set custom date formatter */
++ (NSDateFormatter *)dateFormatter;
+
++ (NSString *)convertToJson:(NSString *)property;
++ (NSString *)convertToProperty:(NSString *)json;
 
 - (NSString *)titleText;
 
@@ -91,5 +102,24 @@
  @note Use with + (StringArr *)excludedKeys 
  */
 - (NSDictionary *)toDictionaryWithExcludedKeys;
+
+#pragma mark - search predicate
+
+/** @brief key value pair for search predicates containg the class and property name
+ @note subclass must implement searchPredicateKeys */
++ (DictStringString *)searchPredicateKeyValues;
+
+/** @brief keys for search predicates containg property names
+ @note subclass must implement */
++ (StringArr *)searchPredicateKeys;
+
+/** @brief search property name, return nil if search self */
++ (StringArr *)searchPredicatePropertyNames;
+
+#pragma mark - utility
+
+- (NSString *)stringJSON;
+/** @brief Sets values from object */
+- (void)setWithObject:(__kindof MKModel *)object;
 
 @end

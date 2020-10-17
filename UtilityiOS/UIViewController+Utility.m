@@ -29,12 +29,36 @@
         return 0.0;
     }
     else {
-        return self.navigationController.navigationBar.frame.size.height + [Constants safeAreaHeight];
+        return [self nabbarHeight] + [Constants safeAreaHeight];
     }
 }
 
+- (CGFloat)tabbarHeight {
+    return ((!self.tabBarController || self.tabBarController.tabBar.isHidden) ? 0.0 : self.tabBarController.tabBar.frame.size.height);
+}
+
+- (CGFloat)nabbarHeight {
+    return self.navigationController.navigationBar.frame.size.height;
+}
+
+- (CGFloat)visibleViewHeight {
+    return [Constants screenHeight]-[Constants safeAreaHeight]-[self nabbarHeight]-[self tabbarHeight];
+}
+
+- (BOOL)isVisible {
+    return [self isViewLoaded] && self.view.window;
+}
+
+- (UIViewController *)previousViewController {
+    if (self.navigationController.viewControllers.count < 2) return nil;
+    NSUInteger index = self.navigationController.viewControllers.count - 1;
+    return self.navigationController.viewControllers[index - 1];
+}
+
 - (void)presentViewController:(UIViewController *)VC animationType:(NSString *)type timingFunction:(NSString *)timingFunction completion:(void (^)(void))completion {
+    
     if (type.length) {
+        
         CATransition *transition = [[CATransition alloc] init];
         transition.duration = [Constants TransitionAnimationDuration];
         transition.timingFunction = [CAMediaTimingFunction functionWithName:timingFunction];
@@ -42,11 +66,10 @@
         transition.subtype = type;
         [self.view.window.layer addAnimation:transition forKey:nil];
     }
-
+    
     if (@available(iOS 13.0, *)) {
         VC.modalPresentationStyle = UIModalPresentationFullScreen;
     }
-    
     [self presentViewController:VC animated:(type.length == 0) completion:completion];
 }
 
@@ -61,4 +84,47 @@
     [self dismissViewControllerAnimated:NO completion:completion];
 }
 
+- (void)removeBackBarButtonText {
+    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+}
+
+- (UIBarButtonItem *)navBarButtonWithAction:(SEL)action type:(NAV_BAR_ITEM_TYPE)type title:(NSString *)title systemItem:(UIBarButtonSystemItem)item image:(UIImage *)image {
+    
+    UIBarButtonItem *button;
+    
+    switch (type) {
+        case NAV_BAR_ITEM_TYPE_TITLE:
+            button = [[UIBarButtonItem alloc] initWithTitle:title style:UIBarButtonItemStyleDone target:self action:action];
+            break;
+        case NAV_BAR_ITEM_TYPE_SYSTEM:
+            button = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:item target:self action:action];
+            break;
+        case NAV_BAR_ITEM_TYPE_IMAGE:
+            button = [[UIBarButtonItem alloc] initWithImage:image style:0 target:self action:action];
+            break;
+        default:
+            break;
+    }
+    return button;
+}
+
+- (void)addTapToDismissKeyboard {
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    [tap setCancelsTouchesInView:NO];
+    [self.view addGestureRecognizer:tap];
+}
+
+- (void)addTapWithAction:(SEL)action {
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:action];
+    [tap setCancelsTouchesInView:NO];
+    [self.view addGestureRecognizer:tap];
+}
+
+- (void)handleTap:(UITapGestureRecognizer *)sender {
+    if (sender.state == UIGestureRecognizerStateEnded) {
+        [self.view endEditing:YES];
+    }
+}
 @end

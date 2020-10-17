@@ -32,6 +32,25 @@
     return actions;
 }
 
+- (instancetype)initWithTitle:(NSString *)title target:(id)target action:(SEL)action object:(NSObject *)object {
+    self = [self initWithTitle:title target:target action:action];
+    self.object = object;
+    return self;
+}
+
++ (instancetype)actionWithTitle:(NSString *)title target:(id)target action:(SEL)action object:(NSObject *)object {
+    return [[ActionObject alloc] initWithTitle:title target:target action:action object:object];
+}
+
++ (NSArray<ActionObject *> *)actionsWithTitleObjects:(MKPairArray<NSString *, NSObject *> *)titles target:(id)target action:(SEL)action {
+    NSMutableArray *actions = [[NSMutableArray alloc] init];
+    [titles.array enumerateObjectsUsingBlock:^(__kindof MKPair<NSString *, NSObject *> * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        ActionObject *act = [ActionObject actionWithTitle:obj.first target:target action:action object:obj.second];
+        [actions addObject:act];
+    }];
+    return actions;
+}
+
 @end
 
 

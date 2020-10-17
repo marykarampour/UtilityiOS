@@ -11,7 +11,11 @@
 
 @interface NSObject (Alert)
 
++ (void)displayToastWithTitle:(NSString *)title;
++ (void)displayToastWithTitle:(NSString *)title message:(NSString *)message;
+
 - (void)OKAlertWithTitle:(NSString *)title message:(NSString *)message;
+- (void)OKAlertWithTitle:(NSString *)title message:(NSString *)message alertAction:(SEL)alertAction;
 /** @param alertAction the target of this is always self */
 - (void)actionAlertWithTitle:(NSString *)title message:(NSString *)message alertAction:(SEL)alertAction;
 /** @param alertActions the target of these are specified in ActionObject objects */

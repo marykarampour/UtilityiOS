@@ -8,30 +8,64 @@
 
 #import "MKModel.h"
 #import "NSObject+Utility.h"
+#import "NSString+Utility.h"
 #import <objc/runtime.h>
 
-static StringFormat MapperFormat;
+const void * _Nonnull DATE_PROPERTIES_KEY;
+const void * _Nonnull PROPERTIES_KEY;
+const void * _Nonnull ATTRIBUTES_KEY;
+const void * _Nonnull ATTRIBUTES_CLASS_KEY;
+const void * _Nonnull MAPPER_FORMAT_KEY;
 
 @implementation MKModel
 
-//+ (void)initialize {
-//    if (!JSONMapperDict) {
-//        JSONMapperDict = [self keyMapperDictionaryForClass:[self class]];//[self keyMapperDictionaryWithAncestors];
-//    }
-//}
-//TODO: make type: JSON vs DB
-//- (instancetype)initWithDB {
-//    if (self = [super init]) {
-//
-//    }
-//}
-
-+ (void)initialize {
-    MapperFormat = StringFormatUnderScoreIgnoreDigits;
++ (StringArr *)propertyNames {
+    StringArr *properties = objc_getAssociatedObject(self, &PROPERTIES_KEY);
+    if (!properties) {
+        properties = [self initializePropertyNames];
+        objc_setAssociatedObject(self, &PROPERTIES_KEY, properties, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return properties;
 }
 
-+ (void)setMapperFormat:(StringFormat)format {
-    MapperFormat = format;
++ (DictStringString *)propertyAttributeNames {
+    DictStringString *propertyAttributeNames = objc_getAssociatedObject(self, &ATTRIBUTES_KEY);
+    if (!propertyAttributeNames) {
+        propertyAttributeNames = [self initializePropertyAttributeNames];
+        objc_setAssociatedObject(self, &ATTRIBUTES_KEY, propertyAttributeNames, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return propertyAttributeNames;
+}
+
++ (DictStringString *)propertyClassNames {
+    DictStringString *propertyClassNames = objc_getAssociatedObject(self, &ATTRIBUTES_CLASS_KEY);
+    if (!propertyClassNames) {
+        propertyClassNames = [self initializePropertyClassNames];
+        objc_setAssociatedObject(self, &ATTRIBUTES_CLASS_KEY, propertyClassNames, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return propertyClassNames;
+}
+
++ (StringArr *)dateProperties {
+    StringArr *properties = objc_getAssociatedObject(self, &DATE_PROPERTIES_KEY);
+    if (!properties) {
+        properties = [self initializeDatePropertyNames];
+        objc_setAssociatedObject(self, &DATE_PROPERTIES_KEY, properties, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return properties;
+}
+
++ (StringFormat)mapperFormat {
+    NSNumber *mapper = objc_getAssociatedObject(self, &MAPPER_FORMAT_KEY);
+    if (!mapper) {
+        mapper = @([self classMapperFormat]);
+        objc_setAssociatedObject(self, &MAPPER_FORMAT_KEY, mapper, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+    return mapper.integerValue;
+}
+
++ (StringFormat)classMapperFormat {
+    return StringFormatNone;
 }
 
 - (instancetype)initWithStringsDictionary:(NSDictionary *)values {
@@ -40,18 +74,15 @@ static StringFormat MapperFormat;
 //overriding this only to support date formates not supporeted by JSONModel
 - (instancetype)initWithDictionary:(NSDictionary *)dict error:(NSError *__autoreleasing *)err {
     if (self = [super initWithDictionary:dict error:err]) {
-        NSArray *names = [[self class] propertyNames];
-        for (NSString *name in names) {
-            NSString *propertyName = [self convertToJson:name];
+
+        for (NSString *name in self.class.dateProperties) {
+            NSString *propertyName = [self.class convertToJson:name];
             
-            Class class = [self classOfProperty:name forObjectClass:[self class]];
-            if (class == [NSDate class]) {
-                id value = dict[propertyName];
-                if (value && ![value isKindOfClass:[NSNull class]]) {
-                    NSDate * date = [[self dateFormatter] dateFromString:value];
-                    if ([date isKindOfClass:[NSDate class]]) {
-                        [self setValue:date forKey:name];
-                    }
+            id value = dict[propertyName];
+            if (value && ![value isKindOfClass:[NSNull class]]) {
+                NSDate * date = [[self.class dateFormatter] dateFromString:value];
+                if ([date isKindOfClass:[NSDate class]]) {
+                    [self setValue:date forKey:name];
                 }
             }
         }
@@ -63,9 +94,9 @@ static StringFormat MapperFormat;
     if (self = [super init]) {
         NSArray *names = [[self class] propertyNames];
         for (NSString *name in names) {
-            NSString *propertyName = [self convertToJson:name];
+            NSString *propertyName = [self.class convertToJson:name];
             
-            Class class = [self classOfProperty:name forObjectClass:[self class]];
+            Class class = [NSObject classOfProperty:name forObjectClass:[self class]];
             id value = values[propertyName];
             
             if (value && ![value isKindOfClass:[NSNull class]]) {
@@ -91,19 +122,6 @@ static StringFormat MapperFormat;
     return self;
 }
 
-+ (NSArray *)propertyNames {
-    NSMutableArray *names = [[NSMutableArray alloc] init];
-    unsigned int count = 0;
-    objc_property_t *properties = class_copyPropertyList(self, &count);
-    
-    for (unsigned int i=0; i<count; i++) {
-        NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
-        [names addObject:name];
-    }
-    free(properties);
-    return names;
-}
-
 - (Class)classOfProperty:(NSString *)name forObjectClass:(Class)objectClass {
     
     Class class = nil;
@@ -123,6 +141,81 @@ static StringFormat MapperFormat;
     }
     return class;
 }
++ (DictStringString *)initializePropertyAttributeNames {
+    if ([self usingAncestors]) {
+        NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+        Class class = self;
+        while (class != [MKModel class]) {
+            [dict addEntriesFromDictionary:[self attributePropertyNamesOfClass:class]];
+            class = [class superclass];
+        }
+        return dict;
+    }
+    else {
+        return [self attributePropertyNamesOfClass:self];
+    }
+}
+
++ (DictStringString *)initializePropertyClassNames {
+    DictStringString *attrPropertyDict = self.class.propertyAttributeNames;
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    
+    [attrPropertyDict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        
+        if ([obj characterAtIndex:1] == '@') {
+            NSArray *components = [obj componentsSeparatedByString:@"\""];
+            if (components.count > 1) {
+                [dict setObject:components[1] forKey:key];
+            }
+        }
+    }];
+    return dict;
+}
+
++ (StringArr *)initializePropertyNames {
+    if ([self usingAncestors]) {
+        MStringArr *arr = [[MStringArr alloc] init];
+        Class class = self;
+        while (class != [MKModel class]) {
+            [arr addObjectsFromArray:[self propertyNamesOfClass:class]];
+            class = [class superclass];
+        }
+        return arr;
+    }
+    else {
+        return [self propertyNamesOfClass:self];
+    }
+}
+
++ (StringArr *)initializeDatePropertyNames {
+    if ([self usingAncestors]) {
+        MStringArr *arr = [[MStringArr alloc] init];
+        Class class = self;
+        while (class != [MKModel class]) {
+            [arr addObjectsFromArray:[self datePropertiesForClass:class]];
+            class = [class superclass];
+        }
+        return arr;
+    }
+    else {
+        return [self datePropertiesForClass:self];
+    }
+}
+
++ (StringArr *)datePropertiesForClass:(Class)className {
+    NSArray *names = [className propertyNames];
+    MStringArr *arr = [[MStringArr alloc] init];
+
+    for (NSString *name in names) {
+        
+        Class class = [className classOfProperty:name forObjectClass:[self class]];
+        if (class == [NSDate class]) {
+            [arr addObject:name];
+        }
+    }
+    return arr;
+}
+
 
 #pragma mark - JSONModel
 
@@ -143,12 +236,18 @@ static StringFormat MapperFormat;
     return dict;
 }
 
+- (NSDictionary *)toDictionary {
+    NSMutableDictionary *dict = [[super toDictionary] mutableCopy];
+    [dict removeObjectsForKeys:[self.class excludedKeys]];
+    return dict;
+}
+
 + (JSONKeyMapper *)keyMapper {
     return [[JSONKeyMapper alloc] initWithModelToJSONDictionary:[self JSONMapperDict]];
 }
 
 + (DictStringString *)JSONMapperDict {
-    return [self keyMapperWithFormat:MapperFormat];
+    return [self keyMapperWithFormat:self.mapperFormat];
 }
 
 + (DictStringString *)DBMapperDict {
@@ -203,19 +302,15 @@ static StringFormat MapperFormat;
     return dict;
 }
 
-- (NSString *)convertToJson:(NSString *)property {
-    return [[[self class] JSONMapperDict] objectForKey:property];
++ (NSString *)convertToJson:(NSString *)property {
+    return [[self JSONMapperDict] objectForKey:property];
 }
 
-- (NSString *)convertToProperty:(NSString *)json {
-    NSArray *keys = [[[self class] JSONMapperDict] allKeysForObject:json];
-    if (keys && keys.count) {
-        return keys[0];
-    }
-    return nil;
++ (NSString *)convertToProperty:(NSString *)json {
+    return [[self JSONMapperDict] allKeysForObject:json].firstObject;
 }
 
-- (NSDateFormatter *)dateFormatter {
++ (NSDateFormatter *)dateFormatter {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
     [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
@@ -227,13 +322,13 @@ static StringFormat MapperFormat;
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super init]) {
-        [self MKInitWithCoder:aDecoder];
+        [self MKInitWithCoder:aDecoder baseClass:[MKModel class]];
     }
     return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-    [self MKEncodeWithCoder:aCoder];
+    [self MKEncodeWithCoder:aCoder baseClass:[MKModel class]];
 }
 
 - (id)copyWithZone:(NSZone *)zone {
@@ -241,7 +336,7 @@ static StringFormat MapperFormat;
 }
 
 - (BOOL)isEqual:(id)object {
-    return [self MKIsEqual:object];
+    return [self MKIsEqual:object properties:self.class.propertyNames];
 }
 
 - (NSUInteger)hash {
@@ -312,6 +407,75 @@ static StringFormat MapperFormat;
         [dict setObject:[name format:format] forKey:name];
     }
     return dict;
+}
+
+
+#pragma mark - search predicate
+
++ (NSArray<Class> *)searchPredicateClasses {
+    StringArr *properties = [self searchPredicatePropertyNames];
+    
+    if (properties.count == 0) return @[self];
+
+    NSMutableArray *set = [[NSMutableArray alloc] init];
+    for (NSString *name in properties) {
+        
+        Class cls = name == NSStringFromClass(self) ? self : NSClassFromString(self.propertyClassNames[name]);
+        if (cls) [set addObject:cls];
+    }
+    return set;
+}
+
++ (StringArr *)searchPredicatePropertyNames {
+    return nil;
+}
+
++ (DictStringString *)searchPredicateKeyValues {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    NSArray<Class> *searchClasses = [self searchPredicateClasses];
+    
+    for (Class cls in searchClasses) {
+
+        NSArray *keys = [cls searchPredicateKeys];
+        
+        for (NSString *key in keys) {
+            NSString *name = [key copy];
+            NSString *className = cls.propertyClassNames[key];
+            if (className.length == 0) continue;
+            
+            if (self != cls) {
+                name = [NSString stringWithFormat:@"%@.%@", NSStringFromClass(cls), key];
+            }
+            
+            [dict setObject:className forKey:name];
+        }
+    }
+
+    return dict;
+}
+
++ (StringArr *)searchPredicateKeys {
+    return @[];
+}
+
+#pragma mark - utility
+
+- (NSString *)stringJSON {
+    NSData *data = [NSJSONSerialization dataWithJSONObject:[self toDictionary] options:0 error:nil];
+    NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    return string;
+}
+
+- (void)setWithObject:(__kindof MKModel *)object {
+    
+    if (![self isKindOfClass:[object class]]) return;
+    
+    for (NSString *name in self.class.propertyNames) {
+        if ([self respondsToSelector:NSSelectorFromString(name)] &&
+            [object respondsToSelector:NSSelectorFromString(name)]) {
+            [self setValue:[object valueForKey:name] forKey:name];
+        }
+    }
 }
 
 @end
