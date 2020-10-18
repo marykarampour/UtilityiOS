@@ -15,8 +15,6 @@ typedef NS_ENUM(NSUInteger, NAV_BAR_ITEM_TYPE) {
     NAV_BAR_ITEM_TYPE_IMAGE
 };
 
-NS_ASSUME_NONNULL_BEGIN
-
 @interface UIViewController (Utility)
 
 /** @brief Use to add a view controller as a child view controller
@@ -46,5 +44,3 @@ NS_ASSUME_NONNULL_BEGIN
 - (UIBarButtonItem *)navBarButtonWithAction:(SEL)action type:(NAV_BAR_ITEM_TYPE)type title:(NSString *)title systemItem:(UIBarButtonSystemItem)item image:(UIImage *)image;
 
 @end
-
-NS_ASSUME_NONNULL_END

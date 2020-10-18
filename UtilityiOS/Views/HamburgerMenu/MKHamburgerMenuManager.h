@@ -11,12 +11,13 @@
 
 @interface MKHamburgerMenuManager : NSObject
 
-@property (nonatomic, strong, readonly) MKHamburgerContainerViewController *menuVC;
+@property (nonatomic, strong, readonly) __kindof MKHamburgerContainerViewController *menuVC;
 @property (nonatomic, strong, readonly) __kindof UIViewController *presentingVC;
 
 + (MKHamburgerMenuManager *)instance;
 
+- (void)initializeContainerWithMenu:(__kindof MKHamburgerViewController *)menuVC;
 - (void)setPresentingViewController:(__kindof UIViewController *)presentingVC;
-- (void)dismissMenu;
+- (void)dismissMenuWithCompletion:(void (^)(void))completion;
 
 @end

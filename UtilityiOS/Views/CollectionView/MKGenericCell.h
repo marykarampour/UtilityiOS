@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MKCellContentController.h"
-#import "MKTableViewCell.h"
+#import "MKBaseTableViewCell.h"
 #import "MKCollectionView.h"
 
 @protocol MKHorizontalCellProtocol <NSObject>
@@ -25,7 +25,7 @@
 
 /** @brief this cell contains a one row collection view */
 
-@interface MKHorizontalTableViewCell : MKTableViewCell <MKHorizontalCellProtocol>
+@interface MKHorizontalTableViewCell : MKBaseTableViewCell <MKHorizontalCellProtocol>
 
 @property (nonatomic, strong, readonly) __kindof MKHorizontalCollectionViewController *controller;
 

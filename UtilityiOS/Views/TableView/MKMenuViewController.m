@@ -7,17 +7,55 @@
 //
 
 #import "MKMenuViewController.h"
+#import "UIViewController+Utility.h"
+#import "UINavigationController+Transition.h"
 #import "UIView+Utility.h"
+#import "MKHeaderFooterContainerViewController.h"
 
 @implementation SpinnerItem
 
 @end
 
+@interface MKMenuObject ()
+
+@property (nonatomic, assign, readwrite) Class trueVCClass;
+
+@end
+
 @implementation MKMenuObject
+
+- (void)setVCClass:(Class)VCClass {
+    _VCClass = VCClass;
+    [self setTrueVCClass];
+}
+
+- (void)setType:(NSUInteger)type {
+    _type = type;
+    [self setTrueVCClass];
+}
+
+- (void)setTrueVCClass {
+    [self viewController];
+}
+
+- (UIViewController *)viewController {
+    //TODO: do not init if already exists
+    UIViewController *nextViewController;
+    if ([self.VCClass instancesRespondToSelector:@selector(initWithType:)]) {
+        nextViewController = [[self.VCClass alloc] initWithType:self.type];
+    }
+    else {
+        nextViewController = [[self.VCClass alloc] init];
+    }
+    self.trueVCClass = [nextViewController class];
+    return nextViewController;
+}
 
 @end
 
 @implementation MKMenuSection
+
+@dynamic items;
 
 @end
 
@@ -26,6 +64,9 @@
 
 @property (nonatomic, strong) BadgeView *badge;
 @property (nonatomic, strong) UIActivityIndicatorView *spinner;
+@property (nonatomic, strong) NSLayoutConstraint *iconSizeConstraint;
+@property (nonatomic, strong, readwrite) UIImageView *iconImage;
+@property (nonatomic, strong, readwrite) MKLabel *titleLabel;
 
 @end
 
@@ -37,11 +78,29 @@
         self.selectionStyle = UITableViewCellSelectionStyleDefault;
         self.badge = [[BadgeView alloc] init];
         self.spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        self.iconImage = [[UIImageView alloc] init];
+        self.iconImage.contentMode = UIViewContentModeScaleAspectFit;
+        self.titleLabel = [[MKLabel alloc] init];
         
+        [self.contentView addSubview:self.iconImage];
+        [self.contentView addSubview:self.titleLabel];
         [self.contentView addSubview:self.badge];
+        
         [self.contentView removeConstraintsMask];
-        [self.contentView constraint:NSLayoutAttributeRight view:self.badge];
+        [self.contentView constraint:NSLayoutAttributeRight view:self.badge margin:-[Constants HorizontalSpacing]];
         [self.contentView constraint:NSLayoutAttributeCenterY view:self.badge];
+        [self.contentView constraint:NSLayoutAttributeLeft view:self.iconImage margin:[Constants HorizontalSpacing]];
+        [self.contentView constraint:NSLayoutAttributeCenterY view:self.iconImage];
+        [self.contentView constraint:NSLayoutAttributeTop view:self.titleLabel];
+        [self.contentView constraint:NSLayoutAttributeBottom view:self.titleLabel];
+        
+        [self.contentView addConstraintWithItem:self.iconImage attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.titleLabel attribute:NSLayoutAttributeLeft multiplier:1.0 constant:-[Constants HorizontalSpacing]];
+        [self.contentView addConstraintWithItem:self.badge attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.titleLabel attribute:NSLayoutAttributeRight multiplier:1.0 constant:[Constants HorizontalSpacing]];
+        
+        self.iconSizeConstraint = [NSLayoutConstraint constraintWithItem:self.iconImage attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0];
+        [self.contentView addConstraintWithItem:self.iconImage attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.iconImage attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0];
+        
+        [self.contentView addConstraint:self.iconSizeConstraint];
     }
     return self;
 }
@@ -52,8 +111,12 @@
             [self animateSpinner];
         }
         else {
-            self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            self.accessoryView = nil;
+            if (obj.accessoryView) {
+                self.accessoryView = obj.accessoryView;
+            }
+            else {
+                self.accessoryType = obj.accessoryType;
+            }
         }
     }
     else {
@@ -64,8 +127,12 @@
             }
             self.badge.hidden = badgeStr.length > 0;
         }
-        self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        self.accessoryView = nil;
+        if (obj.accessoryView) {
+            self.accessoryView = obj.accessoryView;
+        }
+        else {
+            self.accessoryType = obj.accessoryType;
+        }
     }
 }
 
@@ -80,6 +147,11 @@
     self.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
+- (void)setIconSize:(CGFloat)size {
+    self.iconSizeConstraint.constant = size;
+    [self setNeedsLayout];
+}
+
 @end
 
 @interface MKMenuViewController ()
@@ -90,13 +162,15 @@
 
 @implementation MKMenuViewController
 
+@dynamic sections;
+
 - (instancetype)init {
     return [self initWithStyle:UITableViewStyleGrouped];
 }
 
 - (instancetype)initWithStyle:(UITableViewStyle)style {
     if (self = [super initWithStyle:style]) {
-        [self createMenuObjects];
+        [self reloadMenu];
     }
     return self;
 }
@@ -111,19 +185,120 @@
     
     _timer = [NSTimer scheduledTimerWithTimeInterval:BADGE_POOLING_TIMER target:self selector:@selector(updateBadges) userInfo:nil repeats:YES];
     [self updateBadges];
+    [self setItemsStyle];
+    [self reloadDataAnimated:NO];
 }
 
-- (void)transitionToView:(NSIndexPath *)indexPath {
++ (UIViewController *)viewControllerForObject:(MKMenuObject *)obj {
+    return [obj viewController];
+}
+
+- (void)transitionToView:(NSIndexPath *)indexPath animated:(BOOL)animated {
     MKMenuObject *obj = [self menuItemForIndexPath:indexPath];
-    UIViewController *nextViewController;
+    UIViewController *nextViewController = [self.class viewControllerForObject:obj];
+    UIViewController *navigationVC = self.containerVC ? self.containerVC : self;
     
-    if ([obj.VCClass instancesRespondToSelector:@selector(initWithType:)]) {
-        nextViewController = [[obj.VCClass alloc] initWithType:obj.type];
+    if (navigationVC.navigationController) {
+        [navigationVC.navigationController pushViewController:nextViewController animated:animated];
     }
     else {
-        nextViewController = [[obj.VCClass alloc] init];
+        UIViewController *presentingVC = navigationVC.presentingViewController;
+        UINavigationController *presentingNav;
+        if ([presentingVC isKindOfClass:[UINavigationController class]]) {
+            presentingNav = (UINavigationController *)presentingVC;
+        }
+        else if (presentingVC.navigationController) {
+            presentingNav = presentingVC.navigationController;
+        }
+        
+        //dismiss the menu
+        if (self.containerVC) {
+            [self.containerVC dismissViewControllerAnimated:animated completion:nil];
+        }
+        else {
+            [self dismissViewControllerAnimated:animated completion:nil];
+        }
+        
+        for (UIViewController *childMenu in presentingVC.childViewControllers) {
+            if ([childMenu isKindOfClass:[MKMenuViewController class]]) {
+                [((MKMenuViewController *)childMenu) transitionToView:indexPath animated:animated];
+                return;
+            }
+        }
+        
+        //push next VC
+        if (presentingNav) {
+            //Assuming presentingNav's VCs correspond to menu items
+            MKMenuSection *section = self.sections.firstObject;
+            UIViewController *currentVC = presentingNav.topViewController;
+            NSMutableArray<UIViewController *> *VCs = [presentingNav.viewControllers mutableCopy];
+            NSUInteger navigationIndex = [section.items indexOfObject:obj];
+            NSUInteger currentIndex = [VCs indexOfObject:currentVC];
+            
+            if (currentIndex < navigationIndex) {
+                for (NSUInteger i=currentIndex+1; i<=navigationIndex; i++) {
+                    
+                    if (section.items.count <= i) break;
+                    
+                    MKMenuObject *obj = section.items[i];
+                    UIViewController *nextVC = [self.class viewControllerForObject:obj];
+                    [VCs insertObject:nextVC atIndex:i];
+                }
+                [presentingNav setViewControllers:VCs animated:animated];
+            }
+            else if (navigationIndex < currentIndex) {
+                [presentingNav popToViewControllerAtIndex:navigationIndex animated:animated];
+            }
+        }
+        else {
+            [presentingVC presentViewController:nextViewController animationType:animated ? kCATransitionFromRight : nil timingFunction:kCAAnimationLinear completion:nil];
+        }
     }
-    [self.navigationController pushViewController:nextViewController animated:YES];
+}
+
++ (void)transitionToNextItemFromView:(__kindof UIViewController *)VC {
+    
+    UIViewController *pvc = [VC previousViewController];
+    MKMenuViewController *mvc;
+    
+    if ([pvc isKindOfClass:[MKMenuViewController class]]) {
+        mvc = (MKMenuViewController *)pvc;
+    }
+    else if ([pvc isKindOfClass:[MKHeaderFooterContainerViewController class]]) {
+        
+        MKHeaderFooterContainerViewController *hvc = (MKHeaderFooterContainerViewController *)pvc;
+        mvc = (MKMenuViewController *)hvc.childViewController;
+    }
+    //TODO: this should loop through all sections
+    if ([mvc isKindOfClass:[MKMenuViewController class]]) {
+        MKMenuSection *section = (MKMenuSection *)mvc.sections.firstObject;
+        
+        if ([section isKindOfClass:[MKMenuSection class]]) {
+            
+            __block NSInteger index = -1;
+            
+            [section.items enumerateObjectsUsingBlock:^(MKMenuObject * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                if (obj.VCClass == VC.class || [VC isKindOfClass:obj.VCClass]) {
+                    index = idx;
+                    *stop = YES;
+                }
+            }];
+            
+            if (index >= 0 && index+1 < section.items.count) {
+                
+                MKMenuObject *item = section.items[index+1];
+                [VC.navigationController popViewControllerAnimated:NO];
+                
+                if (item.action && [mvc respondsToSelector:item.action]) {
+                    [mvc performSelector:item.action];
+                }
+                else {
+                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index+1 inSection:0];
+                    [mvc transitionToView:indexPath animated:NO];
+                }
+            }
+        }
+    }
 }
 
 #pragma mark - Table view data source
@@ -131,7 +306,7 @@
 - (NSUInteger)numberOfRowsInSectionWhenExpanded:(NSUInteger)section {
     MKMenuSection *sect = [self menuSectionForSection:section];
     if (sect) {
-        return sect.menuItems.count;
+        return sect.items.count;
     }
     return [self numberOfRowsInNonMenuSectionWhenExpanded:section];
 }
@@ -144,28 +319,62 @@
     return [self titleForHeaderInNonMenuSection:section];
 }
 
-- (MKTableViewCell *)baseCellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    MKTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[MKTableViewCell identifier]];
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    MKMenuObject *obj = [self menuItemForIndexPath:indexPath];
+    return obj.hidden ? 0.0 : [self heightForVisibleRowAtIndexPath:indexPath];
+}
+
+- (CGFloat)heightForVisibleRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 48.0;
+}
+
+- (MKBaseTableViewCell *)baseCellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    MKBaseTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[MKBaseTableViewCell identifier]];
     if (cell == nil) {
-        cell = [[MKTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[MKTableViewCell identifier]];
+        cell = [[MKBaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[MKBaseTableViewCell identifier]];
     }
     return cell;
 }
 
 - (MKMenuTableViewCell *)baseMenuCellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MKMenuTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[MKMenuTableViewCell identifier]];
+    
     if (cell == nil) {
         cell = [[MKMenuTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[MKMenuTableViewCell identifier]];
     }
     return cell;
 }
 
+- (void)customizeBaseMenuCell:(__kindof MKMenuTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    MKMenuObject *obj = [self menuItemForIndexPath:indexPath];
+    
+    cell.accessoryType = obj.accessoryType;
+    cell.iconImage.image = obj.iconImage;
+    cell.iconImage.tintColor = obj.tintColor;
+    cell.titleLabel.textColor = obj.textColor;
+    cell.titleLabel.font = obj.font;
+    
+    if (obj.selectedColor) {
+        UIView *view = [[UIView alloc] init];
+        view.backgroundColor = obj.selectedColor;
+        cell.selectedBackgroundView = view;
+    }
+    if (obj.backgroundColor) {
+        cell.backgroundColor = obj.backgroundColor;
+        cell.contentView.backgroundColor = obj.backgroundColor;
+    }
+    
+    [cell setIconSize:obj.iconSize];
+    cell.titleLabel.text = [self titleForItem:indexPath];
+}
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MKMenuObject *obj = [self menuItemForIndexPath:indexPath];
     if (obj) {
         __kindof MKMenuTableViewCell *cell = [self baseMenuCellForRowAtIndexPath:indexPath];
+        [self customizeBaseMenuCell:cell forRowAtIndexPath:indexPath];
         [cell updateWithObject:obj];
-        cell.textLabel.text = [self titleForItem:indexPath];
         return cell;
     }
     return [self baseCellForRowAtIndexPath:indexPath];
@@ -181,10 +390,11 @@
             [self performSelector:obj.action];
         }
         else {
-            [self transitionToView:indexPath];
+            [self transitionToView:indexPath animated:YES];
         }
     }
     self.selectedOption = indexPath;
+    [self reloadDataAnimated:NO];
 }
 
 - (NSString *)titleForItem:(NSIndexPath *)indexPath {
@@ -194,7 +404,7 @@
 
 - (MKMenuObject *)menuItemForTitle:(NSString *)title {
     for (MKMenuSection *sect in self.sections) {
-        for (MKMenuObject *obj in sect.menuItems) {
+        for (MKMenuObject *obj in sect.items) {
             if ([obj.title isEqualToString:title]) {
                 return obj;
             }
@@ -205,7 +415,7 @@
 
 - (MKMenuObject *)menuItemForIndexPath:(NSIndexPath *)indexPath {
     MKMenuSection *sect = [self menuSectionForSection:indexPath.section];
-    return sect.menuItems[indexPath.row];
+    return sect.items[indexPath.row];
 }
 
 - (MKMenuSection *)menuSectionForSection:(NSUInteger)section {
@@ -220,11 +430,34 @@
     for (MKTableViewSection *sect in self.sections) {
         if ([sect isKindOfClass:[MKMenuSection class]]) {
             MKMenuSection * menu = (MKMenuSection *)sect;
-            if ([menu.menuItems containsObject:item]) {
+            if ([menu.items containsObject:item]) {
                 return menu;
             }
         }
     }
+    return nil;
+}
+
+- (void)setItemsStyle {
+    [self.sections enumerateObjectsUsingBlock:^(__kindof MKMenuSection * _Nonnull sec, NSUInteger idxs, BOOL * _Nonnull stops) {
+        [sec.items enumerateObjectsUsingBlock:^(MKMenuObject * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            
+            NSIndexPath *path = [NSIndexPath indexPathForRow:idx inSection:idxs];
+            [self setStyleForItem:obj atIndexPath:path];
+        }];
+    }];
+}
+
+- (void)setStyleForItem:(MKMenuObject *)item atIndexPath:(NSIndexPath *)indexPath {
+    item.accessoryType = [self accessoryTypeForIndexPath:indexPath];
+    item.accessoryView = [self accessoryViewForIndexPath:indexPath];
+}
+
+- (UITableViewCellAccessoryType)accessoryTypeForIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewCellAccessoryNone;
+}
+
+- (UIView *)accessoryViewForIndexPath:(NSIndexPath *)indexPath {
     return nil;
 }
 
@@ -241,6 +474,14 @@
 
 - (void)createMenuObjects {
     RaiseExceptionMissingMethodInClass
+}
+
+- (void)reloadMenu {
+    [self.sections removeAllObjects];
+    [self createMenuObjects];
+    [self updateBadges];
+    [self setItemsStyle];
+    [self reloadDataAnimated:NO];
 }
 
 - (void)updateBadges {
@@ -284,11 +525,6 @@
         [self.tableView endUpdates];
         [self.tableView selectRowAtIndexPath:self.selectedOption animated:NO scrollPosition:UITableViewScrollPositionNone];
     });
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

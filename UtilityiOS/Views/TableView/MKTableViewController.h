@@ -7,21 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MKLabel.h"
 #import "MKBadgeItem.h"
-#import "MKTableViewCell.h"
+#import "MKBaseTableViewCell.h"
+#import "ViewControllerTransitionDelegate.h"
 
-typedef NS_ENUM(NSUInteger, ViewControllerTransitionResult) {
-    ViewControllerTransitionResult_UNKNOWN,
-    ViewControllerTransitionResult_OK,
-    ViewControllerTransitionResult_CANCEL
+typedef NS_ENUM(NSUInteger, MKTableViewAccessoryViewType) {
+    MKTableViewAccessoryViewType_HEADER,
+    MKTableViewAccessoryViewType_FOOTER
 };
-
-@protocol ViewControllerTransitionDelegate <NSObject>
-
-@optional
-- (void)viewController:(UIViewController *)viewController didReturnWithResultType:(ViewControllerTransitionResult)resultType andObject:(id)object;
-
-@end
 
 @protocol MKTableViewControllerDelegate <NSObject>
 
@@ -38,13 +32,18 @@ typedef NS_ENUM(NSUInteger, ViewControllerTransitionResult) {
 
 @property (nonatomic, strong, nullable) NSString *footerTitle;
 
+@property (nonatomic, strong) MKLabelMetaData *sectionHeaderData;
+@property (nonatomic, strong) MKLabelMetaData *sectionFooterData;
+
 - (instancetype _Nonnull)initWithType:(NSInteger)type;
 
+- (void)updateTableView;
 - (void)reloadDataAnimated:(BOOL)animated;
 - (void)reloadAllSections;
 - (void)reloadSection:(NSUInteger)section;
-- (void)reloadSection:(NSUInteger)section completion:(void (^)())completion;
-- (void)reloadSections:(NSArray<NSNumber *> *)sections completion:(void (^)())completion;
+- (void)reloadSection:(NSUInteger)section completion:(void (^)(void))completion;
+- (void)reloadSections:(NSArray<NSNumber *> *)sections completion:(void (^)(void))completion;
+- (void)reloadSectionsSet:(NSIndexSet *)sections completion:(void (^)(void))completion;
 - (void)reloadIndexPaths:(IndexPathArr * _Nullable)indexPaths;
 - (void)reloadSection:(NSUInteger)section withHeader:(BOOL)header;
 - (void)removeRowsAtIndexPaths:(IndexPathArr * _Nullable)indexPaths;
@@ -62,8 +61,18 @@ typedef NS_ENUM(NSUInteger, ViewControllerTransitionResult) {
 
 - (UIView *)defaultSectionFooter;
 
+- (void)createTableAccessoryViewOfType:(MKTableViewAccessoryViewType)type withTitle:(NSString *)title;
+- (void)createTableAccessoryViewOfType:(MKTableViewAccessoryViewType)type withAttributedTitle:(NSAttributedString *)title;
+- (void)setView:(__kindof UIView *)view forAccessoryViewOfType:(MKTableViewAccessoryViewType)type;
+
+- (void)scrollToBottomWithDalay:(CGFloat)delay;
+- (void)scrollToBottomOfSection:(NSUInteger)section withDalay:(CGFloat)delay;
+- (void)scrollToBottomOfIndexPath:(NSIndexPath *)indexPath withDalay:(CGFloat)delay;
+- (void)scrollToBottom;
+
 #pragma mark - custom cell templates
 
-- (__kindof MKTableViewCell *)cellContainingView:(UIView *)view;
+- (__kindof MKBaseTableViewCell *)cellContainingView:(UIView *)view;
+- (MKBaseTableViewCell *)emptyCell;
 
 @end

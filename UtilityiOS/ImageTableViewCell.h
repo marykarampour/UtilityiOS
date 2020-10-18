@@ -6,9 +6,9 @@
 //  Copyright © 2017 Maryam Karampour. All rights reserved.
 //
 
-#import "MKTableViewCell.h"
+#import "MKBaseTableViewCell.h"
 
-@interface ImageTableViewCell : MKTableViewCell
+@interface ImageTableViewCell : MKBaseTableViewCell
 
 - (void)setImage:(NSString *)image;
 

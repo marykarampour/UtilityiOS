@@ -15,7 +15,7 @@
     UIView *menuView;
 }
 
-@property (nonatomic, strong) MKHamburgerViewController *menuVC;
+@property (nonatomic, strong, readwrite) MKHamburgerViewController *menuVC;
 @property (nonatomic, strong) NSLayoutConstraint *rightMarginConstraint;
 
 @end
@@ -23,8 +23,12 @@
 @implementation MKHamburgerContainerViewController
 
 - (instancetype)init {
+    return [self initWithMenuVC:[[MKHamburgerViewController alloc] init]];
+}
+
+- (instancetype)initWithMenuVC:(__kindof MKHamburgerViewController *)menuVC {
     if (self = [super init]) {
-        self.menuVC = [[MKHamburgerViewController alloc] init];
+        self.menuVC = menuVC;
     }
     return self;
 }
@@ -45,10 +49,15 @@
     [self.view constraintWidth:self.menuWidth forView:menuView];
     self.rightMarginConstraint = [NSLayoutConstraint constraintWithItem:menuView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.0];
     [self.view addConstraint:self.rightMarginConstraint];
+    [self addTapWithAction:@selector(hideMenu)];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+}
+
+- (void)hideMenu {
+    [self.menuVC hideMenuWithCompletion:nil];
 }
 
 - (void)updateMenuIsHidden:(BOOL)isHidden comletion:(void (^)(void))completion {
@@ -59,11 +68,6 @@
     } completion:^(BOOL finished) {
         if (completion) completion();
     }];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 @end

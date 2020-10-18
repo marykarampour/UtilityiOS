@@ -8,7 +8,6 @@
 
 #import "MKHamburgerMenuManager.h"
 #import "UIViewController+Utility.h"
-//#import "MKAssets+KaChing.h" fix in util library
 #import "MKAssets.h"
 
 @interface MKHamburgerMenuManager ()
@@ -43,14 +42,19 @@
     return _menuVC;
 }
 
+- (void)initializeContainerWithMenu:(__kindof MKHamburgerViewController *)menuVC {
+    self.menuVC = [[MKHamburgerContainerViewController alloc] initWithMenuVC:menuVC];
+}
+
 - (UIBarButtonItem *)barButtonItem {
     UIBarButtonItem *menuButton = [[UIBarButtonItem alloc] initWithImage:[MKAssets Hamburger_Icon] style:UIBarButtonItemStylePlain target:self action:@selector(menuButtonPressed:)];
-    menuButton.tintColor = [AppTheme barTintColor];
+    menuButton.tintColor = [AppTheme barTextColor];
     return menuButton;
 }
 
 - (void)setPresentingViewController:(__kindof UIViewController *)presentingVC {
     self.presentingVC = presentingVC;
+    self.menuVC.menuVC.presentingVC = presentingVC;
     presentingVC.navigationItem.leftBarButtonItem = [self barButtonItem];
 }
 
@@ -63,14 +67,14 @@
 
 - (void)menuButtonPressed:(UIBarButtonItem *)sender {
     [self prepareMenuForPresentation];
-    [self.presentingVC.navigationController presentViewController:self.menuVC animated:NO completion:^{
+    [self.presentingVC.navigationController presentViewController:self.menuVC animationType:nil timingFunction:kCAAnimationLinear completion:^{
         [self.menuVC updateMenuIsHidden:NO comletion:nil];
     }];
 }
 
-- (void)dismissMenu {
+- (void)dismissMenuWithCompletion:(void (^)(void))completion {
     [self.menuVC updateMenuIsHidden:YES comletion:^{
-        [self.menuVC dismissViewControllerAnimated:NO completion:nil];
+        [self.menuVC dismissViewControllerAnimated:NO completion:completion];
     }];
 }
 

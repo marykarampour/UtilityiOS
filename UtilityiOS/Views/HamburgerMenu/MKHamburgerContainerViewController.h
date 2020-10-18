@@ -6,13 +6,15 @@
 //  Copyright © 2018 BHS Consultants. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "MKHamburgerViewController.h"
 
 @interface MKHamburgerContainerViewController : UIViewController
 
 /** @brief constant width of the menu when completely on screen */
 @property (nonatomic, assign) CGFloat menuWidth;
+@property (nonatomic, strong, readonly) MKHamburgerViewController *menuVC;
 
+- (instancetype)initWithMenuVC:(__kindof MKHamburgerViewController *)menuVC;
 - (void)updateMenuIsHidden:(BOOL)isHidden comletion:(void (^)(void))completion;
 
 @end

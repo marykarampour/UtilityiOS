@@ -10,4 +10,8 @@
 
 @interface MKHamburgerViewController : MKMenuViewController
 
+@property (nonatomic, weak) __kindof UIViewController *presentingVC;
+
+- (void)hideMenuWithCompletion:(void (^)(void))completion;
+
 @end

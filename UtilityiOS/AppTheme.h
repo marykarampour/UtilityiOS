@@ -29,13 +29,17 @@ extern AppThemeStyle THEME_STYLE;
 
 //color
 + (UIColor *)barTintColor;
++ (UIColor *)navBarTintColor;
 + (UIColor *)barTextColor;
++ (UIColor *)barTextDisabledColor;
++ (UIColor *)stepperTintColor;
 + (UIColor *)seperatorColor;
 + (UIColor *)sectionHeaderTextColor;
 + (UIColor *)sectionHeaderBackgroundColor;
 + (UIColor *)sectionFooterTextColor;
 + (UIColor *)sectionFooterBackgroundColor;
 + (UIColor *)tableFooterBackgroundColor;
++ (UIColor *)tableFooterTextColor;
 + (UIColor *)tableCellBackgroundColor;
 + (UIColor *)tableCellAccessoryViewColor;
 + (UIImage *)tableCellDisclosureIndicatorImage;
@@ -57,6 +61,9 @@ extern AppThemeStyle THEME_STYLE;
 + (UIColor *)labelLightColor;
 + (UIColor *)labelMediumColor;
 + (UIColor *)labelDarkColor;
+
++ (UIColor *)checkboxTintColor;
++ (UIColor *)checkboxDisabledColor;
 
 + (UIColor *)buttonBackgroundColor;
 + (UIColor *)buttonTextColor;
@@ -90,9 +97,73 @@ extern AppThemeStyle THEME_STYLE;
 + (UIFont *)mediumBoldLabelFont;
 + (UIFont *)largeBoldLabelFont;
 + (UIFont *)XlargeBoldLabelFont;
++ (UIFont *)XlargeTallBoldFont;
++ (UIFont *)largeTallBoldFont;
++ (UIFont *)mediumTallBoldFont;
++ (UIFont *)largeTallFont;
++ (UIFont *)XlargeTallFont;
++ (UIFont *)mediumTallFont;
++ (UIFont *)smallTallFont;
++ (UIFont *)XsmallTallFont;
++ (UIFont *)XXsmallTallFont;
++ (UIFont *)XXlargeTallFont;
++ (UIFont *)XXXsmallBoldLabelFont;
++ (UIFont *)XXXsmallLabelFont;
 
 + (UIFont *)textViewFont;
 + (UIFont *)textFieldFont;
 + (UIFont *)tableFooterFont;
+
++ (UIFont *)navBarFont;
+
++ (UIFont *)segmentedControlFont;
++ (UIColor *)segmentedControlNormalColor;
++ (UIColor *)segmentedControlSelectedColor;
+
++ (UIColor *)tableCellSelectedColor;
++ (UIColor *)tableHeaderBackgroundColor;
++ (UIColor *)tableHeaderTextColor;
++ (UIFont *)tableHeaderFont;
+
++ (UIColor *)collectionViewSectionHeaderBackgroundColor;
++ (UIColor *)collectionViewSectionHeaderTextColor;
++ (UIFont *)collectionViewSectionHeaderFont;
+
++ (UIColor *)searchBarTintColor;
++ (UIColor *)searchBarElementsTintColor;
++ (UIColor *)searchBarTextColor;
++ (UIColor *)searchBarTextFieldBackgroundColor;
+
++ (UIColor *)blackBlueColorWithAlpha:(CGFloat)alpha;
++ (UIColor *)nightBlueColorWithAlpha:(CGFloat)alpha;
++ (UIColor *)darkBlueColorWithAlpha:(CGFloat)alpha;
++ (UIColor *)mediumBlueColorWithAlpha:(CGFloat)alpha;
++ (UIColor *)lightBlueColorWithAlpha:(CGFloat)alpha;
++ (UIColor *)mistBlueColorWithAlpha:(CGFloat)alpha;
++ (UIColor *)brightBlueColorWithAlpha:(CGFloat)alpha;
++ (UIColor *)whiteBlueColorWithAlpha:(CGFloat)alpha;
++ (UIColor *)darkBrightBlueColorWithAlpha:(CGFloat)alpha;
+
++ (UIColor *)darkGreenColorWithAlpha:(CGFloat)alpha;
++ (UIColor *)mediumGreenColorWithAlpha:(CGFloat)alpha;
++ (UIColor *)lightGreenColorWithAlpha:(CGFloat)alpha;
++ (UIColor *)mistGreenColorWithAlpha:(CGFloat)alpha;
++ (UIColor *)brightGreenColorWithAlpha:(CGFloat)alpha;
+
++ (UIColor *)brightSilverColorWithAlpha:(CGFloat)alpha;
++ (UIColor *)lightSilverColorWithAlpha:(CGFloat)alpha;
++ (UIColor *)mediumSilverColorWithAlpha:(CGFloat)alpha;
++ (UIColor *)darkSilverColorWithAlpha:(CGFloat)alpha;
++ (UIColor *)blackSilverColorWithAlpha:(CGFloat)alpha;
+
++ (UIColor *)brightRedColorWithAlpha:(CGFloat)alpha;
++ (UIColor *)lightRedColorWithAlpha:(CGFloat)alpha;
++ (UIColor *)mediumRedColorWithAlpha:(CGFloat)alpha;
++ (UIColor *)darkRedColorWithAlpha:(CGFloat)alpha;
++ (UIColor *)blackRedColorWithAlpha:(CGFloat)alpha;
+
++ (UIColor *)mediumYellowColorWithAlpha:(CGFloat)alpha;
++ (UIColor *)darkOrangeColorWithAlpha:(CGFloat)alpha;
++ (UIColor *)lightOrangeColorWithAlpha:(CGFloat)alpha;
 
 @end

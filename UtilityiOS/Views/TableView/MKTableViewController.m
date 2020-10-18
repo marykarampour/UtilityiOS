@@ -7,7 +7,8 @@
 //
 
 #import "MKTableViewController.h"
-#import "ServerController.h"
+#import "UIViewController+Utility.h"
+#import "MultiLabelView.h"
 
 static dispatch_queue_t dispatch;
 
@@ -46,28 +47,16 @@ static dispatch_queue_t dispatch;
     self.tableView.estimatedRowHeight = [Constants DefaultRowHeight];
     self.tableView.estimatedSectionHeaderHeight = 0;
     self.tableView.estimatedSectionFooterHeight = 0;
-    if (@available(iOS 11.0, *)) {
-        self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-    }
+//    if (@available(iOS 11.0, *)) {
+//        self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+//    }
     
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-    [self.view addGestureRecognizer:tap];
-    [tap setCancelsTouchesInView:NO];
-}
+    self.sectionHeaderData = [MKLabelMetaData dataWithInsets:UIEdgeInsetsZero font:[UIFont KCTableCellTitleFontBold] textColor:[AppTheme sectionHeaderTextColor] backgroundColor:[AppTheme sectionHeaderBackgroundColor]];
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-}
-
-- (void)handleTap:(UITapGestureRecognizer *)sender {
-    if (sender.state == UIGestureRecognizerStateEnded) {
-        [self.view endEditing:YES];
-    }
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    
+    self.sectionFooterData = [MKLabelMetaData dataWithInsets:UIEdgeInsetsZero font:[UIFont KCTableCellTitleFontBold] textColor:[AppTheme sectionFooterTextColor] backgroundColor:[AppTheme sectionFooterBackgroundColor]];
+    
+    [self addTapToDismissKeyboard];
 }
 
 #pragma mark - Table view data source
@@ -96,29 +85,34 @@ static dispatch_queue_t dispatch;
     return UITableViewAutomaticDimension;
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     
-    UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    if ([header respondsToSelector:@selector(textLabel)]) {
-        [header.textLabel setTextColor:[AppTheme sectionHeaderTextColor]];
-    }
-    if ([header respondsToSelector:@selector(backgroundView)]) {
-        header.backgroundView.backgroundColor = [AppTheme sectionHeaderBackgroundColor];
-    }
+    MKEmbededLabel *view = [[MKEmbededLabel alloc] init];
+    [view setMetaData:self.sectionHeaderData];
+    view.label.text = [self tableView:tableView titleForHeaderInSection:section];
+    return view;
 }
 
-- (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section {
-    UITableViewHeaderFooterView *footer = (UITableViewHeaderFooterView *)view;
-    if ([footer respondsToSelector:@selector(backgroundView)]) {
-        footer.backgroundView.backgroundColor = [AppTheme sectionFooterBackgroundColor];
-    }
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+    
+    MKEmbededLabel *view = [[MKEmbededLabel alloc] init];
+    [view setMetaData:self.sectionFooterData];
+    view.label.text = [self tableView:tableView titleForFooterInSection:section];
+    return view;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [[MKTableViewCell alloc] init];
+    return [[MKBaseTableViewCell alloc] init];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+}
+
+#pragma mark - reload
+
+- (void)updateTableView {
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
 }
 
 - (void)reloadDataAnimated:(BOOL)animated {
@@ -142,7 +136,7 @@ static dispatch_queue_t dispatch;
     });
 }
 
-- (void)reloadSections:(NSArray<NSNumber *> *)sections completion:(void (^)())completion {
+- (void)reloadSections:(NSArray<NSNumber *> *)sections completion:(void (^)(void))completion {
     dispatch_async(dispatch, ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self.tableView beginUpdates];
@@ -153,6 +147,18 @@ static dispatch_queue_t dispatch;
                 }
             }
             [self.tableView reloadSections:set withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView endUpdates];
+            if (completion) completion();
+        });
+    });
+}
+
+
+- (void)reloadSectionsSet:(NSIndexSet *)sections completion:(void (^)(void))completion {
+    dispatch_async(dispatch, ^{
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self.tableView beginUpdates];
+            [self.tableView reloadSections:sections withRowAnimation:UITableViewRowAnimationNone];
             [self.tableView endUpdates];
             if (completion) completion();
         });
@@ -170,16 +176,19 @@ static dispatch_queue_t dispatch;
 }
 
 - (void)reloadSection:(NSUInteger)section {
-    dispatch_async(dispatch, ^{
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [self.tableView beginUpdates];
-            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationAutomatic];
-            [self.tableView endUpdates];
-        });
-    });
+    [UIView performWithoutAnimation:^{
+        
+        CGPoint offset = self.tableView.contentOffset;
+        
+        [self.tableView beginUpdates];
+        [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationNone];
+        [self.tableView endUpdates];
+        
+        self.tableView.contentOffset = offset;
+    }];
 }
 
-- (void)reloadSection:(NSUInteger)section completion:(void (^)())completion {
+- (void)reloadSection:(NSUInteger)section completion:(void (^)(void))completion {
     dispatch_async(dispatch, ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
             [self.tableView beginUpdates];
@@ -207,9 +216,11 @@ static dispatch_queue_t dispatch;
 - (void)reloadIndexPaths:(NSArray<NSIndexPath *> *)indexPaths {
     dispatch_async(dispatch, ^{
         dispatch_sync(dispatch_get_main_queue(), ^{
-            [self.tableView beginUpdates];
-            [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
-            [self.tableView endUpdates];
+            [UIView performWithoutAnimation:^{
+                [self.tableView beginUpdates];
+                [self.tableView reloadRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationNone];
+                [self.tableView endUpdates];
+            }];
         });
     });
 }
@@ -242,6 +253,50 @@ static dispatch_queue_t dispatch;
     }
 }
 
+#pragma mark - scrolling
+
+- (void)scrollToBottomWithDalay:(CGFloat)delay {
+    [self performSelector:@selector(scrollToBottom) withObject:nil afterDelay:delay];
+}
+
+- (void)scrollToBottomOfSection:(NSUInteger)section withDalay:(CGFloat)delay {
+    
+    if ([self.tableView numberOfSections] <= section) return;
+    
+    [UIView animateWithDuration:0.2 delay:delay options:0 animations:^{
+        
+        NSUInteger rows = [self.tableView numberOfRowsInSection:section];
+        rows = rows > 0 ? rows-1 : NSNotFound;
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:rows inSection:section] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    } completion:^(BOOL finished) {
+    }];
+}
+
+- (void)scrollToBottomOfIndexPath:(NSIndexPath *)indexPath withDalay:(CGFloat)delay {
+    
+    if ([self.tableView numberOfSections] <= indexPath.section) return;
+    if ([self.tableView numberOfRowsInSection:indexPath.section] <= indexPath.row) return;
+    
+    [UIView animateWithDuration:0.2 delay:delay options:0 animations:^{
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:indexPath.row inSection:indexPath.section] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    } completion:^(BOOL finished) {
+    }];
+}
+
+- (void)scrollToBottom {
+    //    CGPoint point = CGPointMake(0, self.tableView.contentSize.height - self.tableView.frame.size.height/2.0);
+    //    [self.tableView setContentOffset:point animated:NO];
+    [UIView animateWithDuration:0.2 delay:0.1 options:0 animations:^{
+        NSUInteger last = [self.tableView numberOfSections] - 1;
+        NSUInteger rows = [self.tableView numberOfRowsInSection:last];
+        rows = rows > 0 ? rows-1 : NSNotFound;
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:rows inSection:last] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+    } completion:^(BOOL finished) {
+    }];
+}
+
+#pragma mark - accessory views
+
 - (void)createTableFooterWithTitle:(NSString *)title {
     if (title.length > 0) {
         UILabel *view = [[UILabel alloc] initWithFrame:CGRectMake([Constants HorizontalSpacing], [Constants VerticalSpacing], self.view.frame.size.width-[Constants HorizontalSpacing]*2, [Constants TableFooterHeight])];
@@ -251,13 +306,67 @@ static dispatch_queue_t dispatch;
         view.numberOfLines = 0;
         view.lineBreakMode = NSLineBreakByTruncatingTail;
         view.adjustsFontSizeToFitWidth = YES;
-        view.textColor = [UIColor redColor];
+        view.textColor = [AppTheme sectionFooterTextColor];
         view.font = [AppTheme tableFooterFont];
         self.tableView.tableFooterView = view;
     }
     else {
         UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, self.view.frame.size.width, 1.0)];
         view.backgroundColor = [UIColor whiteColor];
+        self.tableView.tableFooterView = view;
+    }
+}
+
+- (MultiLabelView *)createTableAccessoryViewOfType:(MKTableViewAccessoryViewType)type {
+    MultiLabelView *view = [[MultiLabelView alloc] initWithContentView:nil];
+    [view constructWithType:MultiLabelViewType_Labels leftView:nil rightView:nil labelsCount:1 insets:UIEdgeInsetsMake([Constants TableHeaderPadding], [Constants TableHeaderPadding], [Constants TableHeaderPadding], [Constants TableHeaderPadding])];
+    
+    if (type == MKTableViewAccessoryViewType_HEADER) {
+        view.contentView.backgroundColor = [AppTheme tableHeaderBackgroundColor];
+        view.labels.firstObject.font = [AppTheme tableHeaderFont];
+        view.labels.firstObject.textColor = [AppTheme tableHeaderTextColor];
+    }
+    else {
+        view.contentView.backgroundColor = [AppTheme tableFooterBackgroundColor];
+        view.labels.firstObject.font = [AppTheme tableFooterFont];
+        view.labels.firstObject.textColor = [AppTheme tableFooterTextColor];
+    }
+    return view;
+}
+
+- (void)createTableAccessoryViewOfType:(MKTableViewAccessoryViewType)type withTitle:(NSString *)title {
+    
+    if (title.length == 0) {
+        [self setView:nil forAccessoryViewOfType:type];
+        return;
+    }
+    
+    MultiLabelView *view = [self createTableAccessoryViewOfType:type];
+    [view setText:title forLabelAtIndex:0];
+    view.contentView.frame = CGRectMake(0.0, 0.0, [Constants screenWidth], [view heightForWidth:[Constants screenWidth]]);
+    
+    [self setView:view.contentView forAccessoryViewOfType:type];
+}
+
+- (void)createTableAccessoryViewOfType:(MKTableViewAccessoryViewType)type withAttributedTitle:(NSAttributedString *)title {
+    
+    if (title.length == 0) {
+        [self setView:nil forAccessoryViewOfType:type];
+        return;
+    }
+    
+    MultiLabelView *view = [self createTableAccessoryViewOfType:type];
+    [view setAttributedText:title forLabelAtIndex:0];
+    view.contentView.frame = CGRectMake(0.0, 0.0, [Constants screenWidth], [view heightForWidth:[Constants screenWidth]]);
+    
+    [self setView:view.contentView forAccessoryViewOfType:type];
+}
+
+- (void)setView:(__kindof UIView *)view forAccessoryViewOfType:(MKTableViewAccessoryViewType)type {
+    if (type == MKTableViewAccessoryViewType_HEADER) {
+        self.tableView.tableHeaderView = view;
+    }
+    else {
         self.tableView.tableFooterView = view;
     }
 }
@@ -299,10 +408,14 @@ static dispatch_queue_t dispatch;
 
 #pragma mark - custom cell templates
 
-- (MKTableViewCell *)cellContainingView:(UIView *)view {
+- (MKBaseTableViewCell *)cellContainingView:(UIView *)view {
     CGPoint point = [view convertPoint:view.bounds.origin toView:self.tableView];
     NSIndexPath *path = [self.tableView indexPathForRowAtPoint:point];
     return [self.tableView cellForRowAtIndexPath:path];
+}
+
+- (MKBaseTableViewCell *)emptyCell {
+    return [[MKBaseTableViewCell alloc] init];
 }
 
 @end

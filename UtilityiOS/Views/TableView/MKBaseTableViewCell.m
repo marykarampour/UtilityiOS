@@ -6,9 +6,22 @@
 //  Copyright © 2017 Maryam Karampour. All rights reserved.
 //
 
-#import "MKTableViewCell.h"
+#import "MKBaseTableViewCell.h"
 
-@implementation MKTableViewCell
+@implementation MKTableCellInfo
+
+- (CGFloat)height {
+    return self.hidden ? 0.0 : self.estimatedHeight;
+}
+
+- (void)setHidden:(BOOL)hidden {
+    _hidden = hidden;
+    self.cell.contentView.hidden = hidden;
+}
+
+@end
+
+@implementation MKBaseTableViewCell
 
 + (NSString *)identifier {
     return [NSString stringWithFormat:@"k%@Identifier", NSStringFromClass(self)];
@@ -18,11 +31,12 @@
     return [Constants DefaultRowHeight];
 }
 
+- (instancetype)init {
+    return [self initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[self.class identifier]];
+}
+
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        self.backgroundColor = [AppTheme tableCellBackgroundColor];
-        self.cellController = [[MKCellContentController alloc] initWithCellType:MKCellTypeTableView];
-        [self.cellController setTableViewCell:self];
     }
     return self;
 }
@@ -38,7 +52,7 @@
 - (void)setAccessoryView:(UIView *)accessoryView {
     switch (self.accessoryType) {
         case UITableViewCellAccessoryDisclosureIndicator: {
-            [super setAccessoryView:[MKTableViewCell imageAccessoryView]];
+            [super setAccessoryView:[MKBaseTableViewCell imageAccessoryView]];
         }
             break;
         default: {
