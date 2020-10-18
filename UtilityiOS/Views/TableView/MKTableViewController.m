@@ -39,23 +39,21 @@ static dispatch_queue_t dispatch;
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.tableView.separatorColor = [AppTheme seperatorColor];
     
-    self.automaticallyAdjustsScrollViewInsets = NO;
     self.extendedLayoutIncludesOpaqueBars = NO;
     self.tableView.alwaysBounceHorizontal = NO;
     self.edgesForExtendedLayout = UIRectEdgeNone;
-    
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    self.navigationController.navigationBar.translucent = NO;
+
     self.tableView.estimatedRowHeight = [Constants DefaultRowHeight];
     self.tableView.estimatedSectionHeaderHeight = 0;
     self.tableView.estimatedSectionFooterHeight = 0;
-//    if (@available(iOS 11.0, *)) {
-//        self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-//    }
     
     self.sectionHeaderData = [MKLabelMetaData dataWithInsets:UIEdgeInsetsZero font:[UIFont KCTableCellTitleFontBold] textColor:[AppTheme sectionHeaderTextColor] backgroundColor:[AppTheme sectionHeaderBackgroundColor]];
 
-    
     self.sectionFooterData = [MKLabelMetaData dataWithInsets:UIEdgeInsetsZero font:[UIFont KCTableCellTitleFontBold] textColor:[AppTheme sectionFooterTextColor] backgroundColor:[AppTheme sectionFooterBackgroundColor]];
     
+    [self adjustScrollViewInsetsForNavigationBarHeight:[self adjustedScrollViewInsetsForNavigationBarHeight]];
     [self addTapToDismissKeyboard];
 }
 
@@ -86,18 +84,12 @@ static dispatch_queue_t dispatch;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    
-    MKEmbededLabel *view = [[MKEmbededLabel alloc] init];
-    [view setMetaData:self.sectionHeaderData];
-    view.label.text = [self tableView:tableView titleForHeaderInSection:section];
+    MKEmbededLabel *view = [self basicLabelForAccessoryOfType:MKTableViewAccessoryViewType_HEADER tableView:tableView inSection:section];
     return view;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    
-    MKEmbededLabel *view = [[MKEmbededLabel alloc] init];
-    [view setMetaData:self.sectionFooterData];
-    view.label.text = [self tableView:tableView titleForFooterInSection:section];
+    MKEmbededLabel *view = [self basicLabelForAccessoryOfType:MKTableViewAccessoryViewType_FOOTER tableView:tableView inSection:section];
     return view;
 }
 
@@ -379,6 +371,21 @@ static dispatch_queue_t dispatch;
 
 #pragma mark - helpers
 
+- (MKEmbededLabel *)basicLabelForAccessoryOfType:(MKTableViewAccessoryViewType)type tableView:(UITableView *)tableView inSection:(NSInteger)section {
+    
+    BOOL isHeader = type == MKTableViewAccessoryViewType_HEADER;
+    MKEmbededLabel *view = [[MKEmbededLabel alloc] init];
+    if (isHeader) {
+        [view setMetaData:self.sectionHeaderData];
+        view.label.text = [self tableView:tableView titleForHeaderInSection:section];
+    }
+    else {
+        [view setMetaData:self.sectionFooterData];
+        view.label.text = [self tableView:tableView titleForFooterInSection:section];
+    }
+    return view;
+}
+
 - (void)setFooterTitle:(NSString *)footerTitle {
     _footerTitle = footerTitle;
     [self createTableFooterWithTitle:footerTitle];
@@ -404,6 +411,20 @@ static dispatch_queue_t dispatch;
     else if (self.tabBarController) {
         self.navigationController.tabBarItem.badgeValue = badge.description;
     }
+}
+
+- (void)adjustScrollViewInsetsForNavigationBarHeight:(CGFloat)height {
+    if (@available(iOS 9.0, *)) {
+        
+        CGFloat topInset = height;
+        UIEdgeInsets insets = UIEdgeInsetsMake(topInset, 0, 0, 0);
+        self.tableView.contentInset = insets;
+        self.tableView.scrollIndicatorInsets = insets;
+    }
+}
+
+- (CGFloat)adjustedScrollViewInsetsForNavigationBarHeight {
+    return 0.0;
 }
 
 #pragma mark - custom cell templates

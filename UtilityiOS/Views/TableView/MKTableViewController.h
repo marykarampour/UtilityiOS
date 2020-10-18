@@ -28,7 +28,7 @@ typedef NS_ENUM(NSUInteger, MKTableViewAccessoryViewType) {
 @interface MKTableViewController : UITableViewController <MKTableViewControllerDelegate>
 
 @property (nonatomic, weak) _Nullable id<MKTableViewControllerDelegate> delegate;
-@property (nonatomic, weak) id<ViewControllerTransitionDelegate> transitionDelegate;
+@property (nonatomic, weak) _Nullable id<ViewControllerTransitionDelegate> transitionDelegate;
 
 @property (nonatomic, strong, nullable) NSString *footerTitle;
 
@@ -64,6 +64,7 @@ typedef NS_ENUM(NSUInteger, MKTableViewAccessoryViewType) {
 - (void)createTableAccessoryViewOfType:(MKTableViewAccessoryViewType)type withTitle:(NSString *)title;
 - (void)createTableAccessoryViewOfType:(MKTableViewAccessoryViewType)type withAttributedTitle:(NSAttributedString *)title;
 - (void)setView:(__kindof UIView *)view forAccessoryViewOfType:(MKTableViewAccessoryViewType)type;
+- (MKEmbededLabel *)basicLabelForAccessoryOfType:(MKTableViewAccessoryViewType)type tableView:(UITableView *)tableView inSection:(NSInteger)section;
 
 - (void)scrollToBottomWithDalay:(CGFloat)delay;
 - (void)scrollToBottomOfSection:(NSUInteger)section withDalay:(CGFloat)delay;
@@ -74,5 +75,9 @@ typedef NS_ENUM(NSUInteger, MKTableViewAccessoryViewType) {
 
 - (__kindof MKBaseTableViewCell *)cellContainingView:(UIView *)view;
 - (MKBaseTableViewCell *)emptyCell;
+
+/** @brief Used to adjust the content insets of the table view based on the navigation bar. Default is 0.
+ It can be greater than zero in case of a custom navigation bar */
+- (CGFloat)adjustedScrollViewInsetsForNavigationBarHeight;
 
 @end
