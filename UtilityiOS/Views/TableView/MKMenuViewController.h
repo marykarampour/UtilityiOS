@@ -7,6 +7,7 @@
 //
 
 #import "MKCollapsableSectionsTableViewController.h"
+#import "ActionObject.h"
 #import "BadgeView.h"
 
 @class MKMenuObject;
@@ -83,6 +84,9 @@ static NSString * const typeKey  = @"type";
 @property (nonatomic, strong) SpinnerItem *spinner;
 /** @brief only used if hasBadge is YES */
 @property (nonatomic, strong) MKBadgeItem *badge;
+
+/** @brief Use this method to set properties for the VC being presented */
+@property (nonatomic, strong) ActionObject *actionObject;
 
 @property (nonatomic, assign) UITableViewCellAccessoryType accessoryType;
 @property (nonatomic, strong) UIView *accessoryView;

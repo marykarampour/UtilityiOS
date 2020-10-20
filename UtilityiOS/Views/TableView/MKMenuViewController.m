@@ -194,8 +194,16 @@
 }
 
 - (void)transitionToView:(NSIndexPath *)indexPath animated:(BOOL)animated {
+    
     MKMenuObject *obj = [self menuItemForIndexPath:indexPath];
+    
     UIViewController *nextViewController = [self.class viewControllerForObject:obj];
+    if (obj.actionObject) {
+        if ([obj.actionObject.target respondsToSelector:obj.actionObject.action]) {
+            [obj.actionObject.target performSelector:obj.actionObject.action withObject:obj.actionObject.object];
+        }
+    }
+    
     UIViewController *navigationVC = self.containerVC ? self.containerVC : self;
     
     if (navigationVC.navigationController) {
