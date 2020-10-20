@@ -84,6 +84,10 @@
     [self.placeHolder setHidden:[self hasText]];
 }
 
+- (void)setPlaceholderText:(NSString *)text {
+    self.placeHolder.text = text;
+}
+
 // placeholder position
 - (CGRect)textRectForBounds:(CGRect)bounds {
     return CGRectInset(bounds, 12, 4);

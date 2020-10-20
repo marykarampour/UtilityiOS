@@ -63,7 +63,8 @@ enum {
     TargetType_BASE
 };
 
-typedef NS_ENUM(NSUInteger, TextType) {
+typedef NS_ENUM(NSInteger, TextType) {
+    TextType_NONE = -1,
     TextType_String,
     TextType_Int,
     TextType_IntPositive,

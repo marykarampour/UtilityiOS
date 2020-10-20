@@ -53,7 +53,9 @@
 }
 
 - (void)setPlaceholderText:(NSString *)placeholder {
-    self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:placeholder attributes:@{NSForegroundColorAttributeName:[AppTheme textFieldPlaceholderColor]}];
+    if (placeholder.length) {
+        self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:placeholder attributes:@{NSForegroundColorAttributeName:[AppTheme textFieldPlaceholderColor]}];
+    }
     self.placeholder = placeholder;
 }
 

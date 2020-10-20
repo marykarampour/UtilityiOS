@@ -19,5 +19,6 @@
 
 - (void)showHidePlaceholder;
 - (void)setCharText:(NSString *)text;
+- (void)setPlaceholderText:(NSString *)text;
 
 @end
