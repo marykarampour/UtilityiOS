@@ -328,7 +328,7 @@
 }
 
 - (CGFloat)constantWidthSum {
-    return self.constantWidthSum;
+    return _constantWidthSum;
 }
 
 - (CGFloat)heightForWidth:(CGFloat)width {

@@ -162,7 +162,7 @@
 + (NSString *)privateDocsDir {
     NSArray *paths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES);
     NSString *documentsDirectory = [paths objectAtIndex:0];
-    documentsDirectory = [documentsDirectory stringByAppendingPathComponent:@"Private Documents"];
+    documentsDirectory = [documentsDirectory stringByAppendingPathComponent:@"PrivateDocuments"];
     
     NSError *error;
     [[NSFileManager defaultManager] createDirectoryAtPath:documentsDirectory withIntermediateDirectories:YES attributes:nil error:&error];

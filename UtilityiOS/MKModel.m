@@ -216,6 +216,11 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
     return arr;
 }
 
++ (Class)classForPropertyName:(NSString *)name {
+    NSDictionary *names = [self.class propertyClassNames];
+    NSString *className = [names objectForKey:name];
+    return NSClassFromString(className);
+}
 
 #pragma mark - JSONModel
 
@@ -332,7 +337,7 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-    return [self MKCopyWithZone:zone];
+    return [self MKCopyWithZone:zone baseClass:[MKModel class]];
 }
 
 - (BOOL)isEqual:(id)object {

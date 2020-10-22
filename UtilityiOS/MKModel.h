@@ -68,7 +68,9 @@
 @interface MKModel : JSONModel <NSCoding, NSCopying, MKModelCustomKeysProtocol>
 
 @property (class, nonatomic, strong, readonly) StringArr *propertyNames;
+/** @brief Key is property name and value is Attribute name */
 @property (class, nonatomic, strong, readonly) DictStringString *propertyAttributeNames;
+/** @brief Key is property name and value is class name */
 @property (class, nonatomic, strong, readonly) DictStringString *propertyClassNames;
 @property (class, nonatomic, strong, readonly) StringArr *dateProperties;
 
@@ -115,6 +117,9 @@
 
 /** @brief search property name, return nil if search self */
 + (StringArr *)searchPredicatePropertyNames;
+
+/** @brief Returns class of a property with given name */
++ (Class)classForPropertyName:(NSString *)name;
 
 #pragma mark - utility
 

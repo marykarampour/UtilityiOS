@@ -174,11 +174,11 @@
 + (StringArr *)propertyNamesOfClass:(Class)objectClass {
     MStringArr *fields = [[MStringArr alloc] init];
     unsigned int count = 0;
-    Ivar *properties = class_copyIvarList(objectClass, &count);
+    objc_property_t *properties = class_copyPropertyList(objectClass, &count);
     
     for (unsigned int i=0; i<count; i++) {
-        Ivar var = properties[i];
-        NSString *name = [[NSString stringWithUTF8String:ivar_getName(var)] trimCharSet:@"_"];
+        objc_property_t var = properties[i];
+        NSString *name = [[NSString stringWithUTF8String:property_getName(var)] trimCharSet:@"_"];
         if (name) {
             [fields addObject:name];
         }
@@ -190,11 +190,11 @@
 + (NSDictionary *)attributePropertyNamesOfClass:(Class)objectClass {
     NSMutableDictionary *fields = [[NSMutableDictionary alloc] init];
     unsigned int count = 0;
-    Ivar *properties = class_copyIvarList(objectClass, &count);
+    objc_property_t *properties = class_copyPropertyList(objectClass, &count);
     
     for (unsigned int i=0; i<count; i++) {
-        Ivar var = properties[i];
-        NSString *name = [[NSString stringWithUTF8String:ivar_getName(var)] trimCharSet:@"_"];
+        objc_property_t var = properties[i];
+        NSString *name = [[NSString stringWithUTF8String:property_getName(var)] trimCharSet:@"_"];
         objc_property_t property = class_getProperty(objectClass, [name UTF8String]);
         if (property) {
             NSString *attribute = [NSString stringWithCString:property_getAttributes(property) encoding:NSUTF8StringEncoding];

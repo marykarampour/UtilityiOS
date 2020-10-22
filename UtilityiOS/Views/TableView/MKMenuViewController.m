@@ -202,6 +202,9 @@
         if ([obj.actionObject.target respondsToSelector:obj.actionObject.action]) {
             [obj.actionObject.target performSelector:obj.actionObject.action withObject:obj.actionObject.object];
         }
+        else if ([nextViewController respondsToSelector:obj.actionObject.action]) {
+            [nextViewController performSelector:obj.actionObject.action withObject:obj.actionObject.object];
+        }
     }
     
     UIViewController *navigationVC = self.containerVC ? self.containerVC : self;
