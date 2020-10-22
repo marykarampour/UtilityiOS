@@ -25,7 +25,9 @@ static CGFloat const BUTTON_HEIGHT = 28.0;
         [self.rightButton sizeToFit];
         
         self.view = [[WKWebView alloc] init];
-        self.view.contentMode = UIViewContentModeScaleAspectFill;
+        self.view.contentMode = UIViewContentModeCenter;
+        self.view.backgroundColor = [UIColor clearColor];
+        self.view.scrollView.backgroundColor = [UIColor clearColor];
         
         [self addSubview:self.leftButton];
         [self addSubview:self.rightButton];

@@ -17,8 +17,8 @@ typedef NS_OPTIONS(NSUInteger, MultiLabelViewType) {
 };
 
 #define MULTILABEL_CENTER_X         -1000
-#define MULTILABEL_CENTER_Y         -1000
-#define MULTILABEL_TOP_FIRST_LABEL  -2000
+#define MULTILABEL_CENTER_Y         -2000
+#define MULTILABEL_TOP_FIRST_LABEL  -3000
 
 @interface MultiLabelView : NSObject
 

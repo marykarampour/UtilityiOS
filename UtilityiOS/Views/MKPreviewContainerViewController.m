@@ -26,6 +26,7 @@
 - (instancetype)init {
     if (self = [super init]) {
         mainView = [[UIView alloc] init];
+        mainView.backgroundColor = [UIColor clearColor];
     }
     return self;
 }

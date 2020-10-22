@@ -125,7 +125,7 @@
         [self.contentView constraint:NSLayoutAttributeCenterY view:self.leftView];
     }
     else {
-        [self.contentView addConstraintWithItem:self.labels.firstObject attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.leftView attribute:NSLayoutAttributeTop multiplier:1.0 constant:-(self.edgeIndests.top + [Constants TextPadding])];
+        [self.contentView addConstraintWithItem:self.labels.firstObject attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.leftView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
     }
     
     [self.contentView constraint:NSLayoutAttributeLeft view:self.leftView margin:self.edgeIndests.left];
@@ -157,7 +157,7 @@
         [self.contentView constraint:NSLayoutAttributeCenterY view:self.rightView];
     }
     else {
-        [self.contentView addConstraintWithItem:self.labels.firstObject attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.rightView attribute:NSLayoutAttributeTop multiplier:1.0 constant:-([Constants TextPadding])];
+        [self.contentView addConstraintWithItem:self.labels.firstObject attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.rightView attribute:NSLayoutAttributeTop multiplier:1.0 constant:-0.0];
     }
     
     [self.contentView constraint:NSLayoutAttributeRight view:self.rightView margin:-self.edgeIndests.right];
