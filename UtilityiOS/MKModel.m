@@ -141,6 +141,7 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
     }
     return class;
 }
+
 + (DictStringString *)initializePropertyAttributeNames {
     if ([self usingAncestors]) {
         NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
@@ -162,10 +163,16 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
     
     [attrPropertyDict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         
-        if ([obj characterAtIndex:1] == '@') {
+        if ([obj characterAtIndex:1] == '@') {//objects
             NSArray *components = [obj componentsSeparatedByString:@"\""];
             if (components.count > 1) {
                 [dict setObject:components[1] forKey:key];
+            }
+        }
+        else {//primitives
+            NSArray *components = [obj componentsSeparatedByString:@","];
+            if (components.count > 0 && ((NSString *)components[0]).length > 1) {
+                [dict setObject:[NSString stringWithFormat:@"%c", [components[0] characterAtIndex:1]] forKey:key];
             }
         }
     }];
@@ -481,6 +488,11 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
             [self setValue:[object valueForKey:name] forKey:name];
         }
     }
+}
+
++ (BOOL)propertyIsBool:(NSString *)name {
+    NSString *type = [[self.class propertyClassNames] objectForKey:name];
+    return ([type characterAtIndex:0] == 'c' || [type characterAtIndex:0] == 'B');
 }
 
 @end
