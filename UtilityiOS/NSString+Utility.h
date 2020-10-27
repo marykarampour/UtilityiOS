@@ -88,8 +88,10 @@ typedef NS_ENUM(NSUInteger, StringFormat) {
  UpperCaseString --> Upper Case String
  @endcode
  */
-- (NSString *)splitedStringForUppercaseComponents;
 
+/** @param groupUppercase If YES it will not put extra space between consecutive uppercase letters */
+- (NSString *)splitedStringForUppercaseComponentsAndGroupUppercase:(BOOL)groupUppercase;
+- (NSString *)removeSpaceBetweenOneCharacterSubstrings;
 - (NSString *)numbersOnly;
 
 @end

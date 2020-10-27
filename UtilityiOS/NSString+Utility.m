@@ -211,7 +211,7 @@
     return string;
 }
 
-- (NSString *)splitedStringForUppercaseComponents {
+- (NSString *)splitedStringForUppercaseComponentsAndGroupUppercase:(BOOL)groupUppercase {
     if (self.length < 2) {
         return self;
     }
@@ -228,14 +228,49 @@
         if (newRange.location == NSNotFound) {
             break;
         }
-        if (newRange.location > range.location) {
-            range = NSMakeRange(newRange.location+croppedRange.location, newRange.length);
-            [result insertString:@" " atIndex:range.location];
-        }
+        //if (newRange.location > range.location) {? From PB
+        range = NSMakeRange(newRange.location+croppedRange.location, newRange.length);
+        [result insertString:@" " atIndex:range.location];//}
         range = NSMakeRange(range.location+1, range.length);
         croppedRange = NSMakeRange(range.location+range.length, result.length-range.location-range.length);
     }
-    return result;
+    return groupUppercase ? [result removeSpaceBetweenOneCharacterSubstrings] : result;
+}
+
+- (NSString *)removeSpaceBetweenOneCharacterSubstrings {
+    
+    NSArray<NSString *> *components = [self componentsSeparatedByString:@" "];
+    NSMutableArray<NSString *> *newComponents = [[NSMutableArray alloc] init];
+    NSString *tmpStr;
+    unsigned int tmpIndex;
+    
+    for (unsigned int i=0; i<components.count;) {
+        if (components[i].length == 1) {
+            tmpIndex = i;
+            while (tmpIndex+1 < components.count && components[tmpIndex+1].length == 1) {
+                tmpIndex ++;
+            }
+            if (tmpIndex == i) {
+                [newComponents addObject:components[i]];
+                i++;
+            }
+            else {
+                NSMutableArray<NSString *> *letters = [[NSMutableArray alloc] init];
+                for (unsigned int j=i; j<=tmpIndex; j++) {
+                    [letters addObject:components[j]];
+                }
+                
+                tmpStr = [letters componentsJoinedByString:@""];
+                [newComponents addObject:tmpStr];
+                i = tmpIndex+1;
+            }
+        }
+        else {
+            [newComponents addObject:components[i]];
+            i++;
+        }
+    }
+    return [newComponents componentsJoinedByString:@" "];
 }
 
 @end

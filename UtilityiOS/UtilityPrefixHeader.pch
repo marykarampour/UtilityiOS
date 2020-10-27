@@ -5,8 +5,8 @@
 //  Copyright © 2015 Maryam Karampour All rights reserved.
 //
 
-#ifndef PrefixHeader_pch
-#define PrefixHeader_pch
+#ifndef UtilityPrefixHeader_pch
+#define UtilityPrefixHeader_pch
 
 
 #ifdef __OBJC__
@@ -15,4 +15,4 @@
 #import "AppTheme.h"
 #endif
 
-#endif /* PrefixHeader_pch */
+#endif /* UtilityPrefixHeader_pch */
