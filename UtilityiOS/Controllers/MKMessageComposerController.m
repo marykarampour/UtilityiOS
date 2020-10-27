@@ -59,7 +59,7 @@
         MFMailComposeViewController *mail = [[MFMailComposeViewController alloc] init];
         mail.mailComposeDelegate = self;
         [mail setSubject:title];
-        [mail setMessageBody:message isHTML:NO];
+        [mail setMessageBody:message isHTML:[message containsString:@"<html>"]];
         
         [attachmments enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSData * _Nonnull obj, BOOL * _Nonnull stop) {
             [mail addAttachmentData:obj mimeType:[obj contentType] fileName:key];
