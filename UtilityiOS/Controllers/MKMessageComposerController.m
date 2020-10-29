@@ -69,6 +69,24 @@
     }
 }
 
+- (void)sendEmailWithTitle:(NSString *)title message:(NSString *)message recipients:(NSArray<NSString *> *)recipients attachmments:(NSDictionary<NSString *,NSData *> *)attachmments {
+    
+    if (MFMailComposeViewController.canSendMail) {
+        
+        MFMailComposeViewController *mail = [[MFMailComposeViewController alloc] init];
+        mail.mailComposeDelegate = self;
+        [mail setSubject:title];
+        [mail setToRecipients:recipients];
+        [mail setMessageBody:message isHTML:[message containsString:@"<html>"]];
+        
+        [attachmments enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSData * _Nonnull obj, BOOL * _Nonnull stop) {
+            [mail addAttachmentData:obj mimeType:[obj contentType] fileName:key];
+        }];
+        
+        [self.viewController presentViewController:mail animated:YES completion:nil];
+    }
+}
+
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
     [controller dismissViewControllerAnimated:YES completion:^{
         if ([self.viewController respondsToSelector:@selector(messageComposerDidFinishSendingMail)]) {
