@@ -7,7 +7,6 @@
 //
 
 #import "MKDocumentPickerController.h"
-#import "UIViewController+Alert.h"
 #import "MKAssets.h"
 
 static DictNumString *supportedDocTypes;
