@@ -7,6 +7,7 @@
 //
 
 #import "NSString+Utility.h"
+#import "NSString+Validation.h"
 
 @implementation NSString (Utility)
 
@@ -209,6 +210,32 @@
         string = [string stringByAppendingString:self];
     }
     return string;
+}
+
+- (NSString *)obscuredEmail {
+    
+    NSString *email = self;
+    if (![self isValidStringOfType:TextType_Email maxLength:0 isEditing:NO]) return email;
+    
+    NSArray <NSString *> *components = [self componentsSeparatedByString:@"@"];
+    
+    if (1 < components.count) {
+
+        NSString *obsecured = @"****";
+        
+        NSString *prefix = components[0];
+        NSUInteger prefixObscuredLength = (int)(prefix.length / 2);
+        NSRange prefixObscuredRange = NSMakeRange(prefixObscuredLength, prefix.length - prefixObscuredLength);
+        prefix = [prefix stringByReplacingCharactersInRange:prefixObscuredRange withString:obsecured];
+        
+        NSString *suffix = components[1];
+        NSUInteger suffixObscuredLength = (int)(suffix.length / 2);
+        NSRange suffixObscuredRange = NSMakeRange(0, suffixObscuredLength);
+        suffix = [suffix stringByReplacingCharactersInRange:suffixObscuredRange withString:obsecured];
+        
+        email = [NSString stringWithFormat:@"%@@%@", prefix, suffix];
+    }
+    return email;
 }
 
 - (NSString *)splitedStringForUppercaseComponentsAndGroupUppercase:(BOOL)groupUppercase {

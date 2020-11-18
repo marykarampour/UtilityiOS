@@ -82,13 +82,13 @@ typedef NS_ENUM(NSUInteger, StringFormat) {
 - (NSString *)trimCharSet:(NSString *)chars;
 /** @brief concatinates the same string count times */
 - (NSString *)multiplyWithCount:(NSUInteger)count;
-
+/** @brief If is valid like email@gmail.com it returns emi**@**ail.com otherwise returs self */
+- (NSString *)obscuredEmail;
 /** @brief splits a string based on uppercase letters
  @code
  UpperCaseString --> Upper Case String
  @endcode
  */
-
 /** @param groupUppercase If YES it will not put extra space between consecutive uppercase letters */
 - (NSString *)splitedStringForUppercaseComponentsAndGroupUppercase:(BOOL)groupUppercase;
 - (NSString *)removeSpaceBetweenOneCharacterSubstrings;
