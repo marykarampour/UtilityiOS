@@ -16,7 +16,7 @@
 - (BOOL)hasNonWhitePixelsForMinimumPercent:(float)minimumPercent;
 - (UIImage *)resizeToWidth:(float)width;
 - (UIImage *)roundedImage:(CGRect)frame WithRadious:(float)radious;
-
++ (UIImage *)thumbnailImageFromData:(NSData *)data width:(int)width;
 - (UIImage *)templateImage;
 
 @end

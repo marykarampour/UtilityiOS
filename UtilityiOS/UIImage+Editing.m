@@ -127,4 +127,21 @@
     return NO;
 }
 
++ (UIImage *)thumbnailImageFromData:(NSData *)data width:(int)width {
+    
+    if (!data) return nil;
+    
+    UIImage *image;
+    CFDictionaryRef options = (__bridge CFDictionaryRef)@{
+        (id)kCGImageSourceCreateThumbnailWithTransform:@(YES),
+        (id)kCGImageSourceCreateThumbnailFromImageAlways:@(YES),
+        (id)kCGImageSourceThumbnailMaxPixelSize:@(width)};
+    
+    CGImageSourceRef isrc = CGImageSourceCreateWithData((__bridge CFDataRef)data, NULL);
+    CGImageRef ref = CGImageSourceCreateThumbnailAtIndex(isrc, 0, options);
+    image = [UIImage imageWithCGImage:ref];
+    CGImageRelease(ref);
+    return image;
+}
+
 @end
