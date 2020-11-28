@@ -8,129 +8,216 @@
 
 #import "DBModel.h"
 #import <objc/runtime.h>
+#import "NSObject+Utility.h"
 
-@implementation DBVarChar
-
-@end
-
-@implementation DBChar
-
-@end
-
-@implementation DBNumber
-
-@end
-
-@implementation DBText
-
-@end
-
-@implementation DBEnumValue
-
-@end
-
-@implementation DBEnum
-
-@end
-
-@implementation DBForeignKey
-
-@end
+static DictNumString *syncStatusDict;
 
 @implementation DBModel
 
+//+ (StringFormat)customFormat {
+//    return StringFormatCamelCase;
+//}
+
++ (StringFormat)classMapperFormat {
+    return StringFormatUnderScoreIgnoreDigits;
+}
+
++ (BOOL)usingAncestors {
+    return YES;
+}
+
 - (NSString *)SQLKeysEqualValues {
     
-    MKPairArr *pairs = [self SQLKeyValuePairs];
+    NSArray<MKKeyValue *> *pairs = [self SQLKeyValuePairs];
     NSString *str = @"";
     
-    for (MKPair *pr in pairs) {
+    for (MKKeyValue *pr in pairs) {
         NSString *format = ([pairs lastObject] == pr ? @"%@%@=%@" : @"%@%@=%@, ");
-        str = [NSString stringWithFormat:format, str, pr.key, pr.value];
+        str = [NSString stringWithFormat:format, str, pr.first, pr.second];
     }
     return str;
 }
 
-- (MKPair *)SQLKeysWithValues {
+- (MKKeyValue *)SQLKeysWithValues {
     
-    MKPairArr *pairs = [self SQLKeyValuePairs];
+    NSArray<MKKeyValue *> *pairs = [self SQLKeyValuePairs];
     NSString *keyStr = @"";
     NSString *valueStr = @"";
     
-    for (MKPair *pr in pairs) {
+    for (MKKeyValue *pr in pairs) {
         NSString *format = ([pairs lastObject] == pr ? @"%@%@" : @"%@%@, ");
-        keyStr = [NSString stringWithFormat:format, keyStr, pr.key];
-        valueStr = [NSString stringWithFormat:format, valueStr, pr.value];
+        keyStr = [NSString stringWithFormat:format, keyStr, pr.first];
+        valueStr = [NSString stringWithFormat:format, valueStr, pr.second];
     }
     
-    MKPair *pair = [[MKPair alloc] init];
-    pair.key = keyStr;
-    pair.value = valueStr;
+    MKKeyValue *pair = [[MKKeyValue alloc] init];
+    pair.first = keyStr;
+    pair.second = valueStr;
     
     return pair;
 }
 //mapper not used
-- (MKPairArr *)SQLKeyValuePairs {
-    MMKPairArr *pairs = [[NSMutableArray alloc] init];
+- (NSArray<MKKeyValue *> *)SQLKeyValuePairs {
+    NSMutableArray<MKKeyValue *> *pairs = [[NSMutableArray alloc] init];
+    DictStringString *attrPropertyDict = self.class.propertyClassNames;
     
-    unsigned int varCount = 0;
-    objc_property_t *properties = class_copyPropertyList([self class], &varCount);
-    
-    for (unsigned int i=0; i<varCount; i++) {
+    [attrPropertyDict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
+        
         NSString *keyStr = @"";
         NSString *valueStr = @"";
-        NSString *attribute = [NSString stringWithUTF8String:property_getAttributes(properties[i])];
-        NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
+        NSString *value;
         
-        if (![self valueForKey:name]) {
-            continue;
-        }
-        NSString *value = [[self valueForKey:name] description];
-        
-        if ([attribute characterAtIndex:1] == '@') {
-            NSArray *components = [attribute componentsSeparatedByString:@"\""];
-            if ([components count] > 1) {
-                
-                NSString *className = components[1];
-                Class propertyClass = NSClassFromString(className);
-                if ([propertyClass isSubclassOfClass:[NSDate class]] && [value isKindOfClass:[NSString class]]) {
-                    value = [NSString stringWithFormat:@"%ld", (long)[[self valueForKey:name] timeIntervalSince1970]];
-                }
+        id object = [self valueForKey:key];
+        if (object && [object respondsToSelector:@selector(description)]) {
+            value = [object description];
+            
+            Class propertyClass = NSClassFromString(obj);
+            if ([propertyClass isSubclassOfClass:[NSDate class]] && [value isKindOfClass:[NSString class]]) {
+                value = [NSString stringWithFormat:@"%ld", (long)[[self valueForKey:key] timeIntervalSince1970]];
             }
-        }
-        
-        if (!value.length) {
-            NSString *propertyName = [self convertToProperty:name];
-//            NSString *propertyName = [mapper convertValue:[name stringByReplacingOccurrencesOfString:@"_" withString:@""] isImportingToModel:YES];
-            value = [NSString stringWithFormat:@"\"%@\"", value];
+            
+            if (value.length) {
+                value = [value quotations];
+            }
+            else {
+                value = [NSString stringWithFormat:@"NULL"];
+            }
+            
+            NSString *propertyName = [self.class convertToJson:key];
             keyStr = [NSString stringWithFormat:@"%@", propertyName];
             valueStr = [NSString stringWithFormat:@"%@", value];
+            
+            MKKeyValue *pair = [[MKKeyValue alloc] init];
+            pair.first = keyStr;
+            pair.second = valueStr;
+            
+            [pairs addObject:pair];
         }
-        
-        MKPair *pair = [[MKPair alloc] init];
-        pair.key = keyStr;
-        pair.value = valueStr;
-        
-        [pairs addObject:pair];
-    }
-    free(properties);
-    
+    }];
     return pairs;
 }
 
++ (NSString *)classIDName {
+    return [[self.class dbPropertyName] stringByAppendingString:@"Id"];;
+}
+
++ (StringFormat)dbColumnNameFormat {
+    return StringFormatUnderScore;
+}
+
++ (StringFormat)dbPropertyNameFormat {
+    return StringFormatCamelCase;
+}
+
++ (NSString *)dbClassNameForTable:(NSString *)table {
+    return [table format:StringFormatCapitalizedCamelCase];
+}
+
++ (NSString *)dbTableName {
+    return [NSStringFromClass(self) format:StringFormatUnderScoreIgnoreDigits];
+}
+
++ (NSString *)dbPropertyName {
+    return [NSStringFromClass(self) format:StringFormatCamelCase];
+}
+
+@end
+
+@implementation DBStaticModel
 
 
-//+ (NSString *)createTableQuery {
-//    NSString *query;
-//    unsigned int count = 0;
-//    objc_property_t *properties = class_copyPropertyList([self class], &count);
-//    for (unsigned int i=0; i<count; i++) {
-//        
-//    }
-//    
-//    free(properties);
-//    
-//    return query;
-//}
+@end
+
+@implementation DBDynamicModel
+
++ (void)initialize {
+    if (!syncStatusDict) {
+        syncStatusDict = @{
+            @(SYNC_STATUS_TYPE_I):@"I",
+            @(SYNC_STATUS_TYPE_N):@"N",
+            @(SYNC_STATUS_TYPE_P):@"P"};
+    }
+}
+
++ (SYNC_STATUS_NAME)nameForSyncStatus:(SYNC_STATUS_TYPE)type {
+    return syncStatusDict[@(type)];
+}
+
++ (SYNC_STATUS_TYPE)typeForSyncName:(SYNC_STATUS_NAME)name {
+    return [[syncStatusDict allKeysForObject:name].firstObject integerValue];
+}
+
+@end
+
+@implementation DBStaticPrimaryModel
+
+@dynamic Id;
+
+- (NSString *)IDString {
+    return self.Id.description;
+}
+
+@end
+
+@implementation DBDynamicPrimaryModel
+
+@dynamic Id;
+
+- (instancetype)init {
+    if (self = [super init]) {
+        if (!self.Id) [self setID];
+    }
+    return self;
+}
+
+- (void)setID {
+    self.Id = [NSObject GUID];
+}
+
+- (NSString *)IDString {
+    return [self.Id quotations];
+}
+
+@end
+
+@implementation DBDynamicCompositePrimaryModel
+
+- (NSString *)IDString {
+    return self.Id.description;
+}
+
+@end
+
+@implementation DBColumn
+
+- (id)copyWithZone:(NSZone *)zone {
+    return [self MKCopyWithZone:zone];
+}
+
++ (DBColumn *)columnWithName:(NSString *)name values:(NSArray *)values {
+    DBColumn *col = [[DBColumn alloc] init];
+    col.name = name;
+    col.values = values;
+    return col;
+}
+
++ (NSArray <DBColumn *> *)columnsWithNames:(StringArr *)names values:(StringArr *)values {
+    NSMutableArray *columns = [[NSMutableArray alloc] init];
+    
+    [values enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (idx < names.count) {
+            [columns addObject:[DBColumn columnWithName:names[idx] values:@[obj]]];
+        }
+    }];
+    return columns;
+}
+
+@end
+
+@implementation DBIntervalColumn
+
+- (id)copyWithZone:(NSZone *)zone {
+    return [self MKCopyWithZone:zone];
+}
 
 @end

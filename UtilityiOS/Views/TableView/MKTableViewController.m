@@ -49,9 +49,9 @@ static dispatch_queue_t dispatch;
     self.tableView.estimatedSectionHeaderHeight = 0;
     self.tableView.estimatedSectionFooterHeight = 0;
     
-    self.sectionHeaderData = [MKLabelMetaData dataWithInsets:UIEdgeInsetsZero font:[UIFont KCTableCellTitleFontBold] textColor:[AppTheme sectionHeaderTextColor] backgroundColor:[AppTheme sectionHeaderBackgroundColor]];
+    self.sectionHeaderData = [MKLabelMetaData dataWithInsets:UIEdgeInsetsZero font:[AppTheme sectionHeaderFont] textColor:[AppTheme sectionHeaderTextColor] backgroundColor:[AppTheme sectionHeaderBackgroundColor]];
 
-    self.sectionFooterData = [MKLabelMetaData dataWithInsets:UIEdgeInsetsZero font:[UIFont KCTableCellTitleFontBold] textColor:[AppTheme sectionFooterTextColor] backgroundColor:[AppTheme sectionFooterBackgroundColor]];
+    self.sectionFooterData = [MKLabelMetaData dataWithInsets:UIEdgeInsetsZero font:[AppTheme sectionFooterFont] textColor:[AppTheme sectionFooterTextColor] backgroundColor:[AppTheme sectionFooterBackgroundColor]];
     
     [self adjustScrollViewInsetsForNavigationBarHeight:[self adjustedScrollViewInsetsForNavigationBarHeight]];
     [self addTapToDismissKeyboard];

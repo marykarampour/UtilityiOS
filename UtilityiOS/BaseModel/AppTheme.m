@@ -465,6 +465,14 @@
     return [UIFont boldSystemFontOfSize:16.0];
 }
 
++ (UIFont *)sectionHeaderFont {
+    return [UIFont boldSystemFontOfSize:14.0];
+}
+
++ (UIFont *)sectionFooterFont {
+    return [UIFont boldSystemFontOfSize:14.0];
+}
+
 + (UIFont *)XlargeTallBoldFont {
     return [UIFont fontWithName:@"HelveticaNeue-CondensedBlack" size:24.0];
 }

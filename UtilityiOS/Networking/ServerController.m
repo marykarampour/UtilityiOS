@@ -14,9 +14,9 @@
 @implementation ServerController
 
 + (AFHTTPSessionManager *)auth:(NSString *)username password:(NSString *)password completion:(ServerResultErrorBlock)completion {
-    [[NetworkManager instance] setHeaders:[ServerController headersForUsername:username]];
+
     NSDictionary *params = @{@"username":username, @"password":password};
-    return [[NetworkManager instance] requestURL:[ServerEndpoints AUTH] type:NetworkRequestType_POST parameters:params completion:^(id result, NSError *error) {
+    return [[NetworkManager instance] requestURL:[ServerEndpoints AUTH] type:NetworkRequestType_POST parameters:params headers:[ServerController headersForUsername:username] completion:^(id result, NSError *error) {
         if (!error && result) {
             if ([result objectForKey:@"token"]) {
                 [[NetworkManager instance] setHeaders:@{@"x-token":[result objectForKey:@"token"]}];
@@ -38,16 +38,14 @@
 }
 //sample
 + (AFHTTPSessionManager *)getWithCompletion:(ServerResultErrorBlock)completion {
-    [[NetworkManager instance] setHeaders:[ServerController basicAuthHeaders]];
-    [[NetworkManager instance] resetAuthorizationHeader];
-    return [[NetworkManager instance] requestURL:@"" type:NetworkRequestType_GET parameters:nil completion:^(id result, NSError *error) {
+    return [[NetworkManager instance] requestURL:@"" type:NetworkRequestType_GET parameters:nil headers:[ServerController basicAuthHeaders] completion:^(id result, NSError *error) {
         [self processValuesInResult:result error:error completion:completion];
     }];
 }
 //sample
 + (AFHTTPSessionManager *)getListWithCompletion:(ServerResultErrorBlock)completion {
-    [[NetworkManager instance] setHeaders:[ServerController headers]];
-    return [[NetworkManager instance] requestURL:@"" type:NetworkRequestType_GET parameters:nil completion:^(id result, NSError *error) {
+    
+    return [[NetworkManager instance] requestURL:@"" type:NetworkRequestType_GET parameters:nil headers:[ServerController headers] completion:^(id result, NSError *error) {
         [self processResult:result error:error class:[MKModel class] completion:completion];
     }];
 }

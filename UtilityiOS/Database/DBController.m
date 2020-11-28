@@ -7,7 +7,7 @@
 //
 
 #import "DBController.h"
-#import "ModelIncludeHeaders.h"
+#import "DBModel.h"
 #import "NSString+Utility.h"
 
 @implementation DBController
@@ -86,9 +86,10 @@
             return;
         }
         
-        MKPair *keyValues = [object SQLKeysWithValues];
-        if (keyValues.key.length) {
-            NSString *stmt = [NSString stringWithFormat:exec_insert, [self tableNameForClass:className], keyValues.key, keyValues.value];
+        MKKeyValue *keyValues = [object SQLKeysWithValues];
+        
+        if (keyValues.first.length) {
+            NSString *stmt = [NSString stringWithFormat:exec_insert, [self tableNameForClass:className], keyValues.first, keyValues.second];
             DEBUGLOG(@"%@", stmt);
             [self.dbManager executeQuery:stmt];
         }
@@ -138,7 +139,7 @@
     NSMutableString *whereString = [@"" mutableCopy];
    
     for (NSString *name in columnNames) {
-        [whereString appendString:[NSString stringWithFormat:@"%@=\"%@\"", name, [object valueForKey:[object convertToProperty:name]]]];
+        [whereString appendString:[NSString stringWithFormat:@"%@=\"%@\"", name, [object valueForKey:[object.class convertToProperty:name]]]];
         if (![name isEqualToString:columnNames.lastObject]) {
             [whereString appendString:@" AND "];
         }

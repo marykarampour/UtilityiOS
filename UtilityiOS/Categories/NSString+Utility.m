@@ -37,6 +37,9 @@
         case StringFormatCamelCase:
             return [self underScoreToCamelCaseUpperCaseAll:NO];
             break;
+        case StringFormatCapitalizedCamelCase:
+            return [self CapitalizedCamelCase];
+            break;
         default:
             return self;
             break;
@@ -120,7 +123,6 @@
 }
 
 - (NSNumber *)stringToNumber {
-    
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     formatter.numberStyle = NSNumberFormatterNoStyle;
     return [formatter numberFromString:self];
@@ -210,6 +212,33 @@
         string = [string stringByAppendingString:self];
     }
     return string;
+}
+
+- (NSString *)splitedStringForUppercaseComponents {
+    if (self.length < 2) {
+        return self;
+    }
+    
+    NSMutableString *result = [NSMutableString stringWithString:self];
+    NSRange range = [result rangeOfCharacterFromSet:[NSCharacterSet uppercaseLetterCharacterSet]];
+    NSString *croppedString = self;
+    NSRange croppedRange = NSMakeRange(range.location+range.length, croppedString.length-range.length);
+    
+    while (range.location != NSNotFound && croppedRange.length > 0) {
+        
+        croppedString = [result substringWithRange:croppedRange];
+        NSRange newRange = [croppedString rangeOfCharacterFromSet:[NSCharacterSet uppercaseLetterCharacterSet]];
+        if (newRange.location == NSNotFound) {
+            break;
+        }
+        if (newRange.location > range.location) {
+            range = NSMakeRange(newRange.location+croppedRange.location, newRange.length);
+            [result insertString:@" " atIndex:range.location];
+        }
+        range = NSMakeRange(range.location+1, range.length);
+        croppedRange = NSMakeRange(range.location+range.length, result.length-range.location-range.length);
+    }
+    return result;
 }
 
 - (NSString *)obscuredEmail {

@@ -20,6 +20,17 @@ typedef NS_ENUM(NSUInteger, StringFormat) {
     //2. exampleString -> ExampleString
     StringFormatCapitalized,
     
+    //camelCasing the input string, example:
+    //1. example_string -> exampleString
+    //2. exampleString -> exampleString
+    StringFormatCamelCase,
+    
+    //camelCasing the input string, example:
+    //1. example_string -> ExampleString
+    //2. exampleString -> ExampleString
+    //3. example_string_0 -> exampleString0
+    StringFormatCapitalizedCamelCase,
+    
     //Upper case all charachters of input string, example:
     //1. example_string -> EXAMPLE_STRING
     //2. exampleString -> EXAMPLESTRING
@@ -44,11 +55,6 @@ typedef NS_ENUM(NSUInteger, StringFormat) {
     //1. exampleString -> EXAMPLE_STRING
     //2. exampleString0 -> EXAMPLE_STRING0
     StringFormatUnderScoreIgnoreDigitsUpperCaseAll,
-    
-    //under_score to camelCase
-    //1. example_string -> exampleString
-    //2. example_string_0 -> exampleString0
-    StringFormatCamelCase
 };
 
 @interface NSString (Utility)
@@ -82,6 +88,16 @@ typedef NS_ENUM(NSUInteger, StringFormat) {
 - (NSString *)trimCharSet:(NSString *)chars;
 /** @brief concatinates the same string count times */
 - (NSString *)multiplyWithCount:(NSUInteger)count;
+
+/** @brief splits a string based on uppercase letters
+ @code
+ UpperCaseString --> Upper Case String
+ @endcode
+ */
+- (NSString *)splitedStringForUppercaseComponents;
+
+- (NSString *)numbersOnly;
+
 /** @brief If is valid like email@gmail.com it returns emi**@**ail.com otherwise returs self */
 - (NSString *)obscuredEmail;
 /** @brief splits a string based on uppercase letters
@@ -92,6 +108,5 @@ typedef NS_ENUM(NSUInteger, StringFormat) {
 /** @param groupUppercase If YES it will not put extra space between consecutive uppercase letters */
 - (NSString *)splitedStringForUppercaseComponentsAndGroupUppercase:(BOOL)groupUppercase;
 - (NSString *)removeSpaceBetweenOneCharacterSubstrings;
-- (NSString *)numbersOnly;
 
 @end
