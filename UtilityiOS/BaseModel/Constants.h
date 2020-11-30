@@ -268,6 +268,7 @@ extern NSString * const DateFormatShortAPMStyle;
 + (NSString *)NoCamera_STR;
 + (NSString *)Invalid_STR;
 + (NSString *)Error_STR;
++ (NSString *)Generic_Error_Message;
 + (NSString *)First_Name_STR;
 + (NSString *)Last_Name_STR;
 + (NSString *)Placeholder_Date_STR;

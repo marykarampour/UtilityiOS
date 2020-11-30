@@ -336,6 +336,10 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
     return LOCALIZED(@"Error");
 }
 
++ (NSString *)Generic_Error_Message {
+    return LOCALIZED(@"Something went wrong, please try again");
+}
+
 + (NSString *)Placeholder_Date_STR {
     return LOCALIZED(@"1980-02-28");
 }
