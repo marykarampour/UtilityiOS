@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "NSError+AFNetworking.h"
 #import "ServerDefinitions.h"
 #import "AFNetworking.h"
 

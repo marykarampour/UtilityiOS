@@ -377,7 +377,7 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
         case ServerEnvironment_LOCAL:       return [Constants BaseLocalHostURL];
         case ServerEnvironment_DEV_IN:      return [Constants BaseDevInURL];
         case ServerEnvironment_DEV_OUT:
-        default: return  [Constants BaseDevOutURL];
+        default: return [Constants BaseDevOutURL];
     }
 }
 

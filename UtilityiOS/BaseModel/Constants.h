@@ -173,14 +173,23 @@ extern NSString * const DateFormatShortAPMStyle;
 
 + (ServerEnvironment)ServerEnvironmentVariable;
 + (BOOL)USING_HTTPS;
+
+/** @brief This url must be of form ://domain */
 + (NSString *)BaseLocalHostURL;
+/** @brief This url must be of form ://domain */
 + (NSString *)BaseTestingInURL;
+/** @brief This url must be of form ://domain */
 + (NSString *)BaseTestingOutURL;
+/** @brief This url must be of form ://domain */
 + (NSString *)BaseDevInURL;
+/** @brief This url must be of form ://domain */
 + (NSString *)BaseDevOutURL;
+/** @brief This url must be of form ://domain */
 + (NSString *)BaseQAURL;
+/** @brief This url must be of form ://domain */
 + (NSString *)BaseProductionURL;
 + (NSString *)BaseURLString;
+/** @brief The url used to generate BaseURLString, it can be  BaseDevInURL etc. or other defined values */
 + (NSString *)CommonURLString;
 + (NSString *)BasePort;
 + (NSString *)URLStringWithHttps:(NSString *)https url:(NSString *)url port:(NSString *)port;

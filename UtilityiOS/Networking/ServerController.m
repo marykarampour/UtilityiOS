@@ -13,9 +13,14 @@
 
 @implementation ServerController
 
++ (void)requestURL:(NSString *)url type:(NetworkRequestType)type parameters:(NSDictionary *)parameters completion:(ServerResultErrorBlock)completion {
+    [[NetworkManager instance] requestURL:url type:type parameters:parameters headers:[self headers] completion:completion];
+}
+
 + (AFHTTPSessionManager *)auth:(NSString *)username password:(NSString *)password completion:(ServerResultErrorBlock)completion {
 
     NSDictionary *params = @{@"username":username, @"password":password};
+    
     return [[NetworkManager instance] requestURL:[ServerEndpoints AUTH] type:NetworkRequestType_POST parameters:params headers:[ServerController headersForUsername:username] completion:^(id result, NSError *error) {
         if (!error && result) {
             if ([result objectForKey:@"token"]) {
@@ -44,7 +49,6 @@
 }
 //sample
 + (AFHTTPSessionManager *)getListWithCompletion:(ServerResultErrorBlock)completion {
-    
     return [[NetworkManager instance] requestURL:@"" type:NetworkRequestType_GET parameters:nil headers:[ServerController headers] completion:^(id result, NSError *error) {
         [self processResult:result error:error class:[MKModel class] completion:completion];
     }];
@@ -80,6 +84,39 @@
 
 #pragma mark - helpers
 
++ (void)processResult:(id)resultObject error:(NSError *)error class:(Class)modelClass key:(NSString *)key completion:(ServerResultErrorBlock)completion {
+    if (resultObject) {
+        if ([resultObject isKindOfClass:[NSDictionary class]]) {
+            if (!key) {
+                [self processResult:resultObject error:error class:modelClass completion:^(id result, NSError *error) {
+                    completion(result, error);
+                }];
+            }
+            else {
+                id values = resultObject[key];
+                if (values) {
+                    [self processResult:values error:error class:modelClass completion:^(id result, NSError *error) {
+                        completion(result, error);
+                    }];
+                }
+                else {
+                    completion(nil, [self noContent]);
+                }
+            }
+        }
+        else if ([resultObject isKindOfClass:[NSArray class]]) {
+            [self processResult:resultObject error:error class:modelClass completion:^(id result, NSError *error) {
+                completion(result, error);
+            }];
+        }
+        else {
+            completion(nil, [self noContent]);
+        }
+    }
+    else {
+        completion(nil, error);
+    }
+}
 
 + (NSDictionary *)headers {
     return @{};
@@ -93,100 +130,22 @@
     return @{};
 }
 
-+ (void)processResult:(id)result error:(NSError *)error class:(Class)modelClass completion:(ServerResultErrorBlock)completion {
-    if (error || !result || !modelClass) {
-        completion(nil, error);
-    }
-    else if (result) {
-        if (modelClass == [NSString class] || modelClass == [NSDictionary class] || modelClass == [NSNumber class]) {
-            completion(result, nil);
-        }
-        else {
-            id modelObject;
-            NSError *modelError;
-            
-            if ([result isKindOfClass:[NSArray class]]) {
-                if (modelClass == [NSString class] || modelClass == [NSNumber class]) {
-                    modelObject = result;
-                }
-                else {
-                    NSMutableArray *arr = [[NSMutableArray alloc] init];
-                    for (NSDictionary *dict in result) {
-                        id obj = [[modelClass alloc] initWithDictionary:dict error:&modelError];
-                        if (obj && [obj isKindOfClass:modelClass]) {
-                            [arr addObject:obj];
-                        }
-                    }
-                    modelObject = arr;
-                }
-            }
-            else {
-                modelObject = [[modelClass alloc] initWithDictionary:result error:&modelError];
-            }
-            completion(modelObject, modelError);
-        }
-    }
-    else {
-        completion(nil, nil);//TODO: fix
-    }
++ (NSString *)authTokenKey {
+    return @"token";
 }
 
-+ (void)processValuesInResult:(id)result error:(NSError *)error completion:(ServerResultErrorBlock)completion {
-    if (error || !result) {
-        completion(nil, error);
-    }
-    else if (result) {
-        if ([result isKindOfClass:[NSArray class]]) {
-            NSMutableArray *arr = [[NSMutableArray alloc] init];
-            for (NSDictionary *dict in result) {
-                if ([dict isKindOfClass:[NSDictionary class]]) {
-                    [arr addObjectsFromArray:dict.allValues];
-                }
-            }
-            completion(arr, error);
-        }
-        else if ([result isKindOfClass:[NSDictionary class]]) {
-            NSDictionary *dict = (NSDictionary *)result;
-            if (dict.count == 1) {
-                completion(dict.allValues.firstObject, nil);
-            }
-            else {
-                completion(dict, error);
-            }
-        }
-        else {
-            completion(result, error);
-        }
-    }
-    else {
-        completion(nil, nil);//TODO: fix
-    }
++ (NSString *)tokenKey {
+    return @"x-token";
 }
 
-+ (void)processDataURLResult:(id)result error:(NSError *)error completion:(ServerResultErrorBlock)completion {
-    if (!error && result) {
-        if ([result isKindOfClass:[NSURL class]]) {
-            NSError *err = nil;
-            NSString *path = [((NSURL *)result).absoluteString stringByReplacingOccurrencesOfString:@"file://" withString:@""];
-            NSData *data = [NSData dataWithContentsOfFile:path options:0 error:&err];
-            
-            if (data && !err) {
-                NSData *decompressed = [data streamCompress:COMPRESSION_STREAM_DECODE];
-                DEBUGLOG(@"%lu", (unsigned long)decompressed.length);
-                [[NSFileManager defaultManager] removeItemAtURL:result error:nil];
-                completion(decompressed, error);
-            }
-            else {
-                completion(nil, error);
-            }
-        }
-        else {
-            completion(nil, error);
-        }
-    }
-    else {
-        completion(nil, error);
-    }
+#pragma mark - errors
+
++ (NSError *)unauthorizedWithMessage:(NSString *)message {
+    return [NSError errorWithDomain:NSNetServicesErrorDomain code:401 userInfo:@{NSLocalizedDescriptionKey:message.length ? message : @"Unauthorized"}];
+}
+
++ (NSError *)noContent {
+    return [NSError errorWithDomain:NSNetServicesErrorDomain code:204 userInfo:@{NSLocalizedDescriptionKey:@"No Content"}];
 }
 
 @end

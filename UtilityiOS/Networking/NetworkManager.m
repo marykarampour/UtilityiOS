@@ -177,12 +177,15 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
     [NetworkManager prettyPrintJSON:parameters];
     
     return requestOperator(manager, selector, url, parameters, nil, ^(NSURLSessionDataTask *task, id responseObject) {
-        DEBUGLOG(@"Success Response: %@ - %@", task.response, responseObject);
+        
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)task.response;
+        NSDictionary *headers;
+        
+        DEBUGLOG(@"Success Response: %@ - %@ - %ld", task.response, responseObject, httpResponse.statusCode);
         if ([responseObject respondsToSelector:@selector(description)]) {
             DEBUGLOG(@"Response size in bytes: %ld", [[responseObject description] lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
         }
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)task.response;
-        NSDictionary *headers;
+        
         if ([httpResponse respondsToSelector:@selector(allHeaderFields)]) {
             headers = [httpResponse allHeaderFields];
             DEBUGLOG(@"Success Response Headers: %@", headers);
@@ -190,8 +193,10 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
         completion(responseObject, headers, nil);
     },
     ^(NSURLSessionDataTask *task, NSError *error) {
-        DEBUGLOG(@"Error Response: %@ - %@", task.response, error.localizedDescription);
-        completion(nil, nil, error);
+        
+        NSDictionary *failureBody = [self resultFromError:error];
+        DEBUGLOG(@"Error Response: %@ - %@ - %@", task.response, error.localizedDescription, failureBody);
+        completion(failureBody, nil, error);
     });
 }
 
@@ -322,6 +327,20 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
             DEBUGLOG(@"Prettyprinted parameters: %@", logs);
         }
     }
+}
+
+- (NSDictionary *)resultFromError:(NSError *)error {
+    
+    NSData *data = error.userInfo[AFNetworkingOperationFailingURLResponseDataErrorKey];
+    if (data.length) {
+        
+        NSError *err;
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:&err];
+        if (dict && !err) {
+            return dict;
+        }
+    }
+    return nil;
 }
 
 - (void)addManagerWithBaseURLString:(NSString *)url {
