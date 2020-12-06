@@ -18,9 +18,12 @@
 
 #pragma mark - sample services - subclass may override
 
-+ (AFHTTPSessionManager *)auth:(NSString *)username password:(NSString *)password completion:(ServerResultErrorBlock)completion;
++ (void)auth:(NSString *)username password:(NSString *)password completion:(ServerResultErrorBlock)completion;
++ (void)authWithParameters:(NSDictionary *)params completion:(ServerResultErrorBlock)completion;
 
-+ (AFHTTPSessionManager *)logoutUserWithCompletion:(ServerResultErrorBlock)completion;
+/** @brief It will be called by default from authWithParameters:completion to set auth token based on headers or result */
++ (void)processLogin:(id)result headers:(NSDictionary *)headers error:(NSError *)error completionHeaders:(void(^)(id result, NSError *error))completion;
++ (void)logoutUserWithCompletion:(ServerResultErrorBlock)completion;
 
 + (AFHTTPSessionManager *)sendFile:(NSData *)data filename:(NSString *)filename endpoint:(NSString *)endpoint completion:(ServerResultErrorBlock)completion;
 
@@ -28,13 +31,14 @@
 
 #pragma mark - swizzled in category
 /** @brief these are generic methods, you need to define a category of ServerController class and define the implementation */
-+ (AFHTTPSessionManager *)authWithUserID:(__kindof NSObject *)userID password:(NSString *)password completion:(ServerResultErrorBlock)completion;
++ (void)authWithUserID:(__kindof NSObject *)userID password:(NSString *)password completion:(ServerResultErrorBlock)completion;
 
 #pragma mark - helper set header and processing result methods
 
 + (void)processResult:(id)resultObject error:(NSError *)error class:(Class)modelClass key:(NSString *)key completion:(ServerResultErrorBlock)completion;
 
 + (NSDictionary *)headers;
++ (void)setHeaders:(NSDictionary *)dict;
 + (NSDictionary *)headersForUsername:(NSString *)username;
 + (NSDictionary *)basicAuthHeaders;
 + (NSString *)authTokenKey;

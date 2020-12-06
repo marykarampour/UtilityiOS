@@ -11,45 +11,43 @@
 #import "ServerEndpoints.h"
 #import "MKModel.h"
 
+static NSDictionary *headers;
+
 @implementation ServerController
 
 + (void)requestURL:(NSString *)url type:(NetworkRequestType)type parameters:(NSDictionary *)parameters completion:(ServerResultErrorBlock)completion {
     [[NetworkManager instance] requestURL:url type:type parameters:parameters headers:[self headers] completion:completion];
 }
 
-+ (AFHTTPSessionManager *)auth:(NSString *)username password:(NSString *)password completion:(ServerResultErrorBlock)completion {
++ (void)auth:(NSString *)username password:(NSString *)password completion:(ServerResultErrorBlock)completion {
 
     NSDictionary *params = @{@"username":username, @"password":password};
-    
-    return [[NetworkManager instance] requestURL:[ServerEndpoints AUTH] type:NetworkRequestType_POST parameters:params headers:[ServerController headersForUsername:username] completion:^(id result, NSError *error) {
-        if (!error && result) {
-            if ([result objectForKey:@"token"]) {
-                [[NetworkManager instance] setHeaders:@{@"x-token":[result objectForKey:@"token"]}];
-            }
-        }
-        completion(result, error);
+    [self authWithParameters:params completion:completion];
+}
+
++ (void)authWithParameters:(NSDictionary *)params completion:(ServerResultErrorBlock)completion {
+    [[NetworkManager instance] requestURL:[ServerEndpoints AUTH] type:NetworkRequestType_POST parameters:params completionHeaders:^(id result, NSDictionary *headers, NSError *error) {
+        [self processLogin:result headers:headers error:error completionHeaders:completion];
     }];
 }
 
-+ (AFHTTPSessionManager *)logoutUserWithCompletion:(ServerResultErrorBlock)completion {
-    return [[NetworkManager instance] requestURL:[ServerEndpoints LOGOUT] type:NetworkRequestType_GET parameters:nil completion:^(id result, NSError *error) {
-        if (!error && result) {
-            if ([result objectForKey:@"token"]) {
-                [[NetworkManager instance] setHeaders:@{@"x-token":@""}];
-            }
++ (void)logoutUserWithCompletion:(ServerResultErrorBlock)completion {
+    [[NetworkManager instance] requestURL:[ServerEndpoints LOGOUT] type:NetworkRequestType_GET parameters:nil completion:^(id result, NSError *error) {
+        if (!error) {
+            [self setHeaders:@{[self tokenKey]:@""}];
         }
         completion(result, error);
     }];
 }
 //sample
-+ (AFHTTPSessionManager *)getWithCompletion:(ServerResultErrorBlock)completion {
-    return [[NetworkManager instance] requestURL:@"" type:NetworkRequestType_GET parameters:nil headers:[ServerController basicAuthHeaders] completion:^(id result, NSError *error) {
++ (void)getWithCompletion:(ServerResultErrorBlock)completion {
+    [[NetworkManager instance] requestURL:@"" type:NetworkRequestType_GET parameters:nil headers:[self basicAuthHeaders] completion:^(id result, NSError *error) {
         [self processValuesInResult:result error:error completion:completion];
     }];
 }
 //sample
-+ (AFHTTPSessionManager *)getListWithCompletion:(ServerResultErrorBlock)completion {
-    return [[NetworkManager instance] requestURL:@"" type:NetworkRequestType_GET parameters:nil headers:[ServerController headers] completion:^(id result, NSError *error) {
++ (void)getListWithCompletion:(ServerResultErrorBlock)completion {
+    [[NetworkManager instance] requestURL:@"" type:NetworkRequestType_GET parameters:nil headers:[self headers] completion:^(id result, NSError *error) {
         [self processResult:result error:error class:[MKModel class] completion:completion];
     }];
 }
@@ -61,7 +59,7 @@
     info.fileName = filename;
     info.data = data;
     info.contentType = NetworkContentType_OCTET;
-    [[NetworkManager instance] setHeaders:[ServerController headers]];
+    [[NetworkManager instance] setHeaders:[self headers]];
     return [[NetworkManager instance] requestMultipartFormURL:endpoint type:NetworkRequestType_POST parameters:nil data:@[info] completion:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         DEBUGLOG(@"%@", response);
         completion (response, error);
@@ -69,7 +67,7 @@
 }
 
 + (AFHTTPSessionManager *)getFile:(NSString *)filename endpoint:(NSString *)endpoint completion:(ServerResultErrorBlock)completion {
-    [[NetworkManager instance] setHeaders:[ServerController headers]];
+    [[NetworkManager instance] setHeaders:[self headers]];
     NSString *url = [NSString stringWithFormat:@"%@/%@", endpoint, filename];
     return [[NetworkManager instance] downloadURL:url toFile:filename completion:^(id result, NSError *error) {
         [self processDataURLResult:result error:error completion:completion];
@@ -78,11 +76,25 @@
 
 #pragma mark - swizzled in category
 
-+ (AFHTTPSessionManager *)authWithUserID:(__kindof NSObject *)userID password:(NSString *)password completion:(ServerResultErrorBlock)completion {
-    return [[NetworkManager instance] requestURL:@"" type:NetworkRequestType_POST parameters:nil completion:completion];
++ (void)authWithUserID:(__kindof NSObject *)userID password:(NSString *)password completion:(ServerResultErrorBlock)completion {
+    [[NetworkManager instance] requestURL:@"" type:NetworkRequestType_POST parameters:nil completion:completion];
 }
 
 #pragma mark - helpers
+
++ (void)processLogin:(id)result headers:(NSDictionary *)headers error:(NSError *)error completionHeaders:(void(^)(id result, NSError *error))completion {
+    
+    if (!error && result) {
+        NSString *token = [result objectForKey:[self authTokenKey]];
+        if (token.length == 0) {
+            token = [headers objectForKey:[self authTokenKey]];
+        }
+        if (token) {
+            [self setHeaders:@{[self tokenKey]:token}];
+        }
+    }
+    completion(result, error);
+}
 
 + (void)processResult:(id)resultObject error:(NSError *)error class:(Class)modelClass key:(NSString *)key completion:(ServerResultErrorBlock)completion {
     if (resultObject) {
@@ -119,7 +131,12 @@
 }
 
 + (NSDictionary *)headers {
-    return @{};
+    return headers;
+}
+
++ (void)setHeaders:(NSDictionary *)dict {
+    [[NetworkManager instance] setHeaders:dict];
+    headers = dict;
 }
 
 + (NSDictionary *)headersForUsername:(NSString *)username {
