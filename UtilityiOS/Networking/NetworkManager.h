@@ -73,7 +73,11 @@ enum {
 - (void)resetHeaders:(NSArray *)headers managerAtIndex:(NSUInteger)index;
 - (void)resetAuthorizationHeaderForManagerAtIndex:(NSUInteger)index;
 
-- (void)encodeParametersInURLForManagerAtIndex:(NSUInteger)index;
+/** @brief Encodes the parameters for request types
+ @param types Any of NetworkContentType */
+- (void)encodeParametersForRequestTypes:(NSIndexSet *)types inURLForManagerAtIndex:(NSUInteger)index;
+/** @brief By default encodes the parameters for HEAD and GET */
+- (void)defaultEncodeParametersInURLForManagerAtIndex:(NSUInteger)index;
 
 + (void)prettyPrintJSON:(NSDictionary *)dictionaryData;
 

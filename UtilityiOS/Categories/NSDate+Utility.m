@@ -272,7 +272,7 @@
 }
 
 - (NSNumber *)unixtimestamp {
-    return @([self timeIntervalSince1970]);
+    return [NSNumber numberWithInteger:[self timeIntervalSince1970]];
 }
 
 + (StringArr *)charDaysOfWeek {

@@ -205,7 +205,7 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
     AFHTTPSessionManager *manager = [self.managers objectForKey:@(index)];
     if (!manager) return nil;
     
-    NSString *typeStr = requestTypeStrings[@(type)];
+    NSString *typeStr = [self requesNameForType:type];
     NSString *urlStr = [self urlWithEndpoint:url managerAtIndex:index];
     
     NSMutableURLRequest *request = [manager.requestSerializer multipartFormRequestWithMethod:typeStr URLString:urlStr parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
@@ -366,11 +366,29 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
     return manager;
 }
 
-- (void)encodeParametersInURLForManagerAtIndex:(NSUInteger)index {
+- (NSString *)requesNameForType:(NetworkContentType)type {
+    return [requestTypeStrings objectForKey:@(type)];
+}
+
+- (void)encodeParametersForRequestTypes:(NSIndexSet *)types inURLForManagerAtIndex:(NSUInteger)index {
+        
+    NSMutableSet *set = [[NSMutableSet alloc] init];
+    [types enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL * _Nonnull stop) {
+        NSString *name = [self requesNameForType:idx];
+        if (0 < name.length) [set addObject:name];
+    }];
     
     AFHTTPSessionManager *manager = [self.managers objectForKey:@(index)];
     if (!manager) return;
-    manager.requestSerializer.HTTPMethodsEncodingParametersInURI = [NSSet setWithObjects:@"GET", @"HEAD", nil];
+    manager.requestSerializer.HTTPMethodsEncodingParametersInURI = set;
+}
+
+- (void)defaultEncodeParametersInURLForManagerAtIndex:(NSUInteger)index {
+    
+    NSMutableIndexSet *set = [[NSMutableIndexSet alloc] init];
+    [set addIndex:NetworkRequestType_GET];
+    [set addIndex:NetworkRequestType_HEAD];
+    [self encodeParametersForRequestTypes:set inURLForManagerAtIndex:index];
 }
 
 @end
