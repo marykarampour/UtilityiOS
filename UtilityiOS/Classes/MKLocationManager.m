@@ -165,7 +165,7 @@ static NotificationCategoryIdentifier const GeoFenceCatID = @"GeoFenceCatID";
     }
 }
 
-- (void)createGeofencedZone:(NSArray<MKGeoFencePoint *> *)geofencedPoints {
+- (void)createGeofencedZone:(NSArray<__kindof MKGeoFencePoint *> *)geofencedPoints {
     self.geofencedPoints = geofencedPoints;
     self.lastFencedLocation = self.location.location.coordinate;
     for (MKGeoFencePoint *loc in geofencedPoints) {

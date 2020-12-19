@@ -9,8 +9,9 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 #import "MKNotificationController.h"
+#import "MKModel.h"
 
-@interface MKGeoFencePoint : NSObject
+@interface MKGeoFencePoint : MKModel
 
 @property (nonatomic, strong) NotificationIdentifier identifier;
 @property (nonatomic, strong) NSString *title;
@@ -37,7 +38,7 @@
 - (float)bearingBetweenLocationAndLocation:(CLLocation *)endLocation;
 
 //Geofencing
-- (void)createGeofencedZone:(NSArray<MKGeoFencePoint *> *)geofencedPoints;
+- (void)createGeofencedZone:(NSArray<__kindof MKGeoFencePoint *> *)geofencedPoints;
 - (void)createGeofenceForPoint:(CLLocationCoordinate2D)point;
 
 
