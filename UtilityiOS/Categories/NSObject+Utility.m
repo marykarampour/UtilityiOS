@@ -245,6 +245,29 @@
     return YES;
 }
 
+- (BOOL)allIsNullWithProperties:(StringArr *)properties {
+    for (NSString *name in properties) {
+        id value = [self valueForKey:name];
+        if (value) {
+            return NO;
+        }
+    }
+    return YES;
+}
+
+- (BOOL)allIsNullWithBaseClass:(Class)baseClass {
+    Class currentClass = [self class];
+    BOOL allIsNull = YES;
+    
+    while (currentClass != baseClass && allIsNull) {
+        
+        StringArr *properties = [NSObject propertyNamesOfClass:currentClass];
+        allIsNull = [self allIsNullWithProperties:properties];
+        currentClass = [currentClass superclass];
+    }
+    return allIsNull;
+}
+
 + (void)swizzleSelectorOriginal:(SEL)originalSelector swizzled:(SEL)swizzledSelector isClassMethod:(BOOL)isClassMethod {
     Class class = isClassMethod ? object_getClass(self) : self.class;
     Method originalMethod = isClassMethod ? class_getClassMethod(class, originalSelector) : class_getInstanceMethod(class, originalSelector);

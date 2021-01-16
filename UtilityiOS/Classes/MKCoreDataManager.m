@@ -143,7 +143,9 @@
     }
     NSURL *modelURL = [[NSBundle mainBundle] URLForResource:self.modelPath withExtension:@"momd"];
     DEBUGLOG(@"Core data model path: %@", modelURL.description);
-    _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    if (modelURL) {
+        _managedObjectModel = [[NSManagedObjectModel alloc] initWithContentsOfURL:modelURL];
+    }
     return _managedObjectModel;
 }
 
@@ -151,13 +153,16 @@
     if (_persistentStoreCoordinator) {
         return _persistentStoreCoordinator;
     }
-    NSURL *storeURL = [[Constants appDocumentsDirectory] URLByAppendingPathComponent:self.storePath];
-    DEBUGLOG(@"Core data store path: %@", storeURL.description);
-    NSError *error;
-    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
-        NSAssert(error, error.localizedDescription);
-        return nil;
+    if ([self managedObjectModel]) {
+        
+        NSURL *storeURL = [[Constants appDocumentsDirectory] URLByAppendingPathComponent:self.storePath];
+        DEBUGLOG(@"Core data store path: %@", storeURL.description);
+        NSError *error;
+        _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
+        if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error]) {
+            NSAssert(error, error.localizedDescription);
+            return nil;
+        }
     }
     return _persistentStoreCoordinator;
 }

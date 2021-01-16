@@ -25,8 +25,14 @@
 
 - (NSUInteger)MKHash;
 
-/** @brief Returns YES if all properties are null */
+/** @brief Returns YES if all properties are null. Same as allIsNullWithBaseClass with baseClass = super  */
 - (BOOL)allIsNull;
+
+/** @brief Returns YES if all properties are null */
+- (BOOL)allIsNullWithBaseClass:(Class)baseClass;
+
+/** @brief Returns YES if all given properties have null values */
+- (BOOL)allIsNullWithProperties:(StringArr *)properties;
 
 + (StringArr *)propertyNamesOfClass:(Class)objectClass;
 + (NSDictionary *)attributePropertyNamesOfClass:(Class)objectClass;

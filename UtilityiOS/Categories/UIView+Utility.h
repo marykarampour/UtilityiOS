@@ -16,9 +16,9 @@ static CGFloat const CONSTRAINT_NO_PADDING = MAXFLOAT;
 
 - (void)addConstraintsWithFormat:(NSString * _Nullable)format options:(NSLayoutFormatOptions)opts metrics:(nullable NSDictionary<NSString *,id> *)metrics views:(NSDictionary<NSString *, id> *_Nullable)views;
 
-- (void)addConstraintWithItem:(id _Nullable)view1 attribute:(NSLayoutAttribute)attr1 relatedBy:(NSLayoutRelation)relation toItem:(nullable id)view2 attribute:(NSLayoutAttribute)attr2 multiplier:(CGFloat)multiplier constant:(CGFloat)c;
+- (NSLayoutConstraint *)addConstraintWithItem:(id _Nullable)view1 attribute:(NSLayoutAttribute)attr1 relatedBy:(NSLayoutRelation)relation toItem:(nullable id)view2 attribute:(NSLayoutAttribute)attr2 multiplier:(CGFloat)multiplier constant:(CGFloat)c;
 
-- (void)addConstraintWithItem:(id _Nullable)view1 attribute:(NSLayoutAttribute)attr1 relatedBy:(NSLayoutRelation)relation toItem:(nullable id)view2 attribute:(NSLayoutAttribute)attr2 multiplier:(CGFloat)multiplier constant:(CGFloat)c priority:(UILayoutPriority)priority;
+- (NSLayoutConstraint *)addConstraintWithItem:(id _Nullable)view1 attribute:(NSLayoutAttribute)attr1 relatedBy:(NSLayoutRelation)relation toItem:(nullable id)view2 attribute:(NSLayoutAttribute)attr2 multiplier:(CGFloat)multiplier constant:(CGFloat)c priority:(UILayoutPriority)priority;
 
 - (void)constraintSidesForView:(__kindof UIView *)view insets:(UIEdgeInsets)insets;
 - (void)constraintSidesForView:(__kindof UIView *)view;
@@ -26,14 +26,14 @@ static CGFloat const CONSTRAINT_NO_PADDING = MAXFLOAT;
 - (void)constraintSize:(CGSize)size forView:(__kindof UIView *)view;
 /** brief constraint size based on frame size */
 - (void)constraintSizeForView:(__kindof UIView *)view;
-- (void)constraintWidthForView:(__kindof UIView *)view;
-- (void)constraintHeightForView:(__kindof UIView *)view;
-- (void)constraintWidth:(CGFloat)width forView:(__kindof UIView *)view;
-- (void)constraintHeight:(CGFloat)height forView:(__kindof UIView *)view;
+- (NSLayoutConstraint *)constraintWidthForView:(__kindof UIView *)view;
+- (NSLayoutConstraint *)constraintHeightForView:(__kindof UIView *)view;
+- (NSLayoutConstraint *)constraintWidth:(CGFloat)width forView:(__kindof UIView *)view;
+- (NSLayoutConstraint *)constraintHeight:(CGFloat)height forView:(__kindof UIView *)view;
 - (void)constraintSameWidthHeightForView:(__kindof UIView *)view;
-- (void)constraint:(NSLayoutAttribute)attr view:(__kindof UIView *)view;
-- (void)constraint:(NSLayoutAttribute)attr view:(__kindof UIView *)view margin:(CGFloat)margin;
-- (void)constraint:(NSLayoutAttribute)attr view:(__kindof UIView *)view margin:(CGFloat)margin priority:(UILayoutPriority)priority;
+- (NSLayoutConstraint *)constraint:(NSLayoutAttribute)attr view:(__kindof UIView *)view;
+- (NSLayoutConstraint *)constraint:(NSLayoutAttribute)attr view:(__kindof UIView *)view margin:(CGFloat)margin;
+- (NSLayoutConstraint *)constraint:(NSLayoutAttribute)attr view:(__kindof UIView *)view margin:(CGFloat)margin priority:(UILayoutPriority)priority;
 - (void)constraintSame:(NSLayoutAttribute)attr view1:(__kindof UIView *)view1 view2:(__kindof UIView *)view2;
 - (void)constraintSame:(NSLayoutAttribute)attr view1:(__kindof UIView *)view1 view2:(__kindof UIView *)view2 margin:(CGFloat)margin;
 - (void)constraintSameView1:(__kindof UIView *)view1 view2:(__kindof UIView *)view2;
@@ -44,11 +44,11 @@ static CGFloat const CONSTRAINT_NO_PADDING = MAXFLOAT;
 - (void)constraintHorizontally:(NSArray<__kindof UIView *> *)views interItemMargin:(CGFloat)interItemMargin horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin equalWidths:(BOOL)equalWidths;
 
 /** @param parentConstraints Specifies consraints on parent's edges, pass 0 for none,  NSLayoutAttributeTop or NSLayoutAttributeBottom or both, other values are ignored
- @param horizontalMargin Use CONSTRAINT_NO_PADDING to not constraint horizontally to the parent */
+    @param horizontalMargin Use CONSTRAINT_NO_PADDING to not constraint horizontally to the parent */
 - (void)constraintVertically:(NSArray<__kindof UIView *> *)views interItemMargin:(CGFloat)interItemMargin horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin equalHeights:(BOOL)equalHeights parentConstraints:(NSLayoutAttribute)parentConstraints;
 
 /** @param parentConstraints Specifies consraints on parent's edges, pass 0 for none,  NSLayoutAttributeLeft or NSLayoutAttributeRight or both, other values are ignored
- @param verticalMargin Use CONSTRAINT_NO_PADDING to not constraint vertically to the parent */
+    @param verticalMargin Use CONSTRAINT_NO_PADDING to not constraint vertically to the parent */
 - (void)constraintHorizontally:(NSArray<__kindof UIView *> *)views interItemMargin:(CGFloat)interItemMargin horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin equalWidths:(BOOL)equalWidths parentConstraints:(NSLayoutAttribute)parentConstraints;
 
 /** @brief Limits the height or width of view to that of its parent */
@@ -57,6 +57,8 @@ static CGFloat const CONSTRAINT_NO_PADDING = MAXFLOAT;
 /** @brief Limits the height or width of view to that of its parent */
 - (void)constraintLimitToParent:(NSLayoutAttribute)attr view:(__kindof UIView *)view;
 
+- (void)constraintWidth:(CGFloat)width forView:(__kindof UIView *)view priority:(UILayoutPriority)priority;
+- (void)constraintHeight:(CGFloat)height forView:(__kindof UIView *)view priority:(UILayoutPriority)priority;
 
 #pragma mark - constraints
 
