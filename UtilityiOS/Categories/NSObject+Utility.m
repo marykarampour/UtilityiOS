@@ -247,9 +247,14 @@
 
 - (BOOL)allIsNullWithProperties:(StringArr *)properties {
     for (NSString *name in properties) {
-        id value = [self valueForKey:name];
-        if (value) {
-            return NO;
+        if ([self respondsToSelector:NSSelectorFromString(name)]) {
+            id value = [self valueForKey:name];
+            if ([value isKindOfClass:[NSNumber class]]) {
+                return ![value boolValue];
+            }
+            else if (value) {
+                return NO;
+            }
         }
     }
     return YES;
@@ -294,6 +299,12 @@
 
 + (NSString *)timestampGUID {
     return [NSString stringWithFormat:@"%d-%@", (int)[[NSDate date] timeIntervalSince1970], [self GUID]];
+}
+
+#pragma mark - overrides
+
+- (id)valueForUndefinedKey:(NSString *)key {
+    return nil;
 }
 
 @end
