@@ -13,6 +13,7 @@ static CGFloat const CONSTRAINT_NO_PADDING = MAXFLOAT;
 @interface UIView (Constraints)
 
 - (void)removeConstraintsMask;
+- (void)removeAllSubviewConstraints;
 
 - (void)addConstraintsWithFormat:(NSString * _Nullable)format options:(NSLayoutFormatOptions)opts metrics:(nullable NSDictionary<NSString *,id> *)metrics views:(NSDictionary<NSString *, id> *_Nullable)views;
 
@@ -31,9 +32,15 @@ static CGFloat const CONSTRAINT_NO_PADDING = MAXFLOAT;
 - (NSLayoutConstraint *)constraintWidth:(CGFloat)width forView:(__kindof UIView *)view;
 - (NSLayoutConstraint *)constraintHeight:(CGFloat)height forView:(__kindof UIView *)view;
 - (void)constraintSameWidthHeightForView:(__kindof UIView *)view;
+
 - (NSLayoutConstraint *)constraint:(NSLayoutAttribute)attr view:(__kindof UIView *)view;
 - (NSLayoutConstraint *)constraint:(NSLayoutAttribute)attr view:(__kindof UIView *)view margin:(CGFloat)margin;
 - (NSLayoutConstraint *)constraint:(NSLayoutAttribute)attr view:(__kindof UIView *)view margin:(CGFloat)margin priority:(UILayoutPriority)priority;
+
+- (void)constraintSidesExcluding:(NSLayoutAttribute)attr view:(__kindof UIView *)view;
+- (void)constraintSidesExcluding:(NSLayoutAttribute)attr view:(__kindof UIView *)view margin:(CGFloat)margin;
+- (void)constraintSidesExcluding:(NSLayoutAttribute)attr view:(__kindof UIView *)view margin:(CGFloat)margin priority:(UILayoutPriority)priority;
+
 - (void)constraintSame:(NSLayoutAttribute)attr view1:(__kindof UIView *)view1 view2:(__kindof UIView *)view2;
 - (void)constraintSame:(NSLayoutAttribute)attr view1:(__kindof UIView *)view1 view2:(__kindof UIView *)view2 margin:(CGFloat)margin;
 - (void)constraintSameView1:(__kindof UIView *)view1 view2:(__kindof UIView *)view2;
@@ -50,6 +57,16 @@ static CGFloat const CONSTRAINT_NO_PADDING = MAXFLOAT;
 /** @param parentConstraints Specifies consraints on parent's edges, pass 0 for none,  NSLayoutAttributeLeft or NSLayoutAttributeRight or both, other values are ignored
     @param verticalMargin Use CONSTRAINT_NO_PADDING to not constraint vertically to the parent */
 - (void)constraintHorizontally:(NSArray<__kindof UIView *> *)views interItemMargin:(CGFloat)interItemMargin horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin equalWidths:(BOOL)equalWidths parentConstraints:(NSLayoutAttribute)parentConstraints;
+
+/** @param parentConstraints Specifies consraints on parent's edges, pass 0 for none,  NSLayoutAttributeTop or NSLayoutAttributeBottom or both, other values are ignored
+    @param horizontalMargin Use CONSTRAINT_NO_PADDING to not constraint horizontally to the parent
+    @param verticalConstraints Specifies consraints on parent's edges, pass 0 for none,  NSLayoutAttributeLeft or NSLayoutAttributeRight or both, other values are ignored */
+- (void)constraintHorizontally:(NSArray<__kindof UIView *> *)views interItemMargin:(CGFloat)interItemMargin horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin equalWidths:(BOOL)equalWidths parentConstraints:(NSLayoutAttribute)parentConstraints verticalConstraints:(NSLayoutAttribute)verticalConstraints;
+
+/** @param parentConstraints Specifies consraints on parent's edges, pass 0 for none,  NSLayoutAttributeLeft or NSLayoutAttributeRight or both, other values are ignored
+    @param verticalMargin Use CONSTRAINT_NO_PADDING to not constraint vertically to the parent
+    @param horizontalConstraints  Specifies consraints on parent's edges, pass 0 for none,  NSLayoutAttributeTop or NSLayoutAttributeBottom or both, other values are ignored*/
+- (void)constraintVertically:(NSArray<__kindof UIView *> *)views interItemMargin:(CGFloat)interItemMargin horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin equalHeights:(BOOL)equalHeights parentConstraints:(NSLayoutAttribute)parentConstraints horizontalConstraints:(NSLayoutAttribute)horizontalConstraints;
 
 /** @brief Limits the height or width of view to that of its parent */
 - (void)constraintLimitToParent:(NSLayoutAttribute)attr view:(__kindof UIView *)view size:(CGFloat)size;

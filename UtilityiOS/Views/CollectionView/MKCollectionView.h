@@ -79,6 +79,8 @@
 @property (nonatomic, strong) NSIndexPath *currentFirstItem;
 @property (nonatomic, strong) MKCollectionViewAttributes *attributes;
 
+- (MKCollectionView *)view;
+
 @end
 
 

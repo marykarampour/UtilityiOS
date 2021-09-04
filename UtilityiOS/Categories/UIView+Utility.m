@@ -17,6 +17,12 @@
     }
 }
 
+- (void)removeAllSubviewConstraints {
+    for (UIView *view in self.subviews) {
+        [view removeConstraints:view.constraints];
+    }
+}
+
 - (void)addConstraintsWithFormat:(NSString *)format options:(NSLayoutFormatOptions)opts metrics:(NSDictionary<NSString *,id> *)metrics views:(NSDictionary<NSString *,id> *)views {
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:format options:opts metrics:metrics views:views]];
 }
@@ -105,6 +111,40 @@
     return [self addConstraintWithItem:view attribute:attr relatedBy:NSLayoutRelationEqual toItem:self attribute:attr multiplier:1.0 constant:margin priority:priority];
 }
 
+- (void)constraintSidesExcluding:(NSLayoutAttribute)attr view:(__kindof UIView *)view {
+    [self constraintSidesExcluding:attr view:view margin:0.0];
+}
+
+- (void)constraintSidesExcluding:(NSLayoutAttribute)attr view:(__kindof UIView *)view margin:(CGFloat)margin {
+    if (attr != NSLayoutAttributeTop) {
+        [self constraint:NSLayoutAttributeTop view:view margin:margin];
+    }
+    if (attr != NSLayoutAttributeLeft) {
+        [self constraint:NSLayoutAttributeLeft view:view margin:margin];
+    }
+    if (attr != NSLayoutAttributeBottom) {
+        [self constraint:NSLayoutAttributeBottom view:view margin:-margin];
+    }
+    if (attr != NSLayoutAttributeRight) {
+        [self constraint:NSLayoutAttributeRight view:view margin:-margin];
+    }
+}
+
+- (void)constraintSidesExcluding:(NSLayoutAttribute)attr view:(__kindof UIView *)view margin:(CGFloat)margin priority:(UILayoutPriority)priority {
+    if (attr != NSLayoutAttributeTop) {
+        [self constraint:NSLayoutAttributeTop view:view margin:margin priority:priority];
+    }
+    if (attr != NSLayoutAttributeLeft) {
+        [self constraint:NSLayoutAttributeLeft view:view margin:margin priority:priority];
+    }
+    if (attr != NSLayoutAttributeBottom) {
+        [self constraint:NSLayoutAttributeBottom view:view margin:-margin priority:priority];
+    }
+    if (attr != NSLayoutAttributeRight) {
+        [self constraint:NSLayoutAttributeRight view:view margin:-margin priority:priority];
+    }
+}
+
 - (void)constraintSame:(NSLayoutAttribute)attr view1:(__kindof UIView *)view1 view2:(__kindof UIView *)view2 {
     [self addConstraintWithItem:view1 attribute:attr relatedBy:NSLayoutRelationEqual toItem:view2 attribute:attr multiplier:1.0 constant:0.0];
 }
@@ -142,6 +182,16 @@
 
 - (void)constraintVertically:(NSArray<__kindof UIView *> *)views interItemMargin:(CGFloat)interItemMargin horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin equalHeights:(BOOL)equalHeights parentConstraints:(NSLayoutAttribute)parentConstraints {
     
+    [self constraintVertically:views interItemMargin:interItemMargin horizontalMargin:horizontalMargin verticalMargin:verticalMargin equalHeights:equalHeights parentConstraints:NSLayoutAttributeTop | NSLayoutAttributeBottom horizontalConstraints:NSLayoutAttributeLeft | NSLayoutAttributeRight];
+}
+
+- (void)constraintHorizontally:(NSArray<__kindof UIView *> *)views interItemMargin:(CGFloat)interItemMargin horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin equalWidths:(BOOL)equalWidths parentConstraints:(NSLayoutAttribute)parentConstraints {
+    
+    [self constraintHorizontally:views interItemMargin:interItemMargin horizontalMargin:horizontalMargin verticalMargin:verticalMargin equalWidths:equalWidths parentConstraints:NSLayoutAttributeLeft | NSLayoutAttributeRight verticalConstraints:NSLayoutAttributeTop | NSLayoutAttributeBottom];
+}
+
+- (void)constraintVertically:(NSArray<__kindof UIView *> *)views interItemMargin:(CGFloat)interItemMargin horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin equalHeights:(BOOL)equalHeights parentConstraints:(NSLayoutAttribute)parentConstraints horizontalConstraints:(NSLayoutAttribute)horizontalConstraints {
+    
     NSMutableArray<UIView *> *totalViews = [[NSMutableArray alloc] init];
 
     for (UIView *view in views) {
@@ -164,12 +214,23 @@
         long index = [totalViews indexOfObject:view];
 
         if (horizontalMargin != CONSTRAINT_NO_PADDING) {
-            [self constraint:NSLayoutAttributeLeft view:view margin:horizontalMargin];
-            [self constraint:NSLayoutAttributeRight view:view margin:horizontalMargin];
+            if (horizontalConstraints == NSLayoutAttributeLeft) {
+                [self constraint:NSLayoutAttributeLeft view:view margin:verticalMargin];
+            }
+            else if (horizontalConstraints == NSLayoutAttributeRight) {
+                [self constraint:NSLayoutAttributeRight view:view margin:-verticalMargin];
+            }
+            else {
+                [self constraint:NSLayoutAttributeLeft view:view margin:horizontalMargin];
+                [self constraint:NSLayoutAttributeRight view:view margin:-horizontalMargin];
+            }
         }
-
+        else if (horizontalConstraints == NSLayoutAttributeCenterX) {
+            [self addConstraintWithItem:view attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:last attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
+        }
+        
         if ((parentConstraints & NSLayoutAttributeBottom) && index == totalViews.count - 1) {
-            [self constraint:NSLayoutAttributeBottom view:view margin:verticalMargin];
+            [self constraint:NSLayoutAttributeBottom view:view margin:-verticalMargin];
         }
         if (0 < index) {
             [self addConstraintWithItem:view attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:last attribute:NSLayoutAttributeBottom multiplier:1.0 constant:interItemMargin];
@@ -179,7 +240,7 @@
     }
 }
 
-- (void)constraintHorizontally:(NSArray<__kindof UIView *> *)views interItemMargin:(CGFloat)interItemMargin horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin equalWidths:(BOOL)equalWidths parentConstraints:(NSLayoutAttribute)parentConstraints {
+- (void)constraintHorizontally:(NSArray<__kindof UIView *> *)views interItemMargin:(CGFloat)interItemMargin horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin equalWidths:(BOOL)equalWidths parentConstraints:(NSLayoutAttribute)parentConstraints verticalConstraints:(NSLayoutAttribute)verticalConstraints {
     
     NSMutableArray<UIView *> *totalViews = [[NSMutableArray alloc] init];
 
@@ -203,12 +264,23 @@
         long index = [totalViews indexOfObject:view];
 
         if (verticalMargin != CONSTRAINT_NO_PADDING) {
-            [self constraint:NSLayoutAttributeTop view:view margin:verticalMargin];
-            [self constraint:NSLayoutAttributeBottom view:view margin:verticalMargin];
+            if (verticalConstraints == NSLayoutAttributeTop) {
+                [self constraint:NSLayoutAttributeTop view:view margin:verticalMargin];
+            }
+            else if (verticalConstraints == NSLayoutAttributeBottom) {
+                [self constraint:NSLayoutAttributeBottom view:view margin:-verticalMargin];
+            }
+            else {
+                [self constraint:NSLayoutAttributeTop view:view margin:verticalMargin];
+                [self constraint:NSLayoutAttributeBottom view:view margin:-verticalMargin];
+            }
+        }
+        else if (verticalConstraints == NSLayoutAttributeCenterY) {
+            [self addConstraintWithItem:view attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:last attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
         }
 
         if ((parentConstraints & NSLayoutAttributeRight) && index == totalViews.count - 1) {
-            [self constraint:NSLayoutAttributeRight view:view margin:horizontalMargin];
+            [self constraint:NSLayoutAttributeRight view:view margin:-horizontalMargin];
         }
         if (0 < index) {
             [self addConstraintWithItem:view attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:last attribute:NSLayoutAttributeRight multiplier:1.0 constant:interItemMargin];

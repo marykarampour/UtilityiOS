@@ -196,6 +196,9 @@
 - (void)removeViewAtIndex:(NSUInteger)index {
 }
 
+- (MKCollectionView *)view {
+    return self.views.firstObject;
+}
 
 @end
 
