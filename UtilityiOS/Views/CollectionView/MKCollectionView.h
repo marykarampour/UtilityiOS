@@ -113,7 +113,7 @@
 @property (nonatomic, strong) MKVerticalCollectionHeaderAttributes *headerAttributes;
 
 @end
-
+//TODO: this should be MKSingleSectionCollectionViewController either vertical or horizontal
 @interface MKHorizontalCollectionViewController : MKSingleCollectionViewController <MKHorizontalCollectionViewProtocol>
 
 @property (nonatomic, assign) NSUInteger itemCount;
