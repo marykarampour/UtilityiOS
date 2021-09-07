@@ -119,6 +119,7 @@
 @property (nonatomic, assign) NSUInteger itemCount;
 
 - (instancetype)initWithAttributes:(MKCollectionViewAttributes *)attributes;
+- (void)addIdentifier:(NSString *)identifier;
 
 @end
 

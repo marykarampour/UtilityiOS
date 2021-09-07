@@ -336,6 +336,10 @@
     return self;
 }
 
+- (void)addIdentifier:(NSString *)identifier {
+    [[self view] registerClass:self.attributes.cellClass forCellWithReuseIdentifier:identifier];
+}
+
 - (void)setItemCount:(NSUInteger)itemCount {
     _itemCount = itemCount;
     [self.views.firstObject reload];

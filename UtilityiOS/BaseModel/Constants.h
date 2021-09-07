@@ -96,6 +96,12 @@ typedef NS_ENUM(NSUInteger, MoveDirection) {
     MoveDirection_BACKWARD
 };
 
+typedef NS_ENUM(NSUInteger, CELL_SIZE_TYPE) {
+    CELL_SIZE_TYPE_SMALL,
+    CELL_SIZE_TYPE_MEDIUM,
+    CELL_SIZE_TYPE_LARGE
+};
+
 typedef NSArray<NSString *>                                     StringArr;
 typedef NSMutableArray<NSString *>                              MStringArr;
 typedef NSDictionary<NSString *, NSString *>                    DictStringString;
