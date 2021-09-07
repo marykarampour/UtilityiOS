@@ -46,6 +46,13 @@ extern AppThemeStyle THEME_STYLE;
 + (UIFont *)sectionHeaderFont;
 + (UIFont *)sectionFooterFont;
 
++ (UIColor *)tabbarTextColorNormal;
++ (UIColor *)tabbarTextColorSelected;
++ (UIColor *)tabbarBackgroundColor;
++ (UIColor *)tabbarBarTintColor;
++ (UIFont *)tabbarFont;
++ (UIImage *)tabbarBackgroundImage;
+
 + (UIColor *)translusentBackground;
 + (UIColor *)VCBackgroundColor;
 + (UIColor *)VCForgroundColor;

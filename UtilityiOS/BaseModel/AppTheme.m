@@ -27,10 +27,13 @@
         [[UIBarButtonItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:[self barTextColor], NSFontAttributeName:[self navBarFont]} forState:UIControlStateFocused];
     }*/
     
-    [[UITabBar appearance] setBarTintColor:[self VCBackgroundColor]];
+    if ([self tabbarBackgroundImage])
+        [[UITabBar appearance] setBackgroundImage:[self tabbarBackgroundImage]];
+    [[UITabBar appearance] setBarTintColor:[self tabbarBackgroundColor]];
+    [[UITabBar appearance] setTintColor:[self tabbarBarTintColor]];
     [[UITabBar appearance] setTranslucent:NO];
-    [[UITabBarItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:[self textDefaultColor], NSFontAttributeName:[self mediumLabelFont]} forState:UIControlStateNormal];
-    [[UITabBarItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:[self textHighlightColor], NSFontAttributeName:[self mediumLabelFont]} forState:UIControlStateSelected];
+    [[UITabBarItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:[self tabbarTextColorNormal], NSFontAttributeName:[self tabbarFont]} forState:UIControlStateNormal];
+    [[UITabBarItem appearance] setTitleTextAttributes:@{NSForegroundColorAttributeName:[self tabbarTextColorSelected], NSFontAttributeName:[self tabbarFont]} forState:UIControlStateSelected];
     
     [[UISegmentedControl appearance] setTitleTextAttributes:
      @{NSForegroundColorAttributeName:[self segmentedControlSelectedColor],
@@ -403,6 +406,38 @@
     }
 }
 
++ (UIColor *)tabbarTextColorNormal {
+    switch (THEME_STYLE) {
+        case AppThemeStyle_LIGHT: return [UIColor blackColor];
+        case AppThemeStyle_DARK: return [UIColor whiteColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
++ (UIColor *)tabbarTextColorSelected {
+    switch (THEME_STYLE) {
+        case AppThemeStyle_LIGHT: return [UIColor blackColor];
+        case AppThemeStyle_DARK: return [UIColor whiteColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
++ (UIColor *)tabbarBackgroundColor {
+    switch (THEME_STYLE) {
+        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
+        case AppThemeStyle_DARK: return [UIColor blackColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
++ (UIColor *)tabbarBarTintColor {
+    switch (THEME_STYLE) {
+        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
+        case AppThemeStyle_DARK: return [UIColor blackColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
 #pragma mark - font
 
 + (UIFont *)XXsmallLabelFont {
@@ -521,6 +556,9 @@
     return [UIFont fontWithName:@"HelveticaNeue" size:8.0];
 }
 
++ (UIFont *)tabbarFont {
+    return [UIFont fontWithName:@"HelveticaNeue" size:8.0];
+}
 
 + (UIColor *)tableCellSelectedColor {
     switch (THEME_STYLE) {
@@ -726,6 +764,8 @@
     return [UIColor colorWithRGB:0xffae00 alpha:alpha];
 }
 
-
++ (UIImage *)tabbarBackgroundImage {
+    return nil;
+}
 
 @end
