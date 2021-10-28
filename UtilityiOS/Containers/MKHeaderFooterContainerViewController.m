@@ -16,6 +16,7 @@
 @property (nonatomic, assign, readwrite) HEADER_CONTAINER_TYPE type;
 
 @property (nonatomic, strong) NSLayoutConstraint *footerHeightConstraint;
+@property (nonatomic, strong) NSLayoutConstraint *headerHeightConstraint;
 
 @end
 
@@ -141,6 +142,10 @@
     return 0.0;
 }
 
+- (CGFloat)maxHeaderHeight {
+    return [self headerHeight];
+}
+
 - (CGFloat)headerWidth {
     return [Constants screenWidth];
 }
@@ -163,7 +168,7 @@
 
 - (void)constraintViews {
     
-    if (self.footerHeightConstraint) return;
+    if (self.footerHeightConstraint || self.headerHeightConstraint) return;
     
     [self.view removeConstraintsMask];
     [self.backView removeConstraintsMask];
@@ -173,7 +178,6 @@
     [self.backView constraint:NSLayoutAttributeRight view:self.contentView];
     
     [self.backView constraintWidth:[self headerWidth] forView:self.headerView];
-    [self.backView constraintHeight:[self headerHeight] forView:self.headerView];
     [self.backView constraint:NSLayoutAttributeTop view:self.headerView margin:[self headerVerticalMargin]];
     
     [self.backView constraintWidth:[self footerWidth] forView:self.footerView];
@@ -185,10 +189,25 @@
     [self.backView addConstraintWithItem:self.headerView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
     [self.backView addConstraintWithItem:self.footerView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.contentView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:[self footerVerticalMargin]];
     
-    self.footerHeightConstraint = [NSLayoutConstraint constraintWithItem:self.footerView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:[self footerHeight]];
-    [self.backView addConstraint:self.footerHeightConstraint];
+    self.footerHeightConstraint = [self.backView constraintHeight:[self footerHeight] forView:self.footerView];
+    self.headerHeightConstraint = [self.backView constraintHeight:[self headerHeight] forView:self.headerView];
 }
 
+- (void)setHeaderExpanded:(BOOL)expanded animated:(BOOL)animated completion:(void (^)(void))completion {
+        
+    if (animated) {
+        [UIView animateWithDuration:[self.class animationDuration] delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+            self.headerHeightConstraint.constant = expanded ? [self maxHeaderHeight] : [self headerHeight];
+            [self.view layoutIfNeeded];
+        } completion:^(BOOL finished) {
+            if (completion) completion();
+        }];
+    }
+    else {
+        self.headerHeightConstraint.constant = expanded ? [self maxHeaderHeight] : [self headerHeight];
+        [self.view layoutIfNeeded];
+    }
+}
 
 - (void)setFooterExpanded:(BOOL)expanded animated:(BOOL)animated completion:(void (^)(void))completion {
     

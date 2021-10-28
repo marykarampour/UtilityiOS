@@ -118,7 +118,7 @@
     return [NSDate daysBetweenFromDate:self toDate:startDate];
 }
 
-#warning - fix these
+//TODO: - fix these
 #pragma mark - update
 
 - (NSDate *)updateDayWithValue:(NSInteger)value {
@@ -271,6 +271,25 @@
     return diffComps.day;
 }
 
++ (NSDate *)dateWithYear:(NSUInteger)year month:(NSUInteger)month day:(NSUInteger)day {
+    return [[NSDate date] dateWithYear:year month:month day:day];
+}
+
+- (NSDate *)dateWithYear:(NSUInteger)year month:(NSUInteger)month day:(NSUInteger)day {
+    
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDateComponents *components = [cal components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:self];
+    
+    if (0 < year)
+        [components setYear:year];
+    if (0 < month)
+        [components setMonth:month];
+    if (0 < day)
+        [components setDay:day];
+    
+    return [cal dateFromComponents:components];
+}
+
 - (NSNumber *)unixtimestamp {
     return [NSNumber numberWithInteger:[self timeIntervalSince1970]];
 }
@@ -290,6 +309,10 @@
 
 + (StringArr *)monthsOfYear {
     return [[NSDateFormatter alloc] init].shortMonthSymbols;
+}
+
++ (StringArr *)longMonthsOfYear {
+    return [[NSDateFormatter alloc] init].monthSymbols;
 }
 
 

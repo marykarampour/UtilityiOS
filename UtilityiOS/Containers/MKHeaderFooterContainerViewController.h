@@ -46,7 +46,11 @@ typedef NS_ENUM(NSUInteger, HEADER_CONTAINER_TYPE) {
 - (void)createNextButtonWithType:(NAV_BAR_ITEM_TYPE)type systemItem:(UIBarButtonSystemItem)item image:(UIImage *)image;
 
 + (NSTimeInterval)animationDuration;
+
 /** @brief Expands or collapses the footer */
 - (void)setFooterExpanded:(BOOL)expanded animated:(BOOL)animated completion:(void (^)(void))completion;
+
+/** @brief Expands or collapses the header to min height */
+- (void)setHeaderExpanded:(BOOL)expanded animated:(BOOL)animated completion:(void (^)(void))completion;
 
 @end

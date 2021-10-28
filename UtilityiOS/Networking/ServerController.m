@@ -93,7 +93,7 @@ static NSDictionary *headers;
             [self setHeaders:@{[self tokenKey]:token}];
         }
     }
-    completion(result, error);
+    if (completion) completion(result, error);
 }
 
 + (void)processResult:(id)resultObject error:(NSError *)error class:(Class)modelClass key:(NSString *)key completion:(ServerResultErrorBlock)completion {
@@ -101,32 +101,32 @@ static NSDictionary *headers;
         if ([resultObject isKindOfClass:[NSDictionary class]]) {
             if (!key) {
                 [self processResult:resultObject error:error class:modelClass completion:^(id result, NSError *error) {
-                    completion(result, error);
+                    if (completion) completion(result, error);
                 }];
             }
             else {
                 id values = resultObject[key];
                 if (values) {
                     [self processResult:values error:error class:modelClass completion:^(id result, NSError *error) {
-                        completion(result, error);
+                        if (completion) completion(result, error);
                     }];
                 }
                 else {
-                    completion(nil, [self noContent]);
+                    if (completion) completion(nil, [self noContent]);
                 }
             }
         }
         else if ([resultObject isKindOfClass:[NSArray class]]) {
             [self processResult:resultObject error:error class:modelClass completion:^(id result, NSError *error) {
-                completion(result, error);
+                if (completion) completion(result, error);
             }];
         }
         else {
-            completion(nil, [self noContent]);
+            if (completion) completion(nil, [self noContent]);
         }
     }
     else {
-        completion(nil, error);
+        if (completion) completion(nil, error);
     }
 }
 

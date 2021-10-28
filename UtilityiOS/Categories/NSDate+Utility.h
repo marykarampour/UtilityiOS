@@ -32,6 +32,12 @@
 - (NSArray *)monthStringsWithFormat:(NSString *)format untilDate:(NSDate *)date;
 + (NSUInteger)daysBetweenFromDate:(NSDate *)from toDate:(NSDate *)to;
 
+/** @brief Any component which is 0 will not be set */
++ (NSDate *)dateWithYear:(NSUInteger)year month:(NSUInteger)month day:(NSUInteger)day;
+
+/** @brief Any component which is 0 will not be set */
+- (NSDate *)dateWithYear:(NSUInteger)year month:(NSUInteger)month day:(NSUInteger)day;
+
 - (__kindof MKDateRange *)yearRange;
 - (__kindof MKDateRange *)monthRange;
 
@@ -44,5 +50,6 @@
 + (StringArr *)charDaysOfWeek;
 + (StringArr *)daysOfWeek;
 + (StringArr *)monthsOfYear;
++ (StringArr *)longMonthsOfYear;
 
 @end

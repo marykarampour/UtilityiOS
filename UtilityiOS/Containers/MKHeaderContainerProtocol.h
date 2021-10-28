@@ -42,6 +42,7 @@
 - (void)createFooterView;
 - (CGFloat)headerHeight;
 - (CGFloat)headerWidth;
+- (CGFloat)maxHeaderHeight;
 - (CGFloat)headerVerticalMargin;
 - (CGFloat)footerHeight;
 - (CGFloat)footerWidth;
