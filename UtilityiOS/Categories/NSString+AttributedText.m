@@ -27,6 +27,10 @@
     return self.text && self.font && self.color;
 }
 
++ (StringAttributes *)copy:(StringAttributes *)attrs withText:(NSString *)text {
+    return [[StringAttributes alloc] initWithText:text font:attrs.font color:attrs.color];
+}
+
 @end
 
 @implementation NSString (AttributedText)

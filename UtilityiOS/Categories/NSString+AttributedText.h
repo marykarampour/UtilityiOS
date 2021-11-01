@@ -17,6 +17,7 @@
 - (instancetype)initWithText:(NSString *)text font:(UIFont *)font color:(UIColor *)color;
 + (StringAttributes *)attributesWithText:(NSString *)text font:(UIFont *)font color:(UIColor *)color;
 - (BOOL)isValid;
++ (StringAttributes *)copy:(StringAttributes *)attrs withText:(NSString *)text;
 
 @end
 
@@ -35,7 +36,6 @@
 + (NSAttributedString *)bulletedTextWithAttributes:(NSArray<StringAttributes *> *)attrs bullet:(NSString *)symbol;
 
 + (NSAttributedString *)bulletedTextWithAttributedStrings:(NSArray<NSAttributedString *> *)attrs bullet:(NSString *)symbol;
-
 
 + (NSString *)bullet;
 + (NSString *)tabBullet;
