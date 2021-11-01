@@ -254,6 +254,8 @@ extern NSString * const DateFormatShortAPMStyle;
 + (NSString *)Cancel_STR;
 + (NSString *)Clear_STR;
 + (NSString *)Skip_STR;
++ (NSString *)Choose_STR;
++ (NSString *)Select_STR;
 + (NSString *)Sign_STR;
 + (NSString *)Register_STR;
 + (NSString *)Update_STR;
