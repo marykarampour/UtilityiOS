@@ -127,5 +127,6 @@
 /** @brief Sets values from object */
 - (void)setWithObject:(__kindof MKModel *)object;
 + (BOOL)propertyIsBool:(NSString *)name;
++ (BOOL)propertyIsEnum:(NSString *)name;
 
 @end

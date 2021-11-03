@@ -495,4 +495,9 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
     return ([type characterAtIndex:0] == 'c' || [type characterAtIndex:0] == 'B');
 }
 
++ (BOOL)propertyIsEnum:(NSString *)name {
+    NSString *type = [[self.class propertyClassNames] objectForKey:name];
+    return [type characterAtIndex:0] == 'Q';
+}
+
 @end
