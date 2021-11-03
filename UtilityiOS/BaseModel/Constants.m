@@ -268,6 +268,10 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
     return LOCALIZED(@"Other");
 }
 
++ (NSString *)Details_STR {
+    return LOCALIZED(@"Details");
+}
+
 + (NSString *)Sign_STR {
     return LOCALIZED(@"Sign");
 }

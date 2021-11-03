@@ -258,6 +258,7 @@ extern NSString * const DateFormatShortAPMStyle;
 + (NSString *)Select_STR;
 + (NSString *)Comments_STR;
 + (NSString *)Notes_STR;
++ (NSString *)Details_STR;
 + (NSString *)Other_STR;
 + (NSString *)Sign_STR;
 + (NSString *)Register_STR;
