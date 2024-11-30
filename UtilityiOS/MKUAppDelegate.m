@@ -53,6 +53,13 @@
     return nil;
 }
 
+- (void)openDeviceSettings {
+    NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+    if ([[UIApplication sharedApplication] canOpenURL:url]) {
+        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+    }
+}
+
 #pragma mark - application
 
 + (MKUAppDelegate *)application {

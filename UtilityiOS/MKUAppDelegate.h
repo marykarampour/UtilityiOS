@@ -41,6 +41,8 @@
  */
 - (void)setNotificationCateories;
 
+- (void)openDeviceSettings;
+
 /** @brief call super on these when subclass implements */
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
 - (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings;
