@@ -35,6 +35,22 @@
     return @"square";
 }
 
++ (NSString *)Chevron_Right_Image_Name {
+    return @"chevron.right";
+}
+
++ (NSString *)Chevron_Left_Image_Name {
+    return @"chevron.left";
+}
+
++ (NSString *)Chevron_Up_Image_Name {
+    return @"chevron.up";
+}
+
++ (NSString *)Chevron_Down_Image_Name {
+    return @"chevron.down";
+}
+
 + (UIImage *)systemIconWithName:(NSString *)name color:(UIColor *)color {
     if (!color) return nil;
     
