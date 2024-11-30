@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MKPair.h"
+#import "MKUPair.h"
 
 @interface ActionObject : NSObject
 
@@ -15,6 +15,8 @@
 @property (nonatomic, weak) id target;
 @property (nonatomic, assign) SEL action;
 @property (nonatomic, strong) NSObject *object;
+/** @brief Default is UIAlertActionStyleDefault. */
+@property (nonatomic, assign) UIAlertActionStyle style;
 
 - (instancetype)initWithTitle:(NSString *)title target:(id)target action:(SEL)action;
 + (instancetype)actionWithTitle:(NSString *)title target:(id)target action:(SEL)action;
@@ -22,7 +24,10 @@
 
 - (instancetype)initWithTitle:(NSString *)title target:(id)target action:(SEL)action object:(NSObject *)object;
 + (instancetype)actionWithTitle:(NSString *)title target:(id)target action:(SEL)action object:(NSObject *)object;
-+ (NSArray <ActionObject *> *)actionsWithTitleObjects:(MKPairArray <NSString *, NSObject *> *)titles target:(id)target action:(SEL)action;
++ (NSArray <ActionObject *> *)actionsWithTitleObjects:(MKUPairArray <NSString *, NSObject *> *)titles target:(id)target action:(SEL)action;
++ (instancetype)actionWithAction:(SEL)action;
++ (instancetype)actionWithTarget:(id)target action:(SEL)action;
++ (instancetype)blankAction;
 
 @end
 

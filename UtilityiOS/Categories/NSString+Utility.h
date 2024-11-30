@@ -55,6 +55,11 @@ typedef NS_ENUM(NSUInteger, StringFormat) {
     //1. exampleString -> EXAMPLE_STRING
     //2. exampleString0 -> EXAMPLE_STRING0
     StringFormatUnderScoreIgnoreDigitsUpperCaseAll,
+
+    //capitalized__IS_Under_score to CapitalizedISCamelCase
+    //1. example_string -> Example String
+    //2. example__string_0 -> Example String0
+    StringFormatCapitalizedCamelCaseSpacedSanitizedGroupedOneChars
 };
 
 @interface NSString (Utility)
@@ -108,5 +113,59 @@ typedef NS_ENUM(NSUInteger, StringFormat) {
 /** @param groupUppercase If YES it will not put extra space between consecutive uppercase letters */
 - (NSString *)splitedStringForUppercaseComponentsAndGroupUppercase:(BOOL)groupUppercase;
 - (NSString *)removeSpaceBetweenOneCharacterSubstrings;
+
+
+
+
+
+- (NSString *)addSpaceBefore;
+- (NSString *)addSpaceAfter;
+/** @brief Adds a timestamp to the end of self */
+- (NSString *)timestamp;
+/** @brief Adds a UUID to the end of self */
+- (NSString *)GUID;
+/** @brief Trims white space. */
+- (NSString *)trim;
+/** @brief Trims linear boundaries of a string with a given string.
+ @param string The string that acts as a boundary indicator. Anything before or after that will be removed.
+ @param boundary It can be start or end of the string or both.
+ @param inclusive If Yes, it will remove string, otherwise, it will remove up to string. */
+- (NSString *)trimWithSubstring:(NSString *)string boundary:(LINEAR_BOUNDARY_POINT)boundary inclusive:(BOOL)inclusive;
+- (NSString *)lastCharacters:(NSUInteger)chars;
+- (NSString *)removeBetweenOneCharacterSubstringsOccurrenceaOfSpacer:(NSString *)string;
+- (NSString *)displayNameForProperty;
+
+- (NSString *)multipliedStringOfLenght:(NSUInteger)lenght;
++ (NSString *)nonNullString:(NSString *)string;
++ (NSString *)nonNullOrSpaceString:(NSString *)string;
++ (NSString *)nonEmptyOrNoneString:(NSString *)string;
++ (NSString *)combineString:(NSString *)str1 withString:(NSString *)str2;
+
+//XML
+- (NSString *)addResultForTag:(NSString *)tag;
+- (NSString *)addResultTag:(NSString *)result forTag:(NSString *)tag;
+- (NSString *)removeXMLNilTrueForTag:(NSString *)tag;
+- (NSString *)replaceXMLLessGreaterWithTags;
+- (NSString *)replaceXMLLongWithTag:(NSString *)tag;
+- (NSString *)removeXMLContentsOfTag:(NSString *)tag;
+
+- (CGRect)rectForWidth:(CGFloat)width font:(UIFont *)font;
+- (NSUInteger)numberOfOccurrencesOfString:(NSString *)string;
+- (NSString *)makePrefix;
+/** @brief If self has extension and ext is nil it returns self, otherwise ext will be used as the extension. */
+- (NSString *)fileNameWithExtension:(NSString *)ext;
+- (NSString *)extension;
+/** @brief FileName without extension. */
+- (NSString *)filename;
+
++ (NSString *)addString:(NSString *)string toSource:(NSString *)source delimiter:(NSString *)delimiter;
+- (NSString *)addString:(NSString *)string delimiter:(NSString *)delimiter;
+- (NSString *)stringByRemovingHTMLTags;
++ (NSString *)removeHTMLTagsFromString:(NSString *)text;
+
+/** @brief Returns short form of string (self), given max length param.  */
+- (NSString *)shortenedStringToMaxLength:(NSUInteger)maxLength;
+/** @brief Removes all occurrences of specified charactersToReplace and replaces them with the given replacementString  */
+- (NSString *)replaceCharacters:(NSString *)charactersToReplace withString:(NSString *)replacementString;
 
 @end

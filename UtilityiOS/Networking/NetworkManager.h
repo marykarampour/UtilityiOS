@@ -11,8 +11,8 @@
 #import "ServerDefinitions.h"
 #import "AFNetworking.h"
 
-enum {
-    NETWORK_MANAGER_TYPE_DEFAULT = 0,
+typedef NS_ENUM(NSUInteger, NETWORK_MANAGER_TYPE_) {
+    NETWORK_MANAGER_TYPE_DEFAULT,
     NETWORK_MANAGER_TYPE_BASE
 };
 

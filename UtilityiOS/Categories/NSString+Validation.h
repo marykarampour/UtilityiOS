@@ -10,6 +10,9 @@
 
 @interface NSString (Validation)
 
-- (BOOL)isValidStringOfType:(TextType)type maxLength:(NSUInteger)length isEditing:(BOOL)isEditing;
+- (BOOL)isValidHTML;
+- (BOOL)isValidStringOfType:(MKU_TEXT_TYPE)type maxLength:(NSUInteger)length;
+- (NSString *)alphanumericSpace;
+- (BOOL)isValidStringOfType:(MKU_TEXT_TYPE)type maxLength:(NSUInteger)length isEditing:(BOOL)isEditing;
 
 @end

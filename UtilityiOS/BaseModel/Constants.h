@@ -21,14 +21,16 @@
 #define DEBUGLOG(s, ...)
 #endif
 
-#define RaiseExceptionMissingMethodInClass      [NSException raise:NSInternalInconsistencyException format:@"You have not implemented %@ in %@", NSStringFromSelector(_cmd), NSStringFromClass([self class])];
+#define IS_IPHONE                               [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone
+#define IS_IPAD                                 [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad
 
-#define RaiseExceptionIncorrectMethodUse(...)   [NSException raise:NSInternalInconsistencyException format:@"You are calling %@, use %@ instead", NSStringFromSelector(_cmd), ##__VA_ARGS__];
+#pragma mark - exceptions
 
-#define RaiseExceptionVariableInconsistency(...) [NSException raise:NSInternalInconsistencyException format:@"In method %@, variable %@ is of type %@, you must use type %@ instead", NSStringFromSelector(_cmd), ##__VA_ARGS__];
-
-#define LOCALIZED(s)     NSLocalizedString(s, nil)
-
+#define MKUExceptionMissingMethodInClass                @"You have not implemented %@ in %@"
+#define MKURaiseExceptionMissingMethodInClass           [NSException raise:NSInternalInconsistencyException format:MKUExceptionMissingMethodInClass, NSStringFromSelector(_cmd), NSStringFromClass([self class])];
+#define MKURaiseExceptionIncorrectMethodUse(...)        [NSException raise:NSInternalInconsistencyException format:@"You are calling %@, use %@ instead", NSStringFromSelector(_cmd), ##__VA_ARGS__];
+#define MKURaiseExceptionVariableInconsistency(...)     [NSException raise:NSInternalInconsistencyException format:@"In method %@, variable %@ is of type %@, you must use type %@ instead", NSStringFromSelector(_cmd), ##__VA_ARGS__];
+#define MKURaiseExceptionPropertyIsNil(...)             [NSException raise:NSInternalInconsistencyException format:@"Proprty %@ cannot be nil when calling method %@ in class %@", ##__VA_ARGS__, NSStringFromSelector(_cmd), NSStringFromClass([self class])];
 
 #pragma mark - timers
 
@@ -40,8 +42,42 @@
 
 #define BADGE_POOLING_TIMER                      TIMER_DURATION_10_MIN
 
+#pragma mark - regex
+
+#define kRegexIntPositiveMaxChar                @"^([0-9]{0,%zd})$"
+#define kRegexIntMaxChar                        @"^([-]?[0-9]{0,%zd})$"
+#define kRegexFloatPositiveMaxChar              @"^([0-9]{0,%zd}(\\.[0-9]{0,%zd})?)$"
+#define kRegexFloatMaxChar                      @"^([-]?[0-9]{0,%zd}(\\.[0-9]{0,%zd})?)$"
+#define kRegexLettersMaxChar                    @"^([a-zA-Z]{0,%zd})$"
+#define kRegexAlphanumericMaxChar               @"^([a-zA-Z0-9]{0,%zd})$"
+#define kRegexHTML                              @"<.+?>"
+
+#pragma mark - constant strings
+
+#define LOCALIZED(s)                            NSLocalizedString(s, nil)
+
+#define kSingleEmptyString                      @" "
+#define kColonEmptyString                       @": "
+#define kEmptyString                            @""
+#define kElipsisString                          @"..."
+
+
+#define kInkBlueHEXValue                        0x0039a6
+
 
 #pragma mark - typedefs
+
+typedef UIView * (^VIEW_CREATION_HANDLER)(void);
+typedef UIView * (^SINGLE_INDEX_VIEW_CREATION_HANDLER)(NSUInteger index);
+typedef UIView * (^SINGLE_INDEX_SIZE_VIEW_CREATION_HANDLER)(NSUInteger index, CGFloat size);
+typedef UIView * (^DOUBLE_INDEX_VIEW_CREATION_HANDLER)(NSUInteger row, NSUInteger column);
+typedef UIView * (^DOUBLE_INDEX_SIZE_VIEW_CREATION_HANDLER)(NSUInteger row, NSUInteger column, CGFloat width, CGFloat height);
+
+typedef BOOL (^EvaluateObjectHandler)(id  _Nullable obj);
+typedef void (^VoidActionHandler)();
+
+typedef NSDictionary <NSString *, VoidActionHandler> *TitleVoidActionHandlers;
+
 
 typedef NSInteger ServerEnvironment;
 typedef NSInteger TargetType;
@@ -63,24 +99,24 @@ enum {
     TargetType_BASE
 };
 
-typedef NS_ENUM(NSInteger, TextType) {
-    TextType_NONE = -1,
-    TextType_String,
-    TextType_Int,
-    TextType_IntPositive,
-    TextType_Float,
-    TextType_FloatPositive,
-    TextType_Alphabet,
-    TextType_AlphaNumeric,
-    TextType_AlphaSpaceDot,
-    TextType_Name,
-    TextType_Email,
-    TextType_Phone,
-    TextType_Address,
-    TextType_Date,
-    TextType_Gender,
-    TextType_Password,
-    TextType_Count
+typedef NS_ENUM(NSInteger, MKU_TEXT_TYPE) {
+    MKU_TEXT_TYPE_NONE = -1,
+    MKU_TEXT_TYPE_STRING,
+    MKU_TEXT_TYPE_INT,
+    MKU_TEXT_TYPE_INT_POSITIVE,
+    MKU_TEXT_TYPE_FLOAT,
+    MKU_TEXT_TYPE_FLOAT_POSITIVE,
+    MKU_TEXT_TYPE_ALPHABET,
+    MKU_TEXT_TYPE_ALPHANUMERIC,
+    MKU_TEXT_TYPE_ALPHASPACEDOT,
+    MKU_TEXT_TYPE_NAME,
+    MKU_TEXT_TYPE_EMAIL,
+    MKU_TEXT_TYPE_PHONE,
+    MKU_TEXT_TYPE_ADDRESS,
+    MKU_TEXT_TYPE_DATE,
+    MKU_TEXT_TYPE_GENDER,
+    MKU_TEXT_TYPE_PASSWORD,
+    MKU_TEXT_TYPE_COUNT
 };
 
 typedef NS_ENUM(NSUInteger, ViewPosition) {
@@ -101,6 +137,74 @@ typedef NS_ENUM(NSUInteger, CELL_SIZE_TYPE) {
     CELL_SIZE_TYPE_MEDIUM,
     CELL_SIZE_TYPE_LARGE
 };
+
+typedef NS_OPTIONS(NSUInteger, LINEAR_BOUNDARY_POINT) {
+    LINEAR_BOUNDARY_POINT_START = 1 << 0,
+    LINEAR_BOUNDARY_POINT_END = 1 << 1
+};
+
+typedef NS_ENUM(NSInteger, MKU_TENARY_TYPE) {
+    MKU_TENARY_TYPE_NONE = -1,
+    MKU_TENARY_TYPE_NO,
+    MKU_TENARY_TYPE_YES
+};
+
+typedef NS_ENUM(NSUInteger, MKU_COLUMN_TYPE) {
+    MKU_COLUMN_TYPE_LEFT,
+    MKU_COLUMN_TYPE_RIGHT,
+    MKU_COLUMN_TYPE_COUNT
+};
+
+typedef NS_ENUM(NSUInteger, MKU_ROW_TYPE) {
+    MKU_ROW_TYPE_TOP,
+    MKU_ROW_TYPE_BOTTOM,
+    MKU_ROW_TYPE_COUNT
+};
+
+typedef NS_ENUM(NSUInteger, MKU_VIEW_ALIGNMENT_TYPE) {
+    MKU_VIEW_ALIGNMENT_TYPE_HORIZONTAL,
+    MKU_VIEW_ALIGNMENT_TYPE_VERTICAL
+};
+
+typedef NS_ENUM(NSUInteger, MKU_ACTION_ALERT_TYPE) {
+    MKU_ACTION_ALERT_TYPE_OK,
+    MKU_ACTION_ALERT_TYPE_YESNO,
+    MKU_ACTION_ALERT_TYPE_RETRY
+};
+
+typedef NS_ENUM(NSUInteger, MKU_LIST_ITEM_SELECTED_ACTION) {
+    MKU_LIST_ITEM_SELECTED_ACTION_NONE,
+    MKU_LIST_ITEM_SELECTED_ACTION_SELECT,
+    MKU_LIST_ITEM_SELECTED_ACTION_SHOW_DETAIL,
+    MKU_LIST_ITEM_SELECTED_ACTION_TRANSITION_TO_DETAIL
+};
+
+typedef NS_ENUM(NSUInteger, MKU_VIEW_HIERARCHY_POSITION) {
+    MKU_VIEW_HIERARCHY_POSITION_NEUTRAL,
+    MKU_VIEW_HIERARCHY_POSITION_BACK,
+    MKU_VIEW_HIERARCHY_POSITION_FRONT
+};
+
+typedef NS_OPTIONS(NSUInteger, MKU_VIEW_POSITION) {
+    MKU_VIEW_POSITION_NONE = 0,
+    MKU_VIEW_POSITION_TOP = 1 << 0,
+    MKU_VIEW_POSITION_LEFT = 1 << 1,
+    MKU_VIEW_POSITION_BOTTOM = 1 << 2,
+    MKU_VIEW_POSITION_RIGHT = 1 << 3,
+    MKU_VIEW_POSITION_CENTER_Y = 1 << 4,
+    MKU_VIEW_POSITION_CENTER_X = 1 << 5
+};
+
+typedef NS_ENUM(NSUInteger, MKU_UI_TYPE) {
+    MKU_UI_TYPE_IPOD,
+    MKU_UI_TYPE_IPAD
+};
+
+typedef NS_ENUM(NSUInteger, MKU_APP_TARGET_TYPE) {
+    MKU_APP_TARGET_TYPE_DEFAULT,
+    MKU_APP_TARGET_TYPE_ENTERPRISE
+};
+
 
 typedef NSArray<NSString *>                                     StringArr;
 typedef NSMutableArray<NSString *>                              MStringArr;
@@ -164,10 +268,48 @@ extern NSString * const DateFormatMonthYearStyle;
 extern NSString * const DateFormatDayMonthYearStyle;
 extern NSString * const DateFormatDayMonthYearNumericStyle;
 extern NSString * const DateFormatWeekdayDayStyle;
-
 extern NSString * const DateFormatFullTimeStyle;
 extern NSString * const DateFormatTimeStyle;
 extern NSString * const DateFormatShortAPMStyle;
+extern NSString * const DateFormatWeekdayMonthLongStyle;
+extern NSString * const DateFormatTimeAPMStyle;
+extern NSString * const DateFormatFullTimeZoneStyle;
+extern NSString * const DateFormatLongStyle;
+extern NSString * const DateFormatShortSlashStyle;
+extern NSString * const DateFormatTimeLongStyle;
+extern NSString * const DateFormatTimeShortStyle;
+extern NSString * const DateFormatDayTimeStyle;
+extern NSString * const DateFormatDayTimeStyleLineBreak;
+extern NSString * const DateFormatDayStyle;
+extern NSString * const DateFormatDateTimeStyle;
+extern NSString * const DateFormatDateTimeCompactStyle;
+
+typedef NS_ENUM(NSUInteger, DATE_FORMAT_STYLE) {
+    DATE_FORMAT_SERVER_STYLE,
+    DATE_FORMAT_SHORT_STYLE,
+    DATE_FORMAT_WEEKDAY_SHORT_STYLE,
+    DATE_FORMAT_FULL_STYLE,
+    DATE_FORMAT_MONTHDAY_YEAR_STYLE,
+    DATE_FORMAT_MONTH_YEAR_STYLE,
+    DATE_FORMAT_DAY_MONTH_YEAR_STYLE,
+    DATE_FORMAT_DAY_MONTH_YEAR_NUMERIC_STYLE,
+    DATE_FORMAT_WEEKDAY_DAY_STYLE,
+    DATE_FORMAT_FULL_TIME_STYLE,
+    DATE_FORMAT_TIME_STYLE,
+    DATE_FORMAT_SHORT_APM_STYLE,
+    DATE_FORMAT_WEEKDAY_MONTH_LONG_STYLE,
+    DATE_FORMAT_TIME_APM_STYLE,
+    DATE_FORMAT_FULL_TIMEZONE_STYLE,
+    DATE_FORMAT_LONG_STYLE,
+    DATE_FORMAT_SHORT_SLASH_STYLE,
+    DATE_FORMAT_TIME_LONG_STYLE,
+    DATE_FORMAT_TIME_SHORT_STYLE,
+    DATE_FORMAT_DAY_TIME_STYLE,
+    DATE_FORMAT_DAY_TIME_LINEBREAK_STYLE,
+    DATE_FORMAT_DAY_STYLE,
+    DATE_FORMAT_DATE_TIME_STYLE,
+    DATE_FORMAT_DATE_TIME_COMPACT_STYLE,
+};
 
 #pragma mark - classes
 /** @brief This class contains the constants used throughout the app
@@ -204,32 +346,52 @@ extern NSString * const DateFormatShortAPMStyle;
 
 #pragma mark - constants
 
-+ (float)TransitionAnimationDuration;
-+ (float)PrimaryColumnWidth;
-+ (float)MaxPrimaryColumnWidth;
-+ (float)MinPrimaryColumnWidth;
-+ (float)PrimaryColumnShrunkenWidth;
-+ (float)DefaultRowHeight;
-+ (float)TableSectionHeaderHeight;
-+ (float)TableSectionFooterHeight;
-+ (float)TableFooterHeight;
-+ (float)TableIconImageSmallSize;
-+ (float)TableIconImageLargeSize;
-+ (float)BorderWidth;
-+ (float)ButtonCornerRadious;
-+ (float)GeoFenceRadiousMeter;
-+ (float)GeoFenceRadiousKiloMeter;
-+ (float)TextPadding;
-+ (float)HorizontalSpacing;
-+ (float)VerticalSpacing;
-+ (CGSize)SpinnerSize;
++ (CGFloat)TransitionAnimationDuration;
++ (CGFloat)PrimaryColumnWidth;
++ (CGFloat)MaxPrimaryColumnWidth;
++ (CGFloat)MinPrimaryColumnWidth;
++ (CGFloat)PrimaryColumnShrunkenWidth;
++ (CGFloat)BarButtonItemSpaceWidth;
++ (CGFloat)TextFieldHeight;
++ (CGFloat)TextViewTitleHeight;
++ (CGFloat)TextViewMediumHeight;
++ (CGFloat)NumericInputTextFieldWidth;
++ (CGFloat)InputTextFieldWidth;
++ (CGFloat)DefaultRowHeight;
++ (CGFloat)ExtendedRowHeight;
++ (CGFloat)TableSectionHeaderHeight;
++ (CGFloat)TableSectionHeaderShortHeight;
++ (CGFloat)TableSectionFooterHeight;
++ (CGFloat)TableFooterHeight;
++ (CGFloat)TableCellAccessorySize;
++ (CGFloat)TableIconImageSmallSize;
++ (CGFloat)TableIconImageLargeSize;
++ (CGFloat)TableCellLineHeight;
++ (CGFloat)TableCellContentHorizontalMargin;
++ (CGFloat)TableCellContentVerticalMargin;
++ (CGFloat)BorderWidth;
++ (CGFloat)ButtonCornerRadious;
++ (CGFloat)GeoFenceRadiousMeter;
++ (CGFloat)GeoFenceRadiousKiloMeter;
++ (CGFloat)TextPadding;
++ (CGFloat)HorizontalSpacing;
++ (CGFloat)VerticalSpacing;
 + (UIEdgeInsets)TabBarItemImageInsets;
-+ (float)LoginViewInset;
-+ (float)LoginViewWidth;
-+ (float)BadgeHeight;
++ (CGFloat)TabBarHeight;
++ (CGFloat)LoginViewInset;
++ (CGFloat)LoginViewWidth;
++ (CGFloat)BadgeHeight;
 + (CGSize)TableCellDisclosureIndicatorSize;
 + (CGFloat)Toast_Length_Seconds;
 + (CGFloat)Subsection_Left_Spacing;
++ (CGFloat)DatePickerPopOverHeight;
++ (CGFloat)DatePickerCalendarHeight;
++ (CGSize)SpinnerSize;
++ (CGSize)DateViewControllerPopoverSize;
++ (CGSize)DateViewControllerCalPopoverSize;
++ (NSUInteger)MaxValue1CellCharacterCount;
++ (NSUInteger)MaxTextViewCharacters;
++ (NSUInteger)MaxTextViewCharactersLong;
 
 #pragma mark - defaults
 
@@ -241,19 +403,28 @@ extern NSString * const DateFormatShortAPMStyle;
 
 #pragma mark - strings
 
-+ (NSString *)ExitTitle_STR;
-+ (NSString *)ExitMessage_STR;
-+ (NSString *)LoginFailedTitle_STR;
-+ (NSString *)LoginFailedMessage_STR;
++ (NSString *)Exit_Title_STR;
++ (NSString *)Exit_Message_STR;
++ (NSString *)Login_Failed_Title_STR;
++ (NSString *)Login_Failed_Message_STR;
++ (NSString *)Update_Failed_Title_STR;
 + (NSString *)FaceID_STR;
 + (NSString *)TouchID_STR;
 + (NSString *)Done_STR;
 + (NSString *)Save_STR;
++ (NSString *)Reset_STR;
 + (NSString *)Replace_STR;
++ (NSString *)Remove_STR;
++ (NSString *)Delete_STR;
++ (NSString *)Delete_Prompt_Message_STR;
 + (NSString *)OK_STR;
 + (NSString *)Cancel_STR;
 + (NSString *)Clear_STR;
++ (NSString *)Close_STR;
 + (NSString *)Skip_STR;
++ (NSString *)Yes_STR;
++ (NSString *)No_STR;
++ (NSString *)Retry_STR;
 + (NSString *)Choose_STR;
 + (NSString *)Select_STR;
 + (NSString *)Comments_STR;
@@ -266,6 +437,7 @@ extern NSString * const DateFormatShortAPMStyle;
 + (NSString *)PIN_STR;
 + (NSString *)Username_STR;
 + (NSString *)Password_STR;
++ (NSString *)Enter_Password_STR;
 + (NSString *)Login_STR;
 + (NSString *)Enter_BLANK_STR;
 + (NSString *)Incorrect_BLANK_STR;
@@ -273,6 +445,9 @@ extern NSString * const DateFormatShortAPMStyle;
 + (NSString *)LocationRestrictedMessage_STR;
 + (NSString *)Camera_STR;
 + (NSString *)Photo_Library_STR;
++ (NSString *)Document_Picker_STR;
++ (NSString *)Document_Browser_STR;
++ (NSString *)Document_Detection_STR;
 + (NSString *)CameraDisabledTitle_STR;
 + (NSString *)CameraAccessMessage_BLANK_STR;
 + (NSString *)TakingPicture_STR;
@@ -280,12 +455,20 @@ extern NSString * const DateFormatShortAPMStyle;
 + (NSString *)NoCamera_STR;
 + (NSString *)Invalid_STR;
 + (NSString *)Error_STR;
-+ (NSString *)Generic_Error_Message;
 + (NSString *)First_Name_STR;
 + (NSString *)Last_Name_STR;
++ (NSString *)No_Items_Available_STR;
 + (NSString *)Placeholder_Date_STR;
 + (NSString *)Placeholder_Phone_STR;
 + (NSString *)NO_Connection_Title_STR;
++ (NSString *)Add_New_Item_STR;
++ (NSString *)Generic_Error_Message;
++ (NSString *)No_Camera_Error_Message;
++ (NSString *)Camera_Disabled_Error_Title;
++ (NSString *)Camera_Disabled_Error_Message;
++ (NSString *)Missing_Value_Error_Message;
++ (NSString *)Missing_Object_Error_Message;
+
 
 #pragma mark - app
 

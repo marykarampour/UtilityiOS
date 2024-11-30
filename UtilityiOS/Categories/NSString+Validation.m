@@ -10,47 +10,96 @@
 
 @implementation NSString (Validation)
 
-- (BOOL)isValidStringOfType:(TextType)type maxLength:(NSUInteger)length isEditing:(BOOL)isEditing {
+- (BOOL)isValidHTML {
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:kRegexHTML options:NSRegularExpressionCaseInsensitive error:nil];
+    return 0 < [regex matchesInString:self options:0 range:NSMakeRange(0, [self length])].count;
+}
+
+- (BOOL)isValidStringOfType:(MKU_TEXT_TYPE)type maxLength:(NSUInteger)length {
+    NSPredicate *predicate;
+    switch (type) {
+        case MKU_TEXT_TYPE_INT: {
+            predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", [NSString stringWithFormat:kRegexIntMaxChar, length]];
+        }
+            break;
+        case MKU_TEXT_TYPE_INT_POSITIVE: {
+            predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", [NSString stringWithFormat:kRegexIntPositiveMaxChar, length]];
+        }
+            break;
+        case MKU_TEXT_TYPE_FLOAT: {
+            predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", [NSString stringWithFormat:kRegexFloatMaxChar, length, length]];
+        }
+            break;
+        case MKU_TEXT_TYPE_FLOAT_POSITIVE: {
+            predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", [NSString stringWithFormat:kRegexFloatPositiveMaxChar, length, length]];
+        }
+            break;
+        case MKU_TEXT_TYPE_ALPHABET: {
+            predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", [NSString stringWithFormat:kRegexLettersMaxChar, length]];
+        }
+            break;
+        case MKU_TEXT_TYPE_ALPHANUMERIC: {
+            predicate = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", [NSString stringWithFormat:kRegexAlphanumericMaxChar, length]];
+        }
+            break;
+        default:
+            break;
+    }
+    if (predicate) {
+        return [predicate evaluateWithObject:self];
+    }
+    return YES;
+}
+
+- (NSString *)alphanumericSpace {
+    NSMutableCharacterSet *set = [NSMutableCharacterSet alphanumericCharacterSet];
+    [set addCharactersInString:@" ."];
+    
+    StringArr *arr = [self componentsSeparatedByCharactersInSet:[set invertedSet]];
+    return [arr componentsJoinedByString:@""];
+}
+
+- (BOOL)isValidStringOfType:(MKU_TEXT_TYPE)type maxLength:(NSUInteger)length isEditing:(BOOL)isEditing {
     NSPredicate *predicate;
     NSString *format = [Constants Predicate_MatchesSelf];
     NSString *regex;
     switch (type) {
-        case TextType_Int: {
+        case MKU_TEXT_TYPE_INT: {
             regex = [Constants Regex_CharRange_Int];
             regex = [NSString stringWithFormat:regex, 0, length];
         }
             break;
-        case TextType_IntPositive: {
+        case MKU_TEXT_TYPE_INT_POSITIVE: {
             regex = [Constants Regex_CharRange_IntPositive];
             regex = [NSString stringWithFormat:regex, 0, length];
         }
             break;
-        case TextType_Float: {
+        case MKU_TEXT_TYPE_FLOAT: {
             regex = [Constants Regex_CharRange_Float];
             regex = [NSString stringWithFormat:regex, 0, length, 0, 2];
         }
             break;
-        case TextType_FloatPositive: {
+        case MKU_TEXT_TYPE_FLOAT_POSITIVE: {
             regex = [Constants Regex_CharRange_FloatPositive];
             regex = [NSString stringWithFormat:regex, 0, length, 0, 2];
         }
             break;
-        case TextType_Alphabet: {
+        case MKU_TEXT_TYPE_ALPHABET: {
             regex = [Constants Regex_CharRange_Alphabet];
             regex = [NSString stringWithFormat:regex, 0, length];
         }
             break;
-        case TextType_AlphaNumeric: { 
+        case MKU_TEXT_TYPE_ALPHANUMERIC: {
             regex = [Constants Regex_CharRange_Alphanumeric];
             regex = [NSString stringWithFormat:regex, 0, length];
         }
             break;
-        case TextType_AlphaSpaceDot: {
+        case MKU_TEXT_TYPE_ALPHASPACEDOT: {
             regex = [Constants Regex_CharRange_AlphaSpaceDot];
             regex = [NSString stringWithFormat:regex, 0, length];
         }
             break;
-        case TextType_Email: {
+        case MKU_TEXT_TYPE_EMAIL: {
             if (isEditing) {
                 if (![self containsString:@"@"]) {
                     regex = [Constants Regex_Email_NoCheck];
@@ -67,7 +116,7 @@
             }
         }
             break;
-        case TextType_Phone: {
+        case MKU_TEXT_TYPE_PHONE: {
             if (isEditing) {
                 regex = [Constants Regex_CharRange_Int];
                 regex = [NSString stringWithFormat:regex, 0, 10];
@@ -77,11 +126,11 @@
             }
         }
             break;
-        case TextType_Address: {
+        case MKU_TEXT_TYPE_ADDRESS: {
             regex = [Constants Regex_Address];
         }
             break;
-        case TextType_Date: {
+        case MKU_TEXT_TYPE_DATE: {
             if (isEditing) {
                 regex = [Constants Regex_CharRange_Dash_Numeric];
                 regex = [NSString stringWithFormat:regex, 0, 10];
@@ -91,11 +140,11 @@
             }
         }
             break;
-        case TextType_Gender: {
+        case MKU_TEXT_TYPE_GENDER: {
             regex = [Constants Regex_Gender];
         }
             break;
-        case TextType_String:
+        case MKU_TEXT_TYPE_STRING:
         default:
             return self.length <= length;
     }
@@ -105,6 +154,5 @@
     }
     return YES;
 }
-
 
 @end

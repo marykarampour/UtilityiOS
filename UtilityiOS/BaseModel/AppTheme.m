@@ -61,17 +61,17 @@
 #pragma mark - color
 
 + (UIColor *)textHighlightColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor blueColor];
-        case AppThemeStyle_DARK: return [UIColor blueColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blueColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blueColor];
         default: return [UIColor whiteColor];
     }
 }
      
 + (UIColor *)barTintColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
@@ -81,17 +81,17 @@
 }
 
 + (UIColor *)stepperTintColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)barTextColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor blackColor];
-        case AppThemeStyle_DARK: return [UIColor whiteColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blackColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
         default: return [UIColor whiteColor];
     }
 }
@@ -101,33 +101,33 @@
 }
 
 + (UIColor *)seperatorColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor blackColor];
-        case AppThemeStyle_DARK: return [UIColor grayColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blackColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor grayColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)translusentBackground {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor colorWithWhite:0.0 alpha:0.67];
-        case AppThemeStyle_DARK: return [UIColor colorWithWhite:1.0 alpha:0.33];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor colorWithWhite:0.0 alpha:0.67];
+        case MKU_THEME_STYLE_DARK: return [UIColor colorWithWhite:1.0 alpha:0.33];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)VCBackgroundColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)VCForgroundColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
@@ -135,58 +135,58 @@
 #pragma mark - table
 
 + (UIColor *)sectionHeaderTextColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor blackColor];
-        case AppThemeStyle_DARK: return [UIColor whiteColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blackColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)sectionFooterBackgroundColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 
 + (UIColor *)sectionFooterTextColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor blackColor];
-        case AppThemeStyle_DARK: return [UIColor whiteColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blackColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)sectionHeaderBackgroundColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)tableFooterBackgroundColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor blackColor];
-        case AppThemeStyle_DARK: return [UIColor whiteColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blackColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)tableCellBackgroundColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor blackColor];
-        case AppThemeStyle_DARK: return [UIColor whiteColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blackColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)tableCellAccessoryViewColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor blackColor];
-        case AppThemeStyle_DARK: return [UIColor whiteColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blackColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
         default: return [UIColor whiteColor];
     }
 }
@@ -198,242 +198,242 @@
 #pragma mark - text
 
 + (UIColor *)textDefaultColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor blackColor];
-        case AppThemeStyle_DARK: return [UIColor whiteColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blackColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)textLightColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor colorWithWhite:0.3 alpha:1.0];
-        case AppThemeStyle_DARK: return [UIColor colorWithWhite:0.7 alpha:1.0];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor colorWithWhite:0.3 alpha:1.0];
+        case MKU_THEME_STYLE_DARK: return [UIColor colorWithWhite:0.7 alpha:1.0];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)textMediumColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor colorWithWhite:0.7 alpha:1.0];
-        case AppThemeStyle_DARK: return [UIColor colorWithWhite:0.3 alpha:1.0];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor colorWithWhite:0.7 alpha:1.0];
+        case MKU_THEME_STYLE_DARK: return [UIColor colorWithWhite:0.3 alpha:1.0];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)textDarkColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor blackColor];
-        case AppThemeStyle_DARK: return [UIColor whiteColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blackColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)textFieldLightColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)textFieldMediumColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)textFieldDarkColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)labelLightColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)labelMediumColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)labelDarkColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)buttonBackgroundColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor blackColor];
-        case AppThemeStyle_DARK: return [UIColor whiteColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blackColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)buttonTextColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)buttonHighlightedColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)textViewBackgroundColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)textViewBorderColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)textViewPlaceholderColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)textViewTextColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)textViewCharTextColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 
 + (UIColor *)textFieldBackgroundColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)textFieldBorderColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)textFieldPlaceholderColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)textFieldTextColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)badgeBackgroundColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)badgeTextColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor blackColor];
-        case AppThemeStyle_DARK: return [UIColor whiteColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blackColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)checkboxTintColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor blackColor];
-        case AppThemeStyle_DARK: return [UIColor whiteColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blackColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)checkboxDisabledColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor blackColor];
-        case AppThemeStyle_DARK: return [UIColor whiteColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blackColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)tabbarTextColorNormal {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor blackColor];
-        case AppThemeStyle_DARK: return [UIColor whiteColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blackColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)tabbarTextColorSelected {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor blackColor];
-        case AppThemeStyle_DARK: return [UIColor whiteColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blackColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)tabbarBackgroundColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)tabbarBarTintColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
@@ -561,41 +561,41 @@
 }
 
 + (UIColor *)tableCellSelectedColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor blueColor];
-        case AppThemeStyle_DARK: return [UIColor whiteColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blueColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)tableHeaderBackgroundColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor blueColor];
-        case AppThemeStyle_DARK: return [UIColor whiteColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blueColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)tableHeaderTextColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)collectionViewSectionHeaderBackgroundColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor blueColor];
-        case AppThemeStyle_DARK: return [UIColor whiteColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blueColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)collectionViewSectionHeaderTextColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
@@ -605,25 +605,25 @@
 }
 
 + (UIColor *)tableFooterTextColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)segmentedControlNormalColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor blackColor];
-        case AppThemeStyle_DARK: return [UIColor whiteColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blackColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
         default: return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)segmentedControlSelectedColor {
-    switch (THEME_STYLE) {
-        case AppThemeStyle_LIGHT: return [UIColor whiteColor];
-        case AppThemeStyle_DARK: return [UIColor blackColor];
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
 }

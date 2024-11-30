@@ -7,10 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MKDateRange.h"
+#import "MKUDateRange.h"
 
 @interface NSNumber (Utility)
 
-- (BOOL)isInRange:(MKRange *)range;
+- (BOOL)isInRange:(MKURange *)range;
+- (BOOL)isBOOL;
++ (BOOL)isBOOL:(NSObject *)obj;
++ (NSNumber *)numberWith:(NSNumber *)num min:(NSNumber *)min max:(NSNumber *)max;
++ (BOOL)nullableNumber:(NSNumber *)number1 isEqualToNumber:(NSNumber *)number2;
 
 @end

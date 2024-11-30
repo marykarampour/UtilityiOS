@@ -22,16 +22,27 @@ NSString * const DefaultPushNotificationDeviceTokenKey    = @"DefaultPushNotific
 NSString * const DateFormatServerStyle            = @"YYYY-MM-dd HH:mm:ss";
 NSString * const DateFormatShortStyle             = @"yyyy-MM-dd";
 NSString * const DateFormatWeekdayShortStyle      = @"EEEE MMM dd";
-NSString * const DateFormatFullStyle              = @"EEEE, MMMM dd, yyyy";
 NSString * const DateFormatMonthDayYearStyle      = @"MMMM dd, yyyy";
 NSString * const DateFormatMonthYearStyle         = @"MMMM yyyy";
 NSString * const DateFormatDayMonthYearStyle      = @"dd MMMM yyyy";
 NSString * const DateFormatDayMonthYearNumericStyle = @"dd MM yyyy";
 NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
-
 NSString * const DateFormatFullTimeStyle          = @"HH:mm:ss EEEE, MMMM dd, yyyy";
-NSString * const DateFormatTimeStyle              = @"HH:mm:ss a";
 NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
+NSString * const DateFormatFullStyle              = @"yyyy-MM-dd'T'HH:mm:ss.SS";
+NSString * const DateFormatTimeStyle              = @"HH:mm:ss";
+NSString * const DateFormatWeekdayMonthLongStyle  = @"EEEE, MMMM dd, yyyy";
+NSString * const DateFormatTimeAPMStyle           = @"HH:mm:ss a";
+NSString * const DateFormatFullTimeZoneStyle      = @"yyyy-MM-dd'T'HH:mm:ss.SS zzz";
+NSString * const DateFormatLongStyle              = @"yyyy-MM-dd'T'HH:mm:ss";
+NSString * const DateFormatShortSlashStyle        = @"MM/dd/yy";
+NSString * const DateFormatTimeLongStyle          = @"MM-dd HH:mm";
+NSString * const DateFormatTimeShortStyle         = @"HH:mm";
+NSString * const DateFormatDayTimeStyle           = @"EEEE, MMM. d, yyyy h:mm a";
+NSString * const DateFormatDayTimeStyleLineBreak  = @"EEEE, MMM. d, yyyy\nh:mm a";
+NSString * const DateFormatDayStyle               = @"EEEE, MMM. d, yyyy";
+NSString * const DateFormatDateTimeStyle          = @"yyyy-MM-dd HH:mm:ss";
+NSString * const DateFormatDateTimeCompactStyle   = @"MM-dd-yy HH:mm";
 
 #pragma mark - classes
 
@@ -86,87 +97,168 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
 
 #pragma mark - constants
 
-+ (float)TransitionAnimationDuration {
++ (CGFloat)TransitionAnimationDuration {
     return 0.4;
 }
 
-+ (float)PrimaryColumnWidth {
++ (CGFloat)PrimaryColumnWidth {
     return 256.0;
 }
 
-+ (float)MaxPrimaryColumnWidth {
++ (CGFloat)MaxPrimaryColumnWidth {
     return 256.0;
 }
 
-+ (float)MinPrimaryColumnWidth {
++ (CGFloat)MinPrimaryColumnWidth {
     return 0.0;
 }
 
-+ (float)PrimaryColumnShrunkenWidth {
++ (CGFloat)PrimaryColumnShrunkenWidth {
     return 44.0;
 }
 
-+ (float)DefaultRowHeight {
-    return 44.0;
-}
-
-+ (float)TableSectionHeaderHeight {
++ (CGFloat)BarButtonItemSpaceWidth {
     return 32.0;
 }
 
-+ (float)TableSectionFooterHeight {
++ (CGFloat)TextFieldHeight {
+    return 36.0;
+}
+
++ (CGFloat)TextViewTitleHeight {
+    return 32.0;
+}
+
++ (CGFloat)TextViewMediumHeight {
+    return 128.0;
+}
+
++ (CGFloat)NumericInputTextFieldWidth {
+    return 100.0;
+}
+
++ (CGFloat)InputTextFieldWidth {
+    return 184.0;
+}
+
++ (CGFloat)DefaultRowHeight {
+    return 44.0;
+}
+
++ (CGFloat)ExtendedRowHeight {
+    return 52.0;
+}
+
++ (CGFloat)TableSectionHeaderHeight {
+    return 32.0;
+}
+
++ (CGFloat)TableSectionHeaderShortHeight {
+    return 22.0;
+}
+
++ (CGFloat)TableSectionFooterHeight {
     return 0.0;
 }
 
-+ (float)TableFooterHeight {
++ (CGFloat)TableFooterHeight {
     return 44.0;
 }
 
-+ (float)TableIconImageSmallSize {
++ (CGFloat)TableCellAccessorySize {
+    return 36.0;
+}
+
++ (CGFloat)TableIconImageSmallSize {
     return 32.0;
 }
 
-+ (float)TableIconImageLargeSize {
++ (CGFloat)TableIconImageLargeSize {
     return 64.0;
 }
 
-+ (float)ButtonCornerRadious {
++ (CGFloat)TableCellLineHeight {
+    return 14.0;
+}
+
++ (CGFloat)TableCellContentHorizontalMargin {
+    return 16.0;
+}
+
++ (CGFloat)TableCellContentVerticalMargin {
+    return 16.0;
+}
+
++ (CGFloat)ButtonCornerRadious {
     return 6.0;
 }
 
-+ (float)BorderWidth {
++ (CGFloat)BorderWidth {
     return 1.0;
 }
 
-+ (float)TextPadding {
++ (CGFloat)TextPadding {
     return 4.0;
 }
 
-+ (float)HorizontalSpacing {
++ (CGFloat)HorizontalSpacing {
     return 8.0;
 }
 
-+ (float)VerticalSpacing {
++ (CGFloat)VerticalSpacing {
     return 8.0;
+}
+
++ (CGFloat)DatePickerPopOverHeight {
+    return 300.0;
+}
+
++ (CGFloat)DatePickerCalendarHeight {
+    return 400.0;
 }
 
 + (CGSize)SpinnerSize {
     return CGSizeMake(120.0, 120.0);
 }
 
++ (CGSize)DateViewControllerPopoverSize {
+    return CGSizeMake(300.0, [self DatePickerPopOverHeight]);
+}
+
++ (CGSize)DateViewControllerCalPopoverSize {
+    return CGSizeMake(300.0, [self DatePickerCalendarHeight]);
+}
+
++ (NSUInteger)MaxValue1CellCharacterCount {
+    return 16;
+}
+
+
++ (NSUInteger)MaxTextViewCharacters {
+    return 400;
+}
+
++ (NSUInteger)MaxTextViewCharactersLong {
+    return 1024;
+}
+
 + (UIEdgeInsets)TabBarItemImageInsets {
     return UIEdgeInsetsMake(8.0, 0.0, -8.0, 0.0);
 }
 
-+ (float)LoginViewInset {
++ (CGFloat)TabBarHeight {
+    return 52.0;
+}
+
++ (CGFloat)LoginViewInset {
     return 100.0;
 }
 
-+ (float)LoginViewWidth {
++ (CGFloat)LoginViewWidth {
     return 400.0;
 }
 
-+ (float)BadgeHeight {
++ (CGFloat)BadgeHeight {
     return 20.0;
 }
 
@@ -196,20 +288,24 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
 
 #pragma mark - strings
 
-+ (NSString *)ExitTitle_STR {
++ (NSString *)Exit_Title_STR {
     return LOCALIZED(@"Exit");
 }
 
-+ (NSString *)ExitMessage_STR {
++ (NSString *)Exit_Message_STR {
     return LOCALIZED(@"Are you sure you want to exit?");
 }
 
-+ (NSString *)LoginFailedTitle_STR {
++ (NSString *)Login_Failed_Title_STR {
     return LOCALIZED(@"Login Failed!");
 }
 
-+ (NSString *)LoginFailedMessage_STR {
++ (NSString *)Login_Failed_Message_STR {
     return LOCALIZED(@"Please check your credentials and try again.");
+}
+
++ (NSString *)Update_Failed_Title_STR {
+    return LOCALIZED(@"Update Failed!");
 }
 
 + (NSString *)FaceID_STR {
@@ -228,8 +324,24 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
     return LOCALIZED(@"Save");
 }
 
++ (NSString *)Reset_STR {
+    return LOCALIZED(@"Reset");
+}
+
 + (NSString *)Replace_STR {
     return LOCALIZED(@"Replace");
+}
+
++ (NSString *)Remove_STR {
+    return LOCALIZED(@"Remove");
+}
+
++ (NSString *)Delete_STR {
+    return LOCALIZED(@"Delete");
+}
+
++ (NSString *)Delete_Prompt_Message_STR {
+    return LOCALIZED(@"Delete this item?");
 }
 
 + (NSString *)OK_STR {
@@ -244,8 +356,24 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
     return LOCALIZED(@"Clear");
 }
 
++ (NSString *)Close_STR {
+    return LOCALIZED(@"Close");
+}
+
 + (NSString *)Skip_STR {
     return LOCALIZED(@"Skip");
+}
+
++ (NSString *)Yes_STR {
+    return LOCALIZED(@"Yes");
+}
+
++ (NSString *)No_STR {
+    return LOCALIZED(@"No");
+}
+
++ (NSString *)Retry_STR {
+    return LOCALIZED(@"Retry");
 }
 
 + (NSString *)Choose_STR {
@@ -286,6 +414,10 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
 
 + (NSString *)Password_STR {
     return LOCALIZED(@"Password");
+}
+
++ (NSString *)Enter_Password_STR {
+    return LOCALIZED(@"Please Enter Your Password");
 }
 
 + (NSString *)First_Name_STR {
@@ -332,12 +464,16 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
     return LOCALIZED(@"Photo Library");
 }
 
-+ (NSString *)CameraDisabledTitle_STR {
-    return LOCALIZED(@"Camera is disabled!");
++ (NSString *)Document_Picker_STR {
+    return LOCALIZED(@"Document Picker");
 }
 
-+ (NSString *)CameraAccessMessage_BLANK_STR {
-    return LOCALIZED(@"Camera access is required for %@. Go to settings to enable camera.");
++ (NSString *)Document_Browser_STR {
+    return LOCALIZED(@"Document Browser");
+}
+
++ (NSString *)Document_Detection_STR {
+    return LOCALIZED(@"Document Detection");
 }
 
 + (NSString *)TakingPicture_STR {
@@ -360,10 +496,6 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
     return LOCALIZED(@"Error");
 }
 
-+ (NSString *)Generic_Error_Message {
-    return LOCALIZED(@"Something went wrong, please try again");
-}
-
 + (NSString *)Placeholder_Date_STR {
     return LOCALIZED(@"1980-02-28");
 }
@@ -376,12 +508,39 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
     return LOCALIZED(@"No Network Connection is available");
 }
 
++ (NSString *)Add_New_Item_STR {
+    return @"Add a new item";
+}
 
-+ (float)GeoFenceRadiousKiloMeter {
++ (NSString *)Generic_Error_Message {
+    return LOCALIZED(@"Something went wrong, please try again");
+}
+
++ (NSString *)No_Camera_Error_Message {
+    return LOCALIZED(@"Device has no camera");
+}
+
++ (NSString *)Camera_Disabled_Error_Title {
+    return LOCALIZED(@"Camera is disabled!");
+}
+
++ (NSString *)Camera_Disabled_Error_Message {
+    return LOCALIZED(@"Camera access is required for taking pictures. Go to settings to enable camera.");
+}
+
++ (NSString *)Missing_Value_Error_Message {
+    return LOCALIZED(@"Please enter a value for %@");
+}
+
++ (NSString *)Missing_Object_Error_Message {
+    return LOCALIZED(@"Please select a %@");
+}
+
++ (CGFloat)GeoFenceRadiousKiloMeter {
     return 1.0;
 }
 
-+ (float)GeoFenceRadiousMeter {
++ (CGFloat)GeoFenceRadiousMeter {
     return [Constants GeoFenceRadiousKiloMeter]*1000.0;
 }
 

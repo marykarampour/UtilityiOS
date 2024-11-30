@@ -12,4 +12,6 @@
 
 @property (nonatomic, strong) UITextField *nextControl;
 
+- (BOOL)transferFirstResponderToNextControl;
+
 @end

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "MKLabel.h"
+#import "MKULabel.h"
 
 typedef NS_OPTIONS(NSUInteger, MultiLabelViewType) {
     MultiLabelViewType_NONE = 0,
@@ -25,7 +25,7 @@ typedef NS_OPTIONS(NSUInteger, MultiLabelViewType) {
 @property (nonatomic, strong, readonly) __kindof UIView *contentView;
 @property (nonatomic, strong, readonly) __kindof UIView *leftView;
 @property (nonatomic, strong, readonly) __kindof UIView *rightView;
-@property (nonatomic, strong, readonly) NSMutableArray<__kindof MKLabel *> *labels;
+@property (nonatomic, strong, readonly) NSMutableArray<__kindof MKULabel *> *labels;
 
 /** @brief An optional view at the back of all views, if added will cover the entire contentView */
 @property (nonatomic, strong, readonly) __kindof UIView *backView;
@@ -56,7 +56,7 @@ typedef NS_OPTIONS(NSUInteger, MultiLabelViewType) {
 - (void)setAttributedText:(NSAttributedString *)text forLabelAtIndex:(NSUInteger)index;
 
 /** @brief subclass can override to create custom labels */
-- (__kindof MKLabel *)createLabelAtIndex:(NSUInteger)index;
+- (__kindof MKULabel *)createLabelAtIndex:(NSUInteger)index;
 
 /** @brief Call only after construct, the method does not add aditional views, only replaces the view */
 - (void)addLeftView:(__kindof UIView *)leftView;

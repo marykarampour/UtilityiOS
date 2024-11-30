@@ -8,7 +8,7 @@
 
 #import "NSObject+ProcessModel.h"
 #import "NSData+Compression.h"
-#import "MKModel.h"
+#import "MKUModel.h"
 
 @implementation NSObject (ProcessModel)
 

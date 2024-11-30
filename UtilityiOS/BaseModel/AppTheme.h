@@ -9,21 +9,16 @@
 #import <Foundation/Foundation.h>
 #import "UIColor+Utility.h"
 
-typedef NS_ENUM(NSUInteger, AppThemeStyle) {
-    AppThemeStyle_LIGHT,
-    AppThemeStyle_DARK
+typedef NS_ENUM(NSUInteger, MKU_THEME_STYLE) {
+    MKU_THEME_STYLE_LIGHT,
+    MKU_THEME_STYLE_DARK
 };
 
-extern AppThemeStyle THEME_STYLE;
+extern MKU_THEME_STYLE APP_THEME_STYLE;
 
 @interface AppTheme : NSObject
 
 + (void)applyTheme;
-
-
-//Abstracts
-
-//Appearance
 
 + (UIKeyboardAppearance)keyboardAppearance;
 

@@ -6,12 +6,12 @@
 //  Copyright © 2018 BHS Consultants. All rights reserved.
 //
 
-#import "MKBaseTableViewCell.h"
+#import "MKUBaseTableViewCell.h"
 #import "MultiLabelView.h"
 
 
 
-@interface MultiLabelTableViewCell : MKBaseTableViewCell
+@interface MultiLabelTableViewCell : MKUBaseTableViewCell
 
 @property (nonatomic, strong, readonly) __kindof MultiLabelView *viewObject;
 
