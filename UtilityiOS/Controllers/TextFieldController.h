@@ -7,14 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
-#warning -  make these clusters with text view
-@class MKTextField;
+
+@class MKUTextField;
 
 @protocol TextFieldDelegate <NSObject>
 
 @optional
 - (void)handleTextFieldReturn:(__kindof UITextField *)textField isValid:(BOOL)isValid;
+- (void)handleTextFieldEndEditing:(__kindof UITextField *)textField isValid:(BOOL)isValid;
+- (void)handleTextFieldReturn:(__kindof UITextField *)textField;
+- (void)handleTextFieldEndEditing:(__kindof UITextField *)textField;
 - (void)handleTextFieldChanges:(__kindof UITextField *)textField;
+- (void)handleTextFieldChanges:(__kindof UITextField *)textField newText:(NSString *)newText;
+- (void)handleTextFieldDidChange:(__kindof UITextField *)textField newText:(NSString *)newText;
 - (void)handleTextFieldBeginEditing:(__kindof UITextField *)textField;
 
 @end
@@ -22,10 +27,10 @@
 @interface TextFieldController : NSObject
 
 @property (nonatomic, weak) id<TextFieldDelegate> delegate;
-@property (nonatomic, strong, readonly) NSMutableArray<__kindof MKTextField *> *views;
+@property (nonatomic, weak) MKUTextField *textField;
 @property (nonatomic, assign) NSUInteger maxLenght;
-@property (nonatomic, assign) TextType type;
+@property (nonatomic, assign) MKU_TEXT_TYPE type;
 
-- (void)addTextField:(__kindof MKTextField *)view;
+- (instancetype)initWithType:(MKU_TEXT_TYPE)type;
 
 @end
