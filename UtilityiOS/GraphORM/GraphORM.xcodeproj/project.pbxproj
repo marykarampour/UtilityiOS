@@ -1,0 +1,608 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		6B06DC9B1E4FB6E0001CC993 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6B06DC9A1E4FB6E0001CC993 /* main.cpp */; };
+		6B06DCD01E4FB985001CC993 /* GraphORMLibrary.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6B06DCCF1E4FB985001CC993 /* GraphORMLibrary.hpp */; };
+		6B06DCD21E4FB985001CC993 /* GraphORMLibraryPriv.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6B06DCD11E4FB985001CC993 /* GraphORMLibraryPriv.hpp */; };
+		6B06DCD41E4FB985001CC993 /* GraphORMLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6B06DCD31E4FB985001CC993 /* GraphORMLibrary.cpp */; };
+		6B17037E1E69C23C00F31AF3 /* GraphORM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6B839C831E5354650072956C /* GraphORM.cpp */; };
+		6B1E19421E94667D00F97241 /* GraphORMLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6B06DCD31E4FB985001CC993 /* GraphORMLibrary.cpp */; };
+		6B1E19431E94667D00F97241 /* GraphORM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6B839C831E5354650072956C /* GraphORM.cpp */; };
+		6B1E19471E94667D00F97241 /* GraphORMLibrary.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6B06DCCF1E4FB985001CC993 /* GraphORMLibrary.hpp */; };
+		6B1E19481E94667D00F97241 /* Definitions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6B1EA8341E805C56005E4CE7 /* Definitions.hpp */; };
+		6B1E19491E94667D00F97241 /* GraphORMLibraryPriv.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6B06DCD11E4FB985001CC993 /* GraphORMLibraryPriv.hpp */; };
+		6B1E194A1E94667D00F97241 /* Utility.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6B1EA8361E805C56005E4CE7 /* Utility.hpp */; };
+		6B1E194B1E94667D00F97241 /* GraphORM.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6B839C841E5354650072956C /* GraphORM.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		6B1E194C1E94667D00F97241 /* SQLDefinitions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6B1EA8351E805C56005E4CE7 /* SQLDefinitions.hpp */; };
+		6B1E19521E94673200F97241 /* libUtilityiOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B1E19511E94673200F97241 /* libUtilityiOS.a */; };
+		6B1E19671E947B2700F97241 /* GraphORMLibrary.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6B06DCD31E4FB985001CC993 /* GraphORMLibrary.cpp */; };
+		6B1E19681E947B2700F97241 /* GraphORM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6B839C831E5354650072956C /* GraphORM.cpp */; };
+		6B1E196A1E947B2700F97241 /* libUtilityiOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B1E19511E94673200F97241 /* libUtilityiOS.a */; };
+		6B1E196C1E947B2700F97241 /* GraphORMLibrary.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6B06DCCF1E4FB985001CC993 /* GraphORMLibrary.hpp */; };
+		6B1E196D1E947B2700F97241 /* Definitions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6B1EA8341E805C56005E4CE7 /* Definitions.hpp */; };
+		6B1E196E1E947B2700F97241 /* GraphORMLibraryPriv.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6B06DCD11E4FB985001CC993 /* GraphORMLibraryPriv.hpp */; };
+		6B1E196F1E947B2700F97241 /* Utility.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6B1EA8361E805C56005E4CE7 /* Utility.hpp */; };
+		6B1E19701E947B2700F97241 /* GraphORM.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6B839C841E5354650072956C /* GraphORM.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+		6B1E19711E947B2700F97241 /* SQLDefinitions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6B1EA8351E805C56005E4CE7 /* SQLDefinitions.hpp */; };
+		6B1EA8231E7F2F51005E4CE7 /* libUtility.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B1EA8221E7F2F51005E4CE7 /* libUtility.a */; };
+		6B1EA8371E805C56005E4CE7 /* Definitions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6B1EA8341E805C56005E4CE7 /* Definitions.hpp */; };
+		6B1EA8381E805C56005E4CE7 /* SQLDefinitions.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6B1EA8351E805C56005E4CE7 /* SQLDefinitions.hpp */; };
+		6B1EA8391E805C56005E4CE7 /* Utility.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6B1EA8361E805C56005E4CE7 /* Utility.hpp */; };
+		6B7071C71E82FF91003C0919 /* libUtility.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B7071C61E82FF91003C0919 /* libUtility.a */; };
+		6B839C851E5354650072956C /* GraphORM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6B839C831E5354650072956C /* GraphORM.cpp */; };
+		6B839C861E5354650072956C /* GraphORM.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6B839C841E5354650072956C /* GraphORM.hpp */; settings = {ATTRIBUTES = (Public, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6B06DC951E4FB6E0001CC993 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		6B06DC971E4FB6E0001CC993 /* GraphORM */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = GraphORM; sourceTree = BUILT_PRODUCTS_DIR; };
+		6B06DC9A1E4FB6E0001CC993 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		6B06DCCD1E4FB985001CC993 /* libGraphORMLibrary.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGraphORMLibrary.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6B06DCCF1E4FB985001CC993 /* GraphORMLibrary.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GraphORMLibrary.hpp; sourceTree = "<group>"; };
+		6B06DCD11E4FB985001CC993 /* GraphORMLibraryPriv.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = GraphORMLibraryPriv.hpp; sourceTree = "<group>"; };
+		6B06DCD31E4FB985001CC993 /* GraphORMLibrary.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GraphORMLibrary.cpp; sourceTree = "<group>"; };
+		6B1E19501E94667D00F97241 /* libGraphORMLibraryiOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGraphORMLibraryiOS.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6B1E19511E94673200F97241 /* libUtilityiOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libUtilityiOS.a; path = "../Utility/build/Release-iphoneos/libUtilityiOS.a"; sourceTree = "<group>"; };
+		6B1E19751E947B2700F97241 /* libGraphORMLibraryiOSSim.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libGraphORMLibraryiOSSim.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		6B1EA8221E7F2F51005E4CE7 /* libUtility.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libUtility.a; path = ../DerivedData/PQRSpecialReportsModule/Build/Products/Release/libUtility.a; sourceTree = "<group>"; };
+		6B1EA8341E805C56005E4CE7 /* Definitions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Definitions.hpp; path = Utility/Utility/Definitions.hpp; sourceTree = SOURCE_ROOT; };
+		6B1EA8351E805C56005E4CE7 /* SQLDefinitions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = SQLDefinitions.hpp; path = Utility/Utility/SQLDefinitions.hpp; sourceTree = SOURCE_ROOT; };
+		6B1EA8361E805C56005E4CE7 /* Utility.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; name = Utility.hpp; path = Utility/Utility/Utility.hpp; sourceTree = SOURCE_ROOT; };
+		6B7071C61E82FF91003C0919 /* libUtility.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libUtility.a; path = ../DerivedData/PQRSpecialReportsModule/Build/Products/Debug/libUtility.a; sourceTree = "<group>"; };
+		6B839C831E5354650072956C /* GraphORM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GraphORM.cpp; sourceTree = "<group>"; };
+		6B839C841E5354650072956C /* GraphORM.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GraphORM.hpp; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6B06DC941E4FB6E0001CC993 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6B7071C71E82FF91003C0919 /* libUtility.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6B06DCCA1E4FB985001CC993 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6B1EA8231E7F2F51005E4CE7 /* libUtility.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6B1E19441E94667D00F97241 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6B1E19521E94673200F97241 /* libUtilityiOS.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6B1E19691E947B2700F97241 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6B1E196A1E947B2700F97241 /* libUtilityiOS.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		6B06DC8E1E4FB6E0001CC993 = {
+			isa = PBXGroup;
+			children = (
+				6B06DC991E4FB6E0001CC993 /* GraphORM */,
+				6B06DCCE1E4FB985001CC993 /* GraphORMLibrary */,
+				6B06DC981E4FB6E0001CC993 /* Products */,
+				6B1EA8211E7F2F51005E4CE7 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		6B06DC981E4FB6E0001CC993 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6B06DC971E4FB6E0001CC993 /* GraphORM */,
+				6B06DCCD1E4FB985001CC993 /* libGraphORMLibrary.a */,
+				6B1E19501E94667D00F97241 /* libGraphORMLibraryiOS.a */,
+				6B1E19751E947B2700F97241 /* libGraphORMLibraryiOSSim.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6B06DC991E4FB6E0001CC993 /* GraphORM */ = {
+			isa = PBXGroup;
+			children = (
+				6B06DC9A1E4FB6E0001CC993 /* main.cpp */,
+			);
+			path = GraphORM;
+			sourceTree = "<group>";
+		};
+		6B06DCCE1E4FB985001CC993 /* GraphORMLibrary */ = {
+			isa = PBXGroup;
+			children = (
+				6B1EA8341E805C56005E4CE7 /* Definitions.hpp */,
+				6B1EA8351E805C56005E4CE7 /* SQLDefinitions.hpp */,
+				6B1EA8361E805C56005E4CE7 /* Utility.hpp */,
+				6B06DCCF1E4FB985001CC993 /* GraphORMLibrary.hpp */,
+				6B06DCD11E4FB985001CC993 /* GraphORMLibraryPriv.hpp */,
+				6B06DCD31E4FB985001CC993 /* GraphORMLibrary.cpp */,
+				6B839C831E5354650072956C /* GraphORM.cpp */,
+				6B839C841E5354650072956C /* GraphORM.hpp */,
+			);
+			path = GraphORMLibrary;
+			sourceTree = "<group>";
+		};
+		6B1EA8211E7F2F51005E4CE7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6B1E19511E94673200F97241 /* libUtilityiOS.a */,
+				6B7071C61E82FF91003C0919 /* libUtility.a */,
+				6B1EA8221E7F2F51005E4CE7 /* libUtility.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		6B06DCCB1E4FB985001CC993 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6B06DCD01E4FB985001CC993 /* GraphORMLibrary.hpp in Headers */,
+				6B1EA8371E805C56005E4CE7 /* Definitions.hpp in Headers */,
+				6B06DCD21E4FB985001CC993 /* GraphORMLibraryPriv.hpp in Headers */,
+				6B1EA8391E805C56005E4CE7 /* Utility.hpp in Headers */,
+				6B839C861E5354650072956C /* GraphORM.hpp in Headers */,
+				6B1EA8381E805C56005E4CE7 /* SQLDefinitions.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6B1E19461E94667D00F97241 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6B1E19471E94667D00F97241 /* GraphORMLibrary.hpp in Headers */,
+				6B1E19481E94667D00F97241 /* Definitions.hpp in Headers */,
+				6B1E19491E94667D00F97241 /* GraphORMLibraryPriv.hpp in Headers */,
+				6B1E194A1E94667D00F97241 /* Utility.hpp in Headers */,
+				6B1E194B1E94667D00F97241 /* GraphORM.hpp in Headers */,
+				6B1E194C1E94667D00F97241 /* SQLDefinitions.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6B1E196B1E947B2700F97241 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6B1E196C1E947B2700F97241 /* GraphORMLibrary.hpp in Headers */,
+				6B1E196D1E947B2700F97241 /* Definitions.hpp in Headers */,
+				6B1E196E1E947B2700F97241 /* GraphORMLibraryPriv.hpp in Headers */,
+				6B1E196F1E947B2700F97241 /* Utility.hpp in Headers */,
+				6B1E19701E947B2700F97241 /* GraphORM.hpp in Headers */,
+				6B1E19711E947B2700F97241 /* SQLDefinitions.hpp in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		6B06DC961E4FB6E0001CC993 /* GraphORM */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6B06DC9E1E4FB6E0001CC993 /* Build configuration list for PBXNativeTarget "GraphORM" */;
+			buildPhases = (
+				6B06DC931E4FB6E0001CC993 /* Sources */,
+				6B06DC941E4FB6E0001CC993 /* Frameworks */,
+				6B06DC951E4FB6E0001CC993 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GraphORM;
+			productName = GraphORM;
+			productReference = 6B06DC971E4FB6E0001CC993 /* GraphORM */;
+			productType = "com.apple.product-type.tool";
+		};
+		6B06DCCC1E4FB985001CC993 /* GraphORMLibrary */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6B06DCD71E4FB985001CC993 /* Build configuration list for PBXNativeTarget "GraphORMLibrary" */;
+			buildPhases = (
+				6B06DCC91E4FB985001CC993 /* Sources */,
+				6B06DCCA1E4FB985001CC993 /* Frameworks */,
+				6B06DCCB1E4FB985001CC993 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GraphORMLibrary;
+			productName = GraphORMLibrary;
+			productReference = 6B06DCCD1E4FB985001CC993 /* libGraphORMLibrary.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		6B1E19401E94667D00F97241 /* GraphORMLibraryiOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6B1E194D1E94667D00F97241 /* Build configuration list for PBXNativeTarget "GraphORMLibraryiOS" */;
+			buildPhases = (
+				6B1E19411E94667D00F97241 /* Sources */,
+				6B1E19441E94667D00F97241 /* Frameworks */,
+				6B1E19461E94667D00F97241 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GraphORMLibraryiOS;
+			productName = GraphORMLibrary;
+			productReference = 6B1E19501E94667D00F97241 /* libGraphORMLibraryiOS.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		6B1E19651E947B2700F97241 /* GraphORMLibraryiOSSim */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6B1E19721E947B2700F97241 /* Build configuration list for PBXNativeTarget "GraphORMLibraryiOSSim" */;
+			buildPhases = (
+				6B1E19661E947B2700F97241 /* Sources */,
+				6B1E19691E947B2700F97241 /* Frameworks */,
+				6B1E196B1E947B2700F97241 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = GraphORMLibraryiOSSim;
+			productName = GraphORMLibrary;
+			productReference = 6B1E19751E947B2700F97241 /* libGraphORMLibraryiOSSim.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6B06DC8F1E4FB6E0001CC993 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0820;
+				ORGANIZATIONNAME = "Maryam Karampour";
+				TargetAttributes = {
+					6B06DC961E4FB6E0001CC993 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 629L622SQX;
+						ProvisioningStyle = Automatic;
+					};
+					6B06DCCC1E4FB985001CC993 = {
+						CreatedOnToolsVersion = 8.2.1;
+						DevelopmentTeam = 629L622SQX;
+						ProvisioningStyle = Automatic;
+					};
+					6B1E19401E94667D00F97241 = {
+						DevelopmentTeam = 629L622SQX;
+					};
+					6B1E19651E947B2700F97241 = {
+						DevelopmentTeam = 629L622SQX;
+					};
+				};
+			};
+			buildConfigurationList = 6B06DC921E4FB6E0001CC993 /* Build configuration list for PBXProject "GraphORM" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 6B06DC8E1E4FB6E0001CC993;
+			productRefGroup = 6B06DC981E4FB6E0001CC993 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6B06DC961E4FB6E0001CC993 /* GraphORM */,
+				6B06DCCC1E4FB985001CC993 /* GraphORMLibrary */,
+				6B1E19401E94667D00F97241 /* GraphORMLibraryiOS */,
+				6B1E19651E947B2700F97241 /* GraphORMLibraryiOSSim */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6B06DC931E4FB6E0001CC993 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6B06DC9B1E4FB6E0001CC993 /* main.cpp in Sources */,
+				6B17037E1E69C23C00F31AF3 /* GraphORM.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6B06DCC91E4FB985001CC993 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6B06DCD41E4FB985001CC993 /* GraphORMLibrary.cpp in Sources */,
+				6B839C851E5354650072956C /* GraphORM.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6B1E19411E94667D00F97241 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6B1E19421E94667D00F97241 /* GraphORMLibrary.cpp in Sources */,
+				6B1E19431E94667D00F97241 /* GraphORM.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6B1E19661E947B2700F97241 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6B1E19671E947B2700F97241 /* GraphORMLibrary.cpp in Sources */,
+				6B1E19681E947B2700F97241 /* GraphORM.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		6B06DC9C1E4FB6E0001CC993 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		6B06DC9D1E4FB6E0001CC993 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		6B06DC9F1E4FB6E0001CC993 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = 629L622SQX;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		6B06DCA01E4FB6E0001CC993 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEVELOPMENT_TEAM = 629L622SQX;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		6B06DCD51E4FB985001CC993 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				DEVELOPMENT_TEAM = 629L622SQX;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = macosx;
+				VALID_ARCHS = "i386 x86_64";
+			};
+			name = Debug;
+		};
+		6B06DCD61E4FB985001CC993 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				DEVELOPMENT_TEAM = 629L622SQX;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = macosx;
+				VALID_ARCHS = "i386 x86_64";
+			};
+			name = Release;
+		};
+		6B1E194E1E94667D00F97241 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				DEVELOPMENT_TEAM = 629L622SQX;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				VALID_ARCHS = "i386 x86_64 armv7 armv7s armv8 arm64";
+			};
+			name = Debug;
+		};
+		6B1E194F1E94667D00F97241 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				DEVELOPMENT_TEAM = 629L622SQX;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				VALID_ARCHS = "i386 x86_64 armv7 armv7s armv8 arm64";
+			};
+			name = Release;
+		};
+		6B1E19731E947B2700F97241 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				DEVELOPMENT_TEAM = 629L622SQX;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				ONLY_ACTIVE_ARCH = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				VALID_ARCHS = "i386 x86_64 armv7 armv7s armv8 arm64";
+			};
+			name = Debug;
+		};
+		6B1E19741E947B2700F97241 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				DEVELOPMENT_TEAM = 629L622SQX;
+				EXECUTABLE_PREFIX = lib;
+				GCC_ENABLE_CPP_EXCEPTIONS = YES;
+				GCC_ENABLE_CPP_RTTI = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos";
+				VALID_ARCHS = "i386 x86_64 armv7 armv7s armv8 arm64";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6B06DC921E4FB6E0001CC993 /* Build configuration list for PBXProject "GraphORM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6B06DC9C1E4FB6E0001CC993 /* Debug */,
+				6B06DC9D1E4FB6E0001CC993 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6B06DC9E1E4FB6E0001CC993 /* Build configuration list for PBXNativeTarget "GraphORM" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6B06DC9F1E4FB6E0001CC993 /* Debug */,
+				6B06DCA01E4FB6E0001CC993 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6B06DCD71E4FB985001CC993 /* Build configuration list for PBXNativeTarget "GraphORMLibrary" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6B06DCD51E4FB985001CC993 /* Debug */,
+				6B06DCD61E4FB985001CC993 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6B1E194D1E94667D00F97241 /* Build configuration list for PBXNativeTarget "GraphORMLibraryiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6B1E194E1E94667D00F97241 /* Debug */,
+				6B1E194F1E94667D00F97241 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6B1E19721E947B2700F97241 /* Build configuration list for PBXNativeTarget "GraphORMLibraryiOSSim" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6B1E19731E947B2700F97241 /* Debug */,
+				6B1E19741E947B2700F97241 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6B06DC8F1E4FB6E0001CC993 /* Project object */;
+}
