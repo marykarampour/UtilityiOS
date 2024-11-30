@@ -16,6 +16,11 @@ typedef NS_ENUM(NSUInteger, MKU_THEME_STYLE) {
 
 extern MKU_THEME_STYLE APP_THEME_STYLE;
 
+/** @brief This class contains the theme used throughout the app
+ @note Projects must define a subclass of this class called YourAppTheme containing app specific theme.
+ @note Define a Category AppTheme+[YourAppName] to swizzle implementations of this base class.
+ Different implementations are done via swizzling in A category of AppTheme. All methods are class methods, no instance of this class is created.
+ */
 @interface AppTheme : NSObject
 
 + (void)applyTheme;
@@ -72,6 +77,7 @@ extern MKU_THEME_STYLE APP_THEME_STYLE;
 + (UIColor *)buttonBackgroundColor;
 + (UIColor *)buttonTextColor;
 + (UIColor *)buttonHighlightedColor;
++ (UIColor *)buttonBorderColor;
 
 + (UIColor *)textViewBackgroundColor;
 + (UIColor *)textViewBorderColor;

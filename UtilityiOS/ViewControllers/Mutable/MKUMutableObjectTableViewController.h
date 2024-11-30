@@ -183,7 +183,7 @@ typedef NS_ENUM(NSUInteger, MKU_MUTABLE_OBJECT_FIELD_TYPE) {
 @property (nonatomic, assign) MKU_MUTABLE_OBJECT_FIELD_TYPE type;
 
 /** @brief Creates an instance with a single section of the given type. */
-- (instancetype)initWithType:(MKU_MUTABLE_OBJECT_FIELD_TYPE)type;
+- (instancetype)initWithMKUType:(MKU_MUTABLE_OBJECT_FIELD_TYPE)type;
 
 @end
 

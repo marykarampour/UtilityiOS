@@ -7,6 +7,7 @@
 //
 
 #import "UIButton+MKUTheme.h"
+#import "MKUAssets.h"
 
 @implementation UIButton (MKUTheme)
 
@@ -36,7 +37,7 @@
     
     UIButton *view = [self cornerButtonWithTitle:title];
     view.layer.borderWidth = 1.0;
-    view.layer.borderColor = [AppTheme brightBlueColorWithAlpha:1.0].CGColor;
+    view.layer.borderColor = [AppTheme buttonBorderColor].CGColor;
     return view;
 }
 

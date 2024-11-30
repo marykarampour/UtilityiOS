@@ -10,6 +10,7 @@
 #import "MKURadioButtonView.h"
 #import "UIControl+IndexPath.h"
 #import "UIView+Utility.h"
+#import "MKUAssets.h"
 
 static CGSize CHECK_SIZE;
 

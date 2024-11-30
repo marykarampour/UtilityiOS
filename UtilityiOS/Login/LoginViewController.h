@@ -7,11 +7,12 @@
 //
 
 #import "NSObject+SplitView.h"
-#import "MKBasicFormView.h"
+#import "MKUStackedViews.h"
+#import "MKUTextField.h"
 
 @interface LoginViewController : DetailViewController
 
-@property (nonatomic, strong, readonly) MKBasicFormView *loginView;
+@property (nonatomic, strong, readonly) MKUStackedViews<MKUTextField *> *loginView;
 
 - (void)login;
 

@@ -12,6 +12,7 @@
 #import "NSString+Utility.h"
 #import "NSArray+Utility.h"
 #import "MKUAppDelegate.h"
+#import "NSObject+Alert.h"
 #import "NSData+Utility.h"
 
 @interface MKUMessageComposerController () <MFMailComposeViewControllerDelegate>

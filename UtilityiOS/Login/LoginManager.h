@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import "LoginViewController.h"
+#import "TextFieldController.h"
 #import "KeyboardAdjuster.h"
 
-@interface LoginManager : NSObject
+@interface LoginManager : NSObject<TextFieldDelegate>
 
 @property (nonatomic, strong, readonly) KeyboardAdjuster *viewAdjuster;
 

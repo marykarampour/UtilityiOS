@@ -45,7 +45,7 @@
 }
 
 - (UIViewController *)windowRootViewController {
-    RaiseExceptionMissingMethodInClass
+    MKURaiseExceptionMissingMethodInClass
     return nil;
 }
 

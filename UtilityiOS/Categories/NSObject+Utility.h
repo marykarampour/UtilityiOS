@@ -52,8 +52,6 @@ typedef NS_OPTIONS(NSUInteger, MKU_COPY_OPTION) {
 + (NSString *)GUID;
 + (NSString *)timestampGUID;
 
-
-
 - (instancetype)initWithObject:(NSObject *)object ancestors:(BOOL)ancestors baseClass:(Class)baseClass;
 - (instancetype)initWithObject:(NSObject *)object properties:(NSSet<NSString *> *)properties;
 + (instancetype)objectWithObject:(NSObject *)object ancestors:(BOOL)ancestors baseClass:(Class)baseClass;

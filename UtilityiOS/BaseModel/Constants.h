@@ -313,7 +313,9 @@ typedef NS_ENUM(NSUInteger, DATE_FORMAT_STYLE) {
 
 #pragma mark - classes
 /** @brief This class contains the constants used throughout the app
- @note Projects must define a subclass of this class called AppCommon containing app specific constants. Different implementations are done via swizzling in A category of Constants. All methods are class methods, no instance of this class is created.
+ @note Projects must define a subclass of this class called AppCommon containing app specific constants.
+ @note Define a Category Constants+[YourAppName] to swizzle implementations of this base class.
+ Different implementations are done via swizzling in A category of Constants. All methods are class methods, no instance of this class is created.
  */
 @interface Constants : NSObject
 

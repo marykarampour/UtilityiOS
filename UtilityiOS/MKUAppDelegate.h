@@ -17,7 +17,7 @@
 @property (nonatomic, strong, readonly) MKUMessageComposerController *composer;
 
 /** @brief Returns sharedApplication. */
-+ (MKUAppDelegate *)application;
++ (instancetype)application;
 - (void)setNavbarTintMode:(MKU_THEME_STYLE)mode;
 - (UIViewController *)visibleViewController;
 

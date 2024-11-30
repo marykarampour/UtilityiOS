@@ -63,7 +63,7 @@
 }
 
 - (NSUInteger)numberOfRowsInSectionWhenExpanded:(NSUInteger)section {
-    RaiseExceptionMissingMethodInClass
+    MKURaiseExceptionMissingMethodInClass
     return 0;
 }
 

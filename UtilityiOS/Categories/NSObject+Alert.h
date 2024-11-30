@@ -29,7 +29,7 @@
 /** @brief Uses default MKU_ACTION_ALERT_TYPE_OK */
 - (void)actionAlertWithTitle:(NSString *)title message:(NSString *)message alertActionHandler:(void(^)(void))handler cancelActionHandler:(void(^)(void))cancelHandler;
 - (void)actionAlertWithTitle:(NSString *)title message:(NSString *)message type:(MKU_ACTION_ALERT_TYPE)type alertActionHandler:(void(^)(void))handler cancelActionHandler:(void(^)(void))cancelHandler;
-/** @param Use an empty handler ^{} or title Cancel for Cancel. */
+/** @param handlers Use an empty handler ^{} or title Cancel for Cancel. */
 - (void)actionAlertWithTitle:(NSString *)title message:(NSString *)message preferredStyle:(UIAlertControllerStyle)preferredStyle alertActionHandlers:(TitleVoidActionHandlers)handlers;
 - (void)actionAlertWithTitle:(NSString *)title message:(NSString *)message preferredStyle:(UIAlertControllerStyle)preferredStyle alertActions:(NSArray <ActionObject *> *)alertActions;
 /** @param alertActions the target of these are specified in ActionObject objects */

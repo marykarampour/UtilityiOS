@@ -301,6 +301,14 @@
     }
 }
 
++ (UIColor *)buttonBorderColor {
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
 + (UIColor *)textViewBackgroundColor {
     switch (APP_THEME_STYLE) {
         case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];

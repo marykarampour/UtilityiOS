@@ -32,7 +32,7 @@
 }
 
 - (NSString *)docsDirectory {
-    RaiseExceptionMissingMethodInClass
+    MKURaiseExceptionMissingMethodInClass
     return nil;
 }
 

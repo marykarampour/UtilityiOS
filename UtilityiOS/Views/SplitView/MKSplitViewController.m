@@ -9,11 +9,10 @@
 #import "MKSplitViewController.h"
 #import "TabBarSplitViewController_Extension.h"
 #import "UINavigationController+Transition.h"
-
 #import "ShrunkenMenuViewController.h"
 #import "BaseDetailViewController.h"
 #import "LoginViewController.h"
-#import "MKPair.h"
+#import "MKUPair.h"
 
 @implementation MKSplitViewController
 
@@ -66,7 +65,7 @@
 }
 
 - (void)showPrimaryListNavigationController {
-    [(MKTableViewController *)[self selectedTabViewController] reloadDataAnimated:NO];
+    [(MKUTableViewController *)[self selectedTabViewController] reloadDataAnimated:NO];
 }
 
 - (void)animateLogout {

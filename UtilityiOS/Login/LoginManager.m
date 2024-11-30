@@ -10,9 +10,8 @@
 #import "NSObject+Alert.h"
 #import "SplitViewManager.h"
 #import "ServerController.h"
-#import "TextFieldController.h"
 
-@interface LoginManager () <TextFieldDelegate>
+@interface LoginManager ()
 
 @property (nonatomic, weak) __kindof LoginViewController *viewController;
 @property (nonatomic, strong, readwrite) KeyboardAdjuster *viewAdjuster;
@@ -35,7 +34,7 @@
             [[SplitViewManager instance].splitViewController animateLogin];
         }
         else {
-            [self OKAlertWithTitle:[Constants LoginFailedTitle_STR] message:[Constants LoginFailedMessage_STR]];
+            [self OKAlertWithTitle:[Constants Login_Failed_Title_STR] message:[Constants Login_Failed_Message_STR]];
         }
     }];
 }

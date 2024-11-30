@@ -69,7 +69,7 @@ static NSString * const typeKey  = @"type";
 
 @property (nonatomic, strong) NSString *title;
 
-/** @brief type is used if the VC being pushed uses initWithType */
+/** @brief type is used if the VC being pushed uses initWithMKUType */
 @property (nonatomic, assign) NSUInteger type;
 
 /** @brief The hidden item can be used for navigation controller VCs which are skiped by the menu*/

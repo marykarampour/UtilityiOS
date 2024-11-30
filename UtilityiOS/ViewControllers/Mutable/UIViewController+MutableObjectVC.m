@@ -10,6 +10,7 @@
 #import "UIViewController+ViewControllerTransition.h"
 #import "NSObject+NavBarButtonTarget.h"
 #import "UIViewController+Utility.h"
+#import "NSObject+Alert.h"
 #import <objc/runtime.h>
 #import "MKUSpinner.h"
 

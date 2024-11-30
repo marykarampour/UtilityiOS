@@ -121,8 +121,6 @@ typedef NSDictionary<NSNumber *, MKUDateViewInfoObject *> DateSectionInfoObjctDi
 - (CGFloat)heightForTextFieldCellAtIndexPath:(NSIndexPath *)indexPath;
 - (CGFloat)heightForTextViewCellAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
 
-- (instancetype _Nonnull)initWithType:(NSInteger)type;
-
 - (void)updateTableView;
 - (void)reloadSectionsSet:(NSIndexSet *)sections completion:(void (^)(void))completion;
 

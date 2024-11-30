@@ -41,8 +41,8 @@
 - (UIViewController *)viewController {
     //TODO: do not init if already exists
     UIViewController *nextViewController;
-    if ([self.VCClass instancesRespondToSelector:@selector(initWithType:)]) {
-        nextViewController = [[self.VCClass alloc] initWithType:self.type];
+    if ([self.VCClass instancesRespondToSelector:@selector(initWithMKUType:)]) {
+        nextViewController = [[self.VCClass alloc] initWithMKUType:self.type];
     }
     else {
         nextViewController = [[self.VCClass alloc] init];
@@ -475,7 +475,7 @@
 #pragma mark - abstracts
 
 - (NSUInteger)numberOfRowsInNonMenuSectionWhenExpanded:(NSUInteger)section {
-    RaiseExceptionMissingMethodInClass
+    MKURaiseExceptionMissingMethodInClass
     return 0;
 }
 
@@ -484,7 +484,7 @@
 }
 
 - (void)createMenuObjects {
-    RaiseExceptionMissingMethodInClass
+    MKURaiseExceptionMissingMethodInClass
 }
 
 - (void)reloadMenu {

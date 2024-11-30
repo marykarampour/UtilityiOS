@@ -7,6 +7,7 @@
 //
 
 #import "MKUModel.h"
+#import "ActionObject.h"
 #import "MKUMenuProtocols.h"
 
 @interface MKUMenuObjects : MKUModel
