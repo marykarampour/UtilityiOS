@@ -1,0 +1,11 @@
+build/
+DerivedData/
+xcuserdata/
+*.pbxuser
+.DS_Store
+*.xcworkspace
+!xcschemes
+!xcshareddata
+!default.xcworkspace
+*.xcworkspacedata
+*.xcuserstate

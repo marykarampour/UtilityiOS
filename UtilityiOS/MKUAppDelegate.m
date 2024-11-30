@@ -103,6 +103,13 @@
     return vc;
 }
 
+- (void)openDeviceSettings {
+    NSURL *url = [NSURL URLWithString:UIApplicationOpenSettingsURLString];
+    if ([[UIApplication sharedApplication] canOpenURL:url]) {
+        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+    }
+}
+
 #pragma mark - notifications
 
 // Add "remote-notification" to the list of your supported UIBackgroundModes in your Info.plist.
