@@ -1,50 +1,59 @@
 //
-//  MKUButtonView.h
-//  KaChing
+//  ButtonView.h
+//  UtilityiOS
 //
-//  Created by Maryam Karampour on 2020-10-17.
-//  Copyright © 2020 Prometheus Software. All rights reserved.
+//  Created by Maryam Karampour on 2024-09-01.
 //
 
-#import "MultiLabelView.h"
+#import <UIKit/UIKit.h>
+#import "MKUViewProtocol.h"
+#import "UIControl+IndexPath.h"
+#import "MKUBadgeView.h"
 
-@class MKUButtonView;
+@interface MKUButtonView <__covariant ObjectType : UIView *> : UIView <MKUControlProtocol>
 
-@interface MKUBackButton : UIView
+@property (nonatomic, strong, readonly) UILabel *titleView;
+@property (nonatomic, strong, readonly) UIButton *backButton;
+@property (nonatomic, strong) ObjectType badgeView;
 
-@property (nonatomic, strong) UIButton *button;
-@property (nonatomic, weak) MKUButtonView *container;
+- (instancetype)initWithStyle:(MKU_VIEW_STYLE)style;
 
-@end
+/** @param size Pass 0 to ignore badgeView. If 0 only titleView is constrained,  */
+- (instancetype)initWithBadgeSize:(CGFloat)size;
 
-@protocol MKUButtonProtocol <NSObject>
+/** @param size Pass 0 to ignore badgeView. If 0 only titleView is constrained,  */
+- (instancetype)initWithBadgeSize:(CGFloat)size viewCreationHandler:(VIEW_CREATION_HANDLER)handler;
 
-@optional
-- (void)buttonView:(MKUButtonView *)view setSelected:(BOOL)selected;
-
-@end
-
-@interface MKUButtonView : MultiLabelView
-
-@property (nonatomic, assign) BOOL selected;
-@property (nonatomic, assign) BOOL enabled;
-
-@property (nonatomic, weak) id<MKUButtonProtocol> delegate;
-
-/** @brief By default user interaction is disabled on this button and no action is added, this button covers the entire view */
-@property (nonatomic, strong, readonly) UIButton *backView;
-
-- (void)setTarget:(id)target action:(SEL)action;
-/** @brief Adds the action to container */
-- (void)setActionOnContainer:(SEL)action;
+- (void)setLabelTitle:(NSString *)title;
 - (void)setIndexPath:(NSIndexPath *)indexPath;
+/** @brief Sets the color of a 1 pixel separator line at the bottom. Pass nil to hide.
+ @note Only available with style MKU_VIEW_STYLE_PLAIN and when initWithImageSize is used to initialize. */
+- (void)setSeparatorColor:(UIColor *)color;
 
-/** @brief Override to do work in setSelected
- @note Do not override setSelected, call super on this to notify the delegate on selected */
-- (void)customizeSetSelected:(BOOL)selected;
+/** @brief subtitle If empty, the title is set to text of titleView, otherwise, attributedText is set.  subtitle is displayed below title. */
+- (void)setTitle:(NSString *)title subtitle:(NSString *)subtitle;
 
-/** @brief Override to switchOnOff
- @note Default is: self.selected = !self.selected */
-- (void)switchOnOff:(UIButton *)sender;
+/** @brief value If empty, the title is set to text of titleView, otherwise, attributedText is set. value is displayed right of title. */
+- (void)setTitle:(NSString *)title value:(NSString *)value;
+
++ (MKUButtonView *)BlueButtonWithTitle:(NSString *)title;
++ (MKUButtonView *)BlueButtonWithTitle:(NSString *)title hidden:(BOOL)hidden;
++ (MKUButtonView *)detailButtonWithStyle:(MKU_VIEW_STYLE)style;
++ (MKUButtonView *)cornerDetailButtonWithStyle:(MKU_VIEW_STYLE)style;
 
 @end
+
+@interface MKUButtonImageView : MKUButtonView <UIImageView *>
+
+- (void)setImageName:(NSString *)image;
+- (void)setImage:(UIImage *)image;
++ (MKUButtonImageView *)detailButton;
++ (MKUButtonImageView *)cornerDetailButton;
++ (MKUButtonImageView *)detailButtonWithTitle:(NSString *)title;
+
+@end
+
+@interface MKUButtonBadgeView : MKUButtonView <MKUBadgeView *>
+
+@end
+

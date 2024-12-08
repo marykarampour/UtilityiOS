@@ -84,6 +84,7 @@ typedef NS_ENUM(NSUInteger, StringFormat) {
 - (NSString *)amount;
 + (NSString *)randomStringWithLenght:(NSUInteger)length;
 + (NSString *)telFromString:(NSString *)string;
++ (NSString *)telPromptFromString:(NSString *)string;
 
 + (NSString *)notnullString:(NSString *)string;
 + (NSString *)notnullString:(NSString *)string defaultText:(NSString * __nonnull)defaultText;

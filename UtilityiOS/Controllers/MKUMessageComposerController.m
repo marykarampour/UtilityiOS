@@ -1,6 +1,6 @@
 //
 //  MKUMessageComposerController.m
-//  KaChing
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2020-10-22.
 //  Copyright © 2020 Prometheus Software. All rights reserved.
@@ -22,7 +22,6 @@
 @property (nonatomic, copy) void (^completionHandler)(MKU_MESSAGE_COMPOSER_RESULT);
 
 @end
-
 
 @implementation MKUMessageComposerController
 

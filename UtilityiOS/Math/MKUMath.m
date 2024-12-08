@@ -1,6 +1,6 @@
 //
 //  MKUMath.m
-//  KaChing-v2
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2018-02-12.
 //  Copyright © 2018 BHS Consultants. All rights reserved.

@@ -1,6 +1,6 @@
 //
 //  MKUStackedViews.m
-//  KaChing
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2024-11-28.
 //  Copyright © 2024 Prometheus Software. All rights reserved.
@@ -18,7 +18,7 @@
 @implementation MKUStackedViews
 
 - (instancetype)initWithCount:(NSUInteger)count viewCreationHandler:(SINGLE_INDEX_VIEW_CREATION_HANDLER)handler {
-    return [self initWithCount:count padding:0.0 viewCreationHandler:handler];
+    return [self initWithCount:count padding:self.defaultPadding viewCreationHandler:handler];
 }
 
 - (instancetype)initWithCount:(NSUInteger)count padding:(CGFloat)padding viewCreationHandler:(SINGLE_INDEX_VIEW_CREATION_HANDLER)handler {
@@ -81,10 +81,6 @@
     return self;
 }
 
-+ (CGFloat)defaultPadding {
-    return 4.0;
-}
-
 - (id)viewAtIndex:(NSUInteger)index {
     if (self.views.count <= index) return nil;
     return self.views[index];
@@ -113,7 +109,7 @@
 }
 
 - (void)constreintViews {
-    [self constreintViewsWithPadding:0.0];
+    [self constreintViewsWithPadding:self.defaultPadding];
 }
 
 @end

@@ -21,30 +21,50 @@
  */
 + (BOOL)usingAncestors;
 
+/** @brief Override in subclass if you want dynamic properties including from protocols be added to  property names, default NO
+ @code
+ + (BOOL)usingDynamicProperties {
+ return YES;
+ }
+ @endcode
+ */
++ (BOOL)usingDynamicProperties;
+
 /** @brief Override in subclass if you want keys be excluded in JSON keys
  @code
- + (StringArr *)excludedKeys {
+ + (NSSet<NSString *> *)excludedKeys {
     return @[NSStringFromSelector(@selector(maxDate)),
              NSStringFromSelector(@selector(fromDate)),
              NSStringFromSelector(@selector(toDate))];
  }
  @endcode
  */
-+ (StringArr *)excludedKeys;
++ (NSSet<NSString *> *)excludedKeys;
+
+/** @brief Override in subclass if you want keys be excluded in property names when used in isEqual (not used in copy)
+ @code
+ + (StringSet *)excludedProperties {
+ return [NSSet setWithObjects:NSStringFromSelector(@selector(maxDate)),
+ NSStringFromSelector(@selector(fromDate)),
+ NSStringFromSelector(@selector(toDate)), nil];
+ }
+ @endcode
+ */
++ (StringSet *)excludedProperties;
 
 /** @brief Override in subclass if you want properties have different format than other JSON keys
  @note Use with + (StringFormat)customFormat
  @code
- + (StringArr *)customKeys {
+ + (NSSet<NSString *> *)customKeys {
     return @[NSStringFromSelector(@selector(fromDate)),
              NSStringFromSelector(@selector(toDate))];
  }
  @endcode
  */
-+ (StringArr *)customKeys;
++ (NSSet<NSString *> *)customKeys;
 
 /** @brief Override in subclass if you want properties have different format than other JSON keys
-  @note Use with + (StringArr *)customKeys
+  @note Use with + (NSSet<NSString *> *)customKeys
  @code
  + (StringFormat)customFormat {
     return StringFormatNone;
@@ -65,14 +85,15 @@
 
 @end
 
+//TODO: JSONModel does not support all types, e.g., Class. Made it not throw exception, have to decide
 @interface MKUModel : JSONModel <NSCoding, NSCopying, MKUModelCustomKeysProtocol>
 
-@property (class, nonatomic, strong, readonly) StringArr *propertyNames;
+@property (class, nonatomic, strong, readonly) NSSet<NSString *> *propertyNames;
 /** @brief Key is property name and value is Attribute name */
 @property (class, nonatomic, strong, readonly) DictStringString *propertyAttributeNames;
 /** @brief Key is property name and value is class name */
 @property (class, nonatomic, strong, readonly) DictStringString *propertyClassNames;
-@property (class, nonatomic, strong, readonly) StringArr *dateProperties;
+@property (class, nonatomic, strong, readonly) NSSet<NSString *> *dateProperties;
 
 /** @brief Used to set the mapper format for object to JSON.
  @note default is StringFormatNONE, override + (StringFormat)classMapperFormat in subclass to customize */
@@ -101,9 +122,9 @@
 - (void)setValuesOfObject:(__kindof MKUModel *)object ancestors:(BOOL)ancestors;
 
 /** @brief An extension to - (NSDictionary *)toDictionary excluding given keys
- @note Use with + (StringArr *)excludedKeys 
+ @note Use with + (NSSet<NSString *> *)excludedKeys 
  */
-- (NSDictionary *)toDictionaryWithExcludedKeys;
+- (NSDictionary *)toDictionaryWithExcludedKeys:(StringSet *)keys;
 
 #pragma mark - search predicate
 
@@ -113,10 +134,10 @@
 
 /** @brief keys for search predicates containg property names
  @note subclass must implement */
-+ (StringArr *)searchPredicateKeys;
++ (NSSet<NSString *> *)searchPredicateKeys;
 
 /** @brief search property name, return nil if search self */
-+ (StringArr *)searchPredicatePropertyNames;
++ (NSSet<NSString *> *)searchPredicatePropertyNames;
 
 /** @brief Returns class of a property with given name */
 + (Class)classForPropertyName:(NSString *)name;
@@ -129,7 +150,19 @@
 + (BOOL)propertyIsBool:(NSString *)name;
 + (BOOL)propertyIsEnum:(NSString *)name;
 
+- (NSString *)nameForProperty:(NSString *)property;
++ (NSString *)tagName;
+/** @brief A JSON representation of the serialized object. */
+- (NSString *)stringValue;
+/** @brief A JSON representation of the serialized object is converted to dictionary and used to create the object using initWithMap:. */
++ (instancetype)objectWithJSON:(NSString *)string;
+- (BOOL)propertyIsBool:(NSString *)propertyName;
+/** @brief Default is NO. If No is assuems local time for formatting. */
+- (BOOL)datePropertyIsUTC:(NSString *)propertyName;
+- (NSDictionary *)varNamesWithSingleLenght:(NSUInteger)lenght;
+
 @end
+
 
 
 @interface MKUOption : MKUModel

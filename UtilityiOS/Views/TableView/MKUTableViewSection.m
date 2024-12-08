@@ -1,6 +1,6 @@
 //
 //  MKUTableViewSection.m
-//  KaChing
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2020-10-17.
 //  Copyright © 2020 Prometheus Software. All rights reserved.

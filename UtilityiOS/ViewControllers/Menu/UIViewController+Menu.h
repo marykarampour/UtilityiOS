@@ -1,6 +1,6 @@
 //
 //  UIViewController+Menu.h
-//  KaChing
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2024-11-25.
 //  Copyright © 2024 Prometheus Software. All rights reserved.
@@ -8,7 +8,7 @@
 
 #import "MKUMenuObjects.h"
 #import "UIViewController+UpdateBadge.h"
-#import "MKUTableViewCellContentProtocols.h"
+#import "MKUViewContentStyleProtocols.h"
 #import "MKUViewControllerTransitionProtocol.h"
 
 @interface UIViewController (Menu) <MKUMenuViewControllerProtocol, MKUViewControllerTransitionDelegate, MKURefreshViewControllerDelegate>

@@ -9,6 +9,12 @@
 #import "Constants.h"
 #import "AppDelegate.h"
 #import "NSString+Utility.h"
+#import <LocalAuthentication/LocalAuthentication.h>
+#import "MKUMessageComposerController.h"
+#import "NSObject+Utility.h"
+#import "NSError+Utility.h"
+#import "NSObject+Alert.h"
+#import "MKUModel.h"
 
 #pragma mark - defaults
 
@@ -45,6 +51,55 @@ NSString * const DateFormatDateTimeStyle          = @"yyyy-MM-dd HH:mm:ss";
 NSString * const DateFormatDateTimeCompactStyle   = @"MM-dd-yy HH:mm";
 
 #pragma mark - classes
+
+static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
+
+@interface AppBuildInfo : MKUModel
+
+@property (nonatomic, strong) NSNumber *Major;
+@property (nonatomic, strong) NSNumber *Minor;
+@property (nonatomic, strong) NSNumber *Revison;
+
+@end
+
+@implementation AppBuildInfo
+
++ (instancetype)infoWithVersionString:(NSString *)version {
+    NSString *majorStr;
+    NSString *minorStr;
+    NSString *revisionStr;
+    
+    NSArray<NSString *> *components = [version componentsSeparatedByString:@"."];
+    
+    switch (components.count) {
+        case 1: {
+            majorStr = components[0];
+        }
+            break;
+        case 2: {
+            majorStr = components[0];
+            minorStr = components[1];
+        }
+            break;
+        case 3: {
+            majorStr = components[0];
+            minorStr = components[1];
+            revisionStr = components[2];
+        }
+            break;
+        default:
+            break;
+    }
+    
+    AppBuildInfo *info = [[AppBuildInfo alloc] init];
+    info.Major = [majorStr stringToNumber];
+    info.Minor = [minorStr stringToNumber];
+    info.Revison = [revisionStr stringToNumber];
+    
+    return info;
+}
+
+@end
 
 @implementation Constants
 
@@ -153,6 +208,10 @@ NSString * const DateFormatDateTimeCompactStyle   = @"MM-dd-yy HH:mm";
     return 32.0;
 }
 
++ (CGFloat)TableSectionHeaderMediumHeight {
+    return 44.0;
+}
+
 + (CGFloat)TableSectionHeaderShortHeight {
     return 22.0;
 }
@@ -211,6 +270,10 @@ NSString * const DateFormatDateTimeCompactStyle   = @"MM-dd-yy HH:mm";
 
 + (CGFloat)DatePickerPopOverHeight {
     return 300.0;
+}
+
++ (CGFloat)ButtonChevronSize {
+    return 20.0;
 }
 
 + (CGFloat)DatePickerCalendarHeight {
@@ -616,23 +679,25 @@ NSString * const DateFormatDateTimeCompactStyle   = @"MM-dd-yy HH:mm";
 + (CGFloat)statusBarHeight {
 #ifdef AF_APP_EXTENSIONS
     return 0.0;
-#else
-    return [UIApplication sharedApplication].statusBarFrame.size.height;
 #endif
+    return [UIApplication sharedApplication].statusBarFrame.size.height;
 }
 
 + (UIEdgeInsets)safeAreaInsets {
 #ifdef AF_APP_EXTENSIONS
     return UIEdgeInsetsZero;
-#else
-    UIWindow *window = ((AppDelegate *)[UIApplication sharedApplication].delegate).window;
+#endif
+    
+    UIWindow *window = [AppDelegate application].window;
+    UIEdgeInsets insets = window.safeAreaInsets;
     if ([window respondsToSelector:@selector(safeAreaInsets)]) {
         if (@available(iOS 11.0, *)) {
-            return window.safeAreaInsets;
+            CGFloat topInset = insets.top;
+            topInset = (topInset > 0.0 ? topInset : [Constants statusBarHeight]);
+            return UIEdgeInsetsMake(topInset, insets.left, insets.bottom, insets.right);
         }
     }
-    return UIEdgeInsetsZero;
-#endif
+    return UIEdgeInsetsMake([Constants statusBarHeight], insets.left, insets.bottom, insets.right);
 }
 
 + (CGFloat)safeAreaHeight {
@@ -721,6 +786,77 @@ NSString * const DateFormatDateTimeCompactStyle   = @"MM-dd-yy HH:mm";
         return [Constants FaceID_STR];
     }
     return nil;
+}
+
++ (NSString *)bioMetricNameForContext:(LAContext *)context {
+    if (context.biometryType == LABiometryTypeTouchID) {
+        return kStringTouchID;
+    }
+    else if (context.biometryType == LABiometryTypeFaceID) {
+        return kStringFaceID;
+    }
+    return nil;
+}
+
++ (void)autentiacteWithBiometrics:(void (^)(BOOL, NSError * _Nullable))completion {
+    
+    LAContext *context = [[LAContext alloc] init];
+    BOOL hasBiometry = [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil];
+    NSString *bioTypeStr = [self bioMetricNameForContext:context];
+    __block NSString *message;
+    
+    if (hasBiometry) {
+        NSString *reason = [NSString stringWithFormat:kLoginBiometricsMessage, bioTypeStr];
+        
+        [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:reason reply:^(BOOL success, NSError * _Nullable error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (success && !error) {
+                    completion(success, nil);
+                    return;
+                }
+                else {
+                    switch (error.code) {
+                            
+                        case LAErrorAuthenticationFailed:
+                            message = kBiometricsAuthenticationFailedMessage;
+                            break;
+                            
+                        case LAErrorUserCancel:
+                        case LAErrorUserFallback:
+                        case LAErrorAppCancel:
+                            message = kBiometricsAuthenticationFailedMessage;
+                            break;
+                            
+                        case LAErrorPasscodeNotSet:
+                        case LAErrorSystemCancel:
+                        case LAErrorInvalidContext:
+                        case LAErrorBiometryNotAvailable:
+                        case LAErrorBiometryNotEnrolled:
+                        case LAErrorBiometryLockout:
+                        case LAErrorNotInteractive:
+                        default:
+                            message = kBiometricsCannotPerformMessage;
+                            break;
+                    }
+                }
+                [self handleAutentiacteWithBiometricsMessage:message type:bioTypeStr completion:completion];
+            });
+        }];
+    }
+    else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            message = kBiometricsCannotPerformMessage;
+            [self handleAutentiacteWithBiometricsMessage:message type:bioTypeStr completion:completion];
+        });
+    }
+}
+
++ (void)handleAutentiacteWithBiometricsMessage:(NSString *)message type:(NSString *)type completion:(void (^)(BOOL, NSError * _Nullable))completion {
+    if (0 < message.length)
+        message = [NSString stringWithFormat:message, type];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        completion(NO, [NSError errorWithMessage:message]);
+    });
 }
 
 
@@ -1071,10 +1207,88 @@ NSString * const DateFormatDateTimeCompactStyle   = @"MM-dd-yy HH:mm";
 + (void)callPhoneNumber:(NSString *)num {
 #ifdef AF_APP_EXTENSIONS
     return;
-#else
-    NSString *phoneNum = [NSString telFromString:num];
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phoneNum]];
 #endif
+
+    if (num.length == 0) return;
+    
+    num = [num numbersOnly];
+    NSURL *urlPrompt = [NSURL URLWithString:[NSString telPromptFromString:num]];
+    NSURL *url = [NSURL URLWithString:[NSString telFromString:num]];
+    
+    if (![[UIApplication sharedApplication] canOpenURL:url]) {
+        [NSObject OKAlertWithTitle:@"Device can not make phone calls" message:nil];
+    }
+    else if ([[UIApplication sharedApplication] canOpenURL:urlPrompt]) {
+        [[UIApplication sharedApplication] openURL:urlPrompt options:@{} completionHandler:nil];
+    }
+    else if ([[UIApplication sharedApplication] canOpenURL:url]) {
+        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+    }
+    else {
+        [NSObject textFieldAlertWithTitle:@"Device can not dial this number" message:@"Please make sure the number is valid and try again" defaultText:num target:nil alertActionHandler:^(NSString *string) {
+            [self callPhoneNumber:string];
+        }];
+    }
+}
+
++ (NSDictionary *)appVersionDict {
+    return [[self appBuildInfo] toDictionary];
+}
+
++ (AppBuildInfo *)appBuildInfo {
+    NSString *versionStr = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    return [AppBuildInfo infoWithVersionString:versionStr];
+}
+
++ (NSString *)appVersion {
+    return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+}
+
++ (NSString *)appVersionBuild {
+    NSDictionary *versionDict = [[NSBundle mainBundle] infoDictionary];
+    NSString *build = [versionDict objectForKey:(NSString *)kCFBundleVersionKey];
+    NSString *version = [versionDict objectForKey:@"CFBundleShortVersionString"];
+    version = [NSString stringWithFormat:@"%@ (%@)", version, build];
+    return version;
+}
+
++ (CGFloat)detailMinScreenWidth {
+    float splitWidth = IS_IPAD ? kSplitViewPrimaryWidth : 0.0;
+    return [self screenWidth] - splitWidth;
+}
+
++ (MKU_UI_TYPE)UIType {
+    return IS_IPAD ? MKU_UI_TYPE_IPAD : MKU_UI_TYPE_IPHONE;
+}
+
++ (void)clearTempDirectory {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        NSArray *temp = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:NSTemporaryDirectory() error:NULL];
+        
+        for (NSString *file in temp) {
+            NSString *path = [NSString stringWithFormat:@"%@%@", NSTemporaryDirectory(), file];
+            [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];
+        }
+    });
+}
+
++ (void)copyToClipboard:(NSString *)text {
+    if (text.length == 0) return;
+
+    UIPasteboard *obj = [UIPasteboard generalPasteboard];
+    obj.string = text;
+    [NSObject displayToastWithTitle:text message:@"Copied to Clipboard" duration:2];
+}
+
++ (void)emailToAddress:(NSString *)text {
+    if (text.length == 0) return;
+
+    [MKUMessageComposerController initComposerWithRecipient:text completion:^(MKU_MESSAGE_COMPOSER_RESULT result) {
+        if (result == MKU_MESSAGE_COMPOSER_RESULT_FAILED) {
+            [NSObject OKAlertWithTitle:@"Device can not send email" message:nil];
+        }
+    }];
 }
 
 @end
+

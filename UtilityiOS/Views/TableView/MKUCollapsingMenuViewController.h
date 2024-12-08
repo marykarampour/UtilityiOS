@@ -1,12 +1,12 @@
 //
 //  MKUMenuViewController.h
-//  KaChing-v2
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2018-01-24.
 //  Copyright © 2018 BHS Consultants. All rights reserved.
 //
 
-#import "MKUCollapsableSectionsTableViewController.h"
+#import "MKUCollapsingSectionsTableViewController.h"
 #import "ActionObject.h"
 #import "MKUBadgeView.h"
 
@@ -19,7 +19,7 @@
 
 @end
 
-@interface MKUMenuTableViewCell : MKUBaseTableViewCell
+@interface MKUCollapsingMenuTableViewCell : MKUBaseTableViewCell
 
 @property (nonatomic, strong, readonly) UIImageView *iconImage;
 @property (nonatomic, strong, readonly) MKULabel *titleLabel;
@@ -45,8 +45,8 @@
  @ebdcode
  */
 - (__kindof MKUBaseTableViewCell *)baseCellForRowAtIndexPath:(NSIndexPath *)indexPath;
-- (__kindof MKUMenuTableViewCell *)baseMenuCellForRowAtIndexPath:(NSIndexPath *)indexPath;
-- (void)customizeBaseMenuCell:(__kindof MKUMenuTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath;
+- (__kindof MKUCollapsingMenuTableViewCell *)baseMenuCellForRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)customizeBaseMenuCell:(__kindof MKUCollapsingMenuTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath;
 - (NSUInteger)numberOfRowsInNonMenuSectionWhenExpanded:(NSUInteger)section;
 - (NSString *)titleForHeaderInNonMenuSection:(NSInteger)section;
 - (CGFloat)heightForVisibleRowAtIndexPath:(NSIndexPath *)indexPath;
@@ -112,7 +112,7 @@ static NSString * const typeKey  = @"type";
 @end
 
 
-@interface MKUMenuViewController : MKUCollapsableSectionsTableViewController <MenuViewControllerProtocol>
+@interface MKUCollapsingMenuViewController : MKUCollapsingSectionsTableViewController <MenuViewControllerProtocol>
 
 /** @brief The container view controller if the menu is added to one,
  if not null it is used for navigation, otherwise menu is used */

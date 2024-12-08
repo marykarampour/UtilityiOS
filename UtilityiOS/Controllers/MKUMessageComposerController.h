@@ -1,6 +1,6 @@
 //
 //  MKUMessageComposerController.h
-//  KaChing
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2020-10-22.
 //  Copyright © 2020 Prometheus Software. All rights reserved.
@@ -37,9 +37,10 @@ typedef NS_ENUM(NSUInteger, MKU_MESSAGE_COMPOSER_RESULT) {
 - (BOOL)sendEmailWithTitle:(NSString *)title message:(NSString *)message recipients:(NSArray<NSString *> *)recipients BCCRecipients:(NSArray<NSString *> *)BCCRecipients attachments:(NSDictionary <NSString *, NSData *> *)attachments;
 - (BOOL)sendEmailWithTitle:(NSString *)title message:(NSString *)message recipients:(NSArray<NSString *> *)recipients BCCRecipients:(NSArray<NSString *> *)BCCRecipients attachments:(NSDictionary <NSString *, NSData *> *)attachments asHTML:(BOOL)asHTML;
 
-/** @param if asHTML == YES it will send the message with isHTML = NO. */
+/** @param asHTML == YES it will send the message with isHTML = NO. */
 - (BOOL)sendEmailWithTitle:(NSString *)title message:(NSString *)message asHTML:(BOOL)asHTML;
 + (void)emailToAddress:(NSString *)text;
++ (instancetype)initComposerWithRecipient:(NSString *)recipient completion:(void(^)(MKU_MESSAGE_COMPOSER_RESULT result))completion;
 
 @end
 

@@ -19,14 +19,20 @@ typedef NS_OPTIONS(NSUInteger, MKU_COPY_OPTION) {
 - (BOOL)MKUIsEqual:(id)object;
 /** @brief checks properties given */
 - (BOOL)MKUIsEqual:(id)object properties:(NSSet<NSString *> *)properties;
+
 - (id)MKUCopyWithZone:(NSZone *)zone;
-- (id)MKUCopyWithZone:(NSZone *)zone baseClass:(Class)baseClass;
+- (id)MKUCopyWithZone:(NSZone *)zone properties:(NSSet<NSString *> *)properties;
+- (id)MKUCopyWithZone:(NSZone *)zone excludeProperties:(NSSet<NSString *> *)excluding;
+- (id)MKUCopyWithZone:(NSZone *)zone baseClass:(Class)baseClass option:(MKU_COPY_OPTION)option;
+- (id)MKUCopyWithZone:(NSZone *)zone baseClass:(Class)baseClass option:(MKU_COPY_OPTION)option excludeProperties:(NSSet<NSString *> *)excluding;
 
 - (void)MKUInitWithCoder:(NSCoder *)aDecoder;
 - (void)MKUInitWithCoder:(NSCoder *)aDecoder baseClass:(Class)baseClass;
+- (void)MKUInitWithCoder:(NSCoder *)aDecoder properties:(NSSet<NSString *> *)properties;
 
 - (void)MKUEncodeWithCoder:(NSCoder *)aCoder;
 - (void)MKUEncodeWithCoder:(NSCoder *)aCoder baseClass:(Class)baseClass;
+- (void)MKUEncodeWithCoder:(NSCoder *)aCoder properties:(NSSet<NSString *> *)properties;
 
 - (NSUInteger)MKUHash;
 
@@ -38,6 +44,8 @@ typedef NS_OPTIONS(NSUInteger, MKU_COPY_OPTION) {
 
 /** @brief Returns YES if all given properties have null values */
 - (BOOL)allIsNullWithProperties:(NSSet<NSString *> *)properties;
+
++ (BOOL)haveSameNullity:(NSObject *)obj1 asObject:(NSObject *)obj2;
 
 + (NSDictionary *)attributePropertyNamesOfClass:(Class)objectClass;
 + (Class)classOfProperty:(NSString *)name forObjectClass:(Class)objectClass;
@@ -55,21 +63,15 @@ typedef NS_OPTIONS(NSUInteger, MKU_COPY_OPTION) {
 - (instancetype)initWithObject:(NSObject *)object ancestors:(BOOL)ancestors baseClass:(Class)baseClass;
 - (instancetype)initWithObject:(NSObject *)object properties:(NSSet<NSString *> *)properties;
 + (instancetype)objectWithObject:(NSObject *)object ancestors:(BOOL)ancestors baseClass:(Class)baseClass;
+
 - (void)resetIsDefaults:(BOOL)isDefaults;
 - (void)resetIsDefaults:(BOOL)isDefaults excludeProperties:(NSSet<NSString *> *)excluding;
+
 - (void)setValuesOfObject:(NSObject *)object ancestors:(BOOL)ancestors baseClass:(Class)baseClass;
 - (void)setValuesOfObject:(NSObject *)object properties:(NSSet<NSString *> *)properties;
 
-- (id)MKUCopyWithZone:(NSZone *)zone excludeProperties:(NSSet<NSString *> *)excluding;
-- (id)MKUCopyWithZone:(NSZone *)zone baseClass:(Class)baseClass option:(MKU_COPY_OPTION)option;
-- (id)MKUCopyWithZone:(NSZone *)zone baseClass:(Class)baseClass option:(MKU_COPY_OPTION)option excludeProperties:(NSArray<NSString *> *)excluding;
-- (id)MKUCopyWithZone:(NSZone *)zone properties:(NSSet<NSString *> *)properties;
 
-- (void)MKUInitWithCoder:(NSCoder *)aDecoder properties:(NSSet<NSString *> *)properties;
-
-- (void)MKUEncodeWithCoder:(NSCoder *)aCoder properties:(NSSet<NSString *> *)properties;
-
-- (NSUInteger)MKHashWithProperties:(NSArray<NSString *> *)properties;
+- (NSUInteger)MKUHashWithProperties:(NSSet<NSString *> *)properties;
 
 /** @brief Includes dynamiclly added properties as in protocols */
 + (NSSet<NSString *> *)propertyNamesOfClass:(Class)objectClass;
@@ -83,7 +85,6 @@ typedef NS_OPTIONS(NSUInteger, MKU_COPY_OPTION) {
 /** @brief Excludes dynamiclly added properties as in protocols */
 + (NSDictionary *)ivarAttributesOfClass:(Class)objectClass;
 
-+ (BOOL)haveSameNullity:(NSObject *)obj1 asObject:(NSObject *)obj2;
 
 - (void)processText:(NSString *)text condition:(BOOL)condition object:(NSString *)object action:(SEL)action;
 

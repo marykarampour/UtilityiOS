@@ -20,8 +20,8 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
 
 @implementation MKUModel
 
-+ (StringArr *)propertyNames {
-    StringArr *properties = objc_getAssociatedObject(self, &PROPERTIES_KEY);
++ (NSSet<NSString *> *)propertyNames {
+    NSSet<NSString *> *properties = objc_getAssociatedObject(self, &PROPERTIES_KEY);
     if (!properties) {
         properties = [self initializePropertyNames];
         objc_setAssociatedObject(self, &PROPERTIES_KEY, properties, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -47,8 +47,8 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
     return propertyClassNames;
 }
 
-+ (StringArr *)dateProperties {
-    StringArr *properties = objc_getAssociatedObject(self, &DATE_PROPERTIES_KEY);
++ (NSSet<NSString *> *)dateProperties {
+    NSSet<NSString *> *properties = objc_getAssociatedObject(self, &DATE_PROPERTIES_KEY);
     if (!properties) {
         properties = [self initializeDatePropertyNames];
         objc_setAssociatedObject(self, &DATE_PROPERTIES_KEY, properties, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
@@ -93,7 +93,7 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
 
 - (instancetype)initWithStringsDictionary:(NSDictionary *)values mapper:(JSONKeyMapper *)mapper {
     if (self = [super init]) {
-        NSArray *names = [[self class] propertyNames];
+        NSSet *names = [[self class] propertyNames];
         for (NSString *name in names) {
             NSString *propertyName = [self.class convertToJson:name];
             
@@ -180,27 +180,28 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
     return dict;
 }
 
-+ (StringArr *)initializePropertyNames {
-    if ([self usingAncestors]) {
-        MStringArr *arr = [[MStringArr alloc] init];
-        Class class = self;
-        while (class != [MKUModel class]) {
-            [arr addObjectsFromArray:[self propertyNamesOfClass:class]];
-            class = [class superclass];
++ (NSSet<NSString *> *)initializePropertyNames {
+    MStringSet *arr = [[MStringSet alloc] init];
+    Class class = self;
+    Class finalClass = [self usingAncestors] ? [MKUModel class] : [self superclass];
+    while (class != finalClass && class != [NSObject class]) {
+        if ([self usingDynamicProperties]) {
+            [arr addObjectsFromArray:[[self propertyNamesOfClass:class] allObjects]];
         }
-        return arr;
+        else {
+            [arr addObjectsFromArray:[[self ivarNamesOfClass:class] allObjects]];
+        }
+        class = [class superclass];
     }
-    else {
-        return [self propertyNamesOfClass:self];
-    }
+    return arr;
 }
 
-+ (StringArr *)initializeDatePropertyNames {
++ (NSSet<NSString *> *)initializeDatePropertyNames {
     if ([self usingAncestors]) {
-        MStringArr *arr = [[MStringArr alloc] init];
+        NSMutableSet<NSString *> *arr = [[NSMutableSet<NSString *> alloc] init];
         Class class = self;
         while (class != [MKUModel class]) {
-            [arr addObjectsFromArray:[self datePropertiesForClass:class]];
+            [arr addObjectsFromArray:[[self datePropertiesForClass:class] allObjects]];
             class = [class superclass];
         }
         return arr;
@@ -210,9 +211,9 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
     }
 }
 
-+ (StringArr *)datePropertiesForClass:(Class)className {
-    NSArray *names = [className propertyNames];
-    MStringArr *arr = [[MStringArr alloc] init];
++ (NSSet<NSString *> *)datePropertiesForClass:(Class)className {
+    NSSet *names = [className propertyNames];
+    NSMutableSet<NSString *> *arr = [[NSMutableSet<NSString *> alloc] init];
 
     for (NSString *name in names) {
         
@@ -238,21 +239,14 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
 
 #pragma mark - key mapper
 
-- (NSDictionary *)toDictionaryWithExcludedKeys {
-    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    NSArray *excluded = [[self class] excludedKeys];
-    [[self toDictionary] enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        if (![excluded containsObject:key]) {
-            [dict setObject:obj forKey:key];
-        }
-    }];
+- (NSDictionary *)toDictionaryWithExcludedKeys:(StringSet *)keys {
+    NSMutableDictionary *dict = [[self toDictionary] mutableCopy];
+    [dict removeObjectsForKeys:[keys allObjects]];
     return dict;
 }
 
 - (NSDictionary *)toDictionary {
-    NSMutableDictionary *dict = [[super toDictionary] mutableCopy];
-    [dict removeObjectsForKeys:[self.class excludedKeys]];
-    return dict;
+    return [self toDictionaryWithExcludedKeys:[[self class] excludedKeys]];
 }
 
 + (JSONKeyMapper *)keyMapper {
@@ -295,7 +289,7 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
     unsigned int count = 0;
     objc_property_t *properties = class_copyPropertyList(class, &count);
     NSDictionary *customNames = [self customKeyValueDict];
-    NSArray *excluded = [[self class] excludedKeys];
+    NSSet *excluded = [[self class] excludedKeys];
     
     for (unsigned int i=0; i<count; i++) {
         NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
@@ -331,80 +325,17 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
     return formatter;
 }
 
-#pragma mark - override NSObject
-
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super init]) {
-        [self MKUInitWithCoder:aDecoder baseClass:[MKUModel class]];
-    }
-    return self;
-}
-
-- (void)encodeWithCoder:(NSCoder *)aCoder {
-    [self MKUEncodeWithCoder:aCoder baseClass:[MKUModel class]];
-}
-
-- (id)copyWithZone:(NSZone *)zone {
-    return [self MKUCopyWithZone:zone baseClass:[MKUModel class]];
-}
-
-- (BOOL)isEqual:(id)object {
-    return [self MKUIsEqual:object properties:self.class.propertyNames];
-}
-
-- (NSUInteger)hash {
-    return [self MKUHash];
-}
-
-- (NSString *)titleText {
-    return @"";
-}
-
-- (void)copyValues:(__kindof MKUModel *)object {
-    unsigned int count = 0;
-    objc_property_t *properties = class_copyPropertyList([object class], &count);
-    
-    for (unsigned int i=0; i<count; i++) {
-        NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
-        if ([self respondsToSelector:NSSelectorFromString(name)] && [object valueForKey:name]) {
-            [self setValue:[object valueForKey:name] forKey:name];
-        }
-    }
-    free(properties);
-}
-
-- (void)setValuesOfObject:(__kindof MKUModel *)object ancestors:(BOOL)ancestors {
-    MStringArr *arr = [[NSMutableArray alloc] init];
-    MKUModel *currentObject = object;
-    Class currentClass = [currentObject class];
-    if (ancestors) {
-        while (currentClass != [MKUModel class]) {
-            [arr addObjectsFromArray:[NSObject propertyNamesOfClass:currentClass]];
-            currentClass = [currentClass superclass];
-        }
-    }
-    else {
-        [arr addObjectsFromArray:[NSObject propertyNamesOfClass:currentClass]];
-    }
-    for (NSString *name in arr) {
-        id value = [object valueForKey:name];
-        if ([self respondsToSelector:NSSelectorFromString(name)]) {
-            [self setValue:value forKey:name];
-        }
-    }
-}
-
 #pragma mark - MKUModelCustomKeysProtocol
 
 + (BOOL)usingAncestors {
     return NO;
 }
 
-+ (StringArr *)excludedKeys {
++ (NSSet<NSString *> *)excludedKeys {
     return nil;
 }
 
-+ (StringArr *)customKeys {
++ (NSSet<NSString *> *)customKeys {
     return nil;
 }
 
@@ -415,18 +346,48 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
 + (DictStringString *)customKeyValueDict {
     MDictStringString *dict = [[MDictStringString alloc] init];
     StringFormat format = [self customFormat];
-    StringArr *keys = [self customKeys];
+    NSSet<NSString *> *keys = [self customKeys];
     for (NSString *name in keys) {
         [dict setObject:[name format:format] forKey:name];
     }
     return dict;
 }
 
++ (BOOL)usingDynamicProperties {
+    return NO;
+}
+
++ (StringSet *)excludedProperties {
+    return nil;
+}
+
++ (StringSet *)excludedKeysWithAncestors {
+    MStringSet *arr = [[MStringSet alloc] init];
+    Class class = self;
+    Class finalClass = [self usingAncestors] ? [MKUModel class] : [self superclass];
+    while (class != finalClass && class != [NSObject class]) {
+        [arr addObjectsFromArray:[[class excludedKeys] allObjects]];
+        class = [class superclass];
+    }
+    return arr;
+}
+
++ (StringSet *)excludedPropertiesWithAncestors {
+    MStringSet *arr = [[MStringSet alloc] init];
+    Class class = self;
+    Class finalClass = [self usingAncestors] ? [MKUModel class] : [self superclass];
+    while (class != finalClass && class != [NSObject class]) {
+        [arr addObjectsFromArray:[[class excludedProperties] allObjects]];
+        class = [class superclass];
+    }
+    return arr;
+}
+
 
 #pragma mark - search predicate
 
 + (NSArray<Class> *)searchPredicateClasses {
-    StringArr *properties = [self searchPredicatePropertyNames];
+    NSSet<NSString *> *properties = [self searchPredicatePropertyNames];
     
     if (properties.count == 0) return @[self];
 
@@ -439,7 +400,7 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
     return set;
 }
 
-+ (StringArr *)searchPredicatePropertyNames {
++ (NSSet<NSString *> *)searchPredicatePropertyNames {
     return nil;
 }
 
@@ -448,8 +409,7 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
     NSArray<Class> *searchClasses = [self searchPredicateClasses];
     
     for (Class cls in searchClasses) {
-
-        NSArray *keys = [cls searchPredicateKeys];
+        NSSet *keys = [cls searchPredicateKeys];
         
         for (NSString *key in keys) {
             NSString *name = [key copy];
@@ -467,8 +427,8 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
     return dict;
 }
 
-+ (StringArr *)searchPredicateKeys {
-    return @[];
++ (NSSet<NSString *> *)searchPredicateKeys {
+    return [NSSet set];
 }
 
 #pragma mark - utility
@@ -499,6 +459,158 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
 + (BOOL)propertyIsEnum:(NSString *)name {
     NSString *type = [[self.class propertyClassNames] objectForKey:name];
     return [type characterAtIndex:0] == 'Q';
+}
+
+- (NSString *)nameForProperty:(NSString *)property {
+    return property;
+}
+
++ (NSString *)tagName {
+    return NSStringFromClass(self);
+}
+
+- (NSString *)stringValue {
+    NSData *data = [NSJSONSerialization dataWithJSONObject:[self toDictionary] options:0 error:nil];
+    return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+}
+
++ (instancetype)objectWithJSON:(NSString *)string {
+    NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
+    if (data) {
+        NSDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        return [[self alloc] initWithStringsDictionary:map];
+    }
+    return nil;
+}
+
+#pragma mark - Helpers
+
++ (NSDictionary *)propertyAttributes {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    Class class = self;
+    Class finalClass = [self usingAncestors] ? [MKUModel class] : [self superclass];
+    while (class != finalClass && class != [NSObject class]) {
+        if ([self usingDynamicProperties]) {
+            [dict addEntriesFromDictionary:[self propertyAttributesOfClass:class]];
+        }
+        else {
+            [dict addEntriesFromDictionary:[self ivarAttributesOfClass:class]];
+        }
+        class = [class superclass];
+    }
+    return dict;
+}
+
+- (BOOL)propertyExists:(NSString *)key {
+    NSString *setter = [NSString stringWithFormat:@"set%@%@:", [[key substringToIndex:1] capitalizedString], [key substringFromIndex:1]];
+    
+    if ([self respondsToSelector:NSSelectorFromString(setter)]) {
+        return YES;
+    }
+    return NO;
+}
+
+- (BOOL)propertyIsBool:(NSString *)propertyName {
+    id value = [self valueForKey:propertyName];
+    NSString *attribute = [[self class] propertyAttributes][propertyName];
+    
+    return (value && ([attribute characterAtIndex:1] == 'B' || [attribute characterAtIndex:1] == 'c') && ([value isEqualToNumber:@0] || [value isEqualToNumber:@1]));
+}
+
+- (BOOL)datePropertyIsUTC:(NSString *)propertyName {
+    return NO;
+}
+
+- (NSDictionary *)varNamesWithSingleLenght:(NSUInteger)lenght {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    unsigned int count = 0;
+    objc_property_t *properties = class_copyPropertyList([self class], &count);
+    for (unsigned int i=0; i<count; i++) {
+        NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
+        NSString *str = [@" " multipliedStringOfLenght:lenght];
+        str = [str stringByReplacingCharactersInRange:NSMakeRange(0, name.length) withString:name];
+        [dict setValue:[self valueForKey:name] forKey:str];
+    }
+    return dict;
+}
+
+#pragma mark - utility
+
+- (NSString *)titleText {
+    return @"";
+}
+
+- (void)copyValues:(__kindof MKUModel *)object {
+    unsigned int count = 0;
+    objc_property_t *properties = class_copyPropertyList([object class], &count);
+    
+    for (unsigned int i=0; i<count; i++) {
+        NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
+        if ([self respondsToSelector:NSSelectorFromString(name)] && [object valueForKey:name]) {
+            [self setValue:[object valueForKey:name] forKey:name];
+        }
+    }
+    free(properties);
+}
+
+- (void)setValuesOfObject:(__kindof MKUModel *)object ancestors:(BOOL)ancestors {
+    NSMutableSet<NSString *> *arr = [[NSMutableSet alloc] init];
+    MKUModel *currentObject = object;
+    Class currentClass = [currentObject class];
+    if (ancestors) {
+        while (currentClass != [MKUModel class]) {
+            [arr addObjectsFromArray:[[NSObject propertyNamesOfClass:currentClass] allObjects]];
+            currentClass = [currentClass superclass];
+        }
+    }
+    else {
+        [arr addObjectsFromArray:[[NSObject propertyNamesOfClass:currentClass] allObjects]];
+    }
+    for (NSString *name in arr) {
+        id value = [object valueForKey:name];
+        if ([self respondsToSelector:NSSelectorFromString(name)]) {
+            [self setValue:value forKey:name];
+        }
+    }
+}
+
+#pragma mark - override NSObject
+
+- (instancetype)initWithCoder:(NSCoder *)aDecoder {
+    if (self = [super init]) {
+        if ([self.class usingAncestors])
+            [self MKUInitWithCoder:aDecoder properties:[self.class propertyNames]];
+        [self MKUInitWithCoder:aDecoder];
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    if ([self.class usingAncestors])
+        [self MKUEncodeWithCoder:aCoder properties:[self.class propertyNames]];
+    [self MKUEncodeWithCoder:aCoder];
+}
+
+- (id)copyWithZone:(NSZone *)zone {
+    if ([self.class usingAncestors])
+        return [self MKUCopyWithZone:zone properties:[self.class propertyNames]];
+    return [self MKUCopyWithZone:zone];
+}
+
+- (BOOL)isEqual:(id)object {
+    
+    StringSet *propertyNames = [self.class propertyNames];
+    MStringSet *arr = [NSMutableSet setWithSet:propertyNames];
+    StringSet *excluded = [self.class excludedPropertiesWithAncestors];
+    
+    for (NSString *name in excluded) {
+        [arr removeObject:name];
+    }
+    return [self MKUIsEqual:object properties:arr];
+}
+
+- (NSUInteger)hash {
+    return [self MKUHashWithProperties:[self.class propertyNames]];
 }
 
 @end
@@ -564,4 +676,3 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
 }
 
 @end
-

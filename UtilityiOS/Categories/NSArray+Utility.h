@@ -1,6 +1,6 @@
 //
 //  NSArray+Utility.h
-//  KaChing
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2020-12-05.
 //  Copyright © 2020 Prometheus Software. All rights reserved.

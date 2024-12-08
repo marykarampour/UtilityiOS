@@ -195,6 +195,10 @@
     return [UIImage imageNamed:@""];
 }
 
++ (UIColor *)defaultSectionHeaderColor {
+    return [UIColor colorWithRed:232/255.0f green:233/255.0f blue:237/255.0f alpha:1.0f];
+}
+
 #pragma mark - text
 
 + (UIColor *)textDefaultColor {

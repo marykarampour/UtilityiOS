@@ -1,6 +1,6 @@
 //
 //  NSObject+ProcessModel.m
-//  KaChing
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2020-11-29.
 //  Copyright © 2020 Prometheus Software. All rights reserved.

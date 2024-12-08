@@ -1,6 +1,6 @@
 //
-//  MKUCollapsableSectionsTableViewController.h
-//  KaChing-v2
+//  MKUCollapsingSectionsTableViewController.h
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2018-01-17.
 //  Copyright © 2018 BHS Consultants. All rights reserved.
@@ -8,7 +8,7 @@
 
 #import "MKUTableViewController.h"
 #import "MKUTableViewSection.h"
-#import "MKUButtonView.h"
+#import "MKUButtonLabelView.h"
 #import "MKUPair.h"
 
 #define STATE_EXPANDED  YES
@@ -35,18 +35,19 @@
 
 - (NSUInteger)numberOfRowsInSectionWhenExpanded:(NSUInteger)section;
 /** @brief return nil if no header is needed or if the default for collapsable setions should be used */
-- (__kindof MKUButtonView *)viewObjectForHeaderInSection:(NSInteger)section;
-- (__kindof MKUButtonView *)viewObjectForHeaderInCollapsableSection:(NSInteger)section;
+- (__kindof MKUButtonLabelView *)viewObjectForHeaderInSection:(NSInteger)section;
+- (__kindof MKUButtonLabelView *)viewObjectForHeaderInCollapsableSection:(NSInteger)section;
 /** @brief return nil if no header is needed or if the default for collapsable setions should be used */
 - (UIView *)viewForHeaderInSection:(NSInteger)section;
 - (UIView *)viewForHeaderInCollapsableSection:(NSInteger)section;
 /** @brief Call super first
  @note Never call - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section in subclass */
-- (void)customizeViewForHeader:(__kindof MKUButtonView *)header inSection:(__kindof MKUTableViewSection *)sect section:(NSInteger)section;
+- (void)customizeViewForHeader:(__kindof MKUButtonLabelView *)header inSection:(__kindof MKUTableViewSection *)sect section:(NSInteger)section;
 
 @end
 
-@interface MKUCollapsableSectionsTableViewController : MKUTableViewController <MKUCollapsableSectionsProtocol, MKUButtonProtocol>
+__deprecated
+@interface MKUCollapsingSectionsTableViewController : MKUTableViewController <MKUCollapsableSectionsProtocol, MKUButtonProtocol>
 
 /** @brief Key is the indexpath of section, value is a bool indicating if the section is collapsable
  @code
@@ -82,10 +83,10 @@
 - (MKUTableViewSection *)sectionObjectForIndex:(NSUInteger)section;
 
 /** @brief Returns the header stored in headers or creates new if doesn't exist */
-- (__kindof MKUButtonView *)headerViewForSection:(NSUInteger)section;
+- (__kindof MKUButtonLabelView *)headerViewForSection:(NSUInteger)section;
 
 /** @brief Returns the header stored in headers or creates new if doesn't exist */
-- (__kindof MKUButtonView *)headerViewForSectionObject:(__kindof MKUTableViewSection *)sect;
+- (__kindof MKUButtonLabelView *)headerViewForSectionObject:(__kindof MKUTableViewSection *)sect;
 
 /** @brief This method triggers a collapsing of the section programmatically */
 - (void)performUpdateHeaderForSection:(MKUTableViewSection *)sect section:(NSUInteger)section;

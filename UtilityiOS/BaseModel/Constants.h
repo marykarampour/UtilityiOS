@@ -166,6 +166,12 @@ typedef NS_ENUM(NSUInteger, MKU_VIEW_ALIGNMENT_TYPE) {
     MKU_VIEW_ALIGNMENT_TYPE_VERTICAL
 };
 
+typedef NS_ENUM(NSUInteger, MKU_IMAGE_TITLE_BORDER_STYLE) {
+    MKU_IMAGE_TITLE_BORDER_STYLE_NONE,
+    MKU_IMAGE_TITLE_BORDER_STYLE_IMAGE,
+    MKU_IMAGE_TITLE_BORDER_STYLE_ALL
+};
+
 typedef NS_ENUM(NSUInteger, MKU_ACTION_ALERT_TYPE) {
     MKU_ACTION_ALERT_TYPE_OK,
     MKU_ACTION_ALERT_TYPE_YESNO,
@@ -196,7 +202,7 @@ typedef NS_OPTIONS(NSUInteger, MKU_VIEW_POSITION) {
 };
 
 typedef NS_ENUM(NSUInteger, MKU_UI_TYPE) {
-    MKU_UI_TYPE_IPOD,
+    MKU_UI_TYPE_IPHONE,
     MKU_UI_TYPE_IPAD
 };
 
@@ -205,6 +211,14 @@ typedef NS_ENUM(NSUInteger, MKU_APP_TARGET_TYPE) {
     MKU_APP_TARGET_TYPE_ENTERPRISE
 };
 
+typedef NS_ENUM(NSUInteger, MKU_VIEW_STYLE) {
+    MKU_VIEW_STYLE_PLAIN,
+    MKU_VIEW_STYLE_BORDER,
+    MKU_VIEW_STYLE_ROUND_CORNERS
+};
+
+typedef NSSet<NSString *>                                       StringSet;
+typedef NSMutableSet<NSString *>                                MStringSet;
 
 typedef NSArray<NSString *>                                     StringArr;
 typedef NSMutableArray<NSString *>                              MStringArr;
@@ -362,6 +376,7 @@ typedef NS_ENUM(NSUInteger, DATE_FORMAT_STYLE) {
 + (CGFloat)DefaultRowHeight;
 + (CGFloat)ExtendedRowHeight;
 + (CGFloat)TableSectionHeaderHeight;
++ (CGFloat)TableSectionHeaderMediumHeight;
 + (CGFloat)TableSectionHeaderShortHeight;
 + (CGFloat)TableSectionFooterHeight;
 + (CGFloat)TableFooterHeight;
@@ -388,6 +403,7 @@ typedef NS_ENUM(NSUInteger, DATE_FORMAT_STYLE) {
 + (CGFloat)Subsection_Left_Spacing;
 + (CGFloat)DatePickerPopOverHeight;
 + (CGFloat)DatePickerCalendarHeight;
++ (CGFloat)ButtonChevronSize;
 + (CGSize)SpinnerSize;
 + (CGSize)DateViewControllerPopoverSize;
 + (CGSize)DateViewControllerCalPopoverSize;
@@ -486,6 +502,11 @@ typedef NS_ENUM(NSUInteger, DATE_FORMAT_STYLE) {
 + (UIEdgeInsets)safeAreaInsets;
 + (CGFloat)safeAreaHeight;
 + (CGFloat)bottomSafeAreaHeight;
++ (NSDictionary *)appVersionDict;
++ (NSString *)appVersion;
++ (NSString *)appVersionBuild;
++ (CGFloat)detailMinScreenWidth;
++ (MKU_UI_TYPE)UIType;
 
 #pragma mark - Push Notification
 
@@ -574,6 +595,17 @@ typedef NS_ENUM(NSUInteger, DATE_FORMAT_STYLE) {
 #pragma mark - methods and actions
 
 + (void)callPhoneNumber:(NSString *)num;
++ (void)clearTempDirectory;
++ (void)copyToClipboard:(NSString *)text;
++ (void)emailToAddress:(NSString *)text;
+
+#pragma mark - biometrics
+
++ (BOOL)canAutentiacteWithBiometrics;
++ (BOOL)touchIDIsAvaialable;
++ (BOOL)faceIDIsAvaialable;
++ (NSString *)bioMetricName;
++ (void)autentiacteWithBiometrics:(void (^)(BOOL success, NSError * _Nullable error))completion;
 
 @end
 

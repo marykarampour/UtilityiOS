@@ -1,6 +1,6 @@
 //
 //  NSString+AttributedText.m
-//  KaChing-v2
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2018-02-01.
 //  Copyright © 2018 BHS Consultants. All rights reserved.
@@ -11,11 +11,12 @@
 
 typedef NS_OPTIONS(NSUInteger, MKU_LABEL_ATTRIBUTES_TYPE) {
     MKU_LABEL_ATTRIBUTES_TYPE_NONE          = 0,
-    MKU_LABEL_ATTRIBUTES_TYPE_PLACEHOLDER   = 1 << 0,
-    MKU_LABEL_ATTRIBUTES_TYPE_VALUE         = 1 << 1,
+    MKU_LABEL_ATTRIBUTES_TYPE_TITLE         = 1 << 0,
+    MKU_LABEL_ATTRIBUTES_TYPE_PLACEHOLDER   = 1 << 1,
+    MKU_LABEL_ATTRIBUTES_TYPE_VALUE         = 1 << 2,
     MKU_LABEL_ATTRIBUTES_TYPE_SUBVALUE      = 1 << 3,
-    MKU_LABEL_ATTRIBUTES_TYPE_ATTR_VALUE    = 1 << 5,
-    MKU_LABEL_ATTRIBUTES_TYPE_ATTR_SUBVALUE = 1 << 6
+    MKU_LABEL_ATTRIBUTES_TYPE_ATTR_VALUE    = 1 << 4,
+    MKU_LABEL_ATTRIBUTES_TYPE_ATTR_SUBVALUE = 1 << 5
 };
 
 @implementation MKUStringAttributes
@@ -115,6 +116,10 @@ typedef NS_OPTIONS(NSUInteger, MKU_LABEL_ATTRIBUTES_TYPE) {
 
 @end
 
+@interface MKULabelAttributes_0 : MKULabelAttributes
+
+@end
+
 @interface MKULabelAttributes_1 : MKULabelAttributes
 
 @end
@@ -148,6 +153,22 @@ typedef NS_OPTIONS(NSUInteger, MKU_LABEL_ATTRIBUTES_TYPE) {
 @end
 
 @interface MKULabelAttributes_5 : MKULabelAttributes
+
+@end
+
+@implementation MKULabelAttributes_0
+
+- (CGFloat)heightForWidth:(CGFloat)width {
+    return [self heightForWidth:width text:self.title] + [Constants TableCellLineHeight];
+}
+
+- (void)setAttributedTitlesForLabel:(UILabel *)label sublabel:(UILabel *)sublabel {
+    label.font = [AppTheme mediumBoldLabelFont];
+    label.text = self.title;
+    label.textAlignment = NSTextAlignmentCenter;
+    label.backgroundColor = [UIColor redColor];
+    sublabel.text = nil;
+}
 
 @end
 
@@ -333,8 +354,8 @@ typedef NS_OPTIONS(NSUInteger, MKU_LABEL_ATTRIBUTES_TYPE) {
     
     MKU_LABEL_ATTRIBUTES_TYPE type = MKU_LABEL_ATTRIBUTES_TYPE_NONE;
     
-    if (0 < placeholder.length && value.length == 0 && subvalue.length == 0) {
-        type = MKU_LABEL_ATTRIBUTES_TYPE_PLACEHOLDER;
+    if ((0 < placeholder.length || 0 < title.length) && value.length == 0 && subvalue.length == 0) {
+        type = 0 < placeholder.length ? MKU_LABEL_ATTRIBUTES_TYPE_PLACEHOLDER : MKU_LABEL_ATTRIBUTES_TYPE_TITLE;
     }
     else {
         if (0 < value.length) {
@@ -368,7 +389,10 @@ typedef NS_OPTIONS(NSUInteger, MKU_LABEL_ATTRIBUTES_TYPE) {
         }
     }
     
-    if (type & MKU_LABEL_ATTRIBUTES_TYPE_PLACEHOLDER) {
+    if (type & MKU_LABEL_ATTRIBUTES_TYPE_TITLE) {
+        self = [[MKULabelAttributes_0 alloc] init];
+    }
+    else if (type & MKU_LABEL_ATTRIBUTES_TYPE_PLACEHOLDER) {
         self = [[MKULabelAttributes_1 alloc] init];
     }
     else if (type & MKU_LABEL_ATTRIBUTES_TYPE_VALUE) {

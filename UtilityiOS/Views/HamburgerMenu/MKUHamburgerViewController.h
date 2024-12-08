@@ -1,14 +1,14 @@
 //
 //  MKUHamburgerViewController.h
-//  KaChing-v2
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2018-04-20.
 //  Copyright © 2018 BHS Consultants. All rights reserved.
 //
 
-#import "MKUMenuViewController.h"
+#import "MKUCollapsingMenuViewController.h"
 
-@interface MKUHamburgerViewController : MKUMenuViewController
+@interface MKUHamburgerViewController : MKUCollapsingMenuViewController
 
 @property (nonatomic, weak) __kindof UIViewController *presentingVC;
 

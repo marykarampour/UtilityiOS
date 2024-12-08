@@ -1,18 +1,16 @@
 //
 //  MKUCollectionView.h
-//  KaChing-v2
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2018-01-31.
 //  Copyright © 2018 BHS Consultants. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "MKUCellContentController.h"
-#import "MKUDateRange.h"
+#import <UIKit/UIKit.h>
 
-@class MKUHorizontalCollectionViewCell;
+#pragma mark - cell
 
-@interface MKUCollectionViewAttributes : UICollectionViewFlowLayout <NSCopying>
+@interface MKUCollectionViewLayoutAttributes : UICollectionViewFlowLayout <NSCopying>
 
 @property (nonatomic, assign) Class controllerClass;
 @property (nonatomic, assign) Class cellClass;
@@ -20,29 +18,62 @@
 
 @end
 
-
 @interface MKUCollectionViewCell : UICollectionViewCell
 
-@property (nonatomic, strong) MKUCellContentController *cellController;
+@property (nonatomic, strong) UIColor *activeColor;
+@property (nonatomic, strong) UIColor *inactiveColor;
 
 + (NSString *)identifier;
 + (CGSize)estimatedSize;
+- (void)setActive:(BOOL)active;
 
 @end
 
+@interface MKUCollectionViewHeaderAttributes : NSObject
+
+@property (nonatomic, strong) UIColor *backgroundColor;
+@property (nonatomic, strong) UIColor *textColor;
+@property (nonatomic, strong) UIColor *borderColor;
+@property (nonatomic, strong) UIFont *font;
+@property (nonatomic, assign) UIEdgeInsets insets;
+
+@end
+
+@protocol MKUCollectionHeaderViewProtocol <NSObject>
+
+@required
+/** @brief Subclass must implement to constraint title label and other views.
+ Default wil constraint sides with insets from MKUCollectionViewHeaderAttributes */
+- (void)constraintViews;
+
+@end
+
+@interface MKUCollectionHeaderView : UICollectionReusableView <MKUCollectionHeaderViewProtocol>
+
+@property (nonatomic, strong, readonly) UILabel *textLabel;
+@property (nonatomic, strong) UIColor *borderColor;
+
++ (NSString *)identifier;
+
+@end
+
+@interface MKUVerticalCollectionHeaderView : MKUCollectionHeaderView
+
+@end
+
+#pragma mark - view controller
 
 @interface MKUCollectionView : UICollectionView
 
 + (NSString *)identifier;
-- (instancetype)initWithCollectionViewAttributes:(MKUCollectionViewAttributes *)attributes;
+- (instancetype)initWithCollectionViewAttributes:(MKUCollectionViewLayoutAttributes *)attributes;
 - (void)reload;
 - (void)reloadWithCompletion:(void (^)(void))completion;
 
 - (NSIndexPath *)indexPathForFirstItem;
-- (MKURange *)indexRangeForVisibleItems;
+- (NSRange)indexRangeForVisibleItems;
 
 @end
-
 
 @protocol MKUCollectionViewProtocol <NSObject>
 
@@ -50,11 +81,6 @@
 - (__kindof MKUCollectionViewCell *)cellForItemAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
-
-@interface MKUVerticalCollectionViewCell : MKUCollectionViewCell
-
-@end
-
 
 @interface MKUCollectionViewController : NSObject <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, MKUCollectionViewProtocol>
 
@@ -70,56 +96,76 @@
 
 @end
 
+@class MKUSingleCollectionViewController;
+
+@protocol MKUSingleCollectionViewDelegate <NSObject>
+
+@optional
+- (void)singleCollectionViewController:(__kindof MKUSingleCollectionViewController *)controller didSelectItemAtIndexPath:(NSIndexPath *)indexPath;
+
+@end
+
+@protocol MKUSingleCollectionViewProtocol <NSObject>
+
+@optional
+- (NSString *)titleForHeader:(MKUCollectionHeaderView *)header inSection:(NSUInteger)section;
+
+/** @brief Default is width = [self view].frame.size.width-self.headerAttributes.insets.left-self.headerAttributes.insets.right and height = 44.0 for MKUVerticalCollectionViewController */
+- (CGSize)sizeForHeaderInSection:(NSInteger)section;
+
+/** It is called when collectionView:didSelectItemAtIndexPath is called. singleCollectionViewController:didSelectItemAtIndexPath is called afterwards **/
+- (void)didSelectItemAtIndexPath:(NSIndexPath *)indexPath;
+
+@end
+
 /** @brief subclass allows for only one view, the view can be replaced by another view, it can't be removed */
-@interface MKUSingleCollectionViewController : MKUCollectionViewController
-//TODO: temporary property
-@property (nonatomic, assign) NSUInteger index;
-/** @breif this property is used in loadData method, e.g object can be a date, used to retrieve items */
+@interface MKUSingleCollectionViewController <__covariant ObjectType : NSObject<NSCopying> *> : MKUCollectionViewController <MKUSingleCollectionViewProtocol>
+
+@property (nonatomic, assign) NSInteger selectedIndex;
+@property (nonatomic, assign) NSUInteger maxItemCount;
+@property (nonatomic, strong) NSString *title;
+
+/** @brief Used in loadData method, e.g object can be a date, used to retrieve items */
 @property (nonatomic, strong) id object;
+@property (nonatomic, strong) NSMutableArray<ObjectType> *items;
 @property (nonatomic, strong) NSIndexPath *currentFirstItem;
-@property (nonatomic, strong) MKUCollectionViewAttributes *attributes;
+@property (nonatomic, strong) MKUCollectionViewLayoutAttributes *attributes;
+@property (nonatomic, strong) MKUCollectionViewHeaderAttributes *headerAttributes;
 
+@property (nonatomic, weak) id<MKUSingleCollectionViewDelegate> delegate;
+
+- (instancetype)initWithAttributes:(MKUCollectionViewLayoutAttributes *)attributes;
+
+- (void)setItemsWithArray:(NSArray<ObjectType> *)items;
+/** @brief Thread-safe. */
+- (void)addItem:(ObjectType)item;
+/** @brief Thread-safe. */
+- (void)deleteItem:(ObjectType)item;
 - (MKUCollectionView *)view;
+- (void)reload;
 
 @end
 
-
-@interface MKUVerticalCollectionHeaderAttributes : NSObject
-
-@property (nonatomic, strong) UIColor *textColor;
-@property (nonatomic, strong) UIColor *borderColor;
-@property (nonatomic, strong) UIFont *font;
-
-@end
-
-@protocol MKUVerticalCollectionViewProtocol <NSObject>
+@protocol MKUVerticalCollectionViewProtocol <MKUSingleCollectionViewProtocol>
 
 @required
 - (__kindof MKUCollectionViewCell *)verticalCellForItemAtIndexPath:(NSIndexPath *)indexPath;
-- (NSString *)titleForHeaderInSection:(NSUInteger)section;
 
 @end
 
-@protocol MKUHorizontalCollectionViewProtocol <NSObject>
+@protocol MKUHorizontalCollectionViewProtocol <MKUSingleCollectionViewProtocol>
 
 @required
 - (__kindof MKUCollectionViewCell *)horizontalCellForItemAtIndexPath:(NSIndexPath *)indexPath;
 
 @end
 
-@interface MKUVerticalCollectionViewController : MKUSingleCollectionViewController <MKUVerticalCollectionViewProtocol>
-
-@property (nonatomic, assign) NSUInteger sectionCount;
-@property (nonatomic, strong) MKUVerticalCollectionHeaderAttributes *headerAttributes;
+@interface MKUVerticalCollectionViewController <__covariant ObjectType : NSObject<NSCopying> *> : MKUSingleCollectionViewController <ObjectType> <MKUVerticalCollectionViewProtocol>
 
 @end
-//TODO: this should be MKUSingleSectionCollectionViewController either vertical or horizontal
-@interface MKUHorizontalCollectionViewController : MKUSingleCollectionViewController <MKUHorizontalCollectionViewProtocol>
 
-@property (nonatomic, assign) NSUInteger itemCount;
-
-- (instancetype)initWithAttributes:(MKUCollectionViewAttributes *)attributes;
-- (void)addIdentifier:(NSString *)identifier;
+@interface MKUHorizontalCollectionViewController <__covariant ObjectType : NSObject<NSCopying> *> : MKUSingleCollectionViewController <ObjectType> <MKUHorizontalCollectionViewProtocol>
 
 @end
+
 

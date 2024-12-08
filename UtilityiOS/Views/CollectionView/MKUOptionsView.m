@@ -1,6 +1,6 @@
 //
 //  MKUOptionsView.m
-//  KaChing-v2
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2018-04-21.
 //  Copyright © 2018 BHS Consultants. All rights reserved.
@@ -81,21 +81,13 @@
 - (MKUCollectionViewCell *)cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     MKUOptionsCollectionViewCell *cell = [self optionCellForItemAtIndexPath:indexPath];
     
-    OptionObject *option = self.options[indexPath.item];
+    OptionObject *option = self.items[indexPath.item];
     [cell setIconName:option.iconName iconColor:option.iconColor title:option.title];
     return cell;
 }
 
 - (MKUOptionsCollectionViewCell *)optionCellForItemAtIndexPath:(NSIndexPath *)indexPath {
     return [self.views.firstObject dequeueReusableCellWithReuseIdentifier:[MKUOptionsCollectionViewCell identifier] forIndexPath:indexPath];
-}
-
-- (void)setOptions:(NSArray<OptionObject *> *)options {
-    _options = options;
-}
-
-- (void)loadData {
-    self.itemCount = self.options.count;
 }
 
 @end
@@ -115,7 +107,7 @@
     if (self = [super init]) {
         self.estimatedHeight = [MKUOptionsCollectionViewCell estimatedSize].height + 2*attr.verticalPadding;
         
-        MKUCollectionViewAttributes *attributes = [[MKUCollectionViewAttributes alloc] init];
+        MKUCollectionViewLayoutAttributes *attributes = [[MKUCollectionViewLayoutAttributes alloc] init];
         attributes.itemSize = CGSizeMake((attr.width-2*attr.verticalPadding)/attr.itemsPerPage, [MKUOptionsCollectionViewCell estimatedSize].height-2*attr.verticalPadding);
         attributes.minimumLineSpacing = attr.verticalPadding;
         attributes.minimumInteritemSpacing = attr.interItemSpacing;

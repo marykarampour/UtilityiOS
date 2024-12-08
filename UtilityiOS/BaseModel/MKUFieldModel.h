@@ -1,6 +1,6 @@
 //
 //  MKUFieldModel.h
-//  KaChing
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2024-11-22.
 //  Copyright © 2024 Maryam Karampour. All rights reserved.
@@ -11,7 +11,7 @@
 #import "TextFieldController.h"
 #import "MKUArrayPropertyProtocol.h"
 #import "MKUDataIntegrityProtocol.h"
-#import "MKUTableViewCellContentProtocols.h"
+#import "MKUViewContentStyleProtocols.h"
 
 @class MKUFieldModel;
 @protocol MKUFieldModelDelegate;

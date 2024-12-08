@@ -637,9 +637,8 @@ static JSONKeyMapper* globalKeyMapper = nil;
                 if (![allowedPrimitiveTypes containsObject:propertyType]) {
 
                     //type not allowed - programmer mistaken -> exception
-                    @throw [NSException exceptionWithName:@"JSONModelProperty type not allowed"
-                                                   reason:[NSString stringWithFormat:@"Property type of %@.%@ is not supported by JSONModel.", self.class, p.name]
-                                                 userInfo:nil];
+                    JMLog(@"JSONModelProperty type not allowed");
+                    JMLog(@"Property type of %@.%@ is not supported by JSONModel.", self.class, p.name);
                 }
 
             }
@@ -728,9 +727,8 @@ static JSONKeyMapper* globalKeyMapper = nil;
         //no other protocols on arrays and dictionaries
         //except JSONModel classes
         if ([value isKindOfClass:[NSArray class]]) {
-            @throw [NSException exceptionWithName:@"Bad property protocol declaration"
-                                           reason:[NSString stringWithFormat:@"<%@> is not allowed JSONModel property protocol, and not a JSONModel class.", property.protocol]
-                                         userInfo:nil];
+            JMLog(@"Bad property protocol declaration");
+            JMLog(@"<%@> is not allowed JSONModel property protocol, and not a JSONModel class.", property.protocol);
         }
         return value;
     }
@@ -1014,9 +1012,9 @@ static JSONKeyMapper* globalKeyMapper = nil;
                 } else {
                     //in this case most probably a custom property was defined in a model
                     //but no default reverse transformer for it
-                    @throw [NSException exceptionWithName:@"Value transformer not found"
-                                                   reason:[NSString stringWithFormat:@"[JSONValueTransformer %@] not found", selectorName]
-                                                 userInfo:nil];
+                    JMLog(@"Value transformer not found");
+                    JMLog(@"[JSONValueTransformer %@] not found", selectorName);
+
                     return nil;
                 }
             }

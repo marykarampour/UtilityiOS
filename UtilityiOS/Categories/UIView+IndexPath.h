@@ -1,6 +1,6 @@
 //
 //  UIView+IndexPath.h
-//  KaChing
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2020-10-20.
 //  Copyright © 2020 Prometheus Software. All rights reserved.

@@ -1,21 +1,21 @@
 //
-//  MKUCollapsableSectionsTableViewController.m
-//  KaChing-v2
+//  MKUCollapsingSectionsTableViewController.m
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2018-01-17.
 //  Copyright © 2018 BHS Consultants. All rights reserved.
 //
 
-#import "MKUCollapsableSectionsTableViewController.h"
+#import "MKUCollapsingSectionsTableViewController.h"
 #import "UIControl+IndexPath.h"
 
-@interface MKUCollapsableSectionsTableViewController ()
+@interface MKUCollapsingSectionsTableViewController ()
 
-@property (nonatomic, strong) MKUPairArray <__kindof MKUTableViewSection *, __kindof MKUButtonView *> *headers;
+@property (nonatomic, strong) MKUPairArray <__kindof MKUTableViewSection *, __kindof MKUButtonLabelView *> *headers;
 
 @end
 
-@implementation MKUCollapsableSectionsTableViewController
+@implementation MKUCollapsingSectionsTableViewController
 
 - (instancetype)init {
     return [self initWithStyle:UITableViewStyleGrouped];
@@ -73,15 +73,15 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     MKUTableViewSection *sect = [self sectionObjectForIndex:section];
-    MKUButtonView *header = [self headerViewForSection:section];
+    MKUButtonLabelView *header = [self headerViewForSection:section];
     [self customizeViewForHeader:header inSection:sect section:section];
     return header.contentView;
 }
 
-- (MKUButtonView *)headerViewForSection:(NSUInteger)section {
+- (MKUButtonLabelView *)headerViewForSection:(NSUInteger)section {
     
     MKUTableViewSection *sect = [self sectionObjectForIndex:section];
-    MKUButtonView *header = [self.headers objectForKey:sect];
+    MKUButtonLabelView *header = [self.headers objectForKey:sect];
     
     if (!header) {
         if (sect.isCollapsable) {
@@ -96,7 +96,7 @@
     return header;
 }
 
-- (MKUButtonView *)headerViewForSectionObject:(__kindof MKUTableViewSection *)sect {
+- (MKUButtonLabelView *)headerViewForSectionObject:(__kindof MKUTableViewSection *)sect {
     NSInteger index = [self.sections indexOfObject:sect];
     if (index != NSNotFound) {
         return [self headerViewForSection:index];
@@ -104,19 +104,19 @@
     return nil;
 }
 
-- (void)customizeViewForHeader:(__kindof MKUButtonView *)header inSection:(MKUTableViewSection *)sect section:(NSInteger)section {
-    if (![header isKindOfClass:[MKUButtonView class]]) return;
+- (void)customizeViewForHeader:(__kindof MKUButtonLabelView *)header inSection:(MKUTableViewSection *)sect section:(NSInteger)section {
+    if (![header isKindOfClass:[MKUButtonLabelView class]]) return;
     NSIndexPath *indexPath = [NSIndexPath indexPathWithIndex:section];
     [header setIndexPath:indexPath];
     header.delegate = self;
 }
 
-- (MKUButtonView *)viewObjectForHeaderInSection:(NSInteger)section {
-    return [[MKUButtonView alloc] initWithContentView:[self viewForHeaderInSection:section]];
+- (MKUButtonLabelView *)viewObjectForHeaderInSection:(NSInteger)section {
+    return [[MKUButtonLabelView alloc] initWithContentView:[self viewForHeaderInSection:section]];
 }
 
-- (MKUButtonView *)viewObjectForHeaderInCollapsableSection:(NSInteger)section {
-    return [[MKUButtonView alloc] initWithContentView:[self viewForHeaderInCollapsableSection:section]];
+- (MKUButtonLabelView *)viewObjectForHeaderInCollapsableSection:(NSInteger)section {
+    return [[MKUButtonLabelView alloc] initWithContentView:[self viewForHeaderInCollapsableSection:section]];
 }
 
 - (UIView *)viewForHeaderInSection:(NSInteger)section {
@@ -156,7 +156,7 @@
 - (void)updateHeaderForSection:(NSUInteger)section {
 }
 
-- (void)buttonView:(MKUButtonView *)view setSelected:(BOOL)selected {
+- (void)buttonView:(MKUButtonLabelView *)view setSelected:(BOOL)selected {
     
     NSIndexPath *path = view.backView.indexPath;
     MKUTableViewSection *sect = [self sectionObjectForIndex:path.section];

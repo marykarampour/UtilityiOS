@@ -1,6 +1,6 @@
 //
 //  MKUTableViewController.h
-//  KaChing-v2
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2018-01-15.
 //  Copyright © 2018 BHS Consultants. All rights reserved.
@@ -19,7 +19,7 @@
 #import "MKUViewControllerProtocols.h"
 #import "NSObject+NavBarButtonTarget.h"
 #import "UIViewController+UpdateBadge.h"
-#import "MKUTableViewCellContentProtocols.h"
+#import "MKUViewContentStyleProtocols.h"
 #import "MKUViewControllerTransitionProtocol.h"
 #import "MKUSingleViewTableViewHeaderFooterView.h"
 #import "UIViewController+ViewControllerTransition.h"

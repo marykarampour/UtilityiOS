@@ -1,72 +1,225 @@
 //
 //  MKUButtonView.m
-//  KaChing
+//  UtilityiOS
 //
-//  Created by Maryam Karampour on 2020-10-17.
-//  Copyright © 2020 Prometheus Software. All rights reserved.
+//  Created by Maryam Karampour on 2024-09-01.
 //
 
 #import "MKUButtonView.h"
+#import "AUAssets.h"
 #import "UIView+Utility.h"
-#import "UIControl+IndexPath.h"
+#import "NSString+AttributedText.h"
 
-@implementation MKUBackButton
-
-- (instancetype)init {
-    if (self = [super init]) {
-        self.button = [[UIButton alloc] init];
-    }
-    return self;
-}
-
-@end
+static CGFloat const PADDING = 4.0;
 
 @interface MKUButtonView ()
 
-@property (nonatomic, strong) MKUBackButton *backButton;
-@property (nonatomic, strong, readwrite) UIButton *backView;
+@property (nonatomic, strong, readwrite) UILabel *titleView;
+@property (nonatomic, strong, readwrite) UIButton *backButton;
+@property (nonatomic, strong) UIView *separatorView;
 
 @end
 
 @implementation MKUButtonView
 
-@dynamic backView;
-
 - (instancetype)init {
+    return [self initWithBadgeSize:20.0];
+}
+
+- (void)initBase {
+    
+    self.titleView = [[UILabel alloc] init];
+    self.titleView.textAlignment = NSTextAlignmentLeft;
+    self.titleView.numberOfLines = 0;
+    self.titleView.lineBreakMode = NSLineBreakByCharWrapping;
+    
+    self.backButton = [[UIButton alloc] init];
+    
+    [self addSubview:self.titleView];
+    [self addSubview:self.backButton];
+}
+
+- (void)constraintSeparator {
+    self.separatorView = [[UIView alloc] init];
+    [self addSubview:self.separatorView];
+    [self bringSubviewToFront:self.separatorView];
+    [self constraintHeight:1.0 forView:self.separatorView];
+    [self constraintSidesExcluding:NSLayoutAttributeTop view:self.separatorView];
+}
+
+- (instancetype)initWithStyle:(MKU_VIEW_STYLE)style {
     if (self = [super init]) {
-        self.backButton = [[MKUBackButton alloc] init];
-        self.backButton.container = self;
-        [self addBackView:self.backButton.button];
-        [self setActionOnContainer:@selector(switchOnOff:)];
+        [self initBase];
+        
+        [self constraintSidesForView:self.titleView insets:UIEdgeInsetsMake(PADDING, PADDING, PADDING, PADDING)];
+        [self constraintSidesForView:self.backButton];
+        
+        switch (style) {
+            case MKU_VIEW_STYLE_ROUND_CORNERS:
+                self.layer.cornerRadius = [Constants ButtonCornerRadious];
+            case MKU_VIEW_STYLE_BORDER:
+                self.layer.borderColor = [UIColor AUBlue].CGColor;
+                self.layer.borderWidth = 1.0;
+                break;
+            default:
+                [self constraintSeparator];
+                break;
+        }
+        [self removeConstraintsMask];
     }
     return self;
 }
 
-- (void)setTarget:(id)target action:(SEL)action {
-    [self.backButton.button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+- (instancetype)initWithBadgeSize:(CGFloat)size {
+    return [self initWithBadgeSize:size viewCreationHandler:^UIView *{
+        return [[UIView alloc] init];
+    }];
 }
 
-- (void)setActionOnContainer:(SEL)action {
-    [self setTarget:self.backButton.container action:action];
+- (instancetype)initWithBadgeSize:(CGFloat)size viewCreationHandler:(VIEW_CREATION_HANDLER)handler {
+    if (self = [super init]) {
+        [self initBase];
+        
+        if (0 < size && handler) {
+            self.badgeView = handler();
+            self.badgeView.contentMode = UIViewContentModeScaleAspectFit;
+            
+            [self addSubview:self.badgeView];
+            [self bringSubviewToFront:self.badgeView];
+            
+            [self constraintWidth:size forView:self.badgeView];
+            [self constraintSameWidthHeightForView:self.badgeView];
+            [self constraint:NSLayoutAttributeCenterY view:self.badgeView];
+            [self constraint:NSLayoutAttributeRight view:self.badgeView margin:-[Constants HorizontalSpacing]];
+            [self addConstraintWithItem:self.badgeView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.titleView attribute:NSLayoutAttributeRight multiplier:1.0 constant:[Constants HorizontalSpacing]/2.0];
+            [self constraint:NSLayoutAttributeLeft view:self.titleView margin:[Constants HorizontalSpacing]];
+            [self constraint:NSLayoutAttributeTop view:self.titleView];
+            [self constraint:NSLayoutAttributeBottom view:self.titleView];
+        }
+        else {
+            [self constraintSidesForView:self.titleView insets:UIEdgeInsetsMake([Constants HorizontalSpacing], [Constants HorizontalSpacing], [Constants HorizontalSpacing], [Constants HorizontalSpacing])];
+        }
+        
+        [self constraintSidesForView:self.backButton];
+        [self constraintSeparator];
+        [self removeConstraintsMask];
+    }
+    return self;
+}
+
+- (void)setSeparatorColor:(UIColor *)color {
+    self.separatorView.backgroundColor = color;
+    self.separatorView.hidden = !color;
+}
+
+- (void)addTarget:(id)target action:(SEL)action {
+    if ([target respondsToSelector:action]) {
+        [self.backButton addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+    }
+}
+
+- (void)setLabelTitle:(NSString *)title {
+    self.titleView.text = title;
 }
 
 - (void)setIndexPath:(NSIndexPath *)indexPath {
-    self.backButton.button.indexPath = indexPath;
+    self.backButton.indexPath = indexPath;
 }
 
-- (void)switchOnOff:(UIButton *)sender {
-    self.selected = !self.selected;
+- (void)setTitle:(NSString *)title subtitle:(NSString *)subtitle {
+    [MKUStringAttributes setTitle:title subtitle:subtitle forLabel:self.titleView];
 }
 
-- (void)setSelected:(BOOL)selected {
-    _selected = selected;
-    [self customizeSetSelected:selected];
+- (void)setTitle:(NSString *)title value:(NSString *)value {
+    [MKUStringAttributes setTitle:title value:value forLabel:self.titleView delimiter:kColonEmptyString];
 }
 
-- (void)customizeSetSelected:(BOOL)selected {
-    if ([self.delegate respondsToSelector:@selector(buttonView:setSelected:)]) {
-        [self.delegate buttonView:self setSelected:selected];
-    }
++ (MKUButtonView *)BlueButtonWithTitle:(NSString *)title hidden:(BOOL)hidden {
+    
+    MKUButtonView *view = [[MKUButtonView alloc] initWithStyle:MKU_VIEW_STYLE_ROUND_CORNERS];
+    view.titleView.font = [UIFont SBold];
+    view.titleView.textColor = [UIColor AUBlue];
+    view.titleView.text = title;
+    view.titleView.textAlignment = NSTextAlignmentCenter;
+    view.hidden = hidden;
+    return view;
+}
+
++ (MKUButtonView *)BlueButtonWithTitle:(NSString *)title {
+    return [self BlueButtonWithTitle:title hidden:NO];
+}
+
++ (MKUButtonView *)detailButtonWithStyle:(MKU_VIEW_STYLE)style {
+    MKUButtonView *button = [[MKUButtonView alloc] initWithStyle:style];
+    button.titleView.font = [UIFont SBold];
+    button.titleView.textColor = [UIColor AUDarkBlue];
+    button.titleView.numberOfLines = 0;
+    button.titleView.lineBreakMode = NSLineBreakByWordWrapping;
+    button.backgroundColor = [UIColor whiteColor];
+    button.layer.borderColor = [UIColor whiteColor].CGColor;
+    button.layer.borderWidth = 1.0;
+    return button;
+}
+
++ (MKUButtonView *)cornerDetailButtonWithStyle:(MKU_VIEW_STYLE)style {
+    MKUButtonView *button = [self detailButtonWithStyle:style];
+    button.layer.cornerRadius = [Constants ButtonCornerRadious];
+    return button;
+}
+
+@end
+
+@implementation MKUButtonImageView
+
+- (instancetype)initWithBadgeSize:(CGFloat)size {
+    return [super initWithBadgeSize:size viewCreationHandler:^UIView *{
+        return [[UIImageView alloc] init];
+    }];
+}
+
+- (void)setImageName:(NSString *)image {
+    self.badgeView.image = [UIImage imageNamed:image];
+}
+
+- (void)setImage:(UIImage *)image {
+    self.badgeView.image = image;
+}
+
++ (MKUButtonImageView *)detailButton {
+    MKUButtonImageView *button = [[MKUButtonImageView alloc] initWithBadgeSize:[Constants ButtonChevronSize]];
+    button.badgeView.tintColor = [UIColor AUDarkBlue];
+    button.titleView.font = [UIFont SBold];
+    button.titleView.textColor = [UIColor AUDarkBlue];
+    button.titleView.numberOfLines = 0;
+    button.titleView.lineBreakMode = NSLineBreakByWordWrapping;
+    button.backgroundColor = [UIColor whiteColor];
+    button.layer.cornerRadius = [Constants ButtonCornerRadious];
+    button.layer.borderColor = [UIColor AUMistBlue].CGColor;
+    button.layer.borderWidth = 1.0;
+    [button setImage:[AUAssets systemIconWithName:@"chevron.right" color:[UIColor AUBlue]]];
+    return button;
+}
+
++ (MKUButtonView *)detailButtonWithTitle:(NSString *)title {
+    MKUButtonView *button = [self detailButton];
+    button.titleView.text = title;
+    return button;
+}
+
++ (MKUButtonView *)cornerDetailButton {
+    MKUButtonView *button = [self detailButton];
+    button.layer.cornerRadius = [Constants ButtonCornerRadious];
+    return button;
+}
+
+@end
+
+@implementation MKUButtonBadgeView
+
+- (instancetype)initWithBadgeSize:(CGFloat)size {
+    return [super initWithBadgeSize:size viewCreationHandler:^UIView *{
+        return [[MKUBadgeView alloc] init];
+    }];
 }
 
 @end

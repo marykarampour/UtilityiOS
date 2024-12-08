@@ -1,13 +1,13 @@
 //
 //  MKUGenericTableViewControllerProtocols.h
-//  KaChing
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2024-11-24.
 //  Copyright © 2024 Prometheus Software. All rights reserved.
 //
 
 #import "MKUViewControllerTransitionProtocol.h"
-#import "MKUTableViewCellContentProtocols.h"
+#import "MKUViewContentStyleProtocols.h"
 
 @protocol MKUGenericTableViewControllerProtocols <NSObject>
 

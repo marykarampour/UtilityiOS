@@ -14,170 +14,6 @@
 
 @implementation NSObject (Utility)
 
-- (id)MKUCopyWithZone:(NSZone *)zone baseClass:(Class)baseClass {
-    Class currentClass = [self class];
-    id object = [[currentClass allocWithZone:zone] init];
-    
-    while (currentClass != baseClass) {
-        [self copyWithZone:zone toObject:object ofKind:currentClass];
-        currentClass = [currentClass superclass];
-    }
-    return object;
-}
-
-- (void)copyWithZone:(NSZone *)zone toObject:(id)object ofKind:(Class)objectClass {
-    if (![object isKindOfClass:objectClass]) {
-        return;
-    }
-    unsigned int count = 0;
-    objc_property_t *properties = class_copyPropertyList(objectClass, &count);
-    
-    for (unsigned int i=0; i<count; i++) {
-        NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
-        if ([self respondsToSelector:NSSelectorFromString(name)]) {
-            
-            id value = [self valueForKey:name];
-            if ([value isKindOfClass:[NSArray class]]) {
-                
-                NSArray *array;
-                if ([value isKindOfClass:[NSMutableArray class]]) {
-                    array = [[NSMutableArray alloc] initWithArray:value copyItems:YES];
-                }
-                else {
-                    array = [[NSArray alloc] initWithArray:value copyItems:YES];
-                }
-                [object setValue:array forKey:name];
-            }
-            else {
-                [object setValue:[value copyWithZone:zone] forKey:name];
-            }
-        }
-    }
-    free(properties);
-}
-
-- (NSUInteger)MKUHash {
-    NSUInteger hashPrime = 179;
-    NSUInteger hashEven = 178;
-    NSUInteger hashResult = 1;
-    NSUInteger hashObjects = 1;
-    unsigned int count = 0;
-    
-    objc_property_t *properties = class_copyPropertyList([self class], &count);
-    
-    for (unsigned int i=0; i<count; i++) {
-        NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
-        id value = [self valueForKey:name];
-        if ([value isKindOfClass:[NSObject class]]) {
-            hashObjects = hashObjects ^ [value hash];
-        }
-        else {
-            hashResult = hashResult*hashPrime + (value ? hashPrime : hashEven);
-        }
-    }
-    free(properties);
-    
-    return hashResult + hashObjects;
-}
-
-+ (NSDictionary *)attributePropertyNamesOfClass:(Class)objectClass {
-    NSMutableDictionary *fields = [[NSMutableDictionary alloc] init];
-    unsigned int count = 0;
-    objc_property_t *properties = class_copyPropertyList(objectClass, &count);
-    
-    for (unsigned int i=0; i<count; i++) {
-        objc_property_t var = properties[i];
-        NSString *name = [[NSString stringWithUTF8String:property_getName(var)] trimCharSet:@"_"];
-        objc_property_t property = class_getProperty(objectClass, [name UTF8String]);
-        if (property) {
-            NSString *attribute = [NSString stringWithCString:property_getAttributes(property) encoding:NSUTF8StringEncoding];
-            if (name && attribute) {
-                [fields setObject:attribute forKey:name];
-            }
-        }
-    }
-    free(properties);
-    return fields;
-}
-
-- (BOOL)allIsNull {
-    unsigned int count = 0;
-    objc_property_t *properties = class_copyPropertyList([self class], &count);
-    
-    for (unsigned int i=0; i<count; i++) {
-        NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
-        id value = [self valueForKey:name];
-        if (value) {
-            return NO;
-        }
-    }
-    free(properties);
-    
-    return YES;
-}
-
-- (BOOL)allIsNullWithProperties:(NSSet<NSString *> *)properties {
-    for (NSString *name in properties) {
-        if ([self respondsToSelector:NSSelectorFromString(name)]) {
-            id value = [self valueForKey:name];
-            if ([value isKindOfClass:[NSNumber class]]) {
-                return ![value boolValue];
-            }
-            else if (value) {
-                return NO;
-            }
-        }
-    }
-    return YES;
-}
-
-- (BOOL)allIsNullWithBaseClass:(Class)baseClass {
-    Class currentClass = [self class];
-    BOOL allIsNull = YES;
-    
-    while (currentClass != baseClass && allIsNull) {
-        
-        NSSet<NSString *> *properties = [NSObject propertyNamesOfClass:currentClass];
-        allIsNull = [self allIsNullWithProperties:properties];
-        currentClass = [currentClass superclass];
-    }
-    return allIsNull;
-}
-
-+ (void)swizzleSelectorOriginal:(SEL)originalSelector swizzled:(SEL)swizzledSelector isClassMethod:(BOOL)isClassMethod {
-    Class class = isClassMethod ? object_getClass(self) : self.class;
-    Method originalMethod = isClassMethod ? class_getClassMethod(class, originalSelector) : class_getInstanceMethod(class, originalSelector);
-    Method swizzledMethod = isClassMethod ? class_getClassMethod(class, swizzledSelector) : class_getInstanceMethod(class, swizzledSelector);
-    
-    BOOL addMethod = class_addMethod(class, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));
-    if (addMethod) {
-        class_replaceMethod(class, swizzledSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));
-    }
-    else {
-        method_exchangeImplementations(originalMethod, swizzledMethod);
-    }
-}
-
-+ (void)swizzleSelector:(SEL)selector isClassMethod:(BOOL)isClassMethod {
-    NSString *swizzledSelectorName = [NSString stringWithFormat:@"swizzled_%@", NSStringFromSelector(selector)];
-    SEL swizzledSelector = NSSelectorFromString(swizzledSelectorName);
-    [self swizzleSelectorOriginal:selector swizzled:swizzledSelector isClassMethod:isClassMethod];
-}
-
-+ (NSString *)GUID {
-    return [NSUUID UUID].UUIDString;
-}
-
-+ (NSString *)timestampGUID {
-    return [NSString stringWithFormat:@"%d-%@", (int)[[NSDate date] timeIntervalSince1970], [self GUID]];
-}
-
-#pragma mark - overrides
-
-- (id)valueForUndefinedKey:(NSString *)key {
-    return nil;
-}
-
 #pragma mark - init and set
 
 - (instancetype)initWithObject:(NSObject *)object ancestors:(BOOL)ancestors baseClass:(Class)baseClass {
@@ -200,7 +36,7 @@
     [self resetIsDefaults:isDefaults excludeProperties:nil];
 }
 
-- (void)resetIsDefaults:(BOOL)isDefaults excludeProperties:(NSArray<NSString *> *)excluding {
+- (void)resetIsDefaults:(BOOL)isDefaults excludeProperties:(NSSet<NSString *> *)excluding {
     unsigned int varCount = 0;
     Ivar *vars = class_copyIvarList([self class], &varCount);
     
@@ -247,7 +83,7 @@
 }
 
 - (void)setValuesOfObject:(NSObject *)object ancestors:(BOOL)ancestors baseClass:(Class)baseClass {
-    NSMutableSet<NSString *> *arr = [[NSMutableSet<NSString *> alloc] init];
+    NSMutableSet<NSString *> *arr = [[NSMutableSet alloc] init];
     NSObject *currentObject = object;
     Class currentClass = [currentObject class];
     if (ancestors) {
@@ -313,7 +149,7 @@
     return [self MKUCopyWithZone:zone excludeProperties:nil];
 }
 
-- (id)MKUCopyWithZone:(NSZone *)zone excludeProperties:(NSArray<NSString *> *)excluding {
+- (id)MKUCopyWithZone:(NSZone *)zone excludeProperties:(NSSet<NSString *> *)excluding {
     return [self MKUCopyWithZone:zone baseClass:[self superclass] option:MKU_COPY_OPTION_PROPERTIES | MKU_COPY_OPTION_IVARS excludeProperties:excluding];
 }
 
@@ -416,6 +252,26 @@
     return NO;
 }
 
++ (NSDictionary *)attributePropertyNamesOfClass:(Class)objectClass {
+    NSMutableDictionary *fields = [[NSMutableDictionary alloc] init];
+    unsigned int count = 0;
+    objc_property_t *properties = class_copyPropertyList(objectClass, &count);
+    
+    for (unsigned int i=0; i<count; i++) {
+        objc_property_t var = properties[i];
+        NSString *name = [[NSString stringWithUTF8String:property_getName(var)] trimCharSet:@"_"];
+        objc_property_t property = class_getProperty(objectClass, [name UTF8String]);
+        if (property) {
+            NSString *attribute = [NSString stringWithCString:property_getAttributes(property) encoding:NSUTF8StringEncoding];
+            if (name && attribute) {
+                [fields setObject:attribute forKey:name];
+            }
+        }
+    }
+    free(properties);
+    return fields;
+}
+
 #pragma mark - coding
 
 - (void)MKUInitWithCoder:(NSCoder *)aDecoder ofKind:(Class)objectClass {
@@ -432,7 +288,7 @@
     }
 }
 
-- (void)MKUInitWithCoder:(NSCoder *)aDecoder properties:(NSSet<NSString *> *)properties {
+- (void)MKUInitWithCoder:(NSCoder *)aDecoder properties:(StringArr *)properties {
     if (properties.count == 0) {
         return;
     }
@@ -477,7 +333,7 @@
     [self MKUEncodeWithCoder:aCoder baseClass:[self superclass]];
 }
 
-- (void)MKUEncodeWithCoder:(NSCoder *)aCoder properties:(NSArray<NSString *> *)properties {
+- (void)MKUEncodeWithCoder:(NSCoder *)aCoder properties:(NSSet<NSString *> *)properties {
     if (properties.count == 0) {
         return;
     }
@@ -490,7 +346,7 @@
     }
 }
 
-- (NSUInteger)MKHashWithProperties:(NSArray<NSString *> *)properties {
+- (NSUInteger)MKUHashWithProperties:(NSSet<NSString *> *)properties {
     NSUInteger hashPrime = 179;
     NSUInteger hashEven = 178;
     NSUInteger hashResult = 1;
@@ -515,7 +371,7 @@
 #pragma mark - properties and ivars
 
 + (NSSet<NSString *> *)propertyNamesOfClass:(Class)objectClass {
-    NSMutableSet<NSString *> *fields = [[NSMutableSet<NSString *> alloc] init];
+    NSMutableSet<NSString *> *fields = [[NSMutableSet alloc] init];
     unsigned int count = 0;
     objc_property_t *properties = class_copyPropertyList(objectClass, &count);
     
@@ -552,7 +408,7 @@
 }
 
 + (NSSet<NSString *> *)ivarNamesOfClass:(Class)objectClass {
-    NSMutableSet<NSString *> *fields = [[NSMutableSet<NSString *> alloc] init];
+    NSMutableSet<NSString *> *fields = [[NSMutableSet alloc] init];
     unsigned int count = 0;
     Ivar *properties = class_copyIvarList(objectClass, &count);
     
@@ -615,10 +471,34 @@
     return class;
 }
 
-+ (BOOL)haveSameNullity:(NSObject *)obj1 asObject:(NSObject *)obj2 {
-    if (obj1 && !obj2) return NO;
-    if (!obj1 && obj2) return NO;
-    return YES;
+#pragma mark - swizzling
+
++ (void)swizzleSelectorOriginal:(SEL)originalSelector swizzled:(SEL)swizzledSelector isClassMethod:(BOOL)isClassMethod {
+    Class class = isClassMethod ? object_getClass(self) : self.class;
+    Method originalMethod = isClassMethod ? class_getClassMethod(class, originalSelector) : class_getInstanceMethod(class, originalSelector);
+    Method swizzledMethod = isClassMethod ? class_getClassMethod(class, swizzledSelector) : class_getInstanceMethod(class, swizzledSelector);
+    
+    BOOL addMethod = class_addMethod(class, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));
+    if (addMethod) {
+        class_replaceMethod(class, swizzledSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));
+    }
+    else {
+        method_exchangeImplementations(originalMethod, swizzledMethod);
+    }
+}
+
++ (void)swizzleSelector:(SEL)selector isClassMethod:(BOOL)isClassMethod {
+    NSString *swizzledSelectorName = [NSString stringWithFormat:@"swizzled_%@", NSStringFromSelector(selector)];
+    SEL swizzledSelector = NSSelectorFromString(swizzledSelectorName);
+    [self swizzleSelectorOriginal:selector swizzled:swizzledSelector isClassMethod:isClassMethod];
+}
+
++ (NSString *)GUID {
+    return [NSUUID UUID].UUIDString;
+}
+
++ (NSString *)timestampGUID {
+    return [NSString stringWithFormat:@"%d-%@", (int)[[NSDate date] timeIntervalSince1970], [self GUID]];
 }
 
 #pragma mark - processing values
@@ -787,6 +667,87 @@
         index ++;
     }
     return index;
+}
+
+- (NSUInteger)MKUHash {
+    NSUInteger hashPrime = 179;
+    NSUInteger hashEven = 178;
+    NSUInteger hashResult = 1;
+    NSUInteger hashObjects = 1;
+    unsigned int count = 0;
+    
+    objc_property_t *properties = class_copyPropertyList([self class], &count);
+    
+    for (unsigned int i=0; i<count; i++) {
+        NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
+        id value = [self valueForKey:name];
+        if ([value isKindOfClass:[NSObject class]]) {
+            hashObjects = hashObjects ^ [value hash];
+        }
+        else {
+            hashResult = hashResult*hashPrime + (value ? hashPrime : hashEven);
+        }
+    }
+    free(properties);
+    
+    return hashResult + hashObjects;
+}
+
+#pragma mark - null
+
+- (BOOL)allIsNull {
+    unsigned int count = 0;
+    objc_property_t *properties = class_copyPropertyList([self class], &count);
+    
+    for (unsigned int i=0; i<count; i++) {
+        NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
+        if ([self valueForKey:name]) {
+            return NO;
+        }
+    }
+    free(properties);
+    
+    return YES;
+}
+
++ (BOOL)haveSameNullity:(NSObject *)obj1 asObject:(NSObject *)obj2 {
+    if (obj1 && !obj2) return NO;
+    if (!obj1 && obj2) return NO;
+    return YES;
+}
+
+- (BOOL)allIsNullWithProperties:(NSSet<NSString *> *)properties {
+    for (NSString *name in properties) {
+        if ([self respondsToSelector:NSSelectorFromString(name)]) {
+            id value = [self valueForKey:name];
+            if ([value isKindOfClass:[NSNumber class]]) {
+                return ![value boolValue];
+            }
+            else if (value) {
+                return NO;
+            }
+        }
+    }
+    return YES;
+}
+
+- (BOOL)allIsNullWithBaseClass:(Class)baseClass {
+    Class currentClass = [self class];
+    BOOL allIsNull = YES;
+    
+    while (currentClass != baseClass && allIsNull) {
+        
+        NSSet<NSString *> *properties = [NSObject propertyNamesOfClass:currentClass];
+        allIsNull = [self allIsNullWithProperties:properties];
+        currentClass = [currentClass superclass];
+    }
+    return allIsNull;
+}
+
+#pragma mark - overrides
+
+- (id)valueForUndefinedKey:(NSString *)key {
+    return nil;
 }
 
 @end

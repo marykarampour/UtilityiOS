@@ -1,6 +1,6 @@
 //
 //  MKUMenuObjects.h
-//  KaChing
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2024-11-25.
 //  Copyright © 2024 Prometheus Software. All rights reserved.
@@ -60,8 +60,10 @@
 + (instancetype)objectWithTitle:(NSString *)title type:(NSInteger)type;
 + (instancetype)objectWithTitle:(NSString *)title VCClass:(Class)VCClass type:(NSInteger)type;
 + (instancetype)objectWithTitle:(NSString *)title VCClass:(Class)VCClass object:(id)object;
++ (instancetype)objectWithTitle:(NSString *)title VCClass:(Class)VCClass object:(id)object icon:(UIImage *)icon;
 + (instancetype)objectWithTitle:(NSString *)title VCClass:(Class)VCClass action:(ActionObject *)action;
 + (instancetype)objectWithTitle:(NSString *)title VCClass:(Class)VCClass type:(NSInteger)type object:(id)object;
++ (instancetype)objectWithTitle:(NSString *)title VCClass:(Class)VCClass type:(NSInteger)type object:(id)object icon:(UIImage *)icon;
 + (instancetype)objectWithTitle:(NSString *)title VCClass:(Class)VCClass type:(NSInteger)type action:(ActionObject *)action;
 + (instancetype)objectWithTitle:(NSString *)title VCClass:(Class)VCClass type:(NSInteger)type action:(ActionObject *)action icon:(UIImage *)icon;
 + (instancetype)objectWithTitle:(NSString *)title VCClass:(Class)VCClass icon:(UIImage *)icon;
@@ -71,6 +73,7 @@
 + (instancetype)objectWithTitle:(NSString *)title VCClass:(Class)VCClass selectedIcon:(UIImage *)selectedIcon deselectedIcon:(UIImage *)deselectedIcon badge:(MKUBadgeItem *)badge;
 + (instancetype)objectWithTitle:(NSString *)title VCClass:(Class)VCClass accessoryType:(MKU_MENU_ACCESSORY_TYPE)accessoryType badge:(MKUBadgeItem *)badge;
 + (instancetype)objectWithTitle:(NSString *)title VCClass:(Class)VCClass type:(NSInteger)type accessoryType:(MKU_MENU_ACCESSORY_TYPE)accessoryType badge:(MKUBadgeItem *)badge;
++ (instancetype)objectWithTitle:(NSString *)title subtitle:(NSString *)subtitle VCClass:(Class)VCClass type:(NSInteger)type icon:(UIImage *)icon;
 + (instancetype)objectWithTitle:(NSString *)title subtitle:(NSString *)subtitle VCClass:(Class)VCClass type:(NSInteger)type object:(id)object shouldCopy:(BOOL)shouldCopy;
 + (instancetype)objectWithTitle:(NSString *)title subtitle:(NSString *)subtitle VCClass:(Class)VCClass type:(NSInteger)type object:(id)object shouldCopy:(BOOL)shouldCopy accessoryType:(MKU_MENU_ACCESSORY_TYPE)accessoryType badge:(MKUBadgeItem *)badge;
 

@@ -1,6 +1,6 @@
 //
 //  MKUStackedViews.h
-//  KaChing
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2024-11-28.
 //  Copyright © 2024 Prometheus Software. All rights reserved.
@@ -22,6 +22,8 @@
 @end
 
 @interface MKUStackedViews <__covariant ViewType : UIView *> : UIView <MKUStackedViewProtocol>
+
+@property (nonatomic, assign) CGFloat defaultPadding;
 
 - (NSArray <__kindof UIView *> *)contentViews;
 

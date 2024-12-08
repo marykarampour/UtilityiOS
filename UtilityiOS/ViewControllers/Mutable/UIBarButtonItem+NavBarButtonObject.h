@@ -1,6 +1,6 @@
 //
 //  UIBarButtonItem+NavBarButtonObject.h
-//  KaChing
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2024-11-23.
 //  Copyright © 2024 Prometheus Software. All rights reserved.
@@ -23,15 +23,16 @@ typedef NS_ENUM(NSUInteger, MKU_NAV_BAR_BUTTON_POSITION) {
  @endcode */
 typedef NS_ENUM(NSInteger, MKU_NAV_BAR_BUTTON_TYPE) {
     MKU_NAV_BAR_BUTTON_TYPE_NONE = -1,
-    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_DONE = UIBarButtonSystemItemDone, /** Used in MKUItemsListViewController. Mututally exclusive with EDIT and SAVE. */
-    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_EDIT = UIBarButtonSystemItemEdit, /** Used in MKUEditingListViewController. Mututally exclusive with DONE and SAVE. */
-    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_SAVE = UIBarButtonSystemItemSave, /** USed in MKUMutableObjectTableViewController. Mututally exclusive with EDIT and DONE. */
-    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_ADD = UIBarButtonSystemItemAdd,
-    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_SEARCH = UIBarButtonSystemItemSearch,
-    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_REFRESH = UIBarButtonSystemItemRefresh,
-    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_SPACER = UIBarButtonSystemItemFixedSpace,
-    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_CAMERA = UIBarButtonSystemItemCamera,
-    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_CLOSE = UIBarButtonSystemItemClose,
+    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_DONE     = UIBarButtonSystemItemDone, /** Used in MKUItemsListViewController. Mututally exclusive with EDIT and SAVE. */
+    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_EDIT     = UIBarButtonSystemItemEdit, /** Used in MKUEditingListViewController. Mututally exclusive with DONE and SAVE. */
+    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_SAVE     = UIBarButtonSystemItemSave, /** USed in MKUMutableObjectTableViewController. Mututally exclusive with EDIT and DONE. */
+    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_ADD      = UIBarButtonSystemItemAdd,
+    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_SEARCH   = UIBarButtonSystemItemSearch,
+    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_REFRESH  = UIBarButtonSystemItemRefresh,
+    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_SPACER   = UIBarButtonSystemItemFixedSpace,
+    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_CAMERA   = UIBarButtonSystemItemCamera,
+    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_CLOSE    = UIBarButtonSystemItemClose,
+    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_TRASH    = UIBarButtonSystemItemTrash,
     MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_COUNT,//No item, marks the end of system items
     MKU_NAV_BAR_BUTTON_TYPE_RESET,
     MKU_NAV_BAR_BUTTON_TYPE_CLEAR,

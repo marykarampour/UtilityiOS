@@ -1,12 +1,12 @@
 //
 //  MKUMenuViewController.m
-//  KaChing-v2
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2018-01-24.
 //  Copyright © 2018 BHS Consultants. All rights reserved.
 //
 
-#import "MKUMenuViewController.h"
+#import "MKUCollapsingMenuViewController.h"
 #import "UIViewController+Utility.h"
 #import "UINavigationController+Transition.h"
 #import "UIView+Utility.h"
@@ -60,7 +60,7 @@
 @end
 
 
-@interface MKUMenuTableViewCell ()
+@interface MKUCollapsingMenuTableViewCell ()
 
 @property (nonatomic, strong) MKUBadgeView *badge;
 @property (nonatomic, strong) UIActivityIndicatorView *spinner;
@@ -70,7 +70,7 @@
 
 @end
 
-@implementation MKUMenuTableViewCell
+@implementation MKUCollapsingMenuTableViewCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
@@ -154,13 +154,13 @@
 
 @end
 
-@interface MKUMenuViewController ()
+@interface MKUCollapsingMenuViewController ()
 
 @property (nonatomic, strong) NSTimer *timer;
 
 @end
 
-@implementation MKUMenuViewController
+@implementation MKUCollapsingMenuViewController
 
 @dynamic sections;
 
@@ -231,8 +231,8 @@
         }
         
         for (UIViewController *childMenu in presentingVC.childViewControllers) {
-            if ([childMenu isKindOfClass:[MKUMenuViewController class]]) {
-                [((MKUMenuViewController *)childMenu) transitionToView:indexPath animated:animated];
+            if ([childMenu isKindOfClass:[MKUCollapsingMenuViewController class]]) {
+                [((MKUCollapsingMenuViewController *)childMenu) transitionToView:indexPath animated:animated];
                 return;
             }
         }
@@ -270,18 +270,18 @@
 + (void)transitionToNextItemFromView:(__kindof UIViewController *)VC {
     
     UIViewController *pvc = [VC previousViewController];
-    MKUMenuViewController *mvc;
+    MKUCollapsingMenuViewController *mvc;
     
-    if ([pvc isKindOfClass:[MKUMenuViewController class]]) {
-        mvc = (MKUMenuViewController *)pvc;
+    if ([pvc isKindOfClass:[MKUCollapsingMenuViewController class]]) {
+        mvc = (MKUCollapsingMenuViewController *)pvc;
     }
     else if ([pvc isKindOfClass:[MKUHeaderFooterContainerViewController class]]) {
         
         MKUHeaderFooterContainerViewController *hvc = (MKUHeaderFooterContainerViewController *)pvc;
-        mvc = (MKUMenuViewController *)hvc.childViewController;
+        mvc = (MKUCollapsingMenuViewController *)hvc.childViewController;
     }
     //TODO: this should loop through all sections
-    if ([mvc isKindOfClass:[MKUMenuViewController class]]) {
+    if ([mvc isKindOfClass:[MKUCollapsingMenuViewController class]]) {
         MKUMenuSection *section = (MKUMenuSection *)mvc.sections.firstObject;
         
         if ([section isKindOfClass:[MKUMenuSection class]]) {
@@ -347,16 +347,16 @@
     return cell;
 }
 
-- (MKUMenuTableViewCell *)baseMenuCellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    MKUMenuTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[MKUMenuTableViewCell identifier]];
+- (MKUCollapsingMenuTableViewCell *)baseMenuCellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    MKUCollapsingMenuTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[MKUCollapsingMenuTableViewCell identifier]];
     
     if (cell == nil) {
-        cell = [[MKUMenuTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[MKUMenuTableViewCell identifier]];
+        cell = [[MKUCollapsingMenuTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[MKUCollapsingMenuTableViewCell identifier]];
     }
     return cell;
 }
 
-- (void)customizeBaseMenuCell:(__kindof MKUMenuTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)customizeBaseMenuCell:(__kindof MKUCollapsingMenuTableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
     
     MKUMenuObject *obj = [self menuItemForIndexPath:indexPath];
     
@@ -383,7 +383,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MKUMenuObject *obj = [self menuItemForIndexPath:indexPath];
     if (obj) {
-        __kindof MKUMenuTableViewCell *cell = [self baseMenuCellForRowAtIndexPath:indexPath];
+        __kindof MKUCollapsingMenuTableViewCell *cell = [self baseMenuCellForRowAtIndexPath:indexPath];
         [self customizeBaseMenuCell:cell forRowAtIndexPath:indexPath];
         [cell updateWithObject:obj];
         return cell;

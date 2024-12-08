@@ -1,6 +1,6 @@
 //
 //  MKUOptionsView.h
-//  KaChing-v2
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2018-04-21.
 //  Copyright © 2018 BHS Consultants. All rights reserved.
@@ -12,7 +12,7 @@
 #import "MKULabel.h"
 
 @interface MKUOptionViewAttributes : NSObject
-//TODO: subclass of MKUCollectionViewAttributes
+//TODO: subclass of MKUCollectionViewLayoutAttributes
 @property (nonatomic, assign) CGFloat width;
 @property (nonatomic, assign) NSUInteger itemsPerPage;
 @property (nonatomic, assign) CGFloat horizontalPadding;
@@ -47,9 +47,7 @@
 
 @end
 
-@interface MKUHorizontalOptionsViewController : MKUHorizontalCollectionViewController
-
-@property (nonatomic, strong) NSArray<OptionObject *> *options;
+@interface MKUHorizontalOptionsViewController : MKUHorizontalCollectionViewController <OptionObject *>
 
 /** @breif subclass must implement to use a custom cell */
 - (__kindof MKUOptionsCollectionViewCell *)optionCellForItemAtIndexPath:(NSIndexPath *)indexPath;

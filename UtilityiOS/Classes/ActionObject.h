@@ -1,6 +1,6 @@
 //
 //  ActionObject.h
-//  KaChing-v2
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2017-12-31.
 //  Copyright © 2017 BHS Consultants. All rights reserved.
@@ -32,7 +32,7 @@
 @end
 
 
-@interface OptionObject : NSObject
+@interface OptionObject : MKUModel
 
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *iconName;

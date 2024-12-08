@@ -1,6 +1,6 @@
 //
 //  NSString+Number.m
-//  KaChing
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2015-10-08.
 //  Copyright © 2015 BHS Consultants. All rights reserved.

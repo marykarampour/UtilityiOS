@@ -1,6 +1,6 @@
 //
 //  MKUGenericCell.m
-//  KaChing-v2
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2018-02-11.
 //  Copyright © 2018 BHS Consultants. All rights reserved.
@@ -24,7 +24,7 @@
 
 @synthesize controller;
 
-- (void)setAttributes:(MKUCollectionViewAttributes *)attributes {
+- (void)setAttributes:(MKUCollectionViewLayoutAttributes *)attributes {
     self.controller = [[attributes.controllerClass alloc] initWithAttributes:attributes];
 }
 
@@ -41,7 +41,7 @@
 
 @synthesize controller;
 
-- (void)setAttributes:(MKUCollectionViewAttributes *)attributes {
+- (void)setAttributes:(MKUCollectionViewLayoutAttributes *)attributes {
     self.controller = [[attributes.controllerClass alloc] initWithAttributes:attributes];
 }
 
@@ -62,7 +62,7 @@
     return 80.0;
 }
 
-- (void)setAttributes:(MKUCollectionViewAttributes *)attributes {
+- (void)setAttributes:(MKUCollectionViewLayoutAttributes *)attributes {
     self.controller = [[attributes.controllerClass alloc] initWithAttributes:attributes];
 }
 

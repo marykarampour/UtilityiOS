@@ -185,6 +185,10 @@
     return [NSString stringWithFormat:@"tel://%@", string];
 }
 
++ (NSString *)telPromptFromString:(NSString *)string {
+    return [NSString stringWithFormat:@"telprompt://%@", string];
+}
+
 + (NSString *)notnullString:(NSString *)string {
     return [self notnullString:string defaultText:@""];
 }

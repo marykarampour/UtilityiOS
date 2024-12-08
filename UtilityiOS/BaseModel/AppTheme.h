@@ -43,6 +43,7 @@ extern MKU_THEME_STYLE APP_THEME_STYLE;
 + (UIColor *)tableCellBackgroundColor;
 + (UIColor *)tableCellAccessoryViewColor;
 + (UIImage *)tableCellDisclosureIndicatorImage;
++ (UIColor *)defaultSectionHeaderColor;
 + (UIFont *)sectionHeaderFont;
 + (UIFont *)sectionFooterFont;
 
