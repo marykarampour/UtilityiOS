@@ -6,7 +6,6 @@
 //
 
 #import "MKUButtonView.h"
-#import "AUAssets.h"
 #import "UIView+Utility.h"
 #import "NSString+AttributedText.h"
 
@@ -58,7 +57,7 @@ static CGFloat const PADDING = 4.0;
             case MKU_VIEW_STYLE_ROUND_CORNERS:
                 self.layer.cornerRadius = [Constants ButtonCornerRadious];
             case MKU_VIEW_STYLE_BORDER:
-                self.layer.borderColor = [UIColor AUBlue].CGColor;
+                self.layer.borderColor = [AppTheme mediumBlueColorWithAlpha:1.0].CGColor;
                 self.layer.borderWidth = 1.0;
                 break;
             default:
@@ -137,8 +136,8 @@ static CGFloat const PADDING = 4.0;
 + (MKUButtonView *)BlueButtonWithTitle:(NSString *)title hidden:(BOOL)hidden {
     
     MKUButtonView *view = [[MKUButtonView alloc] initWithStyle:MKU_VIEW_STYLE_ROUND_CORNERS];
-    view.titleView.font = [UIFont SBold];
-    view.titleView.textColor = [UIColor AUBlue];
+    view.titleView.font = [AppTheme smallBoldLabelFont];
+    view.titleView.textColor = [AppTheme mediumBlueColorWithAlpha:1.0];
     view.titleView.text = title;
     view.titleView.textAlignment = NSTextAlignmentCenter;
     view.hidden = hidden;
@@ -151,8 +150,8 @@ static CGFloat const PADDING = 4.0;
 
 + (MKUButtonView *)detailButtonWithStyle:(MKU_VIEW_STYLE)style {
     MKUButtonView *button = [[MKUButtonView alloc] initWithStyle:style];
-    button.titleView.font = [UIFont SBold];
-    button.titleView.textColor = [UIColor AUDarkBlue];
+    button.titleView.font = [AppTheme smallBoldLabelFont];
+    button.titleView.textColor = [AppTheme darkBlueColorWithAlpha:1.0];
     button.titleView.numberOfLines = 0;
     button.titleView.lineBreakMode = NSLineBreakByWordWrapping;
     button.backgroundColor = [UIColor whiteColor];
@@ -187,16 +186,16 @@ static CGFloat const PADDING = 4.0;
 
 + (MKUButtonImageView *)detailButton {
     MKUButtonImageView *button = [[MKUButtonImageView alloc] initWithBadgeSize:[Constants ButtonChevronSize]];
-    button.badgeView.tintColor = [UIColor AUDarkBlue];
-    button.titleView.font = [UIFont SBold];
-    button.titleView.textColor = [UIColor AUDarkBlue];
+    button.badgeView.tintColor = [AppTheme darkBlueColorWithAlpha:1.0];
+    button.titleView.font = [AppTheme smallBoldLabelFont];
+    button.titleView.textColor = [AppTheme darkBlueColorWithAlpha:1.0];
     button.titleView.numberOfLines = 0;
     button.titleView.lineBreakMode = NSLineBreakByWordWrapping;
     button.backgroundColor = [UIColor whiteColor];
     button.layer.cornerRadius = [Constants ButtonCornerRadious];
-    button.layer.borderColor = [UIColor AUMistBlue].CGColor;
+    button.layer.borderColor = [AppTheme mistBlueColorWithAlpha:1.0].CGColor;
     button.layer.borderWidth = 1.0;
-    [button setImage:[AUAssets systemIconWithName:@"chevron.right" color:[UIColor AUBlue]]];
+    [button setImage:[MKUAssets systemIconWithName:@"chevron.right" color:[AppTheme mediumBlueColorWithAlpha:1.0]]];
     return button;
 }
 

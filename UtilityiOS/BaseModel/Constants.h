@@ -395,6 +395,7 @@ typedef NS_ENUM(NSUInteger, DATE_FORMAT_STYLE) {
 + (CGFloat)VerticalSpacing;
 + (UIEdgeInsets)TabBarItemImageInsets;
 + (CGFloat)TabBarHeight;
++ (CGFloat)SplitViewPrimaryWidth;
 + (CGFloat)LoginViewInset;
 + (CGFloat)LoginViewWidth;
 + (CGFloat)BadgeHeight;
@@ -486,6 +487,14 @@ typedef NS_ENUM(NSUInteger, DATE_FORMAT_STYLE) {
 + (NSString *)Camera_Disabled_Error_Message;
 + (NSString *)Missing_Value_Error_Message;
 + (NSString *)Missing_Object_Error_Message;
++ (NSString *)StringTouchID;
++ (NSString *)StringFaceID;
++ (NSString *)LoginBiometricsMessage;
++ (NSString *)BiometricsAuthenticationFailedMessage;
++ (NSString *)BiometricsCannotPerformMessage;
++ (NSString *)BiometricsUserMismatchMessage;
++ (NSString *)ColonEmptyString;
+
 
 
 #pragma mark - app

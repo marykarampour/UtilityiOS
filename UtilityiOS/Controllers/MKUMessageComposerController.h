@@ -40,7 +40,6 @@ typedef NS_ENUM(NSUInteger, MKU_MESSAGE_COMPOSER_RESULT) {
 /** @param asHTML == YES it will send the message with isHTML = NO. */
 - (BOOL)sendEmailWithTitle:(NSString *)title message:(NSString *)message asHTML:(BOOL)asHTML;
 + (void)emailToAddress:(NSString *)text;
-+ (instancetype)initComposerWithRecipient:(NSString *)recipient completion:(void(^)(MKU_MESSAGE_COMPOSER_RESULT result))completion;
 
 @end
 

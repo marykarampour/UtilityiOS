@@ -6,7 +6,7 @@
 //
 
 #import "MKUCollectionMenuViewController.h"
-#import "AUImageTitleCollectionViewCell.h"
+#import "MKUImageTitleCollectionViewCell.h"
 #import "UIViewController+Menu.h"
 #import "UIView+Utility.h"
 
@@ -31,7 +31,7 @@
 - (__kindof MKUCollectionViewCell *)cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     MKUMenuItemObject *obj = self.object.menuItemObjects[indexPath.item];
-    AUImageTitleCollectionViewCell *cell = [[self view] dequeueReusableCellWithReuseIdentifier:[AUImageTitleCollectionViewCell identifier] forIndexPath:indexPath];
+    MKUImageTitleCollectionViewCell *cell = [[self view] dequeueReusableCellWithReuseIdentifier:[MKUImageTitleCollectionViewCell identifier] forIndexPath:indexPath];
     
     cell.textLabel.text = obj.title;
     cell.imageView.image = obj.deselectedIcon;
@@ -59,13 +59,13 @@
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     CGFloat padding = self.borderStyle == MKU_IMAGE_TITLE_BORDER_STYLE_ALL ? 0.0 : 44.0;
-    CGSize size = [AUImageTitleCollectionViewCell estimatedSize];
+    CGSize size = [MKUImageTitleCollectionViewCell estimatedSize];
     return CGSizeMake(size.width, size.height+padding);
 }
 
 - (void)setObject:(MKUMenuSectionObject *)object {
     
-    CGFloat padding = 2*kHorizontalMargin - 1;
+    CGFloat padding = 2*[Constants HorizontalSpacing] - 1;
     
     MKUCollectionViewLayoutAttributes *attributes = [[MKUCollectionViewLayoutAttributes alloc] init];
     attributes.minimumLineSpacing = padding;
@@ -73,8 +73,8 @@
     attributes.frame = CGRectMake(0.0, 0.0, [Constants screenWidth], [Constants screenHeight]);
     attributes.scrollDirection = UICollectionViewScrollDirectionVertical;
     attributes.sectionInset = UIEdgeInsetsMake(padding, padding, padding, padding);
-    attributes.minimumLineSpacing = 4*kHorizontalMargin;
-    attributes.cellClass = [AUImageTitleCollectionViewCell class];
+    attributes.minimumLineSpacing = 4*[Constants HorizontalSpacing];
+    attributes.cellClass = [MKUImageTitleCollectionViewCell class];
     
     MKUCollectionViewHeaderAttributes *headerAttributes = [[MKUCollectionViewHeaderAttributes alloc] init];
     headerAttributes.backgroundColor = [AppTheme buttonBorderColor];

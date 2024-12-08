@@ -75,7 +75,7 @@ static CGFloat const IMAGE_PADDING = 8.0;
 
 
 + (CGSize)estimatedSize {
-    CGFloat size = [Constants screenWidth] / 3.0 - 4*kHorizontalMargin;
+    CGFloat size = [Constants screenWidth] / 3.0 - 4*[Constants HorizontalSpacing];
     return CGSizeMake(size, size);
 }
 
@@ -98,7 +98,7 @@ static CGFloat const IMAGE_PADDING = 8.0;
             break;
     }
     
-    border.layer.cornerRadius = kCornerRadiusLarge;
+    border.layer.cornerRadius = [Constants ButtonCornerRadious];
     border.layer.borderColor = [AppTheme darkBlueColorWithAlpha:1.0].CGColor;
     border.layer.borderWidth = 1.0;
 }

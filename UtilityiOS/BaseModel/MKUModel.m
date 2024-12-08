@@ -240,7 +240,7 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
 #pragma mark - key mapper
 
 - (NSDictionary *)toDictionaryWithExcludedKeys:(StringSet *)keys {
-    NSMutableDictionary *dict = [[self toDictionary] mutableCopy];
+    NSMutableDictionary *dict = [[super toDictionary] mutableCopy];
     [dict removeObjectsForKeys:[keys allObjects]];
     return dict;
 }

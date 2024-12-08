@@ -313,6 +313,10 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
     return 52.0;
 }
 
++ (CGFloat)SplitViewPrimaryWidth {
+    return 256.0;
+}
+
 + (CGFloat)LoginViewInset {
     return 100.0;
 }
@@ -595,6 +599,34 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
     return LOCALIZED(@"Please enter a value for %@");
 }
 
++ (NSString *)StringTouchID {
+    return @"Touch ID";
+}
+
++ (NSString *)StringFaceID {
+    return @"Face ID";
+}
+ 
++ (NSString *)LoginBiometricsMessage {
+    return @"Logging in with %@";
+}
+ 
++ (NSString *)BiometricsAuthenticationFailedMessage {
+    return @"%@ Authentication Failed!";
+}
+
++ (NSString *)BiometricsCannotPerformMessage {
+    return @"Device cannot perform %@ Authentication";
+}
+
++ (NSString *)BiometricsUserMismatchMessage {
+    return @"You must Sign In with password first to use %@ Authentication in future";
+}
+
++ (NSString *)ColonEmptyString {
+    return @": ";
+}
+
 + (NSString *)Missing_Object_Error_Message {
     return LOCALIZED(@"Please select a %@");
 }
@@ -604,13 +636,13 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
 }
 
 + (CGFloat)GeoFenceRadiousMeter {
-    return [Constants GeoFenceRadiousKiloMeter]*1000.0;
+    return [self GeoFenceRadiousKiloMeter]*1000.0;
 }
 
 + (NSString *)BaseURLString {
-    NSString *https = [Constants USING_HTTPS] ? @"https" : @"http";
+    NSString *https = [self USING_HTTPS] ? @"https" : @"http";
     NSString *url = [self CommonURLString];
-    return [self URLStringWithHttps:https url:url port: [Constants BasePort]];
+    return [self URLStringWithHttps:https url:url port: [self BasePort]];
 }
 
 + (NSString *)URLStringWithHttps:(NSString *)https url:(NSString *)url port:(NSString *)port {
@@ -619,15 +651,15 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
 
 + (NSString *)CommonURLString {
    
-    switch ([Constants ServerEnvironmentVariable]) {
-        case ServerEnvironment_PROD:        return [Constants BaseProductionURL];
-        case ServerEnvironment_QA:          return [Constants BaseQAURL];
-        case ServerEnvironment_TESTING_IN:  return [Constants BaseTestingInURL];
-        case ServerEnvironment_TESTING_OUT: return [Constants BaseTestingOutURL];
-        case ServerEnvironment_LOCAL:       return [Constants BaseLocalHostURL];
-        case ServerEnvironment_DEV_IN:      return [Constants BaseDevInURL];
+    switch ([self ServerEnvironmentVariable]) {
+        case ServerEnvironment_PROD:        return [self BaseProductionURL];
+        case ServerEnvironment_QA:          return [self BaseQAURL];
+        case ServerEnvironment_TESTING_IN:  return [self BaseTestingInURL];
+        case ServerEnvironment_TESTING_OUT: return [self BaseTestingOutURL];
+        case ServerEnvironment_LOCAL:       return [self BaseLocalHostURL];
+        case ServerEnvironment_DEV_IN:      return [self BaseDevInURL];
         case ServerEnvironment_DEV_OUT:
-        default: return [Constants BaseDevOutURL];
+        default: return [self BaseDevOutURL];
     }
 }
 
@@ -679,8 +711,9 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
 + (CGFloat)statusBarHeight {
 #ifdef AF_APP_EXTENSIONS
     return 0.0;
-#endif
+#else
     return [UIApplication sharedApplication].statusBarFrame.size.height;
+#endif
 }
 
 + (UIEdgeInsets)safeAreaInsets {
@@ -693,11 +726,11 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
     if ([window respondsToSelector:@selector(safeAreaInsets)]) {
         if (@available(iOS 11.0, *)) {
             CGFloat topInset = insets.top;
-            topInset = (topInset > 0.0 ? topInset : [Constants statusBarHeight]);
+            topInset = (topInset > 0.0 ? topInset : [self statusBarHeight]);
             return UIEdgeInsetsMake(topInset, insets.left, insets.bottom, insets.right);
         }
     }
-    return UIEdgeInsetsMake([Constants statusBarHeight], insets.left, insets.bottom, insets.right);
+    return UIEdgeInsetsMake([self statusBarHeight], insets.left, insets.bottom, insets.right);
 }
 
 + (CGFloat)safeAreaHeight {
@@ -717,10 +750,10 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
                     break;
             }
             
-            return inset > 0.0 ? inset : [Constants statusBarHeight];
+            return inset > 0.0 ? inset : [self statusBarHeight];
         }
     }
-    return [Constants statusBarHeight];
+    return [self statusBarHeight];
 #endif
 }
 
@@ -744,7 +777,7 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
             return inset > 0.0 ? inset : 0.0;
         }
     }
-    return [Constants statusBarHeight];
+    return [self statusBarHeight];
 #endif
 }
 
@@ -779,21 +812,21 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
 }
 
 + (NSString *)bioMetricName {
-    if ([Constants touchIDIsAvaialable]) {
-        return [Constants TouchID_STR];
+    if ([self touchIDIsAvaialable]) {
+        return [self TouchID_STR];
     }
-    else if ([Constants faceIDIsAvaialable]) {
-        return [Constants FaceID_STR];
+    else if ([self faceIDIsAvaialable]) {
+        return [self FaceID_STR];
     }
     return nil;
 }
 
 + (NSString *)bioMetricNameForContext:(LAContext *)context {
     if (context.biometryType == LABiometryTypeTouchID) {
-        return kStringTouchID;
+        return [self StringTouchID];
     }
     else if (context.biometryType == LABiometryTypeFaceID) {
-        return kStringFaceID;
+        return [self StringFaceID];
     }
     return nil;
 }
@@ -806,7 +839,7 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
     __block NSString *message;
     
     if (hasBiometry) {
-        NSString *reason = [NSString stringWithFormat:kLoginBiometricsMessage, bioTypeStr];
+        NSString *reason = [NSString stringWithFormat:[self LoginBiometricsMessage], bioTypeStr];
         
         [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:reason reply:^(BOOL success, NSError * _Nullable error) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -818,13 +851,13 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
                     switch (error.code) {
                             
                         case LAErrorAuthenticationFailed:
-                            message = kBiometricsAuthenticationFailedMessage;
+                            message = [self BiometricsAuthenticationFailedMessage];
                             break;
                             
                         case LAErrorUserCancel:
                         case LAErrorUserFallback:
                         case LAErrorAppCancel:
-                            message = kBiometricsAuthenticationFailedMessage;
+                            message = [self BiometricsAuthenticationFailedMessage];
                             break;
                             
                         case LAErrorPasscodeNotSet:
@@ -835,7 +868,7 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
                         case LAErrorBiometryLockout:
                         case LAErrorNotInteractive:
                         default:
-                            message = kBiometricsCannotPerformMessage;
+                            message = [self BiometricsCannotPerformMessage];
                             break;
                     }
                 }
@@ -845,7 +878,7 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
     }
     else {
         dispatch_async(dispatch_get_main_queue(), ^{
-            message = kBiometricsCannotPerformMessage;
+            message = [self BiometricsCannotPerformMessage];
             [self handleAutentiacteWithBiometricsMessage:message type:bioTypeStr completion:completion];
         });
     }
@@ -898,12 +931,12 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
 + (BOOL)isCurrentDefaultsVersion {
     NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
     NSString *version = [defs objectForKey:DefaultVersionKey];
-    return [version isEqualToString:[Constants DefaultsVersion]];
+    return [version isEqualToString:[self DefaultsVersion]];
 }
 
 + (void)setDefaultsVersion {
     NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
-    [defs setObject:[Constants DefaultsVersion] forKey:DefaultVersionKey];
+    [defs setObject:[self DefaultsVersion] forKey:DefaultVersionKey];
     [defs synchronize];
 }
 
@@ -1207,7 +1240,7 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
 + (void)callPhoneNumber:(NSString *)num {
 #ifdef AF_APP_EXTENSIONS
     return;
-#endif
+#else
 
     if (num.length == 0) return;
     
@@ -1229,6 +1262,7 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
             [self callPhoneNumber:string];
         }];
     }
+#endif
 }
 
 + (NSDictionary *)appVersionDict {
@@ -1253,7 +1287,7 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
 }
 
 + (CGFloat)detailMinScreenWidth {
-    float splitWidth = IS_IPAD ? kSplitViewPrimaryWidth : 0.0;
+    float splitWidth = IS_IPAD ? [self SplitViewPrimaryWidth] : 0.0;
     return [self screenWidth] - splitWidth;
 }
 
@@ -1281,6 +1315,9 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
 }
 
 + (void)emailToAddress:(NSString *)text {
+#ifdef AF_APP_EXTENSIONS
+    return;
+#else
     if (text.length == 0) return;
 
     [MKUMessageComposerController initComposerWithRecipient:text completion:^(MKU_MESSAGE_COMPOSER_RESULT result) {
@@ -1288,6 +1325,7 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
             [NSObject OKAlertWithTitle:@"Device can not send email" message:nil];
         }
     }];
+#endif
 }
 
 @end
