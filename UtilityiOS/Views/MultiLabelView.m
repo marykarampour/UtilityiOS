@@ -16,7 +16,7 @@
 @property (nonatomic, strong, readwrite) __kindof UIView *contentView;
 @property (nonatomic, strong, readwrite) __kindof UIView *leftView;
 @property (nonatomic, strong, readwrite) __kindof UIView *rightView;
-@property (nonatomic, strong, readwrite) NSMutableArray<__kindof MKLabel *> *labels;
+@property (nonatomic, strong, readwrite) NSMutableArray<__kindof MKULabel *> *labels;
 @property (nonatomic, strong, readwrite) __kindof UIView *backView;
 @property (nonatomic, assign) CGFloat constantWidthSum;
 @property (nonatomic, assign) UIEdgeInsets edgeIndests;
@@ -257,14 +257,14 @@
     self.labels = [[NSMutableArray alloc] init];
     
     for (NSUInteger i=0; i<labelsCount; i++) {
-        MKLabel *label = [self createLabelAtIndex:i];
+        MKULabel *label = [self createLabelAtIndex:i];
         [self.labels addObject:label];
         [self.contentView addSubview:label];
     }
 }
 
-- (MKLabel *)createLabelAtIndex:(NSUInteger)index {
-    MKLabel *label = [[MKLabel alloc] init];
+- (MKULabel *)createLabelAtIndex:(NSUInteger)index {
+    MKULabel *label = [[MKULabel alloc] init];
     label.numberOfLines = 0;
     label.lineBreakMode = NSLineBreakByWordWrapping;
     [label sizeToFit];
@@ -277,12 +277,12 @@
     
     if (self.labels.count > 1) {
         for (NSUInteger i=1; i<self.labels.count; i++) {
-            MKLabel *label = self.labels[i];
+            MKULabel *label = self.labels[i];
             [self.contentView addConstraintWithItem:label attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.labels.firstObject attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.0];
             [self.contentView addConstraintWithItem:label attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.labels.firstObject attribute:NSLayoutAttributeRight multiplier:1.0 constant:0.0];
         }
-        MKLabel *topLabel = self.labels.firstObject;
-        MKLabel *nextLabel;
+        MKULabel *topLabel = self.labels.firstObject;
+        MKULabel *nextLabel;
         
         for (NSUInteger i=1; i<self.labels.count; i++) {
             nextLabel = self.labels[i];
@@ -334,7 +334,7 @@
 - (CGFloat)heightForWidth:(CGFloat)width {
     CGSize size = CGSizeMake(width-self.constantWidthSum-2*[Constants TextPadding], CGFLOAT_MAX);
     CGFloat height = 0.0;
-    for (MKLabel *label in self.labels) {
+    for (MKULabel *label in self.labels) {
         NSStringDrawingContext *context = [[NSStringDrawingContext alloc] init];
         CGRect rect = CGRectZero;
         if (label.attributedText) {

@@ -10,8 +10,7 @@
 #import "KeyboardAdjuster.h"
 #import "UIView+Utility.h"
 #import "LoginManager.h"
-#import "MKBasicFormView.h"
-#import "MKLabel.h"
+#import "MKULabel.h"
 
 typedef NS_ENUM(NSUInteger, TextFieldIndex) {
     TextFieldIndexUsername,
@@ -22,8 +21,9 @@ typedef NS_ENUM(NSUInteger, TextFieldIndex) {
 @interface LoginViewController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) LoginManager *loginManager;
-@property (nonatomic, strong, readwrite) MKBasicFormView *loginView;
-@property (nonatomic, strong) MKLabel *versionLabel;
+@property (nonatomic, strong, readwrite) MKUStackedViews<MKUTextField *> *loginView;
+@property (nonatomic, strong) MKULabel *versionLabel;
+@property (nonatomic, strong) UIButton *button;
 
 @end
 
@@ -31,22 +31,27 @@ typedef NS_ENUM(NSUInteger, TextFieldIndex) {
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.navigationController.navigationBarHidden = YES;
     self.edgesForExtendedLayout = UIRectEdgeNone;
     [self.navigationItem setHidesBackButton:YES];
     self.view.backgroundColor = [AppTheme VCBackgroundColor];
 
+    self.button = [[UIButton alloc] init];
     self.loginManager = [[LoginManager alloc] initWithViewController:self];
     
-    self.loginView = [[MKBasicFormView alloc] initWithTextFieldPlaceholders:@[[Constants Username_STR], [Constants Password_STR]] buttonTitle:[Constants Login_STR]];
-    [self.loginView setTarget:self selector:@selector(login)];
-    [self.loginView setDelegate:self.loginManager];
-
+    self.loginView = [[MKUStackedViews alloc] initWithCount:TextFieldIndexCount viewCreationHandler:^UIView *(NSUInteger index) {
+        MKUTextField *view = [[MKUTextField alloc] initWithPlaceholder:index == TextFieldIndexUsername ? [Constants Username_STR] : [Constants Password_STR]];
+        [view setControllerDelegate:self.loginManager];
+        return view;
+    }];
+        
     [self.view addSubview:self.loginView];
+    [self.view addSubview:self.button];
 
-    self.versionLabel = [[MKLabel alloc] init];
+    self.versionLabel = [[MKULabel alloc] init];
     self.versionLabel.textAlignment = NSTextAlignmentCenter;
-    self.versionLabel.text = [AppCommon versionString];
+    self.versionLabel.text = [Constants versionString];
     self.versionLabel.textColor = [AppTheme textLightColor];
     self.versionLabel.font = [AppTheme smallLabelFont];
     [self.view addSubview:self.versionLabel];
@@ -58,8 +63,8 @@ typedef NS_ENUM(NSUInteger, TextFieldIndex) {
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self.loginView setText:@"" atIndex:TextFieldIndexUsername];
-    [self.loginView setText:@"" atIndex:TextFieldIndexPassword];
+    [self.loginView viewAtIndex:TextFieldIndexUsername].text = @"";
+    [self.loginView viewAtIndex:TextFieldIndexPassword].text = @"";
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -69,7 +74,7 @@ typedef NS_ENUM(NSUInteger, TextFieldIndex) {
     [self.view removeConstraintsMask];
     
     [self.view constraintWidth:[Constants LoginViewWidth] forView:self.loginView];
-    [self.view constraintHeight:[self.loginView height] forView:self.loginView];
+    [self.view constraintHeight:2*[Constants TextFieldHeight] forView:self.loginView];
     [self.view constraint:NSLayoutAttributeCenterX view:self.loginView];
     [self.view constraint:NSLayoutAttributeCenterY view:self.loginView margin:-[Constants LoginViewInset]];
     [self.view constraint:NSLayoutAttributeCenterX view:self.versionLabel];
@@ -90,13 +95,7 @@ typedef NS_ENUM(NSUInteger, TextFieldIndex) {
 }
 
 - (void)login {
-    [self.loginManager performLoginWithUsername:[self.loginView textAtIndex:TextFieldIndexUsername] password:[self.loginView textAtIndex:TextFieldIndexPassword]];
+    [self.loginManager performLoginWithUsername:[self.loginView viewAtIndex:TextFieldIndexUsername].text password:[self.loginView viewAtIndex:TextFieldIndexPassword].text];
 }
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 
 @end

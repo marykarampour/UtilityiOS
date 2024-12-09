@@ -86,7 +86,7 @@
             return;
         }
         
-        MKKeyValue *keyValues = [object SQLKeysWithValues];
+        MKUKeyValue *keyValues = [object SQLKeysWithValues];
         
         if (keyValues.first.length) {
             NSString *stmt = [NSString stringWithFormat:exec_insert, [self tableNameForClass:className], keyValues.first, keyValues.second];

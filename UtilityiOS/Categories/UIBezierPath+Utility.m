@@ -1,13 +1,13 @@
 //
 //  UIBezierPath+Utility.m
-//  KaChing-v2
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2018-02-07.
 //  Copyright © 2018 BHS Consultants. All rights reserved.
 //
 
 #import "UIBezierPath+Utility.h"
-#import "MKMath.h"
+#import "MKUMath.h"
 
 @implementation UIBezierPath (Utility)
 
@@ -33,7 +33,7 @@
 }
 
 + (UIBezierPath *)starBezierPathForPolygon:(NSUInteger)vertexCount ofSize:(CGFloat)size {
-    ValueArr *vertices = [MKMath verticesForPolygon:vertexCount ofSize:size];
+    ValueArr *vertices = [MKUMath verticesForPolygon:vertexCount ofSize:size];
     CGMutablePathRef pathRef = CGPathCreateMutable();
     NSUInteger currentVertexIndex = 0;
     NSUInteger skipIndex = (int)((vertexCount-1)/2);

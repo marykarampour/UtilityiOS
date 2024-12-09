@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+__deprecated
 @interface KeyboardAdjuster : NSObject
 
 - (instancetype)initWithViewController:(UIViewController *)viewController;

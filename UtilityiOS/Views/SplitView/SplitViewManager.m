@@ -12,7 +12,7 @@
 #import "ServerController.h"
 #import "NSObject+Utility.h"
 #import "NSObject+Alert.h"
-#import "MKSpinner.h"
+#import "MKUSpinner.h"
 
 @interface SplitViewManager ()
 
@@ -40,17 +40,17 @@
 }
 
 - (UIBarButtonItem *)logoutButton {
-    return [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString([Constants ExitTitle_STR], nil) style:UIBarButtonItemStylePlain target:self action:@selector(logoutAlert)];
+    return [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString([Constants Exit_Title_STR], nil) style:UIBarButtonItemStylePlain target:self action:@selector(logoutAlert)];
 }
 
 - (void)logoutAlert {
-    [self actionAlertWithTitle:[Constants ExitTitle_STR] message:[Constants ExitMessage_STR] alertAction:@selector(logout)];
+    [self actionAlertWithTitle:[Constants Exit_Title_STR] message:[Constants Exit_Message_STR] alertAction:@selector(logout)];
 }
 
 - (void)logout {
-    [MKSpinner show];
+    [MKUSpinner show];
     [ServerController logoutUserWithCompletion:^(id result, NSError *error) {
-        [MKSpinner hide];
+        [MKUSpinner hide];
         [self.splitViewController didLogout];
         [[SplitViewManager instance].splitViewController animateLogout];
     }];

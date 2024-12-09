@@ -21,4 +21,13 @@ const void *NEXT_CONTROL_KEY;
     objc_setAssociatedObject(self, &NEXT_CONTROL_KEY, nextControl, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
+- (BOOL)transferFirstResponderToNextControl {
+    if (self.nextControl) {
+        [self.nextControl becomeFirstResponder];
+        return YES;
+    }
+    [self resignFirstResponder];
+    return NO;
+}
+
 @end

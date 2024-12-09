@@ -1,6 +1,6 @@
 //
 //  NSData+Compression.m
-//  KaChing!
+//  UtilityiOS!
 //
 //  Created by Maryam Karampour on 2017-12-24.
 //  Copyright © 2017 BHS Consultants. All rights reserved.
@@ -19,15 +19,10 @@ unsigned int MAX_BUFFER = 25600000;
     const uint8_t *dataBuffer = (const uint8_t *)self.bytes;
     
     uint8_t *buffer = calloc(size, sizeof(uint8_t));
+    size_t compressedSize = compression_encode_buffer(buffer, size, dataBuffer, size, NULL, COMPRESSION_LZMA);
     
-    if (@available(iOS 9.0, *)) {
-        size_t compressedSize = compression_encode_buffer(buffer, size, dataBuffer, size, NULL, COMPRESSION_LZMA);
-        
-        DEBUGLOG(@"Data size original = %zu AND compressesd = %zu", size, compressedSize);
-        [compressed appendBytes:buffer length:compressedSize];
-    } else {
-        // Fallback on earlier versions
-    }
+    DEBUGLOG(@"Data size original = %zu AND compressesd = %zu", size, compressedSize);
+    [compressed appendBytes:buffer length:compressedSize];
     
     free(buffer);
     
@@ -42,15 +37,10 @@ unsigned int MAX_BUFFER = 25600000;
     
     size_t size = (dataSize < MAX_BUFFER*15 ? dataSize*15 : MAX_BUFFER*15);
     uint8_t *buffer = calloc(size, sizeof(uint8_t));
+    size_t decompressedSize = compression_decode_buffer(buffer, size, dataBuffer, dataSize, NULL, COMPRESSION_LZMA);
     
-    if (@available(iOS 9.0, *)) {
-        size_t decompressedSize = compression_decode_buffer(buffer, size, dataBuffer, dataSize, NULL, COMPRESSION_LZMA);
-        
-        DEBUGLOG(@"Data size original = %zu AND deompressesd = %zu", size, decompressedSize);
-        [decompressed appendBytes:buffer length:decompressedSize];
-    } else {
-        // Fallback on earlier versions
-    }
+    DEBUGLOG(@"Data size original = %zu AND deompressesd = %zu", size, decompressedSize);
+    [decompressed appendBytes:buffer length:decompressedSize];
     
     free(buffer);
     

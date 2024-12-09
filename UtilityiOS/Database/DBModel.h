@@ -6,16 +6,16 @@
 //  Copyright © 2017 Maryam Karampour. All rights reserved.
 //
 
-#import "MKModel.h"
-#import "MKPair.h"
-#import "MKDateRange.h"
+#import "MKUModel.h"
+#import "MKUPair.h"
+#import "MKUDateRange.h"
 
-@interface DBModel : MKModel
+@interface DBModel : MKUModel
 
 @property (nonatomic, strong) NSString *operationType;
 
 - (NSString *)SQLKeysEqualValues;
-- (__kindof MKKeyValue *)SQLKeysWithValues;
+- (__kindof MKUKeyValue *)SQLKeysWithValues;
 + (NSString *)classIDName;
 //+ (NSString *)createTableQuery;
 
@@ -105,7 +105,7 @@ typedef NSString * SYNC_STATUS_NAME;
 @interface DBIntervalColumn : NSObject <NSCopying>
 
 @property (nonatomic, strong) NSString *name;
-@property (nonatomic, strong) MKInterval *values;
+@property (nonatomic, strong) MKUInterval *values;
 @property (nonatomic, assign) BOOL isNull;
 
 @end

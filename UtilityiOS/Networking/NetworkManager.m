@@ -86,12 +86,12 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
 
 + (void)initialize {
     if (!selectors) {
-        selectors = @{@(NetworkRequestType_GET):[NSValue valueWithPointer:@selector(GET:parameters:headers:success:failure:)],
-                      @(NetworkRequestType_POST):[NSValue valueWithPointer:@selector(POST:parameters:headers:success:failure:)],
-                      @(NetworkRequestType_PUT):[NSValue valueWithPointer:@selector(PUT:parameters:headers:success:failure:)],
-                      @(NetworkRequestType_DELETE):[NSValue valueWithPointer:@selector(DELETE:parameters:headers:success:failure:)],
-                      @(NetworkRequestType_HEAD):[NSValue valueWithPointer:@selector(HEAD:parameters:headers:success:failure:)],
-                      @(NetworkRequestType_PATCH):[NSValue valueWithPointer:@selector(PATCH:parameters:headers:success:failure:)]};
+        selectors = @{@(NetworkRequestType_GET)    :[NSValue valueWithPointer:@selector(GET:parameters:headers:success:failure:)],
+                      @(NetworkRequestType_POST)   :[NSValue valueWithPointer:@selector(POST:parameters:headers:success:failure:)],
+                      @(NetworkRequestType_PUT)    :[NSValue valueWithPointer:@selector(PUT:parameters:headers:success:failure:)],
+                      @(NetworkRequestType_DELETE) :[NSValue valueWithPointer:@selector(DELETE:parameters:headers:success:failure:)],
+                      @(NetworkRequestType_HEAD)   :[NSValue valueWithPointer:@selector(HEAD:parameters:headers:success:failure:)],
+                      @(NetworkRequestType_PATCH)  :[NSValue valueWithPointer:@selector(PATCH:parameters:headers:success:failure:)]};
     }
     if (!requestTypeStrings) {
         requestTypeStrings = @{@(NetworkRequestType_GET):@"GET",

@@ -9,21 +9,21 @@
 #import <Foundation/Foundation.h>
 #import "UIColor+Utility.h"
 
-typedef NS_ENUM(NSUInteger, AppThemeStyle) {
-    AppThemeStyle_LIGHT,
-    AppThemeStyle_DARK
+typedef NS_ENUM(NSUInteger, MKU_THEME_STYLE) {
+    MKU_THEME_STYLE_LIGHT,
+    MKU_THEME_STYLE_DARK
 };
 
-extern AppThemeStyle THEME_STYLE;
+extern MKU_THEME_STYLE APP_THEME_STYLE;
 
+/** @brief This class contains the theme used throughout the app
+ @note Projects must define a subclass of this class called YourAppTheme containing app specific theme.
+ @note Define a Category AppTheme+[YourAppName] to swizzle implementations of this base class.
+ Different implementations are done via swizzling in A category of AppTheme. All methods are class methods, no instance of this class is created.
+ */
 @interface AppTheme : NSObject
 
 + (void)applyTheme;
-
-
-//Abstracts
-
-//Appearance
 
 + (UIKeyboardAppearance)keyboardAppearance;
 
@@ -43,6 +43,7 @@ extern AppThemeStyle THEME_STYLE;
 + (UIColor *)tableCellBackgroundColor;
 + (UIColor *)tableCellAccessoryViewColor;
 + (UIImage *)tableCellDisclosureIndicatorImage;
++ (UIColor *)defaultSectionHeaderColor;
 + (UIFont *)sectionHeaderFont;
 + (UIFont *)sectionFooterFont;
 
@@ -77,6 +78,9 @@ extern AppThemeStyle THEME_STYLE;
 + (UIColor *)buttonBackgroundColor;
 + (UIColor *)buttonTextColor;
 + (UIColor *)buttonHighlightedColor;
++ (UIColor *)buttonBorderColor;
++ (UIColor *)buttonDisclosureBorderColor;
++ (UIColor *)buttonDisclosureChevronColor;
 
 + (UIColor *)textViewBackgroundColor;
 + (UIColor *)textViewBorderColor;

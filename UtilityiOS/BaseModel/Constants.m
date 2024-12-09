@@ -9,6 +9,12 @@
 #import "Constants.h"
 #import "AppDelegate.h"
 #import "NSString+Utility.h"
+#import <LocalAuthentication/LocalAuthentication.h>
+#import "MKUMessageComposerController.h"
+#import "NSObject+Utility.h"
+#import "NSError+Utility.h"
+#import "NSObject+Alert.h"
+#import "MKUModel.h"
 
 #pragma mark - defaults
 
@@ -22,18 +28,78 @@ NSString * const DefaultPushNotificationDeviceTokenKey    = @"DefaultPushNotific
 NSString * const DateFormatServerStyle            = @"YYYY-MM-dd HH:mm:ss";
 NSString * const DateFormatShortStyle             = @"yyyy-MM-dd";
 NSString * const DateFormatWeekdayShortStyle      = @"EEEE MMM dd";
-NSString * const DateFormatFullStyle              = @"EEEE, MMMM dd, yyyy";
 NSString * const DateFormatMonthDayYearStyle      = @"MMMM dd, yyyy";
 NSString * const DateFormatMonthYearStyle         = @"MMMM yyyy";
 NSString * const DateFormatDayMonthYearStyle      = @"dd MMMM yyyy";
 NSString * const DateFormatDayMonthYearNumericStyle = @"dd MM yyyy";
 NSString * const DateFormatWeekdayDayStyle        = @"EEEE dd";
-
 NSString * const DateFormatFullTimeStyle          = @"HH:mm:ss EEEE, MMMM dd, yyyy";
-NSString * const DateFormatTimeStyle              = @"HH:mm:ss a";
 NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
+NSString * const DateFormatFullStyle              = @"yyyy-MM-dd'T'HH:mm:ss.SS";
+NSString * const DateFormatTimeStyle              = @"HH:mm:ss";
+NSString * const DateFormatWeekdayMonthLongStyle  = @"EEEE, MMMM dd, yyyy";
+NSString * const DateFormatTimeAPMStyle           = @"HH:mm:ss a";
+NSString * const DateFormatFullTimeZoneStyle      = @"yyyy-MM-dd'T'HH:mm:ss.SS zzz";
+NSString * const DateFormatLongStyle              = @"yyyy-MM-dd'T'HH:mm:ss";
+NSString * const DateFormatShortSlashStyle        = @"MM/dd/yy";
+NSString * const DateFormatTimeLongStyle          = @"MM-dd HH:mm";
+NSString * const DateFormatTimeShortStyle         = @"HH:mm";
+NSString * const DateFormatDayTimeStyle           = @"EEEE, MMM. d, yyyy h:mm a";
+NSString * const DateFormatDayTimeStyleLineBreak  = @"EEEE, MMM. d, yyyy\nh:mm a";
+NSString * const DateFormatDayStyle               = @"EEEE, MMM. d, yyyy";
+NSString * const DateFormatDateTimeStyle          = @"yyyy-MM-dd HH:mm:ss";
+NSString * const DateFormatDateTimeCompactStyle   = @"MM-dd-yy HH:mm";
 
 #pragma mark - classes
+
+static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
+
+@interface AppBuildInfo : MKUModel
+
+@property (nonatomic, strong) NSNumber *Major;
+@property (nonatomic, strong) NSNumber *Minor;
+@property (nonatomic, strong) NSNumber *Revison;
+
+@end
+
+@implementation AppBuildInfo
+
++ (instancetype)infoWithVersionString:(NSString *)version {
+    NSString *majorStr;
+    NSString *minorStr;
+    NSString *revisionStr;
+    
+    NSArray<NSString *> *components = [version componentsSeparatedByString:@"."];
+    
+    switch (components.count) {
+        case 1: {
+            majorStr = components[0];
+        }
+            break;
+        case 2: {
+            majorStr = components[0];
+            minorStr = components[1];
+        }
+            break;
+        case 3: {
+            majorStr = components[0];
+            minorStr = components[1];
+            revisionStr = components[2];
+        }
+            break;
+        default:
+            break;
+    }
+    
+    AppBuildInfo *info = [[AppBuildInfo alloc] init];
+    info.Major = [majorStr stringToNumber];
+    info.Minor = [minorStr stringToNumber];
+    info.Revison = [revisionStr stringToNumber];
+    
+    return info;
+}
+
+@end
 
 @implementation Constants
 
@@ -86,87 +152,180 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
 
 #pragma mark - constants
 
-+ (float)TransitionAnimationDuration {
++ (CGFloat)TransitionAnimationDuration {
     return 0.4;
 }
 
-+ (float)PrimaryColumnWidth {
++ (CGFloat)PrimaryColumnWidth {
     return 256.0;
 }
 
-+ (float)MaxPrimaryColumnWidth {
++ (CGFloat)MaxPrimaryColumnWidth {
     return 256.0;
 }
 
-+ (float)MinPrimaryColumnWidth {
++ (CGFloat)MinPrimaryColumnWidth {
     return 0.0;
 }
 
-+ (float)PrimaryColumnShrunkenWidth {
++ (CGFloat)PrimaryColumnShrunkenWidth {
     return 44.0;
 }
 
-+ (float)DefaultRowHeight {
-    return 44.0;
-}
-
-+ (float)TableSectionHeaderHeight {
++ (CGFloat)BarButtonItemSpaceWidth {
     return 32.0;
 }
 
-+ (float)TableSectionFooterHeight {
++ (CGFloat)TextFieldHeight {
+    return 36.0;
+}
+
++ (CGFloat)TextViewTitleHeight {
+    return 32.0;
+}
+
++ (CGFloat)TextViewMediumHeight {
+    return 128.0;
+}
+
++ (CGFloat)NumericInputTextFieldWidth {
+    return 100.0;
+}
+
++ (CGFloat)InputTextFieldWidth {
+    return 184.0;
+}
+
++ (CGFloat)DefaultRowHeight {
+    return 44.0;
+}
+
++ (CGFloat)ExtendedRowHeight {
+    return 52.0;
+}
+
++ (CGFloat)TableSectionHeaderHeight {
+    return 32.0;
+}
+
++ (CGFloat)TableSectionHeaderMediumHeight {
+    return 44.0;
+}
+
++ (CGFloat)TableSectionHeaderShortHeight {
+    return 22.0;
+}
+
++ (CGFloat)TableSectionFooterHeight {
     return 0.0;
 }
 
-+ (float)TableFooterHeight {
++ (CGFloat)TableFooterHeight {
     return 44.0;
 }
 
-+ (float)TableIconImageSmallSize {
++ (CGFloat)TableCellAccessorySize {
+    return 36.0;
+}
+
++ (CGFloat)TableIconImageSmallSize {
     return 32.0;
 }
 
-+ (float)TableIconImageLargeSize {
++ (CGFloat)TableIconImageLargeSize {
     return 64.0;
 }
 
-+ (float)ButtonCornerRadious {
++ (CGFloat)TableCellLineHeight {
+    return 14.0;
+}
+
++ (CGFloat)TableCellContentHorizontalMargin {
+    return 16.0;
+}
+
++ (CGFloat)TableCellContentVerticalMargin {
+    return 16.0;
+}
+
++ (CGFloat)ButtonCornerRadious {
     return 6.0;
 }
 
-+ (float)BorderWidth {
++ (CGFloat)BorderWidth {
     return 1.0;
 }
 
-+ (float)TextPadding {
++ (CGFloat)TextPadding {
     return 4.0;
 }
 
-+ (float)HorizontalSpacing {
++ (CGFloat)HorizontalSpacing {
     return 8.0;
 }
 
-+ (float)VerticalSpacing {
++ (CGFloat)VerticalSpacing {
     return 8.0;
+}
+
++ (CGFloat)DatePickerPopOverHeight {
+    return 300.0;
+}
+
++ (CGFloat)ButtonChevronSize {
+    return 20.0;
+}
+
++ (CGFloat)DatePickerCalendarHeight {
+    return 400.0;
 }
 
 + (CGSize)SpinnerSize {
     return CGSizeMake(120.0, 120.0);
 }
 
++ (CGSize)DateViewControllerPopoverSize {
+    return CGSizeMake(300.0, [self DatePickerPopOverHeight]);
+}
+
++ (CGSize)DateViewControllerCalPopoverSize {
+    return CGSizeMake(300.0, [self DatePickerCalendarHeight]);
+}
+
++ (NSUInteger)MaxValue1CellCharacterCount {
+    return 16;
+}
+
+
++ (NSUInteger)MaxTextViewCharacters {
+    return 400;
+}
+
++ (NSUInteger)MaxTextViewCharactersLong {
+    return 1024;
+}
+
 + (UIEdgeInsets)TabBarItemImageInsets {
     return UIEdgeInsetsMake(8.0, 0.0, -8.0, 0.0);
 }
 
-+ (float)LoginViewInset {
++ (CGFloat)TabBarHeight {
+    return 52.0;
+}
+
++ (CGFloat)SplitViewPrimaryWidth {
+    return 256.0;
+}
+
++ (CGFloat)LoginViewInset {
     return 100.0;
 }
 
-+ (float)LoginViewWidth {
++ (CGFloat)LoginViewWidth {
     return 400.0;
 }
 
-+ (float)BadgeHeight {
++ (CGFloat)BadgeHeight {
     return 20.0;
 }
 
@@ -196,20 +355,24 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
 
 #pragma mark - strings
 
-+ (NSString *)ExitTitle_STR {
++ (NSString *)Exit_Title_STR {
     return LOCALIZED(@"Exit");
 }
 
-+ (NSString *)ExitMessage_STR {
++ (NSString *)Exit_Message_STR {
     return LOCALIZED(@"Are you sure you want to exit?");
 }
 
-+ (NSString *)LoginFailedTitle_STR {
++ (NSString *)Login_Failed_Title_STR {
     return LOCALIZED(@"Login Failed!");
 }
 
-+ (NSString *)LoginFailedMessage_STR {
++ (NSString *)Login_Failed_Message_STR {
     return LOCALIZED(@"Please check your credentials and try again.");
+}
+
++ (NSString *)Update_Failed_Title_STR {
+    return LOCALIZED(@"Update Failed!");
 }
 
 + (NSString *)FaceID_STR {
@@ -228,8 +391,24 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
     return LOCALIZED(@"Save");
 }
 
++ (NSString *)Reset_STR {
+    return LOCALIZED(@"Reset");
+}
+
 + (NSString *)Replace_STR {
     return LOCALIZED(@"Replace");
+}
+
++ (NSString *)Remove_STR {
+    return LOCALIZED(@"Remove");
+}
+
++ (NSString *)Delete_STR {
+    return LOCALIZED(@"Delete");
+}
+
++ (NSString *)Delete_Prompt_Message_STR {
+    return LOCALIZED(@"Delete this item?");
 }
 
 + (NSString *)OK_STR {
@@ -244,8 +423,48 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
     return LOCALIZED(@"Clear");
 }
 
++ (NSString *)Close_STR {
+    return LOCALIZED(@"Close");
+}
+
 + (NSString *)Skip_STR {
     return LOCALIZED(@"Skip");
+}
+
++ (NSString *)Yes_STR {
+    return LOCALIZED(@"Yes");
+}
+
++ (NSString *)No_STR {
+    return LOCALIZED(@"No");
+}
+
++ (NSString *)Retry_STR {
+    return LOCALIZED(@"Retry");
+}
+
++ (NSString *)Choose_STR {
+    return LOCALIZED(@"Choose");
+}
+
++ (NSString *)Select_STR {
+    return LOCALIZED(@"Select");
+}
+
++ (NSString *)Comments_STR {
+    return LOCALIZED(@"Comments");
+}
+
++ (NSString *)Notes_STR {
+    return LOCALIZED(@"Notes");
+}
+
++ (NSString *)Other_STR {
+    return LOCALIZED(@"Other");
+}
+
++ (NSString *)Details_STR {
+    return LOCALIZED(@"Details");
 }
 
 + (NSString *)Sign_STR {
@@ -262,6 +481,10 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
 
 + (NSString *)Password_STR {
     return LOCALIZED(@"Password");
+}
+
++ (NSString *)Enter_Password_STR {
+    return LOCALIZED(@"Please Enter Your Password");
 }
 
 + (NSString *)First_Name_STR {
@@ -308,12 +531,16 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
     return LOCALIZED(@"Photo Library");
 }
 
-+ (NSString *)CameraDisabledTitle_STR {
-    return LOCALIZED(@"Camera is disabled!");
++ (NSString *)Document_Picker_STR {
+    return LOCALIZED(@"Document Picker");
 }
 
-+ (NSString *)CameraAccessMessage_BLANK_STR {
-    return LOCALIZED(@"Camera access is required for %@. Go to settings to enable camera.");
++ (NSString *)Document_Browser_STR {
+    return LOCALIZED(@"Document Browser");
+}
+
++ (NSString *)Document_Detection_STR {
+    return LOCALIZED(@"Document Detection");
 }
 
 + (NSString *)TakingPicture_STR {
@@ -336,10 +563,6 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
     return LOCALIZED(@"Error");
 }
 
-+ (NSString *)Generic_Error_Message {
-    return LOCALIZED(@"Something went wrong, please try again");
-}
-
 + (NSString *)Placeholder_Date_STR {
     return LOCALIZED(@"1980-02-28");
 }
@@ -352,19 +575,74 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
     return LOCALIZED(@"No Network Connection is available");
 }
 
++ (NSString *)Add_New_Item_STR {
+    return @"Add a new item";
+}
 
-+ (float)GeoFenceRadiousKiloMeter {
++ (NSString *)Generic_Error_Message {
+    return LOCALIZED(@"Something went wrong, please try again");
+}
+
++ (NSString *)No_Camera_Error_Message {
+    return LOCALIZED(@"Device has no camera");
+}
+
++ (NSString *)Camera_Disabled_Error_Title {
+    return LOCALIZED(@"Camera is disabled!");
+}
+
++ (NSString *)Camera_Disabled_Error_Message {
+    return LOCALIZED(@"Camera access is required for taking pictures. Go to settings to enable camera.");
+}
+
++ (NSString *)Missing_Value_Error_Message {
+    return LOCALIZED(@"Please enter a value for %@");
+}
+
++ (NSString *)StringTouchID {
+    return @"Touch ID";
+}
+
++ (NSString *)StringFaceID {
+    return @"Face ID";
+}
+ 
++ (NSString *)LoginBiometricsMessage {
+    return @"Logging in with %@";
+}
+ 
++ (NSString *)BiometricsAuthenticationFailedMessage {
+    return @"%@ Authentication Failed!";
+}
+
++ (NSString *)BiometricsCannotPerformMessage {
+    return @"Device cannot perform %@ Authentication";
+}
+
++ (NSString *)BiometricsUserMismatchMessage {
+    return @"You must Sign In with password first to use %@ Authentication in future";
+}
+
++ (NSString *)ColonEmptyString {
+    return @": ";
+}
+
++ (NSString *)Missing_Object_Error_Message {
+    return LOCALIZED(@"Please select a %@");
+}
+
++ (CGFloat)GeoFenceRadiousKiloMeter {
     return 1.0;
 }
 
-+ (float)GeoFenceRadiousMeter {
-    return [Constants GeoFenceRadiousKiloMeter]*1000.0;
++ (CGFloat)GeoFenceRadiousMeter {
+    return [self GeoFenceRadiousKiloMeter]*1000.0;
 }
 
 + (NSString *)BaseURLString {
-    NSString *https = [Constants USING_HTTPS] ? @"https" : @"http";
+    NSString *https = [self USING_HTTPS] ? @"https" : @"http";
     NSString *url = [self CommonURLString];
-    return [self URLStringWithHttps:https url:url port: [Constants BasePort]];
+    return [self URLStringWithHttps:https url:url port: [self BasePort]];
 }
 
 + (NSString *)URLStringWithHttps:(NSString *)https url:(NSString *)url port:(NSString *)port {
@@ -373,15 +651,15 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
 
 + (NSString *)CommonURLString {
    
-    switch ([Constants ServerEnvironmentVariable]) {
-        case ServerEnvironment_PROD:        return [Constants BaseProductionURL];
-        case ServerEnvironment_QA:          return [Constants BaseQAURL];
-        case ServerEnvironment_TESTING_IN:  return [Constants BaseTestingInURL];
-        case ServerEnvironment_TESTING_OUT: return [Constants BaseTestingOutURL];
-        case ServerEnvironment_LOCAL:       return [Constants BaseLocalHostURL];
-        case ServerEnvironment_DEV_IN:      return [Constants BaseDevInURL];
+    switch ([self ServerEnvironmentVariable]) {
+        case ServerEnvironment_PROD:        return [self BaseProductionURL];
+        case ServerEnvironment_QA:          return [self BaseQAURL];
+        case ServerEnvironment_TESTING_IN:  return [self BaseTestingInURL];
+        case ServerEnvironment_TESTING_OUT: return [self BaseTestingOutURL];
+        case ServerEnvironment_LOCAL:       return [self BaseLocalHostURL];
+        case ServerEnvironment_DEV_IN:      return [self BaseDevInURL];
         case ServerEnvironment_DEV_OUT:
-        default: return [Constants BaseDevOutURL];
+        default: return [self BaseDevOutURL];
     }
 }
 
@@ -441,15 +719,18 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
 + (UIEdgeInsets)safeAreaInsets {
 #ifdef AF_APP_EXTENSIONS
     return UIEdgeInsetsZero;
-#else
-    UIWindow *window = ((AppDelegate *)[UIApplication sharedApplication].delegate).window;
+#endif
+    
+    UIWindow *window = [AppDelegate application].window;
+    UIEdgeInsets insets = window.safeAreaInsets;
     if ([window respondsToSelector:@selector(safeAreaInsets)]) {
         if (@available(iOS 11.0, *)) {
-            return window.safeAreaInsets;
+            CGFloat topInset = insets.top;
+            topInset = (topInset > 0.0 ? topInset : [self statusBarHeight]);
+            return UIEdgeInsetsMake(topInset, insets.left, insets.bottom, insets.right);
         }
     }
-    return UIEdgeInsetsZero;
-#endif
+    return UIEdgeInsetsMake([self statusBarHeight], insets.left, insets.bottom, insets.right);
 }
 
 + (CGFloat)safeAreaHeight {
@@ -469,10 +750,10 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
                     break;
             }
             
-            return inset > 0.0 ? inset : [Constants statusBarHeight];
+            return inset > 0.0 ? inset : [self statusBarHeight];
         }
     }
-    return [Constants statusBarHeight];
+    return [self statusBarHeight];
 #endif
 }
 
@@ -496,7 +777,7 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
             return inset > 0.0 ? inset : 0.0;
         }
     }
-    return [Constants statusBarHeight];
+    return [self statusBarHeight];
 #endif
 }
 
@@ -531,13 +812,84 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
 }
 
 + (NSString *)bioMetricName {
-    if ([Constants touchIDIsAvaialable]) {
-        return [Constants TouchID_STR];
+    if ([self touchIDIsAvaialable]) {
+        return [self TouchID_STR];
     }
-    else if ([Constants faceIDIsAvaialable]) {
-        return [Constants FaceID_STR];
+    else if ([self faceIDIsAvaialable]) {
+        return [self FaceID_STR];
     }
     return nil;
+}
+
++ (NSString *)bioMetricNameForContext:(LAContext *)context {
+    if (context.biometryType == LABiometryTypeTouchID) {
+        return [self StringTouchID];
+    }
+    else if (context.biometryType == LABiometryTypeFaceID) {
+        return [self StringFaceID];
+    }
+    return nil;
+}
+
++ (void)autentiacteWithBiometrics:(void (^)(BOOL, NSError * _Nullable))completion {
+    
+    LAContext *context = [[LAContext alloc] init];
+    BOOL hasBiometry = [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil];
+    NSString *bioTypeStr = [self bioMetricNameForContext:context];
+    __block NSString *message;
+    
+    if (hasBiometry) {
+        NSString *reason = [NSString stringWithFormat:[self LoginBiometricsMessage], bioTypeStr];
+        
+        [context evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:reason reply:^(BOOL success, NSError * _Nullable error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (success && !error) {
+                    completion(success, nil);
+                    return;
+                }
+                else {
+                    switch (error.code) {
+                            
+                        case LAErrorAuthenticationFailed:
+                            message = [self BiometricsAuthenticationFailedMessage];
+                            break;
+                            
+                        case LAErrorUserCancel:
+                        case LAErrorUserFallback:
+                        case LAErrorAppCancel:
+                            message = [self BiometricsAuthenticationFailedMessage];
+                            break;
+                            
+                        case LAErrorPasscodeNotSet:
+                        case LAErrorSystemCancel:
+                        case LAErrorInvalidContext:
+                        case LAErrorBiometryNotAvailable:
+                        case LAErrorBiometryNotEnrolled:
+                        case LAErrorBiometryLockout:
+                        case LAErrorNotInteractive:
+                        default:
+                            message = [self BiometricsCannotPerformMessage];
+                            break;
+                    }
+                }
+                [self handleAutentiacteWithBiometricsMessage:message type:bioTypeStr completion:completion];
+            });
+        }];
+    }
+    else {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            message = [self BiometricsCannotPerformMessage];
+            [self handleAutentiacteWithBiometricsMessage:message type:bioTypeStr completion:completion];
+        });
+    }
+}
+
++ (void)handleAutentiacteWithBiometricsMessage:(NSString *)message type:(NSString *)type completion:(void (^)(BOOL, NSError * _Nullable))completion {
+    if (0 < message.length)
+        message = [NSString stringWithFormat:message, type];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        completion(NO, [NSError errorWithMessage:message]);
+    });
 }
 
 
@@ -579,12 +931,12 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
 + (BOOL)isCurrentDefaultsVersion {
     NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
     NSString *version = [defs objectForKey:DefaultVersionKey];
-    return [version isEqualToString:[Constants DefaultsVersion]];
+    return [version isEqualToString:[self DefaultsVersion]];
 }
 
 + (void)setDefaultsVersion {
     NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
-    [defs setObject:[Constants DefaultsVersion] forKey:DefaultVersionKey];
+    [defs setObject:[self DefaultsVersion] forKey:DefaultVersionKey];
     [defs synchronize];
 }
 
@@ -889,9 +1241,92 @@ NSString * const DateFormatShortAPMStyle          = @"yyyy/MM/dd hh:mm a";
 #ifdef AF_APP_EXTENSIONS
     return;
 #else
-    NSString *phoneNum = [NSString telFromString:num];
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:phoneNum]];
+
+    if (num.length == 0) return;
+    
+    num = [num numbersOnly];
+    NSURL *urlPrompt = [NSURL URLWithString:[NSString telPromptFromString:num]];
+    NSURL *url = [NSURL URLWithString:[NSString telFromString:num]];
+    
+    if (![[UIApplication sharedApplication] canOpenURL:url]) {
+        [NSObject OKAlertWithTitle:@"Device can not make phone calls" message:nil];
+    }
+    else if ([[UIApplication sharedApplication] canOpenURL:urlPrompt]) {
+        [[UIApplication sharedApplication] openURL:urlPrompt options:@{} completionHandler:nil];
+    }
+    else if ([[UIApplication sharedApplication] canOpenURL:url]) {
+        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+    }
+    else {
+        [NSObject textFieldAlertWithTitle:@"Device can not dial this number" message:@"Please make sure the number is valid and try again" defaultText:num target:nil alertActionHandler:^(NSString *string) {
+            [self callPhoneNumber:string];
+        }];
+    }
+#endif
+}
+
++ (NSDictionary *)appVersionDict {
+    return [[self appBuildInfo] toDictionary];
+}
+
++ (AppBuildInfo *)appBuildInfo {
+    NSString *versionStr = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    return [AppBuildInfo infoWithVersionString:versionStr];
+}
+
++ (NSString *)appVersion {
+    return [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+}
+
++ (NSString *)appVersionBuild {
+    NSDictionary *versionDict = [[NSBundle mainBundle] infoDictionary];
+    NSString *build = [versionDict objectForKey:(NSString *)kCFBundleVersionKey];
+    NSString *version = [versionDict objectForKey:@"CFBundleShortVersionString"];
+    version = [NSString stringWithFormat:@"%@ (%@)", version, build];
+    return version;
+}
+
++ (CGFloat)detailMinScreenWidth {
+    float splitWidth = IS_IPAD ? [self SplitViewPrimaryWidth] : 0.0;
+    return [self screenWidth] - splitWidth;
+}
+
++ (MKU_UI_TYPE)UIType {
+    return IS_IPAD ? MKU_UI_TYPE_IPAD : MKU_UI_TYPE_IPHONE;
+}
+
++ (void)clearTempDirectory {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        NSArray *temp = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:NSTemporaryDirectory() error:NULL];
+        
+        for (NSString *file in temp) {
+            NSString *path = [NSString stringWithFormat:@"%@%@", NSTemporaryDirectory(), file];
+            [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];
+        }
+    });
+}
+
++ (void)copyToClipboard:(NSString *)text {
+    if (text.length == 0) return;
+
+    UIPasteboard *obj = [UIPasteboard generalPasteboard];
+    obj.string = text;
+    [NSObject displayToastWithTitle:text message:@"Copied to Clipboard" duration:2];
+}
+
++ (void)emailToAddress:(NSString *)text {
+#ifdef AF_APP_EXTENSIONS
+    return;
+#else
+    if (text.length == 0) return;
+
+    [MKUMessageComposerController initComposerWithRecipient:text completion:^(MKU_MESSAGE_COMPOSER_RESULT result) {
+        if (result == MKU_MESSAGE_COMPOSER_RESULT_FAILED) {
+            [NSObject OKAlertWithTitle:@"Device can not send email" message:nil];
+        }
+    }];
 #endif
 }
 
 @end
+

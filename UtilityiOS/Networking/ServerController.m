@@ -9,7 +9,7 @@
 #import "ServerController.h"
 #import "NSData+Compression.h"
 #import "ServerEndpoints.h"
-#import "MKModel.h"
+#import "MKUModel.h"
 
 static NSDictionary *headers;
 
@@ -48,7 +48,7 @@ static NSDictionary *headers;
 //sample
 + (void)getListWithCompletion:(ServerResultErrorBlock)completion {
     [[NetworkManager instance] requestURL:@"" type:NetworkRequestType_GET parameters:nil headers:[self headers] completion:^(id result, NSError *error) {
-        [self processResult:result error:error class:[MKModel class] completion:completion];
+        [self processResult:result error:error class:[MKUModel class] completion:completion];
     }];
 }
 

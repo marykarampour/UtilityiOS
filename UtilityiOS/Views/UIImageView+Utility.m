@@ -1,6 +1,6 @@
 //
 //  UIImageView+Utility.m
-//  KaChing-v2
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2018-02-23.
 //  Copyright © 2018 BHS Consultants. All rights reserved.
@@ -8,7 +8,7 @@
 
 #import "UIImageView+Utility.h"
 #import "UIImageView+AFNetworking.h"
-#import "MKAssets.h"
+#import "MKUAssets.h"
 
 @implementation UIImageView (Utility)
 
@@ -36,7 +36,7 @@
 
 - (void)setImageWithURLString:(NSString *)url {
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:NSURLRequestReturnCacheDataElseLoad timeoutInterval:30.0];
-    [self setImageWithURLRequest:request placeholderImage:[MKAssets App_Placeholder_Icon] success:nil failure:nil];
+    [self setImageWithURLRequest:request placeholderImage:[MKUAssets systemIconWithName:[MKUAssets Photo_Image_Name] color:[UIColor systemGray3Color]] success:nil failure:nil];
 }
 
 + (UIImageView *)roundedImageViewWithSize:(CGFloat)size {

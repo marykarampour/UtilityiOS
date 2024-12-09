@@ -14,7 +14,7 @@
     uint8_t c;
     [self getBytes:&c length:1];
     switch (c) {
-        case 0xFF: return @"image/jpeg";
+        case 0xFF: return @"image/jpg";
         case 0x89: return @"image/png";
         case 0x49: return @"image/tiff";
         case 0x4D: return @"image/tiff";
@@ -30,7 +30,7 @@
     uint8_t c;
     [self getBytes:&c length:1];
     switch (c) {
-        case 0xFF: return @"jpeg";
+        case 0xFF: return @"jpg";
         case 0x89: return @"png";
         case 0x49: return @"tiff";
         case 0x4D: return @"tiff";
@@ -43,3 +43,4 @@
 }
 
 @end
+
