@@ -186,16 +186,16 @@ static CGFloat const PADDING = 4.0;
 
 + (MKUButtonImageView *)detailButton {
     MKUButtonImageView *button = [[MKUButtonImageView alloc] initWithBadgeSize:[Constants ButtonChevronSize]];
-    button.badgeView.tintColor = [AppTheme darkBlueColorWithAlpha:1.0];
+    button.badgeView.tintColor = [AppTheme buttonDisclosureChevronColor];
     button.titleView.font = [AppTheme smallBoldLabelFont];
     button.titleView.textColor = [AppTheme darkBlueColorWithAlpha:1.0];
     button.titleView.numberOfLines = 0;
     button.titleView.lineBreakMode = NSLineBreakByWordWrapping;
     button.backgroundColor = [UIColor whiteColor];
     button.layer.cornerRadius = [Constants ButtonCornerRadious];
-    button.layer.borderColor = [AppTheme mistBlueColorWithAlpha:1.0].CGColor;
+    button.layer.borderColor = [AppTheme buttonDisclosureBorderColor].CGColor;
     button.layer.borderWidth = 1.0;
-    [button setImage:[MKUAssets systemIconWithName:@"chevron.right" color:[AppTheme mediumBlueColorWithAlpha:1.0]]];
+    [button setImage:[MKUAssets systemIconWithName:@"chevron.right" color:[AppTheme buttonDisclosureChevronColor]]];
     return button;
 }
 

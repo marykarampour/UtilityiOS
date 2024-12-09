@@ -313,6 +313,22 @@
     }
 }
 
++ (UIColor *)buttonDisclosureChevronColor {
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blackColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
++ (UIColor *)buttonDisclosureBorderColor {
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blackColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
 + (UIColor *)textViewBackgroundColor {
     switch (APP_THEME_STYLE) {
         case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];

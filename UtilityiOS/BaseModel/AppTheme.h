@@ -79,6 +79,8 @@ extern MKU_THEME_STYLE APP_THEME_STYLE;
 + (UIColor *)buttonTextColor;
 + (UIColor *)buttonHighlightedColor;
 + (UIColor *)buttonBorderColor;
++ (UIColor *)buttonDisclosureBorderColor;
++ (UIColor *)buttonDisclosureChevronColor;
 
 + (UIColor *)textViewBackgroundColor;
 + (UIColor *)textViewBorderColor;
