@@ -85,7 +85,7 @@ static char PERFORM_SAVE_ACTION_HANDLER_KEY;
     if ([self respondsToSelector:@selector(handleSaveObject)])
         [self handleSaveObject];
     else
-        [self performSaveOrUpdateObjectWithCompletion:[self successResultCompletion]];
+        [self performSaveOrUpdateObjectWithCompletion:self.performSaveOrUpdateObjectCompletionHandler];
 }
 
 - (void)defaultDispatchDelegateForSaveDone {

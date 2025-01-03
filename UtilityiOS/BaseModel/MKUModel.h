@@ -177,10 +177,13 @@
 
 + (NSArray *)namesForOptions:(NSArray<MKUOption *> *)options;
 + (NSArray *)titlesForOptions:(NSArray<MKUOption *> *)options;
-+ (MKUOption *)optionForNameOrTitle:(NSString *)text options:(NSArray<MKUOption *> *)options;
-+ (MKUOption *)optionForName:(NSString *)name options:(NSArray<MKUOption *> *)options;
-+ (MKUOption *)optionForTitle:(NSString *)title options:(NSArray<MKUOption *> *)options;
-+ (MKUOption *)optionForType:(NSInteger)type options:(NSArray<MKUOption *> *)options;
++ (NSArray *)namesForOptions:(NSArray<MKUOption *> *)options range:(NSRange)range;
++ (NSArray *)titlesForOptions:(NSArray<MKUOption *> *)options range:(NSRange)range;
++ (NSArray<MKUOption *> *)optionsForOptions:(NSArray<MKUOption *> *)options range:(NSRange)range;
++ (instancetype)optionForNameOrTitle:(NSString *)text options:(NSArray<MKUOption *> *)options;
++ (instancetype)optionForName:(NSString *)name options:(NSArray<MKUOption *> *)options;
++ (instancetype)optionForTitle:(NSString *)title options:(NSArray<MKUOption *> *)options;
++ (instancetype)optionForType:(NSInteger)type options:(NSArray<MKUOption *> *)options;
 
 @end
 
