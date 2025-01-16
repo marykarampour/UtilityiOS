@@ -11,8 +11,10 @@
 
 /** @brief If self.length == 0 it will return @0. */
 - (NSNumber *)stringToNumber;
-/** @brief If self.length == 0 it will return nil. */
+/** @brief If self.length == 0 it will return nil. Default style is NSNumberFormatterNoStyle */
 - (NSNumber *)stringToNullableNumber;
+/** @brief If self.length == 0 it will return nil. */
+- (NSNumber *)stringToNullableNumberWithStyle:(NSNumberFormatterStyle)style;
 - (NSNumber *)plusMinus;
 - (NSString *)amount;
 - (NSNumber *)stringToNumberWithFormat:(NSNumberFormatterStyle)format;

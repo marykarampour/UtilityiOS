@@ -218,14 +218,16 @@
                 return [self uneditableFieldCellForSection:section withStyle:UITableViewCellStyleValue1];
             }
             
-            MKUInputTableViewCell *cell = [[MKUInputTableViewCell alloc] initWithTextType:[self textTypeForFieldAtIndexPath:indexPath] buttonImage:[self buttonImageForFieldAtIndexPath:indexPath] fieldWidth:[self textWidthForFieldAtIndexPath:indexPath] horizontalMargin:[Constants TableCellContentHorizontalMargin]];
+            NSIndexPath *path = [NSIndexPath indexPathForRow:[self rowForFieldAtIndex:MKU_COLUMN_TYPE_LEFT inSection:section] inSection:section];
+
+            MKUInputTableViewCell *cell = [[MKUInputTableViewCell alloc] initWithTextType:[self textTypeForFieldAtIndexPath:path] buttonImage:[self buttonImageForFieldAtIndexPath:path] fieldWidth:[self textWidthForFieldAtIndexPath:path] horizontalMargin:[Constants TableCellContentHorizontalMargin]];
             
             cell.textField.controller.delegate = self.object.UpdatedObject;
             cell.textField.controller.maxLenght = 64;
             cell.textField.text = [self valueForSection:section];
             cell.label.text = [self titleForSection:section];
-            [cell setIndexPath:[NSIndexPath indexPathForRow:[self rowForFieldAtIndex:MKU_COLUMN_TYPE_LEFT inSection:section] inSection:section]];
-            [cell setTarget:self action:[self actionForFieldButtonAtIndexPath:indexPath]];
+            [cell setIndexPath:path];
+            [cell setTarget:self action:[self actionForFieldButtonAtIndexPath:path]];
             return cell;
         }
             break;
@@ -724,7 +726,7 @@
 }
 
 - (MKU_TEXT_TYPE)textTypeForFieldAtIndexPath:(NSIndexPath *)indexPath {
-    return MKU_TEXT_TYPE_STRING;
+    return [[self.object.UpdatedObject class] textTypeForObjectType:indexPath.row];
 }
 
 - (UIImage *)buttonImageForFieldAtIndexPath:(NSIndexPath *)indexPath {

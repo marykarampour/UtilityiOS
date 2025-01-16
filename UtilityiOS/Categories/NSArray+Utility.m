@@ -53,6 +53,9 @@
         if (arr) [arrays addObject:arr];
         if (exclusive) [arrayOfFiltered removeObjectsInArray:arr];
     }
+    
+    [arrays addObject:arrayOfFiltered];
+
     return arrays;
 }
 

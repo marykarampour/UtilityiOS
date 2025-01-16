@@ -10,6 +10,17 @@
 
 @implementation NSNumber (Utility)
 
+- (NSString *)stringValueWithStyle:(NSNumberFormatterStyle)style {
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    formatter.numberStyle = style;
+    if (style == NSNumberFormatterDecimalStyle) {
+        formatter.minimumFractionDigits = 1;
+        formatter.maximumFractionDigits = 2;
+    }
+    NSString *num = [formatter stringFromNumber:self];
+    return num;
+}
+
 - (BOOL)isInRange:(MKURange *)range {
     return ([self compare:range.start] == NSOrderedSame &&
             [self compare:range.end] == NSOrderedSame);
