@@ -38,6 +38,7 @@ static CGFloat const CONSTRAINT_NO_PADDING = MAXFLOAT;
 - (NSLayoutConstraint *)constraint:(NSLayoutAttribute)attr view:(__kindof UIView *)view margin:(CGFloat)margin priority:(UILayoutPriority)priority;
 
 - (void)constraintSidesExcluding:(NSLayoutAttribute)attr view:(__kindof UIView *)view;
+- (void)constraintSidesExcluding:(NSLayoutAttribute)attr view:(__kindof UIView *)view insets:(UIEdgeInsets)insets;
 - (void)constraintSidesExcluding:(NSLayoutAttribute)attr view:(__kindof UIView *)view margin:(CGFloat)margin;
 - (void)constraintSidesExcluding:(NSLayoutAttribute)attr view:(__kindof UIView *)view margin:(CGFloat)margin priority:(UILayoutPriority)priority;
 
@@ -81,13 +82,42 @@ static CGFloat const CONSTRAINT_NO_PADDING = MAXFLOAT;
 
 - (NSLayoutConstraint *)layoutConstraint:(NSLayoutAttribute)constraint view:(__kindof UIView *)view margin:(CGFloat)margin;
 
+- (void)setPositionInSuperViewWhenHidden:(BOOL)hidden;
++ (void)setPositionOfView:(__kindof UIView *)view inSuperViewWhenHidden:(BOOL)hidden;
+
+/** @brief Adds views to view and adds view to self and sends it to the back. */
+- (void)encapsulateViews:(NSArray<__kindof UIView *> *)views inView:(__kindof UIView *)view;
+
+/** @brief Adds views to view and adds view to self and sends it to the back. The encapsulating view is returned. */
+- (__kindof UIView *)encapsulateViews:(NSArray<__kindof UIView *> *)views;
+
 @end
+
 
 @interface UIView (Utility)
 
 - (void)removeAllSubviews;
 - (void)addTopBar:(BOOL)top bottomBar:(BOOL)bottom color:(UIColor *)color height:(CGFloat)height;
 - (UIView *)addVerticalBar:(CGFloat)leftDistance onLeft:(BOOL)onLeft color:(UIColor *)color width:(CGFloat)width;
++ (void)removeAllSubviewsOfSuperview:(__kindof UIView *)superview;
+
+/** Adds the view to self, and constraints it to all sides.
+ @param position If it is MKU_VIEW_HIERARCHY_POSITION_BACK it sends the view to background.
+ If it is MKU_VIEW_HIERARCHY_POSITION_FRONT it keeps it in foreground. In this case it is equivalent to MKU_VIEW_HIERARCHY_POSITION_NEUTRAL. */
+- (void)addCoverView:(__kindof UIView *)view position:(MKU_VIEW_HIERARCHY_POSITION)position;
+/** Adds the view to self, and constraints it to all sides.
+ @param position If it is MKU_VIEW_HIERARCHY_POSITION_BACK it sends the view to background.
+ If it is MKU_VIEW_HIERARCHY_POSITION_FRONT it keeps it in foreground. In this case it is equivalent to MKU_VIEW_HIERARCHY_POSITION_NEUTRAL. */
+- (void)addCoverView:(__kindof UIView *)view position:(MKU_VIEW_HIERARCHY_POSITION)position insets:(UIEdgeInsets)insets;
+/** @brief Sets view as the wole subview of this view. */
+- (void)setContentView:(__kindof UIView *)view;
+/** @brief Sets view as the wole subview of this superview. */
++ (void)setContentView:(__kindof UIView *)view forSuperview:(__kindof UIView *)superview;
+/** @brief Sets view as the wole subview of this superview. */
++ (void)setContentView:(__kindof UIView *)view forSuperview:(__kindof UIView *)superview insets:(UIEdgeInsets)insets;
+/** @brief Sets view as the wole subview of this superview.
+ @param setterHandler Use to set the view or do other construction. Called before adding the view as a subview and setting constraints. */
++ (void)setContentView:(__kindof UIView *)view forSuperview:(__kindof UIView *)superview insets:(UIEdgeInsets)insets setterHandler:(void (^)(void))setterHandler;
 
 @end
 
@@ -103,6 +133,16 @@ static CGFloat const CONSTRAINT_NO_PADDING = MAXFLOAT;
 
 @end
 
+@interface UIView (DrawText)
 
+/** @brief Call in drawRect:
+ @note Will not draw if color is not given. */
+- (void)drawText:(NSString *)text textColor:(UIColor *)textColor inRect:(CGRect)rect withAngle:(CGFloat)angle atPoint:(CGPoint)point;
+
+/** @brief Call in drawRect:
+ @note Will not draw if color is not given. */
+- (void)drawAttributedString:(NSAttributedString *)attributedText inRect:(CGRect)rect withAngle:(CGFloat)angle atPoint:(CGPoint)point;
+
+@end
 
 

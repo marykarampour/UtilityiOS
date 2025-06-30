@@ -1,13 +1,13 @@
 //
 //  ActionObject.h
-//  KaChing-v2
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2017-12-31.
 //  Copyright © 2017 BHS Consultants. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
-#import "MKPair.h"
+#import "MKUPair.h"
 
 @interface ActionObject : NSObject
 
@@ -15,6 +15,8 @@
 @property (nonatomic, weak) id target;
 @property (nonatomic, assign) SEL action;
 @property (nonatomic, strong) NSObject *object;
+/** @brief Default is UIAlertActionStyleDefault. */
+@property (nonatomic, assign) UIAlertActionStyle style;
 
 - (instancetype)initWithTitle:(NSString *)title target:(id)target action:(SEL)action;
 + (instancetype)actionWithTitle:(NSString *)title target:(id)target action:(SEL)action;
@@ -22,12 +24,15 @@
 
 - (instancetype)initWithTitle:(NSString *)title target:(id)target action:(SEL)action object:(NSObject *)object;
 + (instancetype)actionWithTitle:(NSString *)title target:(id)target action:(SEL)action object:(NSObject *)object;
-+ (NSArray <ActionObject *> *)actionsWithTitleObjects:(MKPairArray <NSString *, NSObject *> *)titles target:(id)target action:(SEL)action;
++ (NSArray <ActionObject *> *)actionsWithTitleObjects:(MKUPairArray <NSString *, NSObject *> *)titles target:(id)target action:(SEL)action;
++ (instancetype)actionWithAction:(SEL)action;
++ (instancetype)actionWithTarget:(id)target action:(SEL)action;
++ (instancetype)blankAction;
 
 @end
 
 
-@interface OptionObject : NSObject
+@interface OptionObject : MKUModel
 
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *iconName;

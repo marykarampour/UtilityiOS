@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MasterDetailProtocol.h"
-#import "MKTableViewController.h"
+#import "MKUTableViewController.h"
 //Abstract
 typedef NSUInteger TabBarIndex;
 
@@ -18,7 +18,7 @@ typedef NS_ENUM(NSUInteger, PrimaryViewState) {
     PrimaryViewStateShrunken
 };
 
-@interface MasterViewController : MKTableViewController <MasterProtocol>
+@interface MasterViewController : MKUTableViewController <MasterProtocol>
 
 @property (nonatomic, weak) id<DetailProtocol> detailDelegate;
 

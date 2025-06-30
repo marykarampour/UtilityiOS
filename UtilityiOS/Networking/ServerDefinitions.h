@@ -1,6 +1,6 @@
 //
 //  ServerDefinitions.h
-//  KaChing
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2020-11-28.
 //  Copyright © 2020 Prometheus Software. All rights reserved.

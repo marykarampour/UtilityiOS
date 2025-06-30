@@ -28,37 +28,37 @@ static DictNumString *syncStatusDict;
 
 - (NSString *)SQLKeysEqualValues {
     
-    NSArray<MKKeyValue *> *pairs = [self SQLKeyValuePairs];
+    NSArray<MKUKeyValue *> *pairs = [self SQLKeyValuePairs];
     NSString *str = @"";
     
-    for (MKKeyValue *pr in pairs) {
+    for (MKUKeyValue *pr in pairs) {
         NSString *format = ([pairs lastObject] == pr ? @"%@%@=%@" : @"%@%@=%@, ");
         str = [NSString stringWithFormat:format, str, pr.first, pr.second];
     }
     return str;
 }
 
-- (MKKeyValue *)SQLKeysWithValues {
+- (MKUKeyValue *)SQLKeysWithValues {
     
-    NSArray<MKKeyValue *> *pairs = [self SQLKeyValuePairs];
+    NSArray<MKUKeyValue *> *pairs = [self SQLKeyValuePairs];
     NSString *keyStr = @"";
     NSString *valueStr = @"";
     
-    for (MKKeyValue *pr in pairs) {
+    for (MKUKeyValue *pr in pairs) {
         NSString *format = ([pairs lastObject] == pr ? @"%@%@" : @"%@%@, ");
         keyStr = [NSString stringWithFormat:format, keyStr, pr.first];
         valueStr = [NSString stringWithFormat:format, valueStr, pr.second];
     }
     
-    MKKeyValue *pair = [[MKKeyValue alloc] init];
+    MKUKeyValue *pair = [[MKUKeyValue alloc] init];
     pair.first = keyStr;
     pair.second = valueStr;
     
     return pair;
 }
 //mapper not used
-- (NSArray<MKKeyValue *> *)SQLKeyValuePairs {
-    NSMutableArray<MKKeyValue *> *pairs = [[NSMutableArray alloc] init];
+- (NSArray<MKUKeyValue *> *)SQLKeyValuePairs {
+    NSMutableArray<MKUKeyValue *> *pairs = [[NSMutableArray alloc] init];
     DictStringString *attrPropertyDict = self.class.propertyClassNames;
     
     [attrPropertyDict enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
@@ -87,7 +87,7 @@ static DictNumString *syncStatusDict;
             keyStr = [NSString stringWithFormat:@"%@", propertyName];
             valueStr = [NSString stringWithFormat:@"%@", value];
             
-            MKKeyValue *pair = [[MKKeyValue alloc] init];
+            MKUKeyValue *pair = [[MKUKeyValue alloc] init];
             pair.first = keyStr;
             pair.second = valueStr;
             
@@ -191,7 +191,7 @@ static DictNumString *syncStatusDict;
 @implementation DBColumn
 
 - (id)copyWithZone:(NSZone *)zone {
-    return [self MKCopyWithZone:zone];
+    return [self MKUCopyWithZone:zone];
 }
 
 + (DBColumn *)columnWithName:(NSString *)name values:(NSArray *)values {
@@ -217,7 +217,7 @@ static DictNumString *syncStatusDict;
 @implementation DBIntervalColumn
 
 - (id)copyWithZone:(NSZone *)zone {
-    return [self MKCopyWithZone:zone];
+    return [self MKUCopyWithZone:zone];
 }
 
 @end

@@ -42,8 +42,8 @@
 /** @brief images used in tabbar items
  @code
  - (StringArr *)tabbarImages {
-     MKPairArray *tabImages = [[MKPairArray alloc] init];
-     tabImages.array = @[[MKPair first:@(0) second:@""]];
+     MKUPairArray *tabImages = [[MKUPairArray alloc] init];
+     tabImages.array = @[[MKUPair first:@(0) second:@""]];
      return [tabImages allValues];
  }
  @endcode

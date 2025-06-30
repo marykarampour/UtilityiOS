@@ -8,6 +8,9 @@
 
 #import "UIView+Utility.h"
 #import <CoreText/CoreText.h>
+#import "NSString+AttributedText.h"
+#import "NSAttributedString+Utility.h"
+#import "UIColor+Utility.h"
 
 @implementation UIView (Constraints)
 
@@ -23,18 +26,38 @@
     }
 }
 
+- (NSLayoutConstraint *)layoutConstraint:(NSLayoutAttribute)constraint view:(__kindof UIView *)view margin:(CGFloat)margin {
+    return [NSLayoutConstraint constraintWithItem:view attribute:constraint relatedBy:NSLayoutRelationEqual toItem:self attribute:constraint multiplier:1.0 constant:margin];
+}
+
+
+- (void)setPositionInSuperViewWhenHidden:(BOOL)hidden {
+    [UIView setPositionOfView:self inSuperViewWhenHidden:hidden];
+}
+
++ (void)setPositionOfView:(__kindof UIView *)view inSuperViewWhenHidden:(BOOL)hidden {
+    if (hidden)
+        [view.superview sendSubviewToBack:view];
+    else
+        [view.superview bringSubviewToFront:view];
+}
+
 - (void)addConstraintsWithFormat:(NSString *)format options:(NSLayoutFormatOptions)opts metrics:(NSDictionary<NSString *,id> *)metrics views:(NSDictionary<NSString *,id> *)views {
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:format options:opts metrics:metrics views:views]];
 }
 
-- (NSLayoutConstraint *)addConstraintWithItem:(id)view1 attribute:(NSLayoutAttribute)attr1 relatedBy:(NSLayoutRelation)relation toItem:(id)view2 attribute:(NSLayoutAttribute)attr2 multiplier:(CGFloat)multiplier constant:(CGFloat)c {
+- (NSLayoutConstraint *)addConstraintWithItem:(__kindof UIView *)view1 attribute:(NSLayoutAttribute)attr1 relatedBy:(NSLayoutRelation)relation toItem:(__kindof UIView *)view2 attribute:(NSLayoutAttribute)attr2 multiplier:(CGFloat)multiplier constant:(CGFloat)c {
+    if (!view1) return nil;
+    if (!view2 && attr1 != attr2) return nil;
     
     NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:view1 attribute:attr1 relatedBy:relation toItem:view2 attribute:attr2 multiplier:multiplier constant:c];
     [self addConstraint:constraint];
     return constraint;
 }
 
-- (NSLayoutConstraint *)addConstraintWithItem:(id)view1 attribute:(NSLayoutAttribute)attr1 relatedBy:(NSLayoutRelation)relation toItem:(id)view2 attribute:(NSLayoutAttribute)attr2 multiplier:(CGFloat)multiplier constant:(CGFloat)c priority:(UILayoutPriority)priority {
+- (NSLayoutConstraint *)addConstraintWithItem:(__kindof UIView *)view1 attribute:(NSLayoutAttribute)attr1 relatedBy:(NSLayoutRelation)relation toItem:(__kindof UIView *)view2 attribute:(NSLayoutAttribute)attr2 multiplier:(CGFloat)multiplier constant:(CGFloat)c priority:(UILayoutPriority)priority {
+    if (!view1) return nil;
+    if (!view2 && attr1 != attr2) return nil;
     
     NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:view1 attribute:attr1 relatedBy:relation toItem:view2 attribute:attr2 multiplier:multiplier constant:c];
     constraint.priority = priority;
@@ -82,6 +105,7 @@
 }
 
 - (void)constraintWidth:(CGFloat)width forView:(__kindof UIView *)view priority:(UILayoutPriority)priority {
+    if (!view) return;
     
     NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeWidth multiplier:1.0 constant:width];
     constraint.priority = priority;
@@ -89,6 +113,7 @@
 }
 
 - (void)constraintHeight:(CGFloat)height forView:(__kindof UIView *)view priority:(UILayoutPriority)priority {
+    if (!view) return;
     
     NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeHeight multiplier:1.0 constant:height];
     constraint.priority = priority;
@@ -113,6 +138,21 @@
 
 - (void)constraintSidesExcluding:(NSLayoutAttribute)attr view:(__kindof UIView *)view {
     [self constraintSidesExcluding:attr view:view margin:0.0];
+}
+
+- (void)constraintSidesExcluding:(NSLayoutAttribute)attr view:(__kindof UIView *)view insets:(UIEdgeInsets)insets {
+    if (attr != NSLayoutAttributeTop) {
+        [self constraint:NSLayoutAttributeTop view:view margin:insets.top];
+    }
+    if (attr != NSLayoutAttributeLeft) {
+        [self constraint:NSLayoutAttributeLeft view:view margin:insets.left];
+    }
+    if (attr != NSLayoutAttributeBottom) {
+        [self constraint:NSLayoutAttributeBottom view:view margin:-insets.bottom];
+    }
+    if (attr != NSLayoutAttributeRight) {
+        [self constraint:NSLayoutAttributeRight view:view margin:-insets.right];
+    }
 }
 
 - (void)constraintSidesExcluding:(NSLayoutAttribute)attr view:(__kindof UIView *)view margin:(CGFloat)margin {
@@ -182,7 +222,7 @@
 
 - (void)constraintVertically:(NSArray<__kindof UIView *> *)views interItemMargin:(CGFloat)interItemMargin horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin equalHeights:(BOOL)equalHeights parentConstraints:(NSLayoutAttribute)parentConstraints {
     
-    [self constraintVertically:views interItemMargin:interItemMargin horizontalMargin:horizontalMargin verticalMargin:verticalMargin equalHeights:equalHeights parentConstraints:NSLayoutAttributeTop | NSLayoutAttributeBottom horizontalConstraints:NSLayoutAttributeLeft | NSLayoutAttributeRight];
+    [self constraintVertically:views interItemMargin:interItemMargin horizontalMargin:horizontalMargin verticalMargin:verticalMargin equalHeights:equalHeights parentConstraints:parentConstraints horizontalConstraints:NSLayoutAttributeLeft | NSLayoutAttributeRight];
 }
 
 - (void)constraintHorizontally:(NSArray<__kindof UIView *> *)views interItemMargin:(CGFloat)interItemMargin horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin equalWidths:(BOOL)equalWidths parentConstraints:(NSLayoutAttribute)parentConstraints {
@@ -193,32 +233,32 @@
 - (void)constraintVertically:(NSArray<__kindof UIView *> *)views interItemMargin:(CGFloat)interItemMargin horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin equalHeights:(BOOL)equalHeights parentConstraints:(NSLayoutAttribute)parentConstraints horizontalConstraints:(NSLayoutAttribute)horizontalConstraints {
     
     NSMutableArray<UIView *> *totalViews = [[NSMutableArray alloc] init];
-
+    
     for (UIView *view in views) {
         if ([self.subviews containsObject:view]) {
             [totalViews addObject:view];
         }
     }
-
+    
     long total = totalViews.count;
     if (total == 0) return;
-
+    
     UIView *last = totalViews.firstObject;
     
     if (parentConstraints & NSLayoutAttributeTop) {
         [self constraint:NSLayoutAttributeTop view:last margin:verticalMargin];
     }
-
+    
     for (UIView *view in totalViews) {
-
+        
         long index = [totalViews indexOfObject:view];
-
+        
         if (horizontalMargin != CONSTRAINT_NO_PADDING) {
             if (horizontalConstraints == NSLayoutAttributeLeft) {
-                [self constraint:NSLayoutAttributeLeft view:view margin:verticalMargin];
+                [self constraint:NSLayoutAttributeLeft view:view margin:horizontalMargin];
             }
             else if (horizontalConstraints == NSLayoutAttributeRight) {
-                [self constraint:NSLayoutAttributeRight view:view margin:-verticalMargin];
+                [self constraint:NSLayoutAttributeRight view:view margin:-horizontalMargin];
             }
             else {
                 [self constraint:NSLayoutAttributeLeft view:view margin:horizontalMargin];
@@ -243,26 +283,26 @@
 - (void)constraintHorizontally:(NSArray<__kindof UIView *> *)views interItemMargin:(CGFloat)interItemMargin horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin equalWidths:(BOOL)equalWidths parentConstraints:(NSLayoutAttribute)parentConstraints verticalConstraints:(NSLayoutAttribute)verticalConstraints {
     
     NSMutableArray<UIView *> *totalViews = [[NSMutableArray alloc] init];
-
+    
     for (UIView *view in views) {
         if ([self.subviews containsObject:view]) {
             [totalViews addObject:view];
         }
     }
-
+    
     long total = totalViews.count;
     if (total == 0) return;
-
+    
     UIView *last = totalViews.firstObject;
     
     if (parentConstraints & NSLayoutAttributeLeft) {
         [self constraint:NSLayoutAttributeLeft view:last margin:horizontalMargin];
     }
-
+    
     for (UIView *view in totalViews) {
-
+        
         long index = [totalViews indexOfObject:view];
-
+        
         if (verticalMargin != CONSTRAINT_NO_PADDING) {
             if (verticalConstraints == NSLayoutAttributeTop) {
                 [self constraint:NSLayoutAttributeTop view:view margin:verticalMargin];
@@ -278,7 +318,7 @@
         else if (verticalConstraints == NSLayoutAttributeCenterY) {
             [self addConstraintWithItem:view attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:last attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0];
         }
-
+        
         if ((parentConstraints & NSLayoutAttributeRight) && index == totalViews.count - 1) {
             [self constraint:NSLayoutAttributeRight view:view margin:-horizontalMargin];
         }
@@ -305,11 +345,22 @@
     [self addConstraint:[NSLayoutConstraint constraintWithItem:view attribute:attr relatedBy:NSLayoutRelationLessThanOrEqual toItem:self attribute:attr multiplier:1.0 constant:0.0]];
 }
 
+- (void)encapsulateViews:(NSArray<__kindof UIView *> *)views inView:(__kindof UIView *)view {
+    
+    for (UIView *obj in views) {
+        [obj removeFromSuperview];
+        [view addSubview:obj];
+    }
+    
+    [self addSubview:view];
+    [self sendSubviewToBack:view];
+}
 
-#pragma mark - constraints
-
-- (NSLayoutConstraint *)layoutConstraint:(NSLayoutAttribute)constraint view:(__kindof UIView *)view margin:(CGFloat)margin {
-    return [NSLayoutConstraint constraintWithItem:view attribute:constraint relatedBy:NSLayoutRelationEqual toItem:self attribute:constraint multiplier:1.0 constant:margin];
+- (__kindof UIView *)encapsulateViews:(NSArray<__kindof UIView *> *)views {
+    
+    UIView *view = [[UIView alloc] init];
+    [self encapsulateViews:views inView:view];
+    return view;
 }
 
 @end
@@ -318,13 +369,17 @@
 @implementation UIView (Utility)
 
 - (void)removeAllSubviews {
-    for (UIView *view in self.subviews) {
+    [UIView removeAllSubviewsOfSuperview:self];
+}
+
++ (void)removeAllSubviewsOfSuperview:(__kindof UIView *)superview {
+    for (UIView *view in superview.subviews) {
         [view removeFromSuperview];
     }
 }
 
 - (void)addTopBar:(BOOL)top bottomBar:(BOOL)bottom color:(UIColor *)color height:(CGFloat)height {
-
+    
     if (top) {
         UIView *topBar = [[UIView alloc] init];
         topBar.backgroundColor = color;
@@ -341,9 +396,9 @@
         UIView *bottomBar = [[UIView alloc] init];
         bottomBar.backgroundColor = color;
         [self addSubview:bottomBar];
-
+        
         [self removeConstraintsMask];
-
+        
         [self constraintHeight:height forView:bottomBar];
         [self constraint:NSLayoutAttributeRight view:bottomBar];
         [self constraint:NSLayoutAttributeBottom view:bottomBar];
@@ -364,6 +419,39 @@
     [self constraint:NSLayoutAttributeTop view:bar];
     [self constraint:NSLayoutAttributeBottom view:bar];
     return bar;
+}
+
+- (void)addCoverView:(__kindof UIView *)view position:(MKU_VIEW_HIERARCHY_POSITION)position {
+    [self addCoverView:view position:position insets:UIEdgeInsetsZero];
+}
+
+- (void)addCoverView:(__kindof UIView *)view position:(MKU_VIEW_HIERARCHY_POSITION)position insets:(UIEdgeInsets)insets {
+    [self addSubview:view];
+    if (position == MKU_VIEW_HIERARCHY_POSITION_BACK)
+        [self sendSubviewToBack:view];
+    [self removeConstraintsMask];
+    [self constraintSidesForView:view insets:insets];
+}
+
+- (void)setContentView:(__kindof UIView *)view {
+    [UIView setContentView:self forSuperview:self insets:UIEdgeInsetsZero setterHandler:nil];
+}
+
++ (void)setContentView:(__kindof UIView *)view forSuperview:(__kindof UIView *)superview {
+    [self setContentView:view forSuperview:superview insets:UIEdgeInsetsZero setterHandler:nil];
+}
+
++ (void)setContentView:(__kindof UIView *)view forSuperview:(__kindof UIView *)superview insets:(UIEdgeInsets)insets {
+    [self setContentView:view forSuperview:superview insets:insets setterHandler:nil];
+}
+
++ (void)setContentView:(__kindof UIView *)view forSuperview:(__kindof UIView *)superview insets:(UIEdgeInsets)insets setterHandler:(void (^)(void))setterHandler {
+    if (![view isKindOfClass:[UIView class]]) return;
+    if (setterHandler) setterHandler();
+    
+    [superview addSubview:view];
+    [superview removeConstraintsMask];
+    [superview constraintSidesForView:view insets:insets];
 }
 
 @end
@@ -420,6 +508,99 @@
     self.layer.shadowOpacity = 0.8f;
     self.layer.shadowPath = shadowPath.CGPath;
     self.layer.shadowRadius = self.layer.cornerRadius;
+}
+
+@end
+
+
+@implementation UIView (DrawText)
+
+- (void)drawText:(NSString *)text textColor:(UIColor *)textColor inRect:(CGRect)rect withAngle:(CGFloat)angle atPoint:(CGPoint)point {
+    if (!textColor) return;
+    [self drawAttributedString:[text attributedTextWithColor:textColor] inRect:rect withAngle:angle atPoint:point];
+}
+
+//http://www.invasivecode.com/weblog/core-text
+//TODO: Different angles must be tested, works for -M_PI_2
+- (void)drawAttributedString:(NSAttributedString *)attributedText inRect:(CGRect)rect withAngle:(CGFloat)angle atPoint:(CGPoint)point {
+    
+    if (attributedText.length == 0) return;
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(context);
+    CGContextSetTextMatrix(context, CGAffineTransformIdentity);
+    CGContextTranslateCTM(context, point.x, point.y);
+    CGContextScaleCTM(context, 1.0, -1.0);
+    CGContextRotateCTM(context, angle);
+    
+    CTFramesetterRef frameRef = CTFramesetterCreateWithAttributedString((CFAttributedStringRef)attributedText);
+    CGRect flippedRect = CGRectMake(rect.origin.x, rect.origin.y, rect.size.height, rect.size.width);
+    CGPathRef path = CGPathCreateWithRect(flippedRect, nil);
+    NSRange runRange = NSMakeRange(0, 0);
+    CFRange runRangeRef = CFRangeMake(runRange.location, runRange.length);
+    CTFrameRef frame = CTFramesetterCreateFrame(frameRef, runRangeRef, path, nil);
+    CFArrayRef frameLineArr = CTFrameGetLines(frame);
+    CFIndex frameLineCount = CFArrayGetCount(frameLineArr);
+    CGPoint textPosition = CGPointMake(0.0, 0.0);
+    
+    for (CFIndex frameLineIndex=0; frameLineIndex<frameLineCount; frameLineIndex++) {
+        
+        CTLineRef frameLine = (CTLineRef)CFArrayGetValueAtIndex(frameLineArr, frameLineIndex);
+        CFArrayRef runArr = CTLineGetGlyphRuns(frameLine);
+        CFIndex runCount = CFArrayGetCount(runArr);
+        CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex(runArr, 0);
+        CGFloat lineLength = 0.0;
+        CFIndex runGlyphCount = CTRunGetGlyphCount(run);
+        runRange.length = runGlyphCount;
+        
+        CGContextSetTextPosition(context, textPosition.x, textPosition.y);
+        
+        for (CFIndex runIndex=0; runIndex<runCount; runIndex++) {
+            
+            CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex(runArr, runIndex);
+            CTFontRef runFont = CFDictionaryGetValue(CTRunGetAttributes(run), kCTFontAttributeName);
+            CFIndex runGlyphCount = CTRunGetGlyphCount(run);
+            
+            runRange.length = runGlyphCount;
+            MKUColorComponents *comps = [attributedText colorComponentsInRange:runRange].firstObject;
+            if (![comps isValid]) continue;
+            
+            for (CFIndex runGlyphIndex=0; runGlyphIndex<runGlyphCount; runGlyphIndex++) {
+                
+                CFRange range = CFRangeMake(runGlyphIndex, 1);
+                
+                CGAffineTransform textMatrix = CTRunGetTextMatrix(run);
+                textMatrix.tx = textPosition.x;
+                textMatrix.ty = textPosition.y;
+                CGContextSetTextMatrix(context, textMatrix);
+                
+                CGFontRef font = CTFontCopyGraphicsFont(runFont, NULL);
+                CGGlyph glyph;
+                CGPoint position;
+                CTRunGetGlyphs(run, range, &glyph);
+                CTRunGetPositions(run, range, &position);
+                lineLength = position.x;
+                
+                CGContextSetFont(context, font);
+                CGContextSetFontSize(context, CTFontGetSize(runFont));
+                
+                CGContextSetRGBFillColor(context, comps.red, comps.green, comps.blue, comps.alpha);
+                CGContextShowGlyphsAtPositions(context, &glyph, &position, 1);
+                
+                CFRelease(font);
+            }
+            
+            textPosition.x = 0.0;
+            textPosition.y -= 16.0;
+            runRange.location = runGlyphCount;
+            CFRelease(runFont);
+        }
+        
+        CFRelease(runArr);
+    }
+    CFRelease(path);
+    CFRelease(frameRef);
+    CGContextRestoreGState(context);
 }
 
 @end
