@@ -1,1 +1,3 @@
-# UtilityiOS is a Mobile Kit Utility library for routines
+# UtilityiOS
+
+A Mobile Kit Utility library for routines
