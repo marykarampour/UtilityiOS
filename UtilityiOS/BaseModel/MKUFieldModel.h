@@ -35,6 +35,8 @@
 - (NSDate *)dateValueForSectionType:(NSInteger)type;
 + (DATE_FORMAT_STYLE)dateFormatForObjectType:(NSInteger)type;
 + (DATE_FORMAT_STYLE)dateFormatForSectionType:(NSInteger)type;
++ (MKU_TEXT_TYPE)textTypeForObjectType:(NSInteger)type;
++ (BOOL)shouldValidateWhenEditingObjectType:(NSInteger)type;
 - (NSNumber *)numberValueForObjectType:(NSInteger)type;
 - (NSNumber *)numberValueForSectionType:(NSInteger)type;
 - (NSObject *)valueForObjectType:(NSInteger)type;

@@ -628,11 +628,11 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
 }
 
 + (instancetype)optionWithTitle:(NSString *)title name:(NSString *)name value:(NSInteger)value {
-    return [[MKUOption alloc] initWithTitle:title name:name value:value];
+    return [[self alloc] initWithTitle:title name:name value:value];
 }
 
 + (instancetype)optionWithTitle:(NSString *)title value:(NSInteger)value {
-    return [[MKUOption alloc] initWithTitle:title name:title value:value];
+    return [[self alloc] initWithTitle:title name:title value:value];
 }
 
 + (NSArray *)namesForOptions:(NSArray<MKUOption *> *)options {
@@ -643,7 +643,22 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
     return [NSArray arrayFromArray:options forKey:NSStringFromSelector(@selector(title))];
 }
 
-+ (MKUOption *)optionForNameOrTitle:(NSString *)text options:(NSArray<MKUOption *> *)options {
++ (NSArray *)namesForOptions:(NSArray<MKUOption *> *)options range:(NSRange)range {
+    return [self namesForOptions:[self optionsForOptions:options range:range]];
+}
+
++ (NSArray *)titlesForOptions:(NSArray<MKUOption *> *)options range:(NSRange)range {
+    return [self titlesForOptions:[self optionsForOptions:options range:range]];
+}
+
++ (NSArray<MKUOption *> *)optionsForOptions:(NSArray<MKUOption *> *)options range:(NSRange)range {
+    NSArray *arr = [options filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(MKUOption * _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+        return NSLocationInRange(evaluatedObject.value, range);
+    }]];
+    return [NSArray arrayFromArray:arr forKey:NSStringFromSelector(@selector(title))];
+}
+
++ (instancetype)optionForNameOrTitle:(NSString *)text options:(NSArray<MKUOption *> *)options {
     return [options objectPassingTest:^BOOL(MKUOption *obj, NSUInteger idx, BOOL *stop) {
         if ([obj.name isEqualToString:text] || [obj.title isEqualToString:text])
             return obj;
@@ -651,7 +666,7 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
     }];
 }
 
-+ (MKUOption *)optionForName:(NSString *)name options:(NSArray<MKUOption *> *)options {
++ (instancetype)optionForName:(NSString *)name options:(NSArray<MKUOption *> *)options {
     return [options objectPassingTest:^BOOL(MKUOption *obj, NSUInteger idx, BOOL *stop) {
         if ([obj.name isEqualToString:name])
             return obj;
@@ -659,7 +674,7 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
     }];
 }
 
-+ (MKUOption *)optionForTitle:(NSString *)title options:(NSArray<MKUOption *> *)options {
++ (instancetype)optionForTitle:(NSString *)title options:(NSArray<MKUOption *> *)options {
     return [options objectPassingTest:^BOOL(MKUOption *obj, NSUInteger idx, BOOL *stop) {
         if ([obj.title isEqualToString:title])
             return obj;
@@ -667,7 +682,7 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
     }];
 }
 
-+ (MKUOption *)optionForType:(NSInteger)type options:(NSArray<MKUOption *> *)options {
++ (instancetype)optionForType:(NSInteger)type options:(NSArray<MKUOption *> *)options {
     return [options objectPassingTest:^BOOL(MKUOption *obj, NSUInteger idx, BOOL *stop) {
         if (obj.value == type)
             return obj;

@@ -260,6 +260,25 @@ static char UPDATE_DELEGATE_KEY;
     return DATE_FORMAT_DAY_TIME_STYLE;
 }
 
++ (MKU_TEXT_TYPE)textTypeForObjectType:(NSInteger)type {
+    return MKU_TEXT_TYPE_STRING;
+}
+
++ (BOOL)shouldValidateWhenEditingObjectType:(NSInteger)type {
+    return NO;
+}
+
++ (NSNumberFormatterStyle)numberStyleForObjectType:(NSInteger)type {
+    MKU_TEXT_TYPE textType = [self textTypeForObjectType:type];
+    switch (textType) {
+        case MKU_TEXT_TYPE_FLOAT:
+        case MKU_TEXT_TYPE_FLOAT_POSITIVE:
+            return NSNumberFormatterDecimalStyle;
+        default:
+            return NSNumberFormatterNoStyle;
+    }
+}
+
 - (NSNumber *)numberValueForObjectType:(NSInteger)type {
     NSObject *value = [self valueForObjectType:type];
     if ([value isKindOfClass:[NSNumber class]]) {
@@ -338,13 +357,20 @@ static char UPDATE_DELEGATE_KEY;
 
 - (NSString *)stringValueForObjectType:(NSInteger)type {
     NSObject *object = [self valueForObjectType:type];
-    if ([object isKindOfClass:[NSString class]]) {
+    
+    if (!object)
+        return nil;
+    
+    if ([object isKindOfClass:[NSString class]])
         return (NSString *)object;
-    }
-    else if ([object isKindOfClass:[NSDate class]]) {
+    
+    if ([object isKindOfClass:[NSDate class]])
         return [self.class localDateStringWithDate:(NSDate *)object forObjectType:type];
-    }
-    return [[self valueForObjectType:type] description];
+    
+    if ([object isKindOfClass:[NSNumber class]])
+        return [(NSNumber *)object stringValueWithStyle:[self.class numberStyleForObjectType:type]];
+    
+    return [object description];
 }
 
 - (NSString *)stringValueForSectionType:(NSInteger)type {
@@ -353,13 +379,10 @@ static char UPDATE_DELEGATE_KEY;
     
     [self.class iterateOverTypesForSectionType:type block:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         
-        NSObject *object = [self valueForObjectType:obj.integerValue];
-        if ([object isKindOfClass:[NSString class]]) {
-            value = (NSString *)object;
-            *stop = YES;
-        }
-        else if ([object isKindOfClass:[NSDate class]]) {
-            value = [self.class localDateStringWithDate:(NSDate *)object forObjectType:obj.integerValue];
+        NSInteger type = obj.integerValue;
+        value = [self stringValueForObjectType:type];
+        
+        if (0 < value.length) {
             *stop = YES;
         }
     }];
@@ -380,7 +403,7 @@ static char UPDATE_DELEGATE_KEY;
 }
 
 + (NSString *)localDateStringWithDate:(NSDate *)date {
-    return [date localDateStringWithFormat:DateFormatDayTimeStyle];
+    return [date localDateStringWithFormat:DATE_FORMAT_DAY_TIME_STYLE];
 }
 
 - (NSString *)localDateStringForObjectType:(NSInteger)type {
@@ -465,12 +488,12 @@ static char UPDATE_DELEGATE_KEY;
         Class cls = [NSObject classOfProperty:name forObjectClass:self.class];
         
         if ([cls isSubclassOfClass:[NSNumber class]])
-            value = [text stringToNumber];
+            value = [text stringToNullableNumberWithStyle:[self.class numberStyleForObjectType:type]];
         
         [self setValue:value forObjectType:type];
         
         if (setTextField)
-            textField.text = [self stringValueForObjectType:type];
+            textField.text = (endEditing || [self.class shouldValidateWhenEditingObjectType:type]) ? [self stringValueForObjectType:type] : text;
         
         [self dispatchUpdateDelegateWithObjectType:type textField:textField endEditing:endEditing atIndexPath:indexPath];
     }
@@ -818,6 +841,14 @@ static char UPDATE_DELEGATE_KEY;
 
 + (DATE_FORMAT_STYLE)dateFormatForSectionType:(NSInteger)type {
     return DATE_FORMAT_FULL_STYLE;
+}
+
++ (MKU_TEXT_TYPE)textTypeForObjectType:(NSInteger)type {
+    return MKU_TEXT_TYPE_STRING;
+}
+
++ (BOOL)shouldValidateWhenEditingObjectType:(NSInteger)type {
+    return NO;
 }
 
 - (BOOL)hasValueForObjectType:(NSInteger)type {

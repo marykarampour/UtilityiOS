@@ -11,6 +11,7 @@
 
 @interface NSNumber (Utility)
 
+- (NSString *)stringValueWithStyle:(NSNumberFormatterStyle)style;
 - (BOOL)isInRange:(MKURange *)range;
 - (BOOL)isBOOL;
 + (BOOL)isBOOL:(NSObject *)obj;

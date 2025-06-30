@@ -28,8 +28,16 @@
 }
 
 - (NSNumber *)stringToNullableNumber {
+    for (NSNumberFormatterStyle i=NSNumberFormatterNoStyle; i<NSNumberFormatterSpellOutStyle; i++) {
+        NSNumber *num = [self stringToNullableNumberWithStyle:i];
+        if (num) return num;
+    }
+    return nil;
+}
+
+- (NSNumber *)stringToNullableNumberWithStyle:(NSNumberFormatterStyle)style {
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
-    formatter.numberStyle = NSNumberFormatterNoStyle;
+    formatter.numberStyle = style;
     NSNumber *num = [formatter numberFromString:self];
     return num;
 }
