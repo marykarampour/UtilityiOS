@@ -6,7 +6,7 @@
 //  Copyright © 2020 Prometheus Software. All rights reserved.
 //
 
-#import "MultiLabelView.h"
+#import "MKUMultiLabelViewController.h"
 
 @class MKUButtonLabelView;
 
@@ -24,7 +24,7 @@
 
 @end
 __deprecated
-@interface MKUButtonLabelView : MultiLabelView
+@interface MKUButtonLabelView : MKUMultiLabelViewController
 
 @property (nonatomic, assign) BOOL selected;
 @property (nonatomic, assign) BOOL enabled;

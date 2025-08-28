@@ -8,6 +8,7 @@
 
 #import "MKUViewControllerTransitionProtocol.h"
 #import "MKUViewContentStyleProtocols.h"
+#import "NSObject+NavBarButtonTarget.h"
 
 @protocol MKUGenericTableViewControllerProtocols <NSObject>
 
@@ -50,8 +51,14 @@
 - (NSAttributedString *)attributedDetailTextLabelAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)isSelectedRowAtIndexPath:(NSIndexPath *)indexPath;
 - (__kindof MKUBaseTableViewCell *)cellForListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath;
+/** @brief Called in tableView: didSelectRowAtIndexPath: or methods called by it when a section is of type list or
+ tableView: commitEditingStyle: forRowAtIndexPath for UITableViewCellEditingStyleInsert.
+ Corresponds to selectedActionHandler of type MKU_LIST_ITEM_SELECTED_ACTION_SELECT and MKU_LIST_ITEM_SELECTED_ACTION_SHOW_DETAIL */
 - (void)didSelectListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath;
 - (NSMutableArray<__kindof NSObject<MKUPlaceholderProtocol> *> *)listItemsForListOfType:(NSUInteger)type;
+- (NSMutableArray<__kindof NSObject<MKUPlaceholderProtocol> *> *)listItemsForListInSection:(NSUInteger)section;
+- (BOOL)canSelectItemsInListOfType:(NSUInteger)type;
+- (NSUInteger)listTypeForListInSection:(NSUInteger)section;
 - (NSObject<MKUPlaceholderProtocol> *)listItemAtIndexPath:(NSIndexPath *)indexPath;
 
 /** @brief Retun view controller to be pushed when an item is selected. It will be called in
@@ -67,12 +74,24 @@
 
 @end
 
+@protocol MKUItemsListVCNavBarDelegate <MKUNavBarButtonTargetProtocol>
+
+@optional
+- (void)addPressed:(UIBarButtonItem *)sender;
+- (void)nextPressed:(UIBarButtonItem *)sender;
+- (void)refreshPressed:(UIBarButtonItem *)sender;
+- (void)closePressed:(UIBarButtonItem *)sender;
+- (void)clearPressed:(UIBarButtonItem *)sender;
+
+@end
+
 
 @protocol MKUEditingListVCProtocol <MKUViewControllerTransitionDelegate>
 
 @required
 - (BOOL)canAddItemToListOfType:(NSUInteger)type;
 - (BOOL)canDeleteFromListOfType:(NSUInteger)type;
+- (BOOL)canMoveItemsInListOfType:(NSUInteger)type;
 /** @brief Return YES if self.editing should be always YES. The navbar will not have the edit button in this case. Default is NO. */
 - (BOOL)canEditListsByDefault;
 - (NSString *)titleForAddCellInListOfType:(NSUInteger)type;
@@ -81,11 +100,14 @@
 /** @brief Peform any actions required to delete this item. In the completion, this ittem will be removed from the list. */
 - (void)willDeleteItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item forRowAtIndexPath:(NSIndexPath *)indexPath withCompletion:(void (^)(BOOL success, NSError *error))completion;
 
-/** @brief Peform any actions required after deleting this item such as updating navbar.. */
+/** @brief Peform any actions required after deleting this item such as updating navbar. */
 - (void)didDeleteItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item forRowAtIndexPath:(NSIndexPath *)indexPath;
 
 /** @brief Peform any actions required to construct this item. In the completion, this ittem will be add to the list. */
 - (void)willAddItemToListOfType:(NSUInteger)type withCompletion:(void (^)(__kindof NSObject<MKUPlaceholderProtocol> *item))completion;
+
+/** @brief Peform any actions required after adding this item such as updating navbar. */
+- (void)didAddItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item forRowAtIndexPath:(NSIndexPath *)indexPath;
 
 /** @brief If YES, the item is added on spot, if NO, presentTransitioningViewControllerWithItem is called to handle adding the new item.
  Default returns NO. */
@@ -94,17 +116,31 @@
 /** @brief Called after insert or delete actions are performed. Use to update other elements such as navbar. */
 - (void)didFinishCommitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath;
 
-/** By default when viewController: didReturnWithResultType: andObject: is triggered, the object is either added if selected index was add, or otherwise, the items replace the  item at selected index
- with the object, unless the object is of a different type than that of items, in which case this method is called to handle the update. */
-- (void)updateItemsWithUnmatchedTypeItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndex:(NSUInteger)index;
+/** By default when viewController: didReturnWithResultType: object: is triggered, the object is either added or replaced if existing, or
+ the object is of a different type than that of items which results in failure, in any case this method is called to handle the update's result.
+ @param update YES if update succeeds and NO if it fails. */
+- (void)didUpdate:(BOOL)update item:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath;
 
 /** @brief Return a new item to be used in willAddItemToListOfType:(NSUInteger)type withCompletion. Default uses  itemsClass to initialize it. */
 - (__kindof NSObject<MKUPlaceholderProtocol> *)newItemInListOfType:(NSUInteger)type;
 
 - (Class)itemsClassInListOfType:(NSUInteger)type;
 
+/** @brief The object which will be retunred to transitionDelegate when Done / Next button ia pressed, e.g., selected items. */
+- (id)returnedInSelectObject;
+/** @brief The object which will be retunred to transitionDelegate when Close button is pressed, e.g., items. */
+- (id)returnedInCloseObject;
+
 @optional
 - (void)item:(__kindof NSObject<MKUPlaceholderProtocol> *)item1 didMoveFromIndex:(NSUInteger)index1 toIndex:(NSUInteger)index2 inListOfType:(NSUInteger)type;
 
 @end
 
+@protocol MKUItemsListVCUpdateDelegate <NSObject>
+
+@optional
+- (void)itemsListVC:(UIViewController<MKUEditingListVCProtocol, MKUItemsListVCProtocol> *)VC didUpdateItems:(NSArray <__kindof NSObject<MKUPlaceholderProtocol> *> *)items inSection:(NSUInteger)section;
+- (void)itemsListVC:(UIViewController<MKUEditingListVCProtocol, MKUItemsListVCProtocol> *)VC didUpdateItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath;
+- (void)itemsListVC:(UIViewController<MKUEditingListVCProtocol, MKUItemsListVCProtocol> *)VC didSetSelected:(BOOL)selected item:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath;
+
+@end

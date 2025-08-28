@@ -53,16 +53,17 @@ static CGFloat const PADDING = 4.0;
         [self constraintSidesForView:self.titleView insets:UIEdgeInsetsMake(PADDING, PADDING, PADDING, PADDING)];
         [self constraintSidesForView:self.backButton];
         
-        switch (style) {
-            case MKU_VIEW_STYLE_ROUND_CORNERS:
-                self.layer.cornerRadius = [Constants ButtonCornerRadious];
-            case MKU_VIEW_STYLE_BORDER:
-                self.layer.borderColor = [AppTheme mediumBlueColorWithAlpha:1.0].CGColor;
+        if (style == MKU_VIEW_STYLE_PLAIN) {
+            [self constraintSeparator];
+        }
+        else {
+            if (style & MKU_VIEW_STYLE_BORDER) {
+                self.layer.borderColor = [AppTheme buttonBorderColor].CGColor;
                 self.layer.borderWidth = 1.0;
-                break;
-            default:
-                [self constraintSeparator];
-                break;
+            }
+            if (style & MKU_VIEW_STYLE_ROUND_CORNERS) {
+                self.layer.cornerRadius = [Constants ButtonCornerRadious];
+            }
         }
         [self removeConstraintsMask];
     }
@@ -125,45 +126,49 @@ static CGFloat const PADDING = 4.0;
     self.backButton.indexPath = indexPath;
 }
 
-- (void)setTitle:(NSString *)title subtitle:(NSString *)subtitle {
-    [MKUStringAttributes setTitle:title subtitle:subtitle forLabel:self.titleView];
-}
-
-- (void)setTitle:(NSString *)title value:(NSString *)value {
-    [MKUStringAttributes setTitle:title value:value forLabel:self.titleView delimiter:kColonEmptyString];
-}
-
-+ (MKUButtonView *)BlueButtonWithTitle:(NSString *)title hidden:(BOOL)hidden {
-    
-    MKUButtonView *view = [[MKUButtonView alloc] initWithStyle:MKU_VIEW_STYLE_ROUND_CORNERS];
-    view.titleView.font = [AppTheme smallBoldLabelFont];
-    view.titleView.textColor = [AppTheme mediumBlueColorWithAlpha:1.0];
++ (instancetype)BlueButtonWithTitle:(NSString *)title hidden:(BOOL)hidden {
+    MKUButtonView *view = [[self alloc] initWithStyle:MKU_VIEW_STYLE_ROUND_CORNERS];
+    view.titleView.font = [AppTheme mediumBoldLabelFont];
+    view.titleView.textColor = [AppTheme buttonTextColor];
     view.titleView.text = title;
     view.titleView.textAlignment = NSTextAlignmentCenter;
     view.hidden = hidden;
     return view;
 }
 
-+ (MKUButtonView *)BlueButtonWithTitle:(NSString *)title {
++ (instancetype)BlueButtonWithTitle:(NSString *)title {
     return [self BlueButtonWithTitle:title hidden:NO];
 }
 
-+ (MKUButtonView *)detailButtonWithStyle:(MKU_VIEW_STYLE)style {
-    MKUButtonView *button = [[MKUButtonView alloc] initWithStyle:style];
-    button.titleView.font = [AppTheme smallBoldLabelFont];
-    button.titleView.textColor = [AppTheme darkBlueColorWithAlpha:1.0];
++ (instancetype)detailButtonWithStyle:(MKU_VIEW_STYLE)style {
+    MKUButtonView *button = [[self alloc] initWithStyle:style];
+    button.titleView.font = [AppTheme mediumBoldLabelFont];
+    button.titleView.textColor = [AppTheme buttonDisclosureChevronColor];
     button.titleView.numberOfLines = 0;
     button.titleView.lineBreakMode = NSLineBreakByWordWrapping;
     button.backgroundColor = [UIColor whiteColor];
     button.layer.borderColor = [UIColor whiteColor].CGColor;
-    button.layer.borderWidth = 1.0;
     return button;
 }
 
-+ (MKUButtonView *)cornerDetailButtonWithStyle:(MKU_VIEW_STYLE)style {
++ (instancetype)cornerDetailButtonWithStyle:(MKU_VIEW_STYLE)style {
     MKUButtonView *button = [self detailButtonWithStyle:style];
     button.layer.cornerRadius = [Constants ButtonCornerRadious];
     return button;
+}
+
++ (instancetype)detailButton {
+    MKUButtonView *button = [[self alloc] init];
+    button.titleView.font = [AppTheme mediumBoldLabelFont];
+    button.titleView.textColor = [AppTheme buttonDisclosureChevronColor];
+    button.titleView.numberOfLines = 0;
+    button.titleView.lineBreakMode = NSLineBreakByWordWrapping;
+    button.backgroundColor = [UIColor whiteColor];
+    return button;
+}
+
++ (instancetype)cornerDetailButton {
+    return [self cornerDetailButtonWithStyle:MKU_VIEW_STYLE_ROUND_CORNERS];
 }
 
 @end
@@ -184,28 +189,25 @@ static CGFloat const PADDING = 4.0;
     self.badgeView.image = image;
 }
 
-+ (MKUButtonImageView *)detailButton {
-    MKUButtonImageView *button = [[MKUButtonImageView alloc] initWithBadgeSize:[Constants ButtonChevronSize]];
++ (instancetype)detailButton {
+    MKUButtonImageView *button = [[self alloc] initWithBadgeSize:[Constants ButtonChevronSize]];
     button.badgeView.tintColor = [AppTheme buttonDisclosureChevronColor];
-    button.titleView.font = [AppTheme smallBoldLabelFont];
-    button.titleView.textColor = [AppTheme darkBlueColorWithAlpha:1.0];
+    button.titleView.font = [AppTheme mediumBoldLabelFont];
+    button.titleView.textColor = [AppTheme buttonDisclosureChevronColor];
     button.titleView.numberOfLines = 0;
     button.titleView.lineBreakMode = NSLineBreakByWordWrapping;
     button.backgroundColor = [UIColor whiteColor];
-    button.layer.cornerRadius = [Constants ButtonCornerRadious];
-    button.layer.borderColor = [AppTheme buttonDisclosureBorderColor].CGColor;
-    button.layer.borderWidth = 1.0;
-    [button setImage:[MKUAssets systemIconWithName:@"chevron.right" color:[AppTheme buttonDisclosureChevronColor]]];
+    [button setImage:[MKUAssets systemIconWithName:[MKUAssets Chevron_Right_Image_Name] color:[AppTheme buttonDisclosureChevronColor]]];
     return button;
 }
 
-+ (MKUButtonView *)detailButtonWithTitle:(NSString *)title {
++ (instancetype)detailButtonWithTitle:(NSString *)title {
     MKUButtonView *button = [self detailButton];
     button.titleView.text = title;
     return button;
 }
 
-+ (MKUButtonView *)cornerDetailButton {
++ (instancetype)cornerDetailButton {
     MKUButtonView *button = [self detailButton];
     button.layer.cornerRadius = [Constants ButtonCornerRadious];
     return button;

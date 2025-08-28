@@ -11,5 +11,6 @@
 @interface UITextView (Editing)
 
 - (BOOL)textViewShouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text maxLength:(NSUInteger)maxLength;
+- (BOOL)textViewShouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text;
 
 @end

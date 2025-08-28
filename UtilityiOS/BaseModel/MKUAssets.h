@@ -20,8 +20,10 @@
 + (NSString *)Chevron_Left_Image_Name;
 + (NSString *)Chevron_Up_Image_Name;
 + (NSString *)Chevron_Down_Image_Name;
++ (NSString *)Plusminus_square_Name;
 
 + (UIImage *)systemIconWithName:(NSString *)name color:(UIColor *)color;
 + (UIImage *)systemIconWithName:(NSString *)name size:(CGFloat)size;
++ (UIImage *)systemIconWithName:(NSString *)name color:(UIColor *)color size:(CGFloat)size;
 
 @end

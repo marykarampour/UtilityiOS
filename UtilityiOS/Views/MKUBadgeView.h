@@ -8,11 +8,6 @@
 
 #import "MKUContainerView.h"
 
-typedef NS_ENUM(NSUInteger, MKU_BADGE_VIEW_STATE) {
-    MKU_BADGE_VIEW_STATE_RED,
-    MKU_BADGE_VIEW_STATE_GREEN
-};
-
 @interface MKUBadgeView : MKUContainerView <UILabel *>
 
 @property (nonatomic, assign) MKU_BADGE_VIEW_STATE state;

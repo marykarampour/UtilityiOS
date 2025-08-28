@@ -11,6 +11,7 @@
 #import "NSString+Utility.h"
 #import "NSNumber+Utility.h"
 #import "NSObject+Utility.h"
+#import "NSNumber+Utility.h"
 #import "NSString+Number.h"
 #import "NSArray+Utility.h"
 #import "NSDate+Utility.h"
@@ -50,7 +51,7 @@ static char UPDATE_DELEGATE_KEY;
     return self;
 }
 
-- (instancetype)initWithMap:(NSDictionary *)map {
+- (instancetype)initWithStringsDictionary:(NSDictionary *)map {
     if (self = [super initWithDictionary:map error:nil]) {
         self.GUID = [Constants GUID];
     }
@@ -368,7 +369,7 @@ static char UPDATE_DELEGATE_KEY;
         return [self.class localDateStringWithDate:(NSDate *)object forObjectType:type];
     
     if ([object isKindOfClass:[NSNumber class]])
-        return [(NSNumber *)object stringValueWithStyle:[self.class numberStyleForObjectType:type]];
+        return [(NSNumber *)object stringValueWithStyle:[self.class numberStyleForObjectType:type] digits:[self floatingDigits]];
     
     return [object description];
 }
@@ -396,6 +397,10 @@ static char UPDATE_DELEGATE_KEY;
 
 - (NSString *)badgeValueForSectionType:(NSInteger)type {
     return nil;
+}
+
+- (NSUInteger)floatingDigits {
+    return 2;
 }
 
 + (NSString *)localDateStringWithDate:(NSDate *)date forObjectType:(NSInteger)type {
@@ -558,11 +563,11 @@ static char UPDATE_DELEGATE_KEY;
 }
 
 + (NSString *)missingValueErrorMessage {
-    return [Constants Missing_Value_Error_Message];
+    return [Constants Missing_Value_Error_Message_STR];
 }
 
 + (NSString *)missingObjectErrorMessage {
-    return [Constants Missing_Object_Error_Message];
+    return [Constants Missing_Object_Error_Message_STR];
 }
 
 @end
@@ -684,6 +689,13 @@ static char UPDATE_DELEGATE_KEY;
     return [self defaultClassForUpdatedObject];
 }
 
+- (NSString *)nameForProperty:(NSString *)property {
+    NSDictionary *map = @{NSStringFromSelector(@selector(OriginalObject)) : [self.class nameForOriginalObject],
+                          NSStringFromSelector(@selector(UpdatedObject)) : [self.class nameForUpdatedObject]};
+    NSString *name = [map objectForKey:property];
+    return name.length > 0 ? name : [super nameForProperty:property];
+}
+
 + (DictStringString *)customKeyValueDict {
     return @{NSStringFromSelector(@selector(OriginalObject)) : [self.class nameForOriginalObject],
              NSStringFromSelector(@selector(UpdatedObject))  : [self.class nameForUpdatedObject]};
@@ -783,6 +795,68 @@ static char UPDATE_DELEGATE_KEY;
 
 + (BOOL)usingAncestors {
     return YES;
+}
+
+@end
+
+
+@implementation MKUFieldListModel
+
++ (NSDictionary<NSNumber *,NSString *> *)propertyEnumDictionary {
+    return @{@(MKU_FIELD_LIST_TYPE_A) : NSStringFromSelector(@selector(itemsA)),
+             @(MKU_FIELD_LIST_TYPE_B) : NSStringFromSelector(@selector(itemsB)),
+             @(MKU_FIELD_LIST_TYPE_C) : NSStringFromSelector(@selector(itemsC)),
+             @(MKU_FIELD_LIST_TYPE_D) : NSStringFromSelector(@selector(itemsD))};
+}
+
+- (NSMutableArray *)arrayA {
+    return [self.itemsA array];
+}
+
+- (NSMutableArray *)arrayB {
+    return [self.itemsB array];
+}
+
+- (NSMutableArray *)arrayC {
+    return [self.itemsC array];
+}
+
+- (NSMutableArray *)arrayD {
+    return [self.itemsD array];
+}
+
+- (NSUInteger)activeListsCount {
+    NSUInteger count = 0;
+    NSUInteger value = 0;
+    for (NSUInteger i=MKU_FIELD_LIST_TYPE_NONE; value<MKU_FIELD_LIST_TYPE_COUNT; i++) {
+        value = 1 << i;
+        if (value & self.activeListTypes) count++;
+    }
+    return count;
+}
+
+- (NSString *)description {
+    return [NSString stringWithFormat:@"itemsA: %@\nitemsB: %@\nitemsC: %@\nitemsD: %@", _itemsA, _itemsB, _itemsC, _itemsD];
+}
+
+@end
+
+@implementation MKUUpdateListObject
+
+@dynamic OriginalObject;
+@dynamic UpdatedObject;
+
+@end
+
+@implementation MKUFieldSingleListModel
+
+@dynamic itemsA;
+
+- (instancetype)init {
+    if (self = [super init]) {
+        self.itemsA = [[NSMutableArray alloc] init];
+    }
+    return self;
 }
 
 @end
@@ -963,6 +1037,22 @@ static char UPDATE_DELEGATE_KEY;
 }
 
 - (void)canUpdateWithResult:(VALIDATION_BLOCK)result {
+}
+
+- (NSString *)title {
+    return self;
+}
+
++ (NSString *)missingValueErrorMessage {
+    return [Constants Missing_Value_Error_Message_STR];
+}
+
++ (NSString *)missingObjectErrorMessage {
+    return [Constants Missing_Object_Error_Message_STR];
+}
+
+- (NSUInteger)floatingDigits {
+    return 2;
 }
 
 @end

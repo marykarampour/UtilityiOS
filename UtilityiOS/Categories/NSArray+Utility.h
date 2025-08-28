@@ -23,7 +23,7 @@
 + (NSArray *)orderedArrayOfValuesFromDict:(NSDictionary<NSNumber *, ObjectType> *)dict range:(NSRange)range;
 
 /** @brief For each element of the array, each predicate is checked in order and put inside a subarray corresponding to the predicate.
- @param exclusive If Yes the first predicate that matches is used. This makes the resulting array not share any eleents. */
+ @param exclusive If Yes the first predicate that matches is used. This makes the resulting array not share any eleents. The last element will be what is left out. */
 - (NSArray<NSArray<ObjectType> *> *)filteredArraysUsingPredicates:(NSArray<NSPredicate *> *)predicates exclusive:(BOOL)exclusive;
 
 + (instancetype)arrayWithNullableObject:(ObjectType)obj;
@@ -37,6 +37,10 @@
 /** @brief It returns an array of values based on a given key that the objects in the original array responds to. */
 + (instancetype)arrayFromArray:(NSArray<ObjectType> *)array forKey:(NSString *)key;
 + (instancetype)arrayWithArray:(NSArray<ObjectType> *)array byAddingObject:(ObjectType)anObject;
+/** @brief It returns arrays grouped based on a given key that the objects in the original array responds to. */
+- (NSDictionary<NSString *, NSMutableArray<ObjectType> *> *)groupedArrayForKey:(NSString *)key;
+/** @brief It returns arrays grouped based on a given key that the objects in the original array responds to. */
++ (NSDictionary<NSString *, NSMutableArray<ObjectType> *> *)groupedArrayFromArray:(NSArray<ObjectType> *)array forKey:(NSString *)key;
 - (instancetype)arrayByAddingObject:(ObjectType)anObject;
 - (NSString *)uniqueComponentsJoinedByString:(NSString *)separator usingSelector:(SEL)selector;
 
@@ -51,11 +55,24 @@
 /** @brief If object is nil, nothing will happen. */
 - (void)addNullableObject:(ObjectType)anObject;
 
-/** @brief If object is already in the array, nothing will happen. */
-- (void)addUniqueObject:(ObjectType)anObject;
+/** @brief If index is out of bounds, nothing will happen.
+    @return NO if index is out of bounds. */
+- (BOOL)boundsCheckRemoveObjectAtIndex:(NSUInteger)index;
 
-/** @brief If object is already in the array, nothing will happen. */
-- (void)addUniqueObjectsFromArray:(NSArray<ObjectType> *)otherArray;
+/** @brief If object is already in the array, nothing will happen.
+ @return A BOOL indicating if the object was added to the array. */
+- (BOOL)addUniqueObject:(ObjectType)anObject;
+
+/** @brief If object is already in the array, nothing will happen.
+ @return Objects that failed to be added to the array. */
+- (NSArray *)addUniqueObjectsFromArray:(NSArray<ObjectType> *)otherArray;
+
+/** @brief If object is already in the array, it will be replaced by the one from otherArray.
+ @return Objects that were replaced. */
+- (NSArray *)addOrReplaceUniqueObjectsFromArray:(NSArray<ObjectType> *)otherArray;
+
+/** @brief If insert fails due to index being out of bounds the item will be added. */
+- (void)insertOrAddObject:(ObjectType)anObject atIndex:(NSUInteger)index;
 
 /** @brief Thread-safe add operation. */
 - (void)addSynchronizedObject:(ObjectType)anObject;

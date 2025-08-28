@@ -72,6 +72,9 @@
     else if ([type isEqualToString:@"@\"NSArray\""]) {
         value = isDefaults ? @[] : nil;
     }
+    else if ([NSObject isObjectType:type]) {
+        value = nil;
+    }
     else {
         //Treating all primitives which have 1 char type the same way.
         //Used to be: else if ([type isEqualToString:@"@\"c\""] || [type isEqualToString:@"B"]) {
@@ -80,6 +83,12 @@
     }
     
     [self setValue:value forKey:name];
+}
+
++ (BOOL)isObjectType:(NSString *)type {
+    NSString *name = [type stringByTrimmingCharactersInSet:[[NSCharacterSet alphanumericCharacterSet] invertedSet]];
+    Class cls = NSClassFromString(name);
+    return [cls isSubclassOfClass:[NSObject class]];
 }
 
 - (void)setValuesOfObject:(NSObject *)object ancestors:(BOOL)ancestors baseClass:(Class)baseClass {
@@ -98,8 +107,14 @@
     [self setValuesOfObject:object properties:arr];
 }
 
-- (void)setValuesOfObject:(NSObject *)object properties:(NSSet<NSString *> *)properties {
+- (void)setValuesOfObject:(NSObject *)object properties:(StringSet *)properties {
+    [self setValuesOfObject:object properties:properties excludeProperties:nil];
+}
+
+- (void)setValuesOfObject:(NSObject *)object properties:(NSSet<NSString *> *)properties excludeProperties:(StringSet *)excluding {
     for (NSString *name in properties) {
+        if ([excluding containsObject:name]) continue;
+
         if ([object respondsToSelector:NSSelectorFromString(name)] &&
             [self respondsToSelector:NSSelectorFromString(name)] &&
             ![self isReadOnlyProperty:name]) {

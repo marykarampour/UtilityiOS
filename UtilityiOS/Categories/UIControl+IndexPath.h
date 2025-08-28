@@ -6,10 +6,10 @@
 //  Copyright © 2018 BHS Consultants. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "IndexPathProtocol.h"
 
-@interface UIControl (IndexPath)
+@interface UIControl (IndexPath) <IndexPathProtocol>
 
-@property (nonatomic, strong) NSIndexPath *indexPath;
+@property (nonatomic, strong) NSString *GUID;
 
 @end

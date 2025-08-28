@@ -12,17 +12,21 @@
 #import <AVFoundation/AVFoundation.h>
 #import <VisionKit/VisionKit.h>
 #import <PhotosUI/PhotosUI.h>
+#import <MobileCoreServices/MobileCoreServices.h>
+#import <AVFoundation/AVFoundation.h>
 #import "UIImage+Editing.h"
+#import "NSArray+Utility.h"
 #import "NSObject+Alert.h"
 #import "MKUSpinner.h"
 
-static NSDictionary <NSNumber *, NSString *> *supportedDocTypes;
+static NSDictionary <NSNumber *, UTType *> *supportedDocTypes;
 
 @interface MKUDocumentPickerController () <UIImagePickerControllerDelegate, UIImagePickerControllerDelegate, UIDocumentPickerDelegate, UINavigationControllerDelegate, VNDocumentCameraViewControllerDelegate, PHPickerViewControllerDelegate>
 
 @property (nonatomic, weak) UIViewController *viewController;
 @property (nonatomic, weak) id<MKUDocumentPickerDelegate> delegate;
-@property (nonatomic, strong) NSArray <NSString *> *acceptedDocTypes;
+@property (nonatomic, strong) NSArray <UTType *> *acceptedDocTypes;
+@property (nonatomic, assign) MKU_IMAGE_PICKER_TYPE type;
 
 - (void)showCamera;
 - (void)showPhotos;
@@ -51,35 +55,86 @@ static NSDictionary <NSNumber *, NSString *> *supportedDocTypes;
 @end
 
 
-@interface MKUDocumentPickerController_Photos : MKUDocumentPickerController
+@interface MKUDocumentPickerController_Photos_Import : MKUDocumentPickerController
 
 @end
 
-@implementation MKUDocumentPickerController_Photos
+@implementation MKUDocumentPickerController_Photos_Import
 
 - (instancetype)init {
     return [super init];
 }
 
 - (void)presentDocumentPickerWithImage:(NSData *)data {
-    [self performPresentDocumentPickerType:MKU_IMAGE_PICKER_TYPE_PHOTOS withImage:data];
+    [self performPresentDocumentPickerType:MKU_IMAGE_PICKER_TYPE_PHOTOS_IMPORT withImage:data];
 }
 
 @end
 
 
-@interface MKUDocumentPickerController_Docs : MKUDocumentPickerController
+@interface MKUDocumentPickerController_Photos_Export : MKUDocumentPickerController
 
 @end
 
-@implementation MKUDocumentPickerController_Docs
+@implementation MKUDocumentPickerController_Photos_Export
 
 - (instancetype)init {
     return [super init];
 }
 
 - (void)presentDocumentPickerWithImage:(NSData *)data {
-    [self performPresentDocumentPickerType:MKU_IMAGE_PICKER_TYPE_DOCS withImage:data];
+    [self presentDocumentExportWithType:MKU_IMAGE_PICKER_TYPE_PHOTOS_EXPORT data:[NSArray arrayWithNullableObject:data]];
+}
+
+@end
+
+
+@interface MKUDocumentPickerController_Docs_Import : MKUDocumentPickerController
+
+@end
+
+@implementation MKUDocumentPickerController_Docs_Import
+
+- (instancetype)init {
+    return [super init];
+}
+
+- (void)presentDocumentPickerWithImage:(NSData *)data {
+    [self performPresentDocumentPickerType:MKU_IMAGE_PICKER_TYPE_DOCS_IMPORT withImage:data];
+}
+
+@end
+
+
+@interface MKUDocumentPickerController_Docs_Export : MKUDocumentPickerController
+
+@end
+
+@implementation MKUDocumentPickerController_Docs_Export
+
+- (instancetype)init {
+    return [super init];
+}
+
+- (void)presentDocumentPickerWithImage:(NSData *)data {
+    [self presentDocumentExportWithType:MKU_IMAGE_PICKER_TYPE_DOCS_EXPORT data:[NSArray arrayWithNullableObject:data]];
+}
+
+@end
+
+
+@interface MKUDocumentPickerController_Vision : MKUDocumentPickerController
+
+@end
+
+@implementation MKUDocumentPickerController_Vision
+
+- (instancetype)init {
+    return [super init];
+}
+
+- (void)presentDocumentPickerWithImage:(NSData *)data {
+    [self performPresentDocumentPickerType:MKU_IMAGE_PICKER_TYPE_VISION withImage:data];
 }
 
 @end
@@ -198,24 +253,25 @@ static NSDictionary <NSNumber *, NSString *> *supportedDocTypes;
 
 + (void)initialize {
     if (!supportedDocTypes) {
-        supportedDocTypes = @{@(MKU_DOCUMENT_TYPE_PDF)      : [UTTypePDF identifier],
-                              @(MKU_DOCUMENT_TYPE_IMAGE)    : [UTTypeImage identifier],
-                              @(MKU_DOCUMENT_TYPE_JPEG)     : [UTTypeJPEG identifier],
-                              @(MKU_DOCUMENT_TYPE_JPEG2000) : [UTTypeJPEG identifier],
-                              @(MKU_DOCUMENT_TYPE_TIFF)     : [UTTypeTIFF identifier],
-                              @(MKU_DOCUMENT_TYPE_PNG)      : [UTTypePNG identifier],
-                              @(MKU_DOCUMENT_TYPE_TEXT)     : [UTTypeText identifier],
-                              @(MKU_DOCUMENT_TYPE_CONTENT)  : [UTTypeContent identifier],
-                              @(MKU_DOCUMENT_TYPE_DOC)      : @"com.microsoft.word.doc"};
+        supportedDocTypes =
+            @{@(MKU_DOCUMENT_TYPE_PDF)  : UTTypePDF,
+              @(MKU_DOCUMENT_TYPE_GIF)  : UTTypeGIF,
+              @(MKU_DOCUMENT_TYPE_JPEG) : UTTypeJPEG,
+              @(MKU_DOCUMENT_TYPE_TIFF) : UTTypeTIFF,
+              @(MKU_DOCUMENT_TYPE_PNG)  : UTTypePNG,
+              @(MKU_DOCUMENT_TYPE_RTF)  : UTTypeText,
+              @(MKU_DOCUMENT_TYPE_TEXT) : UTTypePlainText,
+              @(MKU_DOCUMENT_TYPE_DATA) : UTTypeData,
+              @(MKU_DOCUMENT_TYPE_DOC)  : [UTType typeWithIdentifier:@"com.microsoft.word.doc"]};
     }
 }
 
 - (void)setAcceptedDocumentTypes:(MKU_DOCUMENT_TYPE)docType {
-    MStringArr *types = [[NSMutableArray alloc] init];
+    NSMutableArray *types = [[NSMutableArray alloc] init];
     NSUInteger type = MKU_DOCUMENT_TYPE_PDF;
     for (unsigned int i=1; type < MKU_DOCUMENT_TYPE_COUNT; type = 1U << i, i++) {
         if (docType & type) {
-            NSString *doc = [self docTypeNameForType:type];
+            UTType *doc = [self docTypeNameForType:type];
             if (doc) {
                 [types addObject:doc];
             }
@@ -224,7 +280,7 @@ static NSDictionary <NSNumber *, NSString *> *supportedDocTypes;
     self.acceptedDocTypes = types;
 }
 
-- (NSString *)docTypeNameForType:(MKU_DOCUMENT_TYPE)type {
+- (UTType *)docTypeNameForType:(MKU_DOCUMENT_TYPE)type {
     return [supportedDocTypes objectForKey:@(type)];
 }
 
@@ -242,33 +298,43 @@ static NSDictionary <NSNumber *, NSString *> *supportedDocTypes;
 
 - (instancetype)initWithViewController:(UIViewController *)viewController delegate:(id<MKUDocumentPickerDelegate>)delegate type:(MKU_IMAGE_PICKER_TYPE)type {
     
-    if (type & MKU_IMAGE_PICKER_TYPE_CAMERA && type & MKU_IMAGE_PICKER_TYPE_PHOTOS && type & MKU_IMAGE_PICKER_TYPE_DOCS && type & MKU_IMAGE_PICKER_TYPE_VISION)
+    if (type & MKU_IMAGE_PICKER_TYPE_CAMERA && type & MKU_IMAGE_PICKER_TYPE_PHOTOS_IMPORT && type & MKU_IMAGE_PICKER_TYPE_DOCS_IMPORT && type & MKU_IMAGE_PICKER_TYPE_VISION)
         self = [[MKUDocumentPickerController_Photos_Camera_Vision_Docs alloc] init];
     
-    else if (type & MKU_IMAGE_PICKER_TYPE_CAMERA && type & MKU_IMAGE_PICKER_TYPE_PHOTOS && type & MKU_IMAGE_PICKER_TYPE_DOCS)
+    else if (type & MKU_IMAGE_PICKER_TYPE_CAMERA && type & MKU_IMAGE_PICKER_TYPE_PHOTOS_IMPORT && type & MKU_IMAGE_PICKER_TYPE_DOCS_IMPORT)
         self = [[MKUDocumentPickerController_Photos_Camera_Docs alloc] init];
     
-    else if (type & MKU_IMAGE_PICKER_TYPE_CAMERA && type & MKU_IMAGE_PICKER_TYPE_PHOTOS)
+    else if (type & MKU_IMAGE_PICKER_TYPE_CAMERA && type & MKU_IMAGE_PICKER_TYPE_PHOTOS_IMPORT)
         self = [[MKUDocumentPickerController_Photos_Camera alloc] init];
     
-    else if (type & MKU_IMAGE_PICKER_TYPE_CAMERA && type & MKU_IMAGE_PICKER_TYPE_DOCS)
+    else if (type & MKU_IMAGE_PICKER_TYPE_CAMERA && type & MKU_IMAGE_PICKER_TYPE_DOCS_IMPORT)
         self = [[MKUDocumentPickerController_Camera_Docs alloc] init];
     
-    else if (type & MKU_IMAGE_PICKER_TYPE_PHOTOS && type & MKU_IMAGE_PICKER_TYPE_DOCS)
+    else if (type & MKU_IMAGE_PICKER_TYPE_PHOTOS_IMPORT && type & MKU_IMAGE_PICKER_TYPE_DOCS_IMPORT)
         self = [[MKUDocumentPickerController_Photos_Docs alloc] init];
     
-    else if (type & MKU_IMAGE_PICKER_TYPE_PHOTOS)
-        self = [[MKUDocumentPickerController_Photos alloc] init];
+    else if (type & MKU_IMAGE_PICKER_TYPE_PHOTOS_IMPORT)
+        self = [[MKUDocumentPickerController_Photos_Import alloc] init];
     
-    else if (type & MKU_IMAGE_PICKER_TYPE_DOCS)
-        self = [[MKUDocumentPickerController_Docs alloc] init];
+    else if (type & MKU_IMAGE_PICKER_TYPE_PHOTOS_EXPORT)
+        self = [[MKUDocumentPickerController_Photos_Export alloc] init];
+    
+    else if (type & MKU_IMAGE_PICKER_TYPE_DOCS_IMPORT)
+        self = [[MKUDocumentPickerController_Docs_Import alloc] init];
+    
+    else if (type & MKU_IMAGE_PICKER_TYPE_DOCS_EXPORT)
+        self = [[MKUDocumentPickerController_Docs_Export alloc] init];
+    
+    else if (type & MKU_IMAGE_PICKER_TYPE_VISION)
+        self = [[MKUDocumentPickerController_Vision alloc] init];
     
     else
         self = [[MKUDocumentPickerController_Camera alloc] init];
     
+    self.type = type;
     self.viewController = viewController;
     self.delegate = delegate;
-    self.maxMultipleSelection = 1;
+    self.maxMultipleSelection = [Constants Image_Picker_Max_Selection];
     
     [self checkImagePickerAuthorization];
     
@@ -278,7 +344,7 @@ static NSDictionary <NSNumber *, NSString *> *supportedDocTypes;
 - (void)checkImagePickerAuthorization {
     AVAuthorizationStatus auth = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
     if (auth == AVAuthorizationStatusDenied) {
-        [self.viewController OKAlertWithTitle:[Constants Camera_Disabled_Error_Title] message:[Constants Camera_Disabled_Error_Message]];
+        [self.viewController OKAlertWithTitle:[Constants Camera_Disabled_Error_Title_STR] message:[Constants Camera_Disabled_Error_Message_STR]];
     }
 }
 
@@ -287,35 +353,67 @@ static NSDictionary <NSNumber *, NSString *> *supportedDocTypes;
 }
 
 - (void)showPhotos {
-    [self presentPickerWithType:MKU_IMAGE_PICKER_TYPE_PHOTOS];
+    [self presentPickerWithType:MKU_IMAGE_PICKER_TYPE_PHOTOS_IMPORT];
 }
 
 - (void)showDocs {
-    [self presentPickerWithType:MKU_IMAGE_PICKER_TYPE_DOCS];
+    [self presentPickerWithType:MKU_IMAGE_PICKER_TYPE_DOCS_IMPORT];
 }
 
 - (void)showVision {
     [self presentPickerWithType:MKU_IMAGE_PICKER_TYPE_VISION];
 }
 
-- (void)presentPickerWithType:(MKU_IMAGE_PICKER_TYPE)type {
+- (void)presentPickerWithType:(MKU_IMAGE_PICKER_TYPE)type data:(NSArray<NSData *> *)data {
     
     if (type == MKU_IMAGE_PICKER_TYPE_CAMERA && ![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
 #if !TARGET_IPHONE_SIMULATOR
-        [self.viewController OKAlertWithTitle:kErrorString message:[Constants No_Camera_Error_Message]];
+        [self.viewController OKAlertWithTitle:kErrorString message:[Constants No_Camera_Error_Message_STR]];
         return;
 #endif
     }
     
     UIViewController *vc;
     
-    if (type == MKU_IMAGE_PICKER_TYPE_DOCS) {
-        UIDocumentPickerViewController *picker = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:self.acceptedDocTypes inMode:UIDocumentPickerModeImport];
+    if (type == MKU_IMAGE_PICKER_TYPE_DOCS_IMPORT) {
+        UIDocumentPickerViewController *picker = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:self.acceptedDocTypes];
         picker.delegate = self;
         picker.allowsMultipleSelection = self.allowsMultipleSelection;
         vc = picker;
     }
-    else if (TARGET_IPHONE_SIMULATOR || type == MKU_IMAGE_PICKER_TYPE_PHOTOS) {
+    else if (type == MKU_IMAGE_PICKER_TYPE_DOCS_EXPORT) {
+        if (data.count == 0) return;
+
+        NSMutableArray<NSURL *> *URLs = [[NSMutableArray alloc] init];
+        
+        for (NSData *obj in data) {
+            NSURL *URL = [Constants writeToTempDirectoryWithFileName:[Constants Untitled_STR] directory:nil data:obj];
+            if (URL) [URLs addObject:URL];
+        }
+        
+        if (URLs.count == 0) return;
+        
+        UIDocumentPickerViewController *picker = [[UIDocumentPickerViewController alloc] initForExportingURLs:URLs];
+        picker.delegate = self;
+        picker.allowsMultipleSelection = self.allowsMultipleSelection;
+        vc = picker;
+    }
+    else if (type == MKU_IMAGE_PICKER_TYPE_PHOTOS_EXPORT) {
+        if (data.count == 0) return;
+        
+        [data enumerateObjectsUsingBlock:^(NSData * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            UIImage *im = [UIImage imageWithData:obj];
+            id target;
+            if (im) {
+                if (idx == data.count - 1)
+                    target = self;
+                UIImageWriteToSavedPhotosAlbum(im, target, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+            }
+        }];
+        
+        return;
+    }
+    else if (TARGET_IPHONE_SIMULATOR || type == MKU_IMAGE_PICKER_TYPE_PHOTOS_IMPORT) {
         vc = [self photoPickerController];
     }
     else if (type == MKU_IMAGE_PICKER_TYPE_VISION) {
@@ -329,6 +427,14 @@ static NSDictionary <NSNumber *, NSString *> *supportedDocTypes;
     
     [self.viewController updateNavBarMode:MKU_THEME_STYLE_LIGHT];
     [self.viewController presentViewController:vc animationType:nil timingFunction:nil completion:nil];
+}
+
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo {
+    [self dispatchDelegateWithExportedImage:image error:error];
+}
+
+- (void)presentPickerWithType:(MKU_IMAGE_PICKER_TYPE)type {
+    [self presentPickerWithType:type data:nil];
 }
 
 - (UIImagePickerController *)imagePickerControllerWithType:(MKU_IMAGE_PICKER_TYPE)type {
@@ -350,8 +456,12 @@ static NSDictionary <NSNumber *, NSString *> *supportedDocTypes;
         return picker;
     }
     else {
-        return [self imagePickerControllerWithType:MKU_IMAGE_PICKER_TYPE_PHOTOS];
+        return [self imagePickerControllerWithType:MKU_IMAGE_PICKER_TYPE_PHOTOS_IMPORT];
     }
+}
+
+- (void)presentDocumentExportWithType:(MKU_IMAGE_PICKER_TYPE)type data:(NSArray<NSData *> *)data {
+    [self presentPickerWithType:type data:data];
 }
 
 - (void)presentDocumentPicker {
@@ -387,21 +497,21 @@ static NSDictionary <NSNumber *, NSString *> *supportedDocTypes;
 
 - (NSString *)pickerTitleForType:(MKU_IMAGE_PICKER_TYPE)type {
     switch (type) {
-        case MKU_IMAGE_PICKER_TYPE_CAMERA: return [Constants Camera_STR];
-        case MKU_IMAGE_PICKER_TYPE_PHOTOS: return [Constants Photo_Library_STR];
-        case MKU_IMAGE_PICKER_TYPE_VISION: return [Constants Document_Detection_STR];
-        case MKU_IMAGE_PICKER_TYPE_DOCS:   return [Constants Document_Picker_STR];
-        default:                           return nil;
+        case MKU_IMAGE_PICKER_TYPE_CAMERA:        return [Constants Camera_STR];
+        case MKU_IMAGE_PICKER_TYPE_PHOTOS_IMPORT: return [Constants Photo_Library_STR];
+        case MKU_IMAGE_PICKER_TYPE_VISION:        return [Constants Document_Detection_STR];
+        case MKU_IMAGE_PICKER_TYPE_DOCS_IMPORT:   return [Constants Document_Picker_STR];
+        default:                                  return nil;
     }
 }
 
 - (SEL)pickerActionForType:(MKU_IMAGE_PICKER_TYPE)type {
     switch (type) {
-        case MKU_IMAGE_PICKER_TYPE_CAMERA: return @selector(showCamera);
-        case MKU_IMAGE_PICKER_TYPE_PHOTOS: return @selector(showPhotos);
-        case MKU_IMAGE_PICKER_TYPE_VISION: return @selector(showVision);
-        case MKU_IMAGE_PICKER_TYPE_DOCS:   return @selector(showDocs);
-        default:                           return nil;
+        case MKU_IMAGE_PICKER_TYPE_CAMERA:        return @selector(showCamera);
+        case MKU_IMAGE_PICKER_TYPE_PHOTOS_IMPORT: return @selector(showPhotos);
+        case MKU_IMAGE_PICKER_TYPE_VISION:        return @selector(showVision);
+        case MKU_IMAGE_PICKER_TYPE_DOCS_IMPORT:   return @selector(showDocs);
+        default:                                  return nil;
     }
 }
 
@@ -455,7 +565,11 @@ static NSDictionary <NSNumber *, NSString *> *supportedDocTypes;
 - (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
     [self dismissViewController:controller];
     for (NSURL *url in urls) {
-        [self dispatchDelegateWithData:[self dataFromURL:url]];
+        NSData *data = [self dataFromURL:url];
+        if (self.type & MKU_IMAGE_PICKER_TYPE_DOCS_EXPORT)
+            [self dispatchDelegateWithExportedData:data error:nil];
+        else
+            [self dispatchDelegateWithData:data];
     }
 }
 
@@ -466,15 +580,49 @@ static NSDictionary <NSNumber *, NSString *> *supportedDocTypes;
     }
 }
 
+- (void)documentCameraViewController:(VNDocumentCameraViewController *)controller didFailWithError:(NSError *)error {
+    [self dismissViewController:controller];
+    [self dispatchDelegateDidFailWithError:error];
+}
+
+- (void)documentCameraViewControllerDidCancel:(VNDocumentCameraViewController *)controller {
+    [self dismissViewController:controller];
+    [self dispatchDelegateDidCancel];
+}
+
 - (void)dispatchDelegateWithData:(NSData *)data {
     if ([self.delegate respondsToSelector:@selector(documentPickerPickedData:)]) {
-        [self.delegate performSelector:@selector(documentPickerPickedData:) withObject:data];
+        [self.delegate documentPickerPickedData:data];
     }
 }
 
 - (void)dispatchDelegateWithImage:(UIImage *)image {
     if ([self.delegate respondsToSelector:@selector(documentPickerPickedImage:)]) {
-        [self.delegate performSelector:@selector(documentPickerPickedImage:) withObject:image];
+        [self.delegate documentPickerPickedImage:image];
+    }
+}
+
+- (void)dispatchDelegateWithExportedData:(NSData *)data error:(NSError *)error {
+    if ([self.delegate respondsToSelector:@selector(documentPickerDidExportData:withError:)]) {
+        [self.delegate documentPickerDidExportData:data withError:error];
+    }
+}
+
+- (void)dispatchDelegateWithExportedImage:(UIImage *)image error:(NSError *)error {
+    if ([self.delegate respondsToSelector:@selector(documentPickerDidExportImage:withError:)]) {
+        [self.delegate documentPickerDidExportImage:image withError:error];
+    }
+}
+
+- (void)dispatchDelegateDidFailWithError:(NSError *)error {
+    if ([self.delegate respondsToSelector:@selector(documentPickerDidFailWithError:)]) {
+        [self.delegate documentPickerDidFailWithError:error];
+    }
+}
+
+- (void)dispatchDelegateDidCancel {
+    if ([self.delegate respondsToSelector:@selector(documentPickerDidCancel)]) {
+        [self.delegate documentPickerDidCancel];
     }
 }
 
@@ -504,7 +652,7 @@ static NSDictionary <NSNumber *, NSString *> *supportedDocTypes;
     return data;
 }
 
-- (NSArray<NSString *> *)acceptedDocTypes {
+- (NSArray<UTType *> *)acceptedDocTypes {
     if (!_acceptedDocTypes) {
         _acceptedDocTypes = [supportedDocTypes allValues];
     }

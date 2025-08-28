@@ -19,6 +19,7 @@
 /** @param defaultTitle is used when title is empty, such as in service errors. */
 - (void)OKAlertWithTitle:(NSString *)title message:(NSString *)message defaultTitle:(NSString *)defaultTitle;
 - (void)OKAlertWithTitle:(NSString *)title message:(NSString *)message alertActionHandler:(void(^)(void))handler;
+- (void)OKAlertWithTitle:(NSString *)title message:(NSString *)message alertAction:(SEL)alertAction;
 
 /** @param alertAction the target of this is always self */
 - (void)actionAlertWithTitle:(NSString *)title message:(NSString *)message alertAction:(SEL)alertAction;
@@ -46,8 +47,8 @@
 - (void)passwordAlertWithUserID:(NSNumber *)userID successActionHandler:(void(^)(void))handler;
 - (void)passwordAlertWithUserID:(NSNumber *)userID successActionHandler:(void(^)(void))handler cancelActionHandler:(void(^)(void))cancelHandler;
 - (void)passwordAlertWithTitle:(NSString *)title message:(NSString *)message userID:(NSNumber *)userID target:(NSObject *)target successActionHandler:(void(^)(void))handler cancelActionHandler:(void(^)(void))cancelHandler;
+- (void)textFieldAlertWithTitle:(NSString *)title target:(NSObject *)target passName:(NSString *)passName successActionHandler:(void (^)(id))handler;
 
-- (void)OKAlertWithTitle:(NSString *)title message:(NSString *)message alertAction:(SEL)alertAction;
 /** @brief performs an auth service defined in the server controller
  @param userID the ID that needs to be passed to the server call method
  @param passName the name of the pass, e.g. Password, PIN, etc.

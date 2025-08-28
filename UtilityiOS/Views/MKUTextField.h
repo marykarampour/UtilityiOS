@@ -24,6 +24,7 @@ typedef NS_OPTIONS(NSUInteger, MKU_TEXT_FIELD_TYPE) {
 @property (nonatomic, strong, readonly) TextFieldController *controller;
 
 - (instancetype)initWithPlaceholder:(NSString *)placeholder;
+- (instancetype)initWithPlaceholder:(NSString *)placeholder textType:(MKU_TEXT_TYPE)textType;
 - (instancetype)initWithPlaceholder:(NSString *)placeholder type:(MKU_TEXT_FIELD_TYPE)type textType:(MKU_TEXT_TYPE)textType;
 - (instancetype)initWithTextType:(MKU_TEXT_TYPE)type;
 

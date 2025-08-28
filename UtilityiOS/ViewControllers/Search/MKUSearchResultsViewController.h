@@ -12,16 +12,10 @@
 #import "MKUSearchHeaderView.h"
 #import "MKUSearch.h"
 
-typedef NS_ENUM(NSUInteger, MKU_SEARCH_DATE_SECTION) {
-    MKU_SEARCH_DATE_SECTION_DATE,
-    MKU_SEARCH_DATE_SECTION_LIST,
-    MKU_SEARCH_DATE_SECTION_COUNT
-};
-
 @class MKUSearchResultsChildViewController;
 @class MKUSearchResultsViewController;
 
-@protocol MKUSearchHeaderVCParentViewDelegate <MKUViewControllerTransitionDelegate>
+@protocol MKUSearchHeaderVCParentViewDelegate <MKUHeaderFooterContainerProtocol>
 
 @required
 /** @brief Calls performSearchWithCompletion and immediately sets the searchArray as result. */
@@ -61,14 +55,9 @@ typedef NS_ENUM(NSUInteger, MKU_SEARCH_DATE_SECTION) {
 
 @end
 
+@interface MKUSearchResultsViewController <__covariant ObjectType : NSObject<MKUSearchProtocol> *> : MKUHeaderFooterContainerViewController <MKUSearchHeaderVCParentViewDelegate, MKURefreshViewControllerDelegate, MKUSearchResultsUpdateDelegate, MKUSearchResultsTransitionDelegate, MKUViewControllerActionProtocol, MKUItemsListVCNavBarDelegate>
 
-@interface MKUSearchResultsChildViewController <__covariant ObjectType : NSObject<MKUSearchProtocol> *> : MKUItemsListViewController <ObjectType> <HeaderVCChildViewDelegate>
-
-@end
-
-@interface MKUSearchResultsViewController <__covariant ObjectType : NSObject<MKUSearchProtocol> *, __covariant ChildType : __kindof MKUSearchResultsChildViewController *> : MKUHeaderFooterContainerViewController <ChildType> <MKUSearchHeaderVCParentViewDelegate, MKURefreshViewControllerDelegate, MKUSearchResultsUpdateDelegate, MKUSearchResultsTransitionDelegate, MKUViewControllerActionProtocol, MKUItemsListVCNavBarDelegate>
-
-@property (nonatomic, strong) ChildType childViewController;
+@property (nonatomic, strong) MKUSearchResultsChildViewController *childViewController;
 @property (nonatomic, strong) MKUSearchHeaderView *headerView;
 @property (nonatomic, strong) NSArray <ObjectType> *dataSource;
 
@@ -98,11 +87,15 @@ typedef NS_ENUM(NSUInteger, MKU_SEARCH_DATE_SECTION) {
 - (void)setIsSearching:(BOOL)isSearching;
 
 /** @brief selectedObjectHandler The handler to evalaute and set the selected item in the array of items. */
-+ (void)loadSelectionVCWithTitle:(NSString *)title allowsMultipleSelection:(BOOL)allowsMultipleSelection items:(NSArray *)items transitionDelegate:(id<MKUViewControllerTransitionDelegate>)transitionDelegate selectedObjectHandler:(EvaluateObjectHandler)selectedObjectHandler completion:(void(^)(UIViewController *VC))completion;
-
++ (void)loadSelectionVCWithTitle:(NSString *)title allowsMultipleSelection:(BOOL)allowsMultipleSelection items:(NSArray *)items transitionDelegate:(id<MKUViewControllerTransitionDelegate>)transitionDelegate selectedObjectHandler:(EvaluateSelectedObjectHandler)selectedObjectHandler completion:(void(^)(UIViewController *VC))completion;
+ 
 @end
 
+@interface MKUSearchResultsChildViewController <__covariant ObjectType : NSObject<MKUSearchProtocol> *> : MKUItemsListViewController <ObjectType> <HeaderVCChildViewDelegate>
 
+@property (nonatomic, weak) MKUSearchResultsViewController <ObjectType> *headerDelegate;
+
+@end
 
 #pragma mark - Date search
 
@@ -118,7 +111,7 @@ typedef NS_ENUM(NSUInteger, MKU_SEARCH_DATE_SECTION) {
 
 @end
 
-@interface MKUSearchResultsDateViewController <__covariant ObjectType : NSObject<MKUSearchProtocol> *> : MKUSearchResultsViewController <ObjectType, MKUSearchResultsDateChildViewController *> <MKUSearchResultsDateVCProtocol>
+@interface MKUSearchResultsDateViewController <__covariant ObjectType : NSObject<MKUSearchProtocol> *> : MKUSearchResultsViewController <ObjectType> <MKUSearchResultsDateVCProtocol>
 
 - (NSDate *)selectedDate;
 

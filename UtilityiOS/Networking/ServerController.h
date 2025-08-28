@@ -30,7 +30,7 @@
 + (AFHTTPSessionManager *)getFile:(NSString *)filename endpoint:(NSString *)endpoint completion:(ServerResultErrorBlock)completion;
 
 #pragma mark - swizzled in category
-/** @brief these are generic methods, you need to define a category of ServerController class and define the implementation */
+/** @brief these are generic methods, you need to define a category of ServerController class and define the implementation. */
 + (void)authWithUserID:(__kindof NSObject *)userID password:(NSString *)password completion:(ServerResultErrorBlock)completion;
 
 #pragma mark - helper set header and processing result methods

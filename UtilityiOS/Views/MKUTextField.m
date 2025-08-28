@@ -21,11 +21,15 @@
 }
 
 - (instancetype)initWithPlaceholder:(NSString *)placeholder {
-    return [self initWithPlaceholder:placeholder type:MKU_TEXT_FIELD_TYPE_DEFAULT textType:MKU_TEXT_TYPE_STRING];
+    return [self initWithPlaceholder:placeholder type:MKU_TEXT_FIELD_TYPE_BORDER | MKU_TEXT_FIELD_TYPE_CORNER textType:MKU_TEXT_TYPE_STRING];
+}
+
+- (instancetype)initWithPlaceholder:(NSString *)placeholder textType:(MKU_TEXT_TYPE)textType {
+    return [self initWithPlaceholder:placeholder type:MKU_TEXT_FIELD_TYPE_BORDER | MKU_TEXT_FIELD_TYPE_CORNER textType:textType];
 }
 
 - (instancetype)initWithTextType:(MKU_TEXT_TYPE)type {
-    return [self initWithPlaceholder:@"" type:MKU_TEXT_FIELD_TYPE_DEFAULT textType:type];
+    return [self initWithPlaceholder:@"" type:MKU_TEXT_FIELD_TYPE_BORDER | MKU_TEXT_FIELD_TYPE_CORNER textType:type];
 }
 
 - (instancetype)initWithPlaceholder:(NSString *)placeholder type:(MKU_TEXT_FIELD_TYPE)type textType:(MKU_TEXT_TYPE)textType {
@@ -48,16 +52,13 @@
             self.layer.cornerRadius = [Constants ButtonCornerRadious];
             self.layer.masksToBounds = YES;
         }
-                
-        self.font = [AppTheme textFieldFont];
-        self.textColor = [AppTheme textFieldTextColor];
-        self.backgroundColor = [AppTheme textFieldBackgroundColor];
         
         self.clearButtonMode = UITextFieldViewModeWhileEditing;
         self.autocorrectionType = UITextAutocorrectionTypeNo;
         self.autocapitalizationType = UITextAutocapitalizationTypeNone;
-        
-        self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:placeholder attributes:@{NSForegroundColorAttributeName:[AppTheme textFieldPlaceholderColor]}];
+        self.font = [AppTheme textFieldFont];
+        self.textColor = [AppTheme textFieldTextColor];
+        self.backgroundColor = [AppTheme textFieldBackgroundColor];
         self.placeholder = placeholder;
         
         self.controller = [[TextFieldController alloc] initWithType:textType];
@@ -67,10 +68,13 @@
 }
 
 - (void)setPlaceholderText:(NSString *)placeholder {
-    if (placeholder.length) {
-        self.attributedPlaceholder = [[NSAttributedString alloc] initWithString:placeholder attributes:@{NSForegroundColorAttributeName:[AppTheme textFieldPlaceholderColor]}];
-    }
     self.placeholder = placeholder;
+}
+
+- (void)setPlaceholder:(NSString *)placeholder {
+    [super setPlaceholder:placeholder];
+
+    self.attributedPlaceholder = placeholder.length ? [[NSAttributedString alloc] initWithString:placeholder attributes:@{NSForegroundColorAttributeName:[AppTheme textFieldPlaceholderColor]}] : nil;
 }
 
 - (void)setControllerDelegate:(id<TextFieldDelegate>)object {

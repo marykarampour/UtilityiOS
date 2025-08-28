@@ -12,7 +12,7 @@
 #import "UIView+Utility.h"
 #import "MKUAssets.h"
 
-static CGSize CHECK_SIZE;
+static CGFloat const CHECK_SIZE = 40.0;
 
 @interface MKURadioButtonView ()
 
@@ -51,13 +51,11 @@ static CGSize CHECK_SIZE;
         
         self.alignment = alignment;
         self.verticalAlignment = verticalAlignment;
-        
-        CHECK_SIZE = CGSizeMake([Constants CheckBoxSize], [Constants CheckBoxSize]);
-        
-        self.selectedImage = [MKUAssets systemIconWithName:[MKUAssets Checkmark_Square_Image_Name] color:[AppTheme checkboxTintColor]];
-        self.deselectedImage = [MKUAssets systemIconWithName:[MKUAssets Square_Image_Name] color:[AppTheme checkboxTintColor]];
-        self.disabledDeselectedImage = [MKUAssets systemIconWithName:[MKUAssets Checkmark_Square_Image_Name] color:[AppTheme checkboxDisabledColor]];
-        self.disabledSelectedImage = [MKUAssets systemIconWithName:[MKUAssets Square_Image_Name] color:[AppTheme checkboxDisabledColor]];
+                
+        self.selectedImage = [MKUAssets systemIconWithName:[MKUAssets Checkmark_Square_Image_Name] color:[AppTheme checkboxTintColor] size:[Constants CheckBoxSize]];
+        self.deselectedImage = [MKUAssets systemIconWithName:[MKUAssets Square_Image_Name] color:[AppTheme checkboxTintColor] size:[Constants CheckBoxSize]];
+        self.disabledSelectedImage = [MKUAssets systemIconWithName:[MKUAssets Checkmark_Square_Image_Name] color:[AppTheme checkboxDisabledColor] size:[Constants CheckBoxSize]];
+        self.disabledDeselectedImage = [MKUAssets systemIconWithName:[MKUAssets Square_Image_Name] color:[AppTheme checkboxDisabledColor] size:[Constants CheckBoxSize]];
         
         self.titleLabel = [[MKULabel alloc] init];
         self.titleLabel.adjustsFontSizeToFitWidth = YES;
@@ -65,7 +63,7 @@ static CGSize CHECK_SIZE;
         self.titleLabel.numberOfLines = 0;
         
         self.checkImageView = [[UIImageView alloc] init];
-        self.checkImageView.contentMode = UIViewContentModeScaleAspectFit;
+        self.checkImageView.contentMode = UIViewContentModeCenter;
         
         self.backButton = [[UIButton alloc] init];
         self.backButton.userInteractionEnabled = NO;
@@ -85,7 +83,7 @@ static CGSize CHECK_SIZE;
     
     [self removeConstraintsMask];
     [self constraintSidesForView:self.backButton];
-    [self constraintSize:CHECK_SIZE forView:self.checkImageView];
+    [self constraintSize:CGSizeMake(CHECK_SIZE, CHECK_SIZE) forView:self.checkImageView];
     
     if (self.verticalAlignment == MKU_RADIO_BUTTON_VERTICAL_ALIGNMENT_CENTER_Y) {
         

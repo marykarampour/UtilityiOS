@@ -8,6 +8,7 @@
 
 #import "MKUSearchResultsViewController.h"
 #import "UIViewController+MutableObjectVC.h"
+#import "MKUEditingListsViewController.h"
 #import "NSObject+Utility.h"
 #import "NSArray+Utility.h"
 
@@ -24,11 +25,6 @@
 
 @property (nonatomic, assign) BOOL isSearching;
 
-- (NSString *)textLabelAtIndex:(NSUInteger)index;
-- (NSString *)detailTextLabelAtIndex:(NSUInteger)index;
-- (void)performDidSelectObject:(NSObject <MKUSearchProtocol> *)object;
-- (NSObject <MKUSearchProtocol> *)objectAtIndex:(NSUInteger)index;
-
 @end
 
 
@@ -43,8 +39,9 @@
 #pragma mark - Table View
 
 - (CGFloat)heightForNonDateRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSObject<MKUSearchProtocol> *obj = [self.headerDelegate arrayForSearchState][indexPath.row];
-    
+    NSObject<MKUSearchProtocol> *obj = [[self.headerDelegate arrayForSearchState] nullableObjectAtIndex:indexPath.row];
+    if (!obj) return 0.0;
+
     if ([self.headerDelegate isDetailCellAtIndexPath:indexPath])
         return [self.headerDelegate estimatedDetailCellHeightForObject:obj];
     return [self.headerDelegate estimatedCellHeightForObject:obj];
@@ -64,7 +61,7 @@
 }
 
 - (UITableViewCellAccessoryType)accessoryTypeForSingleDeselectedRowForListOfType:(NSUInteger)type {
-    return self.headerDelegate.selectedAction == MKU_LIST_ITEM_SELECTED_ACTION_TRANSITION_TO_DETAIL ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+    return self.headerDelegate.selectedActionHandler(0) == MKU_LIST_ITEM_SELECTED_ACTION_TRANSITION_TO_DETAIL ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
 }
 
 - (void)setTextForRowAtIndexPath:(NSIndexPath *)indexPath inCell:(MKUBaseTableViewCell *)cell {
@@ -75,7 +72,7 @@
 }
 
 - (NSString *)noItemAvailableTitleForListOfType:(NSUInteger)type {
-    return nil;
+    return kStringSearchNotFound;
 }
 
 @end
@@ -124,9 +121,8 @@
     [self setNavBarItemsOfTarget:self.childViewController];
 }
 
-- (void)setSelectedAction:(MKU_LIST_ITEM_SELECTED_ACTION)selectedAction {
-    [super setSelectedAction:selectedAction];
-    self.childViewController.selectedAction = selectedAction;
+- (void)didSetSelectedActionHandler:(LIST_ITEM_SELECTED_ACTION_HANDLER)selectedActionHandler {
+    self.childViewController.selectedActionHandler = selectedActionHandler;
     [self addNavBarTarget:self.childViewController];
     [self setNavBarItemsOfTarget:self.childViewController];
 }
@@ -154,13 +150,13 @@
     [self resetSearch];
 }
 
-- (void)itemsListVC:(MKUItemsListViewController *)VC didSetSelected:(BOOL)selected item:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndex:(NSUInteger)index {
+- (void)itemsListVC:(MKUItemsListViewController *)VC didSetSelected:(BOOL)selected item:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath {
     
     if (self.isSearching || !item)
         self.isSearching = NO;
     
     if (item)
-        [self searchDidSelectObject:item atIndex:index];
+        [self searchDidSelectObject:item atIndex:indexPath.row];
     
     [self.headerView resignFirstResponder];
 }
@@ -168,12 +164,13 @@
 #pragma mark - search
 
 - (NSArray <NSObject<MKUSearchProtocol> *> *)arrayForSearchState {
-    return self.isSearching || 0 < self.filterPredicates.count ? self.childViewController.items : self.dataSource;
+    return self.isSearching || 0 < self.filterPredicates.count ? [self.childViewController items] : self.dataSource;
 }
 
 - (void)searchDidSelectObject:(NSObject<MKUSearchProtocol> *)object atIndex:(NSInteger)index {
     
-    if (self.selectedAction == MKU_LIST_ITEM_SELECTED_ACTION_TRANSITION_TO_DETAIL && [self.searchTransitionDelegate respondsToSelector:@selector(transitioningViewControllerForObject:atIndex:completion:)]) {
+    if (self.selectedActionHandler(0) == MKU_LIST_ITEM_SELECTED_ACTION_TRANSITION_TO_DETAIL &&
+        [self.searchTransitionDelegate respondsToSelector:@selector(transitioningViewControllerForObject:atIndex:completion:)]) {
         [self.searchTransitionDelegate transitioningViewControllerForObject:object atIndex:index completion:^(UIViewController *VC) {
             if (VC) {
                 [self clearSearch];
@@ -188,9 +185,8 @@
             }
         }];
     }
-    else if (self.selectedAction == MKU_LIST_ITEM_SELECTED_ACTION_SELECT) {
+    else if (self.selectedActionHandler(0) == MKU_LIST_ITEM_SELECTED_ACTION_SELECT) {
         [self updateWithSelectObject:object];
-        id object = self.childViewController.tableView.allowsMultipleSelection ? [self selectedObjects] : [self selectedObject];
         [self dispathTransitionDelegateToReturnWithObject:object];
     }
     else {
@@ -290,12 +286,12 @@
     
     if (0 < arr.count) {
         predicate = [NSCompoundPredicate orPredicateWithSubpredicates:arr];
-        [andArr addObject:predicate];
+        [andArr addNullableObject:predicate];
     }
     
     if (0 < self.searchPredicate.text.length) {
         NSPredicate *textPre = [self searchPredicateWithText:self.searchPredicate.text condition:self.searchPredicate.condition];
-        [andArr addObject:textPre];
+        [andArr addNullableObject:textPre];
     }
     
     predicate = [NSCompoundPredicate andPredicateWithSubpredicates:andArr];
@@ -322,10 +318,10 @@
     
     if ([obj.class respondsToSelector:@selector(searchPredicateKeys)]) {
         
-        StringArr *keys = [obj.class searchPredicateKeys];
+        StringSet *keys = [obj.class searchPredicateKeys];
         
         if (1 == keys.count) {
-            predicate = [self predicateWithKey:keys.firstObject searchText:searchText condition:condition];
+            predicate = [self predicateWithKey:keys.anyObject searchText:searchText condition:condition];
         }
         else if (0 < keys.count) {
             
@@ -355,7 +351,7 @@
 }
 
 - (void)setSelectedObjects:(NSArray<NSObject<MKUSearchProtocol> *> *)objects {
-    [self.childViewController setSelectedObjects:[NSMutableSet setWithArray:objects]];
+    [self.childViewController setSelectedObjectsWithSet:[NSMutableSet setWithArray:objects]];
 }
 
 - (__kindof MKUBaseTableViewCell *)tableView:(UITableView *)tableView detailCellForObject:(NSObject<MKUSearchProtocol> *)object {
@@ -363,7 +359,7 @@
     MKUSubtitleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[MKUSubtitleTableViewCell identifier]];
     if (!cell) {
         cell = [[MKUSubtitleTableViewCell alloc] init];
-        cell.accessoryType = self.selectedAction == MKU_LIST_ITEM_SELECTED_ACTION_TRANSITION_TO_DETAIL ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+        cell.accessoryType = self.selectedActionHandler(0) == MKU_LIST_ITEM_SELECTED_ACTION_TRANSITION_TO_DETAIL ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
     }
     
     NSString *title = [object respondsToSelector:@selector(title)] ? [object title] : nil;
@@ -408,7 +404,7 @@
     return [AppTheme sectionHeaderBackgroundColor];
 }
 
-+ (void)loadSelectionVCWithTitle:(NSString *)title allowsMultipleSelection:(BOOL)allowsMultipleSelection items:(NSArray *)items transitionDelegate:(id<MKUViewControllerTransitionDelegate>)transitionDelegate selectedObjectHandler:(EvaluateObjectHandler)selectedObjectHandler completion:(void (^)(UIViewController *))completion {
++ (void)loadSelectionVCWithTitle:(NSString *)title allowsMultipleSelection:(BOOL)allowsMultipleSelection items:(NSArray *)items transitionDelegate:(id<MKUViewControllerTransitionDelegate>)transitionDelegate selectedObjectHandler:(EvaluateSelectedObjectHandler)selectedObjectHandler completion:(void (^)(UIViewController *))completion {
     
     MKUSearchResultsViewController *vc = [[[self class] alloc] init];
     vc.childViewController.tableView.allowsMultipleSelection = allowsMultipleSelection;
@@ -428,7 +424,7 @@
 }
 
 - (BOOL)showSelectedObject {
-    return self.selectedAction == MKU_LIST_ITEM_SELECTED_ACTION_SHOW_DETAIL && 0 < [self selectedObjects].count;
+    return self.selectedActionHandler(0) == MKU_LIST_ITEM_SELECTED_ACTION_SHOW_DETAIL && 0 < [self selectedObjects].count;
 }
 
 - (BOOL)isDetailCellAtIndexPath:(NSIndexPath *)indexPath {
@@ -475,7 +471,7 @@
 @dynamic childViewController;
 
 - (NSDate *)selectedDate {
-    return self.childViewController.dateCellInfoObjects[@(MKU_SEARCH_DATE_SECTION_DATE)].date;
+    return self.childViewController.dateCellInfoObjects[@(MKU_LIST_DATE_SECTION_DATE)].date;
 }
 
 - (void)createChildVC {
@@ -499,26 +495,30 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        [self addDateSections:@[@(MKU_SEARCH_DATE_SECTION_DATE)]];
-        self.dateCellInfoObjects[@(MKU_SEARCH_DATE_SECTION_DATE)].date = [NSDate date];
+        [self addDateSections:@[@(MKU_LIST_DATE_SECTION_DATE)]];
+        self.dateCellInfoObjects[@(MKU_LIST_DATE_SECTION_DATE)].date = [NSDate date];
     }
     return self;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return MKU_SEARCH_DATE_SECTION_COUNT;
+    return MKU_LIST_DATE_SECTION_COUNT;
+}
+
+- (NSUInteger)listTypeForListInSection:(NSUInteger)section {
+    return MKU_FIELD_LIST_TYPE_A;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     return
-    section == MKU_SEARCH_DATE_SECTION_DATE &&
+    section == MKU_LIST_DATE_SECTION_DATE &&
     [self.headerDelegate respondsToSelector:@selector(dateSectionHeaderTitle)]
     ? [Constants TableSectionHeaderHeight] : 0.0;
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     if (![self.headerDelegate respondsToSelector:@selector(dateSectionHeaderTitle)]) return nil;
-    return section == MKU_SEARCH_DATE_SECTION_DATE ? [self.headerDelegate dateSectionHeaderTitle] : nil;
+    return section == MKU_LIST_DATE_SECTION_DATE ? [self.headerDelegate dateSectionHeaderTitle] : nil;
 }
 
 - (void)datePicker:(MKUDatePicker *)datePicker didChangeDate:(NSDate *)date {

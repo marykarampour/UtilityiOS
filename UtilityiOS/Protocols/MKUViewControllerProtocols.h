@@ -11,6 +11,7 @@
 @protocol MKUViewControllerProtocol <NSObject>
 
 @optional
-- (instancetype)initWithMKUType:(NSUInteger)type;
+/** @brief A default init method that takes an int as parameter. Used in menu transitions and search facilities. */
+- (instancetype)initWithMKUType:(NSInteger)type;
 
 @end

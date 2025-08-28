@@ -26,9 +26,9 @@ typedef NS_ENUM(NSUInteger, MKU_ACCESSORY_VIEW_TYPE) {
 
 @end
 
-@interface MKUPaddingLabel : UIView
+@interface MKUPaddingLabel <__covariant ViewType : MKULabel *> : UIView
 
-@property (nonatomic, strong, readonly) MKULabel *titleLabel;
+@property (nonatomic, strong, readonly) ViewType titleLabel;
 
 - (instancetype)initWithInsets:(UIEdgeInsets)insets;
 - (instancetype)initWithFrame:(CGRect)frame insets:(UIEdgeInsets)insets;

@@ -7,12 +7,14 @@
 //
 
 #import "JSONModel.h"
+#import "MKUViewContentStyleProtocols.h"
 #import "NSString+Utility.h"
+#import "NSObject+Utility.h"
 
 @protocol MKUModelCustomKeysProtocol <NSObject>
 
 @optional
-/** @brief Override in subclass if you want properties of ancestors be added to JSON keys, default NO
+/** @brief Override in subclass if you want properties of ancestors be added to serialization keys, default NO
  @code
  + (BOOL)usingAncestors {
     return YES;
@@ -30,12 +32,16 @@
  */
 + (BOOL)usingDynamicProperties;
 
+/** @brief Return how you want BOOL be serialized, e.g., YES / NO, or true / false.  DEfault is true / false */
++ (NSString *)stringValueForBOOL:(BOOL)value;
++ (BOOL)boolValueForObject:(NSObject *)value;
+
 /** @brief Override in subclass if you want keys be excluded in JSON keys
  @code
- + (NSSet<NSString *> *)excludedKeys {
-    return @[NSStringFromSelector(@selector(maxDate)),
-             NSStringFromSelector(@selector(fromDate)),
-             NSStringFromSelector(@selector(toDate))];
+ + (StringSet *)excludedKeys {
+ return [NSSet setWithObjects:NSStringFromSelector(@selector(maxDate)),
+ NSStringFromSelector(@selector(fromDate)),
+ NSStringFromSelector(@selector(toDate)), nil];
  }
  @endcode
  */
@@ -50,14 +56,15 @@
  }
  @endcode
  */
-+ (StringSet *)excludedProperties;
++ (NSSet<NSString *> *)excludedProperties;
 
 /** @brief Override in subclass if you want properties have different format than other JSON keys
  @note Use with + (StringFormat)customFormat
  @code
  + (NSSet<NSString *> *)customKeys {
-    return @[NSStringFromSelector(@selector(fromDate)),
-             NSStringFromSelector(@selector(toDate))];
+ return [NSSet setWithObjects:
+ NSStringFromSelector(@selector(fromDate)),
+ NSStringFromSelector(@selector(toDate)), nil];
  }
  @endcode
  */
@@ -83,6 +90,11 @@
  */
 + (DictStringString *)customKeyValueDict;
 
+- (Class)classForProperty:(NSString *)property;
+
+/** @brief Used to serialize dates. Default is DATE_FORMAT_FULL_STYLE. */
+- (DATE_FORMAT_STYLE)dateFormatForProperty:(NSString *)propertyName;
+
 @end
 
 //TODO: JSONModel does not support all types, e.g., Class. Made it not throw exception, have to decide
@@ -99,8 +111,10 @@
  @note default is StringFormatNONE, override + (StringFormat)classMapperFormat in subclass to customize */
 @property (class, nonatomic, assign, readonly) StringFormat mapperFormat;
 
-
 - (instancetype)initWithStringsDictionary:(NSDictionary *)values;
+
++ (NSArray *)toDictionaryWithArray:(NSArray<MKUModel *> *)items;
++ (NSArray *)toDictionaryWithArray:(NSArray<MKUModel *> *)items withTags:(BOOL)tags;
 
 /** @brief Override in subclass to set the mapper format for object to JSON. */
 + (StringFormat)classMapperFormat;
@@ -116,11 +130,6 @@
 /** @brief Only copies values which are not nil */
 - (void)copyValues:(__kindof MKUModel *)object;
 
-/** @brief Set all values of object
- @param ancestors YES will set values for ancestors of object too, NO only sets values of properties of object
- */
-- (void)setValuesOfObject:(__kindof MKUModel *)object ancestors:(BOOL)ancestors;
-
 /** @brief An extension to - (NSDictionary *)toDictionary excluding given keys
  @note Use with + (NSSet<NSString *> *)excludedKeys 
  */
@@ -131,13 +140,6 @@
 /** @brief key value pair for search predicates containg the class and property name
  @note subclass must implement searchPredicateKeys */
 + (DictStringString *)searchPredicateKeyValues;
-
-/** @brief keys for search predicates containg property names
- @note subclass must implement */
-+ (NSSet<NSString *> *)searchPredicateKeys;
-
-/** @brief search property name, return nil if search self */
-+ (NSSet<NSString *> *)searchPredicatePropertyNames;
 
 /** @brief Returns class of a property with given name */
 + (Class)classForPropertyName:(NSString *)name;
@@ -154,7 +156,9 @@
 + (NSString *)tagName;
 /** @brief A JSON representation of the serialized object. */
 - (NSString *)stringValue;
-/** @brief A JSON representation of the serialized object is converted to dictionary and used to create the object using initWithMap:. */
+/** @brief A JSON representation of the serialized object. */
+- (NSData *)dataValue;
+/** @brief A JSON representation of the serialized object is converted to dictionary and used to create the object using initWithStringsDictionary:. */
 + (instancetype)objectWithJSON:(NSString *)string;
 - (BOOL)propertyIsBool:(NSString *)propertyName;
 /** @brief Default is NO. If No is assuems local time for formatting. */
@@ -162,7 +166,6 @@
 - (NSDictionary *)varNamesWithSingleLenght:(NSUInteger)lenght;
 
 @end
-
 
 
 @interface MKUOption : MKUModel
@@ -180,10 +183,16 @@
 + (NSArray *)namesForOptions:(NSArray<MKUOption *> *)options range:(NSRange)range;
 + (NSArray *)titlesForOptions:(NSArray<MKUOption *> *)options range:(NSRange)range;
 + (NSArray<MKUOption *> *)optionsForOptions:(NSArray<MKUOption *> *)options range:(NSRange)range;
+/** @param values can be a bitmask or other int, either case bitwise & will be used to evalaute if the option matches.*/
++ (NSArray<MKUOption *> *)optionsForOptions:(NSArray<MKUOption *> *)options values:(NSArray<NSNumber *> *)values;
++ (NSArray<MKUOption *> *)optionsForOptions:(NSArray<MKUOption *> *)options value:(NSInteger)value;
++ (NSArray<MKUOption *> *)optionsForOptions:(NSArray<MKUOption *> *)options name:(NSString *)name;
++ (NSArray<MKUOption *> *)optionsForOptions:(NSArray<MKUOption *> *)options title:(NSString *)title;
 + (instancetype)optionForNameOrTitle:(NSString *)text options:(NSArray<MKUOption *> *)options;
 + (instancetype)optionForName:(NSString *)name options:(NSArray<MKUOption *> *)options;
 + (instancetype)optionForTitle:(NSString *)title options:(NSArray<MKUOption *> *)options;
 + (instancetype)optionForType:(NSInteger)type options:(NSArray<MKUOption *> *)options;
 
-@end
+- (NSComparisonResult)compare:(MKUOption *)option;
 
+@end

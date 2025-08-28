@@ -29,6 +29,7 @@
     
     if ([self tabbarBackgroundImage])
         [[UITabBar appearance] setBackgroundImage:[self tabbarBackgroundImage]];
+    [[UITabBar appearance] setBackgroundColor:[self tabbarBackgroundColor]];
     [[UITabBar appearance] setBarTintColor:[self tabbarBackgroundColor]];
     [[UITabBar appearance] setTintColor:[self tabbarBarTintColor]];
     [[UITabBar appearance] setTranslucent:NO];
@@ -47,11 +48,20 @@
     [UITextField appearance].keyboardAppearance = [AppTheme keyboardAppearance];
     
     [[UIStepper appearance] setTintColor:[self stepperTintColor]];
-    
+
+    [[UISearchBar appearance] setBackgroundColor:[self searchBarBackgroundColor]];
     [[UISearchBar appearance] setBarTintColor:[self searchBarElementsTintColor]];
     [[UISearchBar appearance] setTintColor:[self searchBarTintColor]];
-    [[UITextField appearanceWhenContainedIn:[UISearchBar class], nil] setBackgroundColor:[self searchBarTextFieldBackgroundColor]];
+    [[UITextField appearanceWhenContainedInInstancesOfClasses:@[[UISearchBar class]]] setBackgroundColor:[self searchBarTextFieldBackgroundColor]];
     [[UITextField appearanceWhenContainedInInstancesOfClasses:@[[UISearchBar class]]] setTextColor:[self searchBarTextColor]];
+    
+    NSArray<Class<UIAppearanceContainer>> *arr = @[[UISegmentedControl class]];
+    [[UILabel appearanceWhenContainedInInstancesOfClasses:arr] setNumberOfLines:0];
+    [[UILabel appearanceWhenContainedInInstancesOfClasses:arr] setLineBreakMode:NSLineBreakByWordWrapping];
+    
+    [[UIPageControl appearance] setPageIndicatorTintColor:[self pageIndicatorTintColor]];
+    [[UIPageControl appearance] setCurrentPageIndicatorTintColor:[self currentPageIndicatorTintColor]];
+    [[UIPageControl appearance] setHidesForSinglePage:YES];
 }
 
 + (UIKeyboardAppearance)keyboardAppearance {
@@ -136,35 +146,67 @@
 
 + (UIColor *)sectionHeaderTextColor {
     switch (APP_THEME_STYLE) {
-        case MKU_THEME_STYLE_LIGHT: return [UIColor blackColor];
-        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
-        default: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_LIGHT: return [self sectionHeaderLightTextColor];
+        case MKU_THEME_STYLE_DARK:  return [self sectionHeaderDarkTextColor];
+        default:                    return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)sectionFooterBackgroundColor {
     switch (APP_THEME_STYLE) {
-        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
-        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
-        default: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_LIGHT: return [self sectionFooterLightBackgroundColor];
+        case MKU_THEME_STYLE_DARK:  return [self sectionFooterDarkBackgroundColor];
+        default:                    return [UIColor whiteColor];
     }
 }
 
 
 + (UIColor *)sectionFooterTextColor {
     switch (APP_THEME_STYLE) {
-        case MKU_THEME_STYLE_LIGHT: return [UIColor blackColor];
-        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
-        default: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_LIGHT: return [self sectionFooterLightTextColor];
+        case MKU_THEME_STYLE_DARK:  return [self sectionFooterDarkTextColor];
+        default:                    return [UIColor whiteColor];
     }
 }
 
 + (UIColor *)sectionHeaderBackgroundColor {
     switch (APP_THEME_STYLE) {
-        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
-        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
-        default: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_LIGHT: return [self sectionHeaderLightBackgroundColor];
+        case MKU_THEME_STYLE_DARK:  return [self sectionHeaderDarkBackgroundColor];
+        default:                    return [UIColor whiteColor];
     }
+}
+
++ (UIColor *)sectionHeaderLightTextColor {
+    return [UIColor blackColor];
+}
+
++ (UIColor *)sectionHeaderLightBackgroundColor {
+    return [UIColor whiteColor];
+}
+
++ (UIColor *)sectionFooterLightTextColor {
+    return [UIColor blackColor];
+}
+
++ (UIColor *)sectionFooterLightBackgroundColor {
+    return [UIColor whiteColor];
+}
+
++ (UIColor *)sectionHeaderDarkTextColor {
+    return [UIColor whiteColor];
+}
+
++ (UIColor *)sectionHeaderDarkBackgroundColor {
+    return [UIColor blackColor];
+}
+
++ (UIColor *)sectionFooterDarkTextColor {
+    return [UIColor whiteColor];
+}
+
++ (UIColor *)sectionFooterDarkBackgroundColor {
+    return [UIColor blackColor];
 }
 
 + (UIColor *)tableFooterBackgroundColor {
@@ -402,7 +444,7 @@
     }
 }
 
-+ (UIColor *)badgeBackgroundColor {
++ (UIColor *)badgeBackgroundColorForState:(MKU_BADGE_VIEW_STATE)state {
     switch (APP_THEME_STYLE) {
         case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
         case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
@@ -463,6 +505,22 @@
         case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
         case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
+    }
+}
+
++ (UIColor *)pageIndicatorTintColor {
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor whiteColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
++ (UIColor *)currentPageIndicatorTintColor {
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blackColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor whiteColor];
+        default: return [UIColor blackColor];
     }
 }
 
@@ -534,6 +592,10 @@
 
 + (UIFont *)sectionFooterFont {
     return [UIFont boldSystemFontOfSize:14.0];
+}
+
++ (UIFont *)buttonFont {
+    return [UIFont boldSystemFontOfSize:16.0];
 }
 
 + (UIFont *)XlargeTallBoldFont {
@@ -654,6 +716,10 @@
         case MKU_THEME_STYLE_DARK: return [UIColor blackColor];
         default: return [UIColor whiteColor];
     }
+}
+
++ (UIColor *)searchBarBackgroundColor {
+    return [UIColor whiteColor];
 }
 
 + (UIColor *)searchBarElementsTintColor {

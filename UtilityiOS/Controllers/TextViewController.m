@@ -29,8 +29,10 @@
 #pragma mark - delegates
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
-    if (![textView isKindOfClass:[MKUTextView class]]) return YES;
-    if (self.maxLenght == 0 || self.maxLenght == NSNotFound) return YES;
+    if (![textView isKindOfClass:[MKUTextView class]] ||
+        self.maxLenght == 0 ||
+        self.maxLenght == NSNotFound)
+        return [textView textViewShouldChangeTextInRange:range replacementText:text];
     return [textView textViewShouldChangeTextInRange:range replacementText:text maxLength:self.maxLenght];
 }
 

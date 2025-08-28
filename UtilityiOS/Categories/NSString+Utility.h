@@ -90,22 +90,29 @@ typedef NS_ENUM(NSUInteger, StringFormat) {
 + (NSString *)notnullString:(NSString *)string defaultText:(NSString * __nonnull)defaultText;
 - (NSString *)quotations;
 - (NSString *)spaced;
-- (NSString *)removeSubstring:(NSString *)str;
-- (NSString *)trimCharSet:(NSString *)chars;
 /** @brief concatinates the same string count times */
 - (NSString *)multiplyWithCount:(NSUInteger)count;
-
-/** @brief splits a string based on uppercase letters
- @code
- UpperCaseString --> Upper Case String
- @endcode
- */
-- (NSString *)splitedStringForUppercaseComponents;
-
 - (NSString *)numbersOnly;
 
 /** @brief If is valid like email@gmail.com it returns emi**@**ail.com otherwise returs self */
 - (NSString *)obscuredEmail;
+- (NSString *)addSpaceBefore;
+- (NSString *)addSpaceAfter;
+/** @brief Adds a timestamp to the end of self */
+- (NSString *)timestamp;
+/** @brief Adds a UUID to the end of self */
+- (NSString *)GUID;
+- (NSString *)removeSubstring:(NSString *)str;
+/** @brief Trims white space. */
+- (NSString *)trim;
+- (NSString *)trimCharSet:(NSString *)chars;
+/** @brief Trims linear boundaries of a string with a given string.
+ @param string The string that acts as a boundary indicator. Anything before or after that will be removed.
+ @param boundary It can be start or end of the string or both.
+ @param inclusive If Yes, it will remove string, otherwise, it will remove up to string. */
+- (NSString *)trimWithSubstring:(NSString *)string boundary:(LINEAR_BOUNDARY_POINT)boundary inclusive:(BOOL)inclusive;
+- (NSString *)lastCharacters:(NSUInteger)chars;
+
 /** @brief splits a string based on uppercase letters
  @code
  UpperCaseString --> Upper Case String
@@ -114,26 +121,13 @@ typedef NS_ENUM(NSUInteger, StringFormat) {
 /** @param groupUppercase If YES it will not put extra space between consecutive uppercase letters */
 - (NSString *)splitedStringForUppercaseComponentsAndGroupUppercase:(BOOL)groupUppercase;
 - (NSString *)removeSpaceBetweenOneCharacterSubstrings;
-
-
-
-
-
-- (NSString *)addSpaceBefore;
-- (NSString *)addSpaceAfter;
-/** @brief Adds a timestamp to the end of self */
-- (NSString *)timestamp;
-/** @brief Adds a UUID to the end of self */
-- (NSString *)GUID;
-/** @brief Trims white space. */
-- (NSString *)trim;
-/** @brief Trims linear boundaries of a string with a given string.
- @param string The string that acts as a boundary indicator. Anything before or after that will be removed.
- @param boundary It can be start or end of the string or both.
- @param inclusive If Yes, it will remove string, otherwise, it will remove up to string. */
-- (NSString *)trimWithSubstring:(NSString *)string boundary:(LINEAR_BOUNDARY_POINT)boundary inclusive:(BOOL)inclusive;
-- (NSString *)lastCharacters:(NSUInteger)chars;
 - (NSString *)removeBetweenOneCharacterSubstringsOccurrenceaOfSpacer:(NSString *)string;
+/** @brief splits a string based on uppercase letters
+ @code
+ UpperCaseString --> Upper Case String
+ @endcode
+ */
+- (NSString *)splitedStringForUppercaseComponents;
 - (NSString *)displayNameForProperty;
 
 - (NSString *)multipliedStringOfLenght:(NSUInteger)lenght;

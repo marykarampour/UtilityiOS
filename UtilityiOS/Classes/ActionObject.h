@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "MKUPair.h"
 
-@interface ActionObject : NSObject
+@interface ActionObject : MKUModel
 
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, weak) id target;

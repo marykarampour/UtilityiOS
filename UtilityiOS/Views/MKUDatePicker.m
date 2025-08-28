@@ -32,17 +32,14 @@
 
 - (void)updateStyle {
     if (self.datePickerMode == UIDatePickerModeDate || self.datePickerMode == UIDatePickerModeDateAndTime) {
-        if (@available(iOS 14.0, *)) {
+        if (@available(iOS 14.0, *))
             self.preferredDatePickerStyle = UIDatePickerStyleInline;
-        }
-        else if (@available(iOS 13.4, *)) {
+        else if (@available(iOS 13.4, *))
             self.preferredDatePickerStyle = UIDatePickerStyleWheels;
-        }
     }
     else {
-        if (@available(iOS 13.4, *)) {
+        if (@available(iOS 13.4, *))
             self.preferredDatePickerStyle = UIDatePickerStyleWheels;
-        }
     }
 }
 
@@ -64,11 +61,13 @@
         case DATE_FORMAT_TIME_SHORT_STYLE:
         case DATE_FORMAT_TIME_STYLE:
         case DATE_FORMAT_DATE_TIME_COMPACT_STYLE:
+        case DATE_FORMAT_MONTH_TIME_COMPACT_STYLE:
             return UIDatePickerModeTime;
             
         case DATE_FORMAT_MONTH_YEAR_STYLE:
             if (@available(iOS 17.4, *))
                 return UIDatePickerModeYearAndMonth;
+            
         case DATE_FORMAT_SHORT_STYLE:
             return UIDatePickerModeDate;
             
@@ -82,6 +81,7 @@
         case DATE_FORMAT_TIME_SHORT_STYLE:
         case DATE_FORMAT_TIME_STYLE:
         case DATE_FORMAT_DATE_TIME_COMPACT_STYLE:
+        case DATE_FORMAT_MONTH_TIME_COMPACT_STYLE:
         case DATE_FORMAT_MONTH_YEAR_STYLE:
         case DATE_FORMAT_SHORT_STYLE:
             return [Constants DateViewControllerPopoverSize];

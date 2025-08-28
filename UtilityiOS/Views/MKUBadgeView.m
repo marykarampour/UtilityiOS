@@ -9,25 +9,20 @@
 #import "MKUBadgeView.h"
 #import "UIView+Utility.h"
 
-static CGFloat const BADGE_HEIGHT = 22.0;
-static CGFloat const SPINNER_BADGE_SPACING = 4.0;
-
 @implementation MKUBadgeView
 
 - (instancetype)init {
     self = [super initWithViewCreationHandler:^UIView *{
-        
         UILabel *label = [[UILabel alloc] init];
         label.textAlignment = NSTextAlignmentCenter;
         label.textColor = [AppTheme badgeTextColor];
-        label.font = [AppTheme smallLabelFont];
+        label.font = [AppTheme smallBoldLabelFont];
         return label;
     }];
     
     if (self) {
-        self.state = MKU_BADGE_VIEW_STATE_RED;
+        self.state = MKU_BADGE_VIEW_STATE_ALERT;
         self.clipsToBounds = YES;
-        self.backgroundColor = [AppTheme badgeBackgroundColor];
         self.layer.cornerRadius = [Constants BadgeHeight]/2;
     };
     return self;
@@ -44,7 +39,7 @@ static CGFloat const SPINNER_BADGE_SPACING = 4.0;
 
 - (void)setState:(MKU_BADGE_VIEW_STATE)state {
     _state = state;
-    self.backgroundColor = state == MKU_BADGE_VIEW_STATE_RED ? [UIColor redColor] : [UIColor systemGreenColor];
+    self.backgroundColor = [AppTheme badgeBackgroundColorForState:state];
 }
 
 @end
@@ -68,16 +63,16 @@ static CGFloat const SPINNER_BADGE_SPACING = 4.0;
         [self addSubview:self.spinnerView];
         
         [self removeConstraintsMask];
-        [self constraintWidth:BADGE_HEIGHT forView:self.spinnerView];
-        [self constraintHeight:BADGE_HEIGHT forView:self.spinnerView];
-        [self constraintHorizontally:@[self.spinnerView, self.badgeView] interItemMargin:SPINNER_BADGE_SPACING horizontalMargin:0.0 verticalMargin:0.0 equalWidths:NO];
+        [self constraintWidth:[Constants BadgeHeight] forView:self.spinnerView];
+        [self constraintHeight:[Constants BadgeHeight] forView:self.spinnerView];
+        [self constraintHorizontally:@[self.spinnerView, self.badgeView] interItemMargin:[Constants SpinnerBadgeSpacing] horizontalMargin:0.0 verticalMargin:0.0 equalWidths:NO];
     }
     return self;
 }
 
 - (CGSize)setText:(NSString *)text {
     [self.badgeView setText:text];
-    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.badgeView.frame.size.width + SPINNER_BADGE_SPACING + BADGE_HEIGHT, BADGE_HEIGHT);
+    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.badgeView.frame.size.width + [Constants SpinnerBadgeSpacing] + [Constants BadgeHeight], [Constants BadgeHeight]);
     return self.frame.size;
 }
 

@@ -205,15 +205,6 @@
     return [NSString stringWithFormat:@" %@ ", self];
 }
 
-- (NSString *)removeSubstring:(NSString *)str {
-    return [self stringByReplacingOccurrencesOfString:str withString:@""];
-}
-
-- (NSString *)trimCharSet:(NSString *)chars {
-    NSCharacterSet *set = [NSCharacterSet characterSetWithCharactersInString:chars];
-    return [self stringByTrimmingCharactersInSet:set];
-}
-
 - (NSString *)multiplyWithCount:(NSUInteger)count {
     NSString *string = @"";
     for (NSUInteger i=0; i<count; i++) {
@@ -275,32 +266,6 @@
     return email;
 }
 
-- (NSString *)splitedStringForUppercaseComponentsAndGroupUppercase:(BOOL)groupUppercase {
-    if (self.length < 2) {
-        return self;
-    }
-    
-    NSMutableString *result = [NSMutableString stringWithString:self];
-    NSRange range = [result rangeOfCharacterFromSet:[NSCharacterSet uppercaseLetterCharacterSet]];
-    NSString *croppedString = self;
-    NSRange croppedRange = NSMakeRange(range.location+range.length, croppedString.length-range.length);
-    
-    while (range.location != NSNotFound && croppedRange.length > 0) {
-        
-        croppedString = [result substringWithRange:croppedRange];
-        NSRange newRange = [croppedString rangeOfCharacterFromSet:[NSCharacterSet uppercaseLetterCharacterSet]];
-        if (newRange.location == NSNotFound) {
-            break;
-        }
-        //if (newRange.location > range.location) {? From PB
-        range = NSMakeRange(newRange.location+croppedRange.location, newRange.length);
-        [result insertString:@" " atIndex:range.location];//}
-        range = NSMakeRange(range.location+1, range.length);
-        croppedRange = NSMakeRange(range.location+range.length, result.length-range.location-range.length);
-    }
-    return groupUppercase ? [result removeSpaceBetweenOneCharacterSubstrings] : result;
-}
-
 - (NSString *)sanitizeCapitalizedCamelCaseSpaced {
     
     NSString *string = [self format:StringFormatUnderScore];
@@ -327,8 +292,17 @@
     return [NSString stringWithFormat:@"%@-%@", self, [NSString GUID]];
 }
 
+- (NSString *)removeSubstring:(NSString *)str {
+    return [self stringByReplacingOccurrencesOfString:str withString:@""];
+}
+
 - (NSString *)trim {
     return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+}
+
+- (NSString *)trimCharSet:(NSString *)chars {
+    NSCharacterSet *set = [NSCharacterSet characterSetWithCharactersInString:chars];
+    return [self stringByTrimmingCharactersInSet:set];
 }
 
 - (NSString *)trimWithSubstring:(NSString *)string boundary:(LINEAR_BOUNDARY_POINT)boundary inclusive:(BOOL)inclusive {
@@ -362,6 +336,32 @@
 - (NSString *)lastCharacters:(NSUInteger)chars {
     if (self.length <= chars) return self;
     return [self substringFromIndex:self.length - chars];
+}
+
+- (NSString *)splitedStringForUppercaseComponentsAndGroupUppercase:(BOOL)groupUppercase {
+    if (self.length < 2) {
+        return self;
+    }
+    
+    NSMutableString *result = [NSMutableString stringWithString:self];
+    NSRange range = [result rangeOfCharacterFromSet:[NSCharacterSet uppercaseLetterCharacterSet]];
+    NSString *croppedString = self;
+    NSRange croppedRange = NSMakeRange(range.location+range.length, croppedString.length-range.length);
+    
+    while (range.location != NSNotFound && 0 < croppedRange.length && croppedRange.length + croppedRange.location <= result.length) {
+        
+        croppedString = [result substringWithRange:croppedRange];
+        NSRange newRange = [croppedString rangeOfCharacterFromSet:[NSCharacterSet uppercaseLetterCharacterSet]];
+        if (newRange.location == NSNotFound) {
+            break;
+        }
+        //if (newRange.location > range.location) {? From PB
+        range = NSMakeRange(newRange.location+croppedRange.location, newRange.length);
+        [result insertString:@" " atIndex:range.location];//}
+        range = NSMakeRange(range.location+1, range.length);
+        croppedRange = NSMakeRange(range.location+range.length, result.length-range.location-range.length);
+    }
+    return groupUppercase ? [result removeSpaceBetweenOneCharacterSubstrings] : result;
 }
 
 - (NSString *)removeSpaceBetweenOneCharacterSubstrings {

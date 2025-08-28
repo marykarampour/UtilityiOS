@@ -82,28 +82,6 @@ typedef NS_OPTIONS(NSUInteger, MKU_LABEL_ATTRIBUTES_TYPE) {
     return [[MKUStringAttributes alloc] initWithText:attrs.text font:attrs.font color:attrs.color alignment:alignment];
 }
 
-+ (instancetype)blueBoldAttrsWithText:(NSString *)text {
-    return [MKUStringAttributes attributesWithText:text font:[AppTheme mediumBoldLabelFont] color:[AppTheme brightBlueColorWithAlpha:1.0]];
-}
-
-+ (void)setTitle:(NSString *)title subtitle:(NSString *)subtitle forLabel:(UILabel *)label {
-    [self setTitle:title value:subtitle forLabel:label delimiter:@"\n"];
-}
-
-+ (void)setTitle:(NSString *)title value:(NSString *)value forLabel:(UILabel *)label delimiter:(NSString *)delimiter {
-    if (title.length == 0) {
-        label.attributedText = nil;
-        label.text = value;
-        label.textAlignment = NSTextAlignmentLeft;
-        return;
-    }
-    
-    NSArray <MKUStringAttributes *> *attrs = @[[MKUStringAttributes attributesWithText:title font:[AppTheme mediumBoldLabelFont] color:[AppTheme brightBlueColorWithAlpha:1.0]],
-                                               [MKUStringAttributes attributesWithText:value font:[AppTheme mediumLabelFont] color:[AppTheme textDarkColor]]];
-    label.attributedText = [NSString attributedTextWithAttributes:attrs delimiter:delimiter];
-    label.textAlignment = (0 == title.length || 0 == value.length) ? NSTextAlignmentCenter : NSTextAlignmentLeft;
-}
-
 @end
 
 
@@ -166,7 +144,6 @@ typedef NS_OPTIONS(NSUInteger, MKU_LABEL_ATTRIBUTES_TYPE) {
     label.font = [AppTheme mediumBoldLabelFont];
     label.text = self.title;
     label.textAlignment = NSTextAlignmentCenter;
-    label.backgroundColor = [UIColor redColor];
     sublabel.text = nil;
 }
 
@@ -440,7 +417,7 @@ typedef NS_OPTIONS(NSUInteger, MKU_LABEL_ATTRIBUTES_TYPE) {
     if (!self.attrSubvalue && (self.type & MKU_LABEL_ATTRIBUTES_TYPE_ATTR_SUBVALUE)) {
         NSArray<MKUStringAttributes *> *subattrs = @[
             [MKUStringAttributes attributesWithText:self.subtitle font:[AppTheme smallBoldLabelFont] color:[AppTheme textDarkColor]],
-            [MKUStringAttributes attributesWithText:self.subvalue font:[AppTheme mediumLabelFont] color:[AppTheme brightBlueColorWithAlpha:1.0]]];
+            [MKUStringAttributes attributesWithText:self.subvalue font:[AppTheme smallLabelFont] color:[AppTheme brightBlueColorWithAlpha:1.0]]];
         
         self.attrSubvalue = [NSString attributedTextWithAttributes:subattrs delimiter:self.sublabelDelimiter];
     }
@@ -483,19 +460,6 @@ typedef NS_OPTIONS(NSUInteger, MKU_LABEL_ATTRIBUTES_TYPE) {
 
 - (NSAttributedString *)attributedTextWithColor:(UIColor *)color font:(UIFont *)font {
     return [NSString attributedTextWithAttribute:[MKUStringAttributes attributesWithText:self font:font color:color]];
-}
-
-+ (NSAttributedString *)attributedTitle:(NSString *)title number:(NSNumber *)number style:(MKU_THEME_STYLE)style {
-    
-    if (!number) number = @0;
-    
-    UIColor *titleColor = style == MKU_THEME_STYLE_DARK ? [AppTheme mistBlueColorWithAlpha:1.0] : [AppTheme textDarkColor];
-    UIColor *subtitleColor = style == MKU_THEME_STYLE_DARK ? [AppTheme textMediumColor] : [AppTheme textMediumColor];
-    
-    NSArray <MKUStringAttributes *> *attrs =
-    @[[MKUStringAttributes attributesWithText:title font:[AppTheme smallBoldLabelFont] color:titleColor alignment:NSTextAlignmentCenter],
-      [MKUStringAttributes attributesWithText:[number stringValue] font:[AppTheme mediumBoldLabelFont] color:subtitleColor alignment:NSTextAlignmentCenter]];
-    return [NSString attributedTextWithAttributes:attrs delimiter:@"\n"];
 }
 
 + (NSAttributedString *)multiLineTextWithAttributes:(NSArray<MKUStringAttributes *> *)attrs {
@@ -793,31 +757,6 @@ typedef NS_OPTIONS(NSUInteger, MKU_LABEL_ATTRIBUTES_TYPE) {
 }
 
 #pragma mark - text attributes
-
-- (MKUStringAttributes *)titleAttributes {
-    return [MKUStringAttributes attributesWithText:self font:[AppTheme mediumLabelFont] color:[AppTheme textDarkColor]];
-}
-
-- (MKUStringAttributes *)detailAttributes {
-    return [MKUStringAttributes attributesWithText:self font:[AppTheme mediumLabelFont] color:[AppTheme textMediumColor]];
-}
-
-- (MKUStringAttributes *)titleBoldAttributes {
-    return [MKUStringAttributes attributesWithText:self font:[AppTheme mediumBoldLabelFont] color:[AppTheme textDarkColor]];
-}
-
-- (MKUStringAttributes *)detailBoldAttributes {
-    return [MKUStringAttributes attributesWithText:self font:[AppTheme mediumBoldLabelFont] color:[AppTheme textMediumColor]];
-}
-
-- (MKUStringAttributes *)smallAttributes {
-    return [MKUStringAttributes attributesWithText:self font:[AppTheme smallLabelFont] color:[AppTheme textDarkColor]];
-}
-
-- (MKUStringAttributes *)smallBoldAttributes {
-    return [MKUStringAttributes attributesWithText:self font:[AppTheme smallBoldLabelFont] color:[AppTheme textDarkColor]];
-}
-
 
 + (NSAttributedString *)attributedTextWithAttributedStrings:(NSArray<NSAttributedString *> *)attrs attributedDelimiter:(NSAttributedString *)delimiter {
     NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:@""];

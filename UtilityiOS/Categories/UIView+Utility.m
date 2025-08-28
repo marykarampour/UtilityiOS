@@ -540,6 +540,10 @@
     CFRange runRangeRef = CFRangeMake(runRange.location, runRange.length);
     CTFrameRef frame = CTFramesetterCreateFrame(frameRef, runRangeRef, path, nil);
     CFArrayRef frameLineArr = CTFrameGetLines(frame);
+    
+    CFRelease(frameRef);
+    CFRelease(path);
+    
     CFIndex frameLineCount = CFArrayGetCount(frameLineArr);
     CGPoint textPosition = CGPointMake(0.0, 0.0);
     
@@ -549,7 +553,7 @@
         CFArrayRef runArr = CTLineGetGlyphRuns(frameLine);
         CFIndex runCount = CFArrayGetCount(runArr);
         CTRunRef run = (CTRunRef)CFArrayGetValueAtIndex(runArr, 0);
-        CGFloat lineLength = 0.0;
+        CGFloat lineLength = 0.0;//TODO: Not used
         CFIndex runGlyphCount = CTRunGetGlyphCount(run);
         runRange.length = runGlyphCount;
         
@@ -598,8 +602,9 @@
         
         CFRelease(runArr);
     }
-    CFRelease(path);
-    CFRelease(frameRef);
+    //If not released leaks, if released crashes! It seems to be a new CF bug
+    //CFRelease(frameLineArr);
+    //CFRelease(frame);
     CGContextRestoreGState(context);
 }
 

@@ -27,9 +27,6 @@
 - (BOOL)isValid;
 + (instancetype)copy:(MKUStringAttributes *)attrs withText:(NSString *)text;
 + (instancetype)copy:(MKUStringAttributes *)attrs alignment:(NSTextAlignment)alignment;
-+ (instancetype)blueBoldAttrsWithText:(NSString *)text;
-+ (void)setTitle:(NSString *)title subtitle:(NSString *)subtitle forLabel:(UILabel *)label;
-+ (void)setTitle:(NSString *)title value:(NSString *)value forLabel:(UILabel *)label delimiter:(NSString *)delimiter;
 
 @end
 
@@ -69,7 +66,6 @@
 
 - (NSAttributedString *)attributedTextWithColor:(UIColor *)color;
 - (NSAttributedString *)attributedTextWithColor:(UIColor *)color font:(UIFont *)font;
-+ (NSAttributedString *)attributedTitle:(NSString *)title number:(NSNumber *)number style:(MKU_THEME_STYLE)style;
 
 + (NSAttributedString *)multiLineTextWithAttributes:(NSArray <MKUStringAttributes *> *)attrs;
 + (NSAttributedString *)dashedTextWithAttributes:(NSArray <MKUStringAttributes *> *)attrs;
@@ -94,13 +90,6 @@
 
 - (NSAttributedString *)attributedTextWithAttributes:(MKUStringAttributes *)attrs titleAttributes:(MKUStringAttributes *)titleAttrs title:(NSString *)title delimiter:(NSString *)delimiter;
 + (NSAttributedString *)attributedTextWithAttributes:(MKUStringAttributes *)attrs text:(NSString *)text titleAttributes:(MKUStringAttributes *)titleAttrs title:(NSString *)title delimiter:(NSString *)delimiter;
-
-- (MKUStringAttributes *)titleAttributes;
-- (MKUStringAttributes *)detailAttributes;
-- (MKUStringAttributes *)titleBoldAttributes;
-- (MKUStringAttributes *)detailBoldAttributes;
-- (MKUStringAttributes *)smallAttributes;
-- (MKUStringAttributes *)smallBoldAttributes;
 
 + (NSString *)bullet;
 + (NSString *)spaceBullet;

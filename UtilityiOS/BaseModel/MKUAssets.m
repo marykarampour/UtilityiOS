@@ -51,12 +51,19 @@
     return @"chevron.down";
 }
 
++ (NSString *)Plusminus_square_Name {
+    return @"plusminus.square";
+}
+
 + (UIImage *)systemIconWithName:(NSString *)name color:(UIColor *)color {
     if (!color) return nil;
     
-    UIImageSymbolConfiguration *configuration = [UIImageSymbolConfiguration configurationWithPaletteColors:@[color]];
-    UIImage *image = [UIImage systemImageNamed:name withConfiguration:configuration];
-    return image;
+    if (@available(iOS 15.0, *)) {
+        UIImageSymbolConfiguration *configuration = [UIImageSymbolConfiguration configurationWithPaletteColors:@[color]];
+        UIImage *image = [UIImage systemImageNamed:name withConfiguration:configuration];
+        return image;
+    }
+    return nil;
 }
 
 + (UIImage *)systemIconWithName:(NSString *)name size:(CGFloat)size {
@@ -64,6 +71,29 @@
     
     UIImageSymbolConfiguration *configuration = [UIImageSymbolConfiguration configurationWithPointSize:size];
     UIImage *image = [UIImage systemImageNamed:name withConfiguration:configuration];
+    return image;
+}
+
++ (UIImage *)systemIconWithName:(NSString *)name color:(UIColor *)color size:(CGFloat)size {
+    
+    if (!color && size <= 0.0) return [UIImage systemImageNamed:name];
+    
+    UIImage *image = [UIImage systemImageNamed:name];
+    UIImageSymbolConfiguration *colorConfig;
+    UIImageSymbolConfiguration *sizeConfig;
+    
+    if (color) {
+        if (@available(iOS 15.0, *)) {
+            colorConfig = [UIImageSymbolConfiguration configurationWithPaletteColors:@[color]];
+            image = [image imageByApplyingSymbolConfiguration:colorConfig];
+        }
+    }
+
+    if (0.0 <= size) {
+        sizeConfig = [UIImageSymbolConfiguration configurationWithPointSize:size];
+        image = [image imageByApplyingSymbolConfiguration:sizeConfig];
+    }
+    
     return image;
 }
 

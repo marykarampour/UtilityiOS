@@ -13,7 +13,7 @@
 
 @interface MKUTextView : UITextView
 
-@property (nonatomic, assign, readonly) BOOL hasCharCount;
+@property (nonatomic, assign) BOOL hasCharCount;
 @property (nonatomic, strong, readonly) TextViewController *controller;
 
 - (instancetype)initWithPlaceholder:(NSString *)placeholder;

@@ -77,7 +77,7 @@
     attributes.cellClass = [MKUImageTitleCollectionViewCell class];
     
     MKUCollectionViewHeaderAttributes *headerAttributes = [[MKUCollectionViewHeaderAttributes alloc] init];
-    headerAttributes.backgroundColor = [AppTheme buttonBorderColor];
+    headerAttributes.backgroundColor = [AppTheme collectionViewSectionHeaderBackgroundColor];
     headerAttributes.insets = UIEdgeInsetsZero;
     
     self.attributes = attributes;

@@ -213,11 +213,3 @@
 }
 
 @end
-
-@implementation MKUColorComponents (MKUTheme)
-
-+ (MKUColorComponents *)MKUInkBlueComponents {
-    return [MKUColorComponents colorComponentsWithRGBHEX:kInkBlueHEXValue alpha:1.0];
-}
-
-@end

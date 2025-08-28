@@ -11,56 +11,9 @@
 #import "UIViewController+Navigation.h"
 #import "ServerController.h"
 #import "MKUAppDelegate.h"
-#import "MKUAppDelegate.h"
-#import "MKUSpinner.h"
 #import "MKUSpinner.h"
 
 @implementation NSObject (Alert)
-
-- (void)textFieldAlertWithUserID:(__kindof NSObject *)userID passName:(NSString *)passName successAction:(ActionObject *)successAction {
-    [self textFieldAlertWithTitle:nil userID:userID passName:passName successAction:successAction];
-}
-
-- (void)textFieldAlertWithTitle:(NSString *)title userID:(__kindof NSObject *)userID passName:(NSString *)passName successAction:(ActionObject *)successAction {
-    
-    NSString *message = [NSString stringWithFormat:[Constants Enter_BLANK_STR], passName];
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-    __block UITextField *passText;
-    
-    [alert addAction:[UIAlertAction actionWithTitle:[Constants OK_STR] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [MKUSpinner show];
-        [ServerController authWithUserID:userID password:passText.text completion:^(id result, NSError *error) {
-            [MKUSpinner hide];
-            if (!error && result) {
-                if ([successAction.target respondsToSelector:successAction.action]) {
-                    [successAction.target performSelector:successAction.action];
-                }
-            }
-            else {
-                NSString *errorTitle = [NSString stringWithFormat:[Constants Incorrect_BLANK_STR], passName];
-                [self textFieldAlertWithTitle:errorTitle userID:userID passName:passName successAction:successAction];
-            }
-        }];
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:[Constants Cancel_STR] style:UIAlertActionStyleDefault handler:nil]];
-    
-    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.placeholder = passName;
-        textField.secureTextEntry = YES;
-        passText = textField;
-    }];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[self presentingVC] presentViewController:alert animationType:kCATransitionFade timingFunction:kCAAnimationLinear completion:nil];
-    });
-}
-
-- (UIViewController *)presentingVC  {
-    if ([self isKindOfClass:[UIViewController class]]) return (UIViewController *)self;
-    MKUAppDelegate *app = (MKUAppDelegate *)[UIApplication sharedApplication].delegate;
-    UIViewController *vc = [app visibleViewController];
-    return vc;
-}
 
 + (void)displayToastWithTitle:(NSString *)title {
     [self displayToastWithTitle:title message:nil];
@@ -71,7 +24,7 @@
 }
 
 + (void)displayToastWithTitle:(NSString *)title message:(NSString *)message duration:(NSTimeInterval)duration {
-    if (title.length == 0 && title.length == 0) return;
+    if (title.length == 0 && message.length == 0) return;
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -83,7 +36,7 @@
 }
 
 - (void)OKAlertWithTitle:(NSString *)title message:(NSString *)message {
-    if (title.length == 0 && title.length == 0) return;
+    if (title.length == 0 && message.length == 0) return;
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:[Constants OK_STR]  style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
@@ -102,6 +55,18 @@
 - (void)OKAlertWithTitle:(NSString *)title message:(NSString *)message defaultTitle:(NSString *)defaultTitle {
     NSString *text = [NSString notnullString:title defaultText:defaultTitle];
     [self OKAlertWithTitle:text message:message];
+}
+
+- (void)OKAlertWithTitle:(NSString *)title message:(NSString *)message alertActionHandler:(void (^)(void))handler {
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:[Constants OK_STR] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if (handler) handler();
+    }]];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[self presentingVC] presentViewController:alert animated:YES completion:nil];
+    });
 }
 
 - (void)actionAlertWithTitle:(NSString *)title message:(NSString *)message alertAction:(SEL)alertAction {
@@ -287,18 +252,6 @@
     });
 }
 
-- (void)OKAlertWithTitle:(NSString *)title message:(NSString *)message alertActionHandler:(void (^)(void))handler {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-    
-    [alert addAction:[UIAlertAction actionWithTitle:[Constants OK_STR] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        if (handler) handler();
-    }]];
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [[self presentingVC] presentViewController:alert animated:YES completion:nil];
-    });
-}
-
 - (void)textFieldAlertWithTitle:(NSString *)title message:(NSString *)message target:(NSObject<UITextFieldDelegate> *)target alertAction:(SEL)alertAction {
     [self textFieldAlertWithTitle:title message:message target:target alertActionHandler:^(NSString *text) {
         if ([target respondsToSelector:alertAction]) {
@@ -381,6 +334,89 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [[self presentingVC] presentViewController:alert animated:YES completion:nil];
     });
+}
+
+- (void)textFieldAlertWithUserID:(__kindof NSObject *)userID passName:(NSString *)passName successAction:(ActionObject *)successAction {
+    [self textFieldAlertWithTitle:nil userID:userID passName:passName successAction:successAction];
+}
+
+- (void)textFieldAlertWithTitle:(NSString *)title userID:(__kindof NSObject *)userID passName:(NSString *)passName successAction:(ActionObject *)successAction {
+    
+    NSString *message = [NSString stringWithFormat:[Constants Enter_BLANK_STR], passName];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    __block UITextField *passText;
+    
+    [alert addAction:[UIAlertAction actionWithTitle:[Constants OK_STR] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [MKUSpinner show];
+        [ServerController authWithUserID:userID password:passText.text completion:^(id result, NSError *error) {
+            [MKUSpinner hide];
+            if (!error && result) {
+                if ([successAction.target respondsToSelector:successAction.action]) {
+                    [successAction.target performSelector:successAction.action];
+                }
+            }
+            else {
+                NSString *errorTitle = [NSString stringWithFormat:[Constants Incorrect_BLANK_STR], passName];
+                [self textFieldAlertWithTitle:errorTitle userID:userID passName:passName successAction:successAction];
+            }
+        }];
+    }]];
+    [alert addAction:[UIAlertAction actionWithTitle:[Constants Cancel_STR] style:UIAlertActionStyleDefault handler:nil]];
+    
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = passName;
+        textField.secureTextEntry = YES;
+        passText = textField;
+    }];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[self presentingVC] presentViewController:alert animationType:kCATransitionFade timingFunction:kCAAnimationLinear completion:nil];
+    });
+}
+
+- (void)textFieldAlertWithTitle:(NSString *)title target:(NSObject *)target passName:(NSString *)passName successActionHandler:(void (^)(id))handler {
+    
+    NSString *message = [NSString stringWithFormat:[Constants Enter_BLANK_STR], passName];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    __block UITextField *userText;
+    __block UITextField *passText;
+    
+    [alert addAction:[UIAlertAction actionWithTitle:[Constants OK_STR] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        [MKUSpinner show];
+        [ServerController authWithUserID:userText.text password:passText.text completion:^(id result, NSError *error) {
+            [MKUSpinner hide];
+            if (!error && result) {
+                if (handler) handler(result);
+            }
+            else {
+                NSString *errorTitle = [NSString stringWithFormat:[Constants Incorrect_BLANK_STR], passName];
+                [self textFieldAlertWithTitle:errorTitle target:target passName:passName successActionHandler:handler];
+            }
+        }];
+    }]];
+       
+    [alert addAction:[UIAlertAction actionWithTitle:[Constants Cancel_STR] style:UIAlertActionStyleDefault handler:nil]];
+    
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = [Constants Username_STR];
+        userText = textField;
+    }];
+    
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = passName;
+        textField.secureTextEntry = YES;
+        passText = textField;
+    }];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[self presentingVC] presentViewController:alert animationType:kCATransitionFade timingFunction:kCAAnimationLinear completion:nil];
+    });
+}
+
+- (UIViewController *)presentingVC  {
+    if ([self isKindOfClass:[UIViewController class]]) return (UIViewController *)self;
+    UIViewController *vc = [[MKUAppDelegate application] visibleViewController];
+    return vc;
 }
 
 @end

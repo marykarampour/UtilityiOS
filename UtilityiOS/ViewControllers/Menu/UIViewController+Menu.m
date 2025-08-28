@@ -8,6 +8,7 @@
 
 #import "UIViewController+Menu.h"
 #import "MKUTableViewController.h"
+#import "MKUSplitViewController.h"
 #import "NSArray+Utility.h"
 #import <objc/runtime.h>
 
@@ -96,6 +97,15 @@ static char MENU_OBJECTS_KEY;
     [self.navigationController pushViewController:VC animated:YES];
 }
 
+- (void)transitionToDetailViewAtIndexPath:(NSIndexPath *)indexPath {
+    if (![self.splitViewController isKindOfClass:[MKUSplitViewController class]]) return;
+    
+    UIViewController *nextViewController = [self nextViewControllerForIndexPath:indexPath];
+    MKUSplitViewController *splitVC = (MKUSplitViewController *)self.splitViewController;
+    UINavigationController *nav = [splitVC popDetailViewController:NO];
+    [nav pushViewController:nextViewController animated:NO];
+}
+
 - (UIViewController *)nextViewControllerForIndexPath:(NSIndexPath *)indexPath {
     
     MKUMenuItemObject *obj = [self menuObjectAtIndexPath:indexPath];
@@ -107,6 +117,8 @@ static char MENU_OBJECTS_KEY;
     else {
         nextViewController = [[obj.VCClass alloc] init];
     }
+    
+    nextViewController.title = obj.title;
     
     if (obj.object) {
         BOOL objectCanCopy = [obj.object respondsToSelector:@selector(copyWithZone:)] && obj.shouldCopy;

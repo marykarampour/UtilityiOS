@@ -35,7 +35,7 @@
 @protocol MKUSearchCriteriaViewProtocol <MKUPolymorphicViewProtocol, MKUControlProtocol>
 
 @required
-/** @brief By default if type = MKU_UI_TYPE_IPOD it addes a back button to hide and show this view. */
+/** @brief By default if type = MKU_UI_TYPE_IPHONE it addes a back button to hide and show this view. */
 - (instancetype)initWithUIType:(MKU_UI_TYPE)type;
 - (void)setTextFieldDelegate:(id<UITextFieldDelegate>)delegate;
 

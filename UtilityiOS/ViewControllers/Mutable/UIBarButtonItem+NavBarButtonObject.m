@@ -103,7 +103,7 @@ static char ACTION_HANDLER_KEY;
 
 + (instancetype)spacer {
     UIBarButtonItem *obj = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
-    obj.width = 32.0;
+    obj.width = [Constants NavbarItemSpaceWidth];
     return obj;
 }
 

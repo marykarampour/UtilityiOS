@@ -101,7 +101,7 @@ static CGFloat const IMAGE_SHRINK_CONSTANT = 0.5;
 }
 
 //https://stackoverflow.com/a/6565988
-- (NSData *)aspectFitResize:(CGSize)size {
+- (UIImage *)aspectFitImageResize:(CGSize)size {
     if (size.height == 0) return nil;
     
     UIImage *image = self;
@@ -111,13 +111,27 @@ static CGFloat const IMAGE_SHRINK_CONSTANT = 0.5;
     CGFloat height = aspectS > aspectI ? size.height : self.size.height * size.width / self.size.width;
     CGSize imSize = CGSizeMake(width, height);
     
-    UIGraphicsBeginImageContextWithOptions(size, NO, self.scale);
+    UIGraphicsBeginImageContextWithOptions(imSize, NO, self.scale);
     [image drawInRect:CGRectMake(size.width / 2.0 - imSize.width / 2.0, 0.0, imSize.width, imSize.height)];
     image = UIGraphicsGetImageFromCurrentImageContext();
-    NSData *imageData = UIImageJPEGRepresentation(image, MAX_IMAGE_QUALITY);
     UIGraphicsEndImageContext();
     
+    return image;
+}
+
+- (NSData *)aspectFitResize:(CGSize)size {
+    UIImage *image = [self aspectFitImageResize:size];
+    NSData *imageData = [image shrink];
     return imageData;
+}
+
++ (NSData *)aspectFitImageData:(NSData *)data resize:(CGSize)size {
+    UIImage *image = [UIImage imageWithData:data];
+    return [image aspectFitResize:size];
+}
+
++ (NSData *)aspectFitShrinkImageData:(NSData *)data {
+    return [self aspectFitImageData:data resize:[Constants ImageShrinkMaxSize]];
 }
 
 - (UIImage *)rotate:(float)radian {
@@ -135,6 +149,7 @@ static CGFloat const IMAGE_SHRINK_CONSTANT = 0.5;
     CGContextDrawImage(context, CGRectMake(-self.size.width/2, -self.size.height/2, self.size.width, self.size.height), [self CGImage]);
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
+    
     return image;
 }
 
@@ -179,6 +194,7 @@ static CGFloat const IMAGE_SHRINK_CONSTANT = 0.5;
     CGImageSourceRef isrc = CGImageSourceCreateWithData((__bridge CFDataRef)data, NULL);
     CGImageRef ref = CGImageSourceCreateThumbnailAtIndex(isrc, 0, options);
     image = [UIImage imageWithCGImage:ref];
+    
     CGImageRelease(ref);
     CFRelease(isrc);
     return image;
@@ -191,6 +207,9 @@ static CGFloat const IMAGE_SHRINK_CONSTANT = 0.5;
     CGImageRef selfRef = [context createCGImage:self.CIImage fromRect:selfRect];
     CGImageRef imageRef = CGImageCreateWithImageInRect(selfRef, rect);
     UIImage *im = [UIImage imageWithCGImage:imageRef];
+    
+    CGImageRelease(imageRef);
+    CGImageRelease(selfRef);
     return im;
 }
 
@@ -253,7 +272,7 @@ static CGFloat const IMAGE_SHRINK_CONSTANT = 0.5;
     if (isPDF)
         return [UIImage verticallyStackedPdfFromImageData:images];
     else
-        return [[UIImage verticallyStackedImageFromImageData:images] shrink];
+        return [[[UIImage verticallyStackedImageFromImageData:images] aspectFitImageResize:[Constants ImageShrinkMaxSize]] shrink];
 }
 
 +  (UIImage *)stackedImageFromImages:(NSArray<UIImage *> *)images vertical:(BOOL)vertical {
@@ -343,7 +362,8 @@ static CGFloat const IMAGE_SHRINK_CONSTANT = 0.5;
     
     for (NSData *image in images) {
         
-        UIImage *im = [UIImage imageWithData:image];
+        NSData *fit = [UIImage aspectFitShrinkImageData:image];
+        UIImage *im = [UIImage imageWithData:fit];
         if (!im) continue;
         
         CGSize size = im.size;

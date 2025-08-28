@@ -10,7 +10,7 @@
 #import "UIViewController+Utility.h"
 #import "MKUHeaderContainerProtocol.h"
 #import "NSObject+NavBarButtonTarget.h"
-#import "MKUViewControllerTransitionProtocol.h"
+#import "UIViewController+ViewControllerTransition.h"
 
 /** @brief class is the generic VC which includes a header view on top, and a main content view.
  @note Uses MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_SAVE */

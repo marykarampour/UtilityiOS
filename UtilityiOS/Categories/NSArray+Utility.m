@@ -47,7 +47,7 @@
     
     NSMutableArray *arrays = [[NSMutableArray alloc] init];
     NSMutableArray *arrayOfFiltered = [[NSMutableArray alloc] initWithArray:self];
-    
+
     for (NSPredicate *obj in predicates) {
         NSArray *arr = [arrayOfFiltered filteredArrayUsingPredicate:obj];
         if (arr) [arrays addObject:arr];
@@ -87,18 +87,49 @@
 
 + (instancetype)arrayFromArray:(NSArray *)array forKey:(NSString *)key {
     if (array.count == 0) return nil;
-    
+    if (![array.firstObject respondsToSelector:NSSelectorFromString(key)]) return nil;
+
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (NSObject *obj in array) {
-        if (![obj respondsToSelector:NSSelectorFromString(key)]) continue;
         id value = [obj valueForKey:key];
-        if (![arr containsObject:value]) [arr addObject:value];
+        if (value && ![arr containsObject:value]) [arr addObject:value];
     }
     return arr;
 }
 
 + (instancetype)arrayWithArray:(NSArray *)array byAddingObject:(id)anObject {
     return [array arrayByAddingObject:anObject];
+}
+
+- (NSDictionary *)groupedArrayForKey:(NSString *)key {
+    return [NSArray groupedArrayFromArray:self forKey:key];
+}
+
++ (NSDictionary *)groupedArrayFromArray:(NSArray *)array forKey:(NSString *)key {
+    if (array.count == 0) return nil;
+    if (![array.firstObject respondsToSelector:NSSelectorFromString(key)]) return nil;
+
+    NSMutableDictionary <NSString *, NSMutableArray *> *dict = [[NSMutableDictionary alloc] init];
+    NSMutableArray *keys = [[NSMutableArray alloc] init];
+
+    for (NSObject *obj in array) {
+        
+        id value = [obj valueForKey:key];
+        if (!value) continue;
+        
+        if (![keys containsObject:value])
+            [keys addObject:value];
+        
+        NSMutableArray *arr = [dict objectForKey:value];
+        if (!arr)
+            arr = [[NSMutableArray alloc] init];
+        if (![arr containsObject:obj]) {
+            [arr addObject:obj];
+            [dict setObject:arr forKey:value];
+        }
+    }
+        
+    return dict;
 }
 
 - (instancetype)arrayByAddingObject:(id)anObject {
@@ -115,7 +146,7 @@
         
         NSString *desc = [[obj performSelector:selector] description];
         if ([str containsString:desc]) continue;
-        
+
         [str appendString:desc];
     }
     return str;
@@ -139,15 +170,43 @@
     [self addObject:anObject];
 }
 
-- (void)addUniqueObject:(id)anObject {
-    if ([self containsObject:anObject]) return;
-    [self addObject:anObject];
+- (BOOL)boundsCheckRemoveObjectAtIndex:(NSUInteger)index {
+    if (self.count <= index || index < 0) return NO;
+    [self removeObjectAtIndex:index];
+    return YES;
 }
 
-- (void)addUniqueObjectsFromArray:(NSArray *)otherArray {
+- (BOOL)addUniqueObject:(id)anObject {
+    if ([self containsObject:anObject]) return NO;
+    [self addObject:anObject];
+    return YES;
+}
+
+- (NSArray *)addUniqueObjectsFromArray:(NSArray *)otherArray {
+    NSMutableArray *existing = [[NSMutableArray alloc] init];
     for (id obj in otherArray) {
-        [self addUniqueObject:obj];
+        if (![self addUniqueObject:obj])
+            [existing addObject:obj];
     }
+    return existing;
+}
+
+- (NSArray *)addOrReplaceUniqueObjectsFromArray:(NSArray *)otherArray {
+    NSMutableArray *existing = [[NSMutableArray alloc] init];
+    for (id obj in otherArray) {
+        if (![self addUniqueObject:obj]) {
+            [existing addObject:obj];
+            [self replaceObjectAtIndex:[self indexOfObject:obj] withObject:obj];
+        }
+    }
+    return existing;
+}
+
+- (void)insertOrAddObject:(id)anObject atIndex:(NSUInteger)index {
+    if (self.count <= index)
+        [self addObject:anObject];
+    else
+        [self insertObject:anObject atIndex:index];
 }
 
 - (void)addSynchronizedObject:(id)anObject {

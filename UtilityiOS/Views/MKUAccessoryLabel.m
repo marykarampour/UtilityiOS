@@ -20,6 +20,8 @@
     if (self = [super initWithText:text]) {
         CGFloat padding = [Constants TextPadding];
         self.insets = UIEdgeInsetsMake(padding, padding, padding, padding);
+        self.numberOfLines = 0;
+        self.lineBreakMode = NSLineBreakByWordWrapping;
     }
     return self;
 }
@@ -80,13 +82,6 @@
 
 - (void)drawTextInRect:(CGRect)rect {
     [super drawTextInRect:UIEdgeInsetsInsetRect(rect, self.insets)];
-}
-
-- (CGSize)intrinsicContentSize {
-    CGSize size = [super intrinsicContentSize];
-    size.width  += (self.insets.left + self.insets.right);
-    size.height += (self.insets.top + self.insets.bottom);
-    return size;
 }
 
 @end

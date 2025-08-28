@@ -24,7 +24,7 @@ typedef NS_ENUM(NSUInteger, MKU_NAV_BAR_BUTTON_POSITION) {
 typedef NS_ENUM(NSInteger, MKU_NAV_BAR_BUTTON_TYPE) {
     MKU_NAV_BAR_BUTTON_TYPE_NONE = -1,
     MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_DONE     = UIBarButtonSystemItemDone, /** Used in MKUItemsListViewController. Mututally exclusive with EDIT and SAVE. */
-    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_EDIT     = UIBarButtonSystemItemEdit, /** Used in MKUEditingListViewController. Mututally exclusive with DONE and SAVE. */
+    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_EDIT     = UIBarButtonSystemItemEdit, /** Used in MKUEditingListsViewController. Mututally exclusive with DONE and SAVE. */
     MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_SAVE     = UIBarButtonSystemItemSave, /** USed in MKUMutableObjectTableViewController. Mututally exclusive with EDIT and DONE. */
     MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_ADD      = UIBarButtonSystemItemAdd,
     MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_SEARCH   = UIBarButtonSystemItemSearch,

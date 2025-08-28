@@ -49,6 +49,9 @@ typedef NS_OPTIONS(NSUInteger, MKU_MENU_ACCESSORY_TYPE) {
  Default does nothing. */
 - (void)willTransitionToView:(UIViewController *)VC atIndexPath:(NSIndexPath *)indexPath;
 
+/** @brief Called in didSelectNoneSpinnerRowAtIndexPath: By default calls transitionToViewAtIndexPath: implemented in UIViewController (Menu). */
+- (void)handleTransitionToViewAtIndexPath:(NSIndexPath *)indexPath;
+
 @end
 
 

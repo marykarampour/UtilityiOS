@@ -15,9 +15,22 @@ typedef NS_OPTIONS(NSUInteger, MKU_COPY_OPTION) {
 
 @interface NSObject (Utility)
 
+- (instancetype)initWithObject:(NSObject *)object ancestors:(BOOL)ancestors baseClass:(Class)baseClass;
+- (instancetype)initWithObject:(NSObject *)object properties:(NSSet<NSString *> *)properties;
++ (instancetype)objectWithObject:(NSObject *)object ancestors:(BOOL)ancestors baseClass:(Class)baseClass;
+
+- (void)resetIsDefaults:(BOOL)isDefaults;
+- (void)resetIsDefaults:(BOOL)isDefaults excludeProperties:(NSSet<NSString *> *)excluding;
+/** @brief Set all values of object
+ @param ancestors YES will set values for ancestors of object too, NO only sets values of properties of object
+ */
+- (void)setValuesOfObject:(NSObject *)object ancestors:(BOOL)ancestors baseClass:(Class)baseClass;
+- (void)setValuesOfObject:(NSObject *)object properties:(NSSet<NSString *> *)properties;
+- (void)setValuesOfObject:(NSObject *)object properties:(StringSet *)properties excludeProperties:(StringSet *)excluding;
+
 /** @brief checks properties of self.class */
 - (BOOL)MKUIsEqual:(id)object;
-/** @brief checks properties given */
+/** @brief Returns YES if all properties are null. Same as allIsNullWithBaseClass with baseClass = super  */
 - (BOOL)MKUIsEqual:(id)object properties:(NSSet<NSString *> *)properties;
 
 - (id)MKUCopyWithZone:(NSZone *)zone;
@@ -35,8 +48,21 @@ typedef NS_OPTIONS(NSUInteger, MKU_COPY_OPTION) {
 - (void)MKUEncodeWithCoder:(NSCoder *)aCoder properties:(NSSet<NSString *> *)properties;
 
 - (NSUInteger)MKUHash;
+- (NSUInteger)MKUHashWithProperties:(NSSet<NSString *> *)properties;
 
-/** @brief Returns YES if all properties are null. Same as allIsNullWithBaseClass with baseClass = super  */
+/** @brief Includes dynamiclly added properties as in protocols */
++ (NSSet<NSString *> *)propertyNamesOfClass:(Class)objectClass;
+
+/** @brief Includes dynamiclly added properties as in protocols */
++ (NSDictionary *)propertyAttributesOfClass:(Class)objectClass;
+
+/** @brief Excludes dynamiclly added properties as in protocols */
++ (NSSet<NSString *> *)ivarNamesOfClass:(Class)objectClass;
+
+/** @brief Excludes dynamiclly added properties as in protocols */
++ (NSDictionary *)ivarAttributesOfClass:(Class)objectClass;
+
+/** @brief Returns YES if all properties are null */
 - (BOOL)allIsNull;
 
 /** @brief Returns YES if all properties are null */
@@ -59,31 +85,6 @@ typedef NS_OPTIONS(NSUInteger, MKU_COPY_OPTION) {
 
 + (NSString *)GUID;
 + (NSString *)timestampGUID;
-
-- (instancetype)initWithObject:(NSObject *)object ancestors:(BOOL)ancestors baseClass:(Class)baseClass;
-- (instancetype)initWithObject:(NSObject *)object properties:(NSSet<NSString *> *)properties;
-+ (instancetype)objectWithObject:(NSObject *)object ancestors:(BOOL)ancestors baseClass:(Class)baseClass;
-
-- (void)resetIsDefaults:(BOOL)isDefaults;
-- (void)resetIsDefaults:(BOOL)isDefaults excludeProperties:(NSSet<NSString *> *)excluding;
-
-- (void)setValuesOfObject:(NSObject *)object ancestors:(BOOL)ancestors baseClass:(Class)baseClass;
-- (void)setValuesOfObject:(NSObject *)object properties:(NSSet<NSString *> *)properties;
-
-
-- (NSUInteger)MKUHashWithProperties:(NSSet<NSString *> *)properties;
-
-/** @brief Includes dynamiclly added properties as in protocols */
-+ (NSSet<NSString *> *)propertyNamesOfClass:(Class)objectClass;
-
-/** @brief Includes dynamiclly added properties as in protocols */
-+ (NSDictionary *)propertyAttributesOfClass:(Class)objectClass;
-
-/** @brief Excludes dynamiclly added properties as in protocols */
-+ (NSSet<NSString *> *)ivarNamesOfClass:(Class)objectClass;
-
-/** @brief Excludes dynamiclly added properties as in protocols */
-+ (NSDictionary *)ivarAttributesOfClass:(Class)objectClass;
 
 
 - (void)processText:(NSString *)text condition:(BOOL)condition object:(NSString *)object action:(SEL)action;

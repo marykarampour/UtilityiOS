@@ -48,6 +48,9 @@
 }
 
 - (void)initBaseWithObject:(id)object {
+    self.selectedActionHandler = ^MKU_LIST_ITEM_SELECTED_ACTION(NSUInteger section) {
+        return MKU_LIST_ITEM_SELECTED_ACTION_NONE;
+    };
     [self createChildVC];
     [self createHeaderView];
     [self createFooterView];
@@ -81,6 +84,11 @@
 
 - (NSString *)titleForButtonOfType:(MKU_NAV_BAR_BUTTON_TYPE)type {
     return [self isDoneButtonOfType:type] ? [Constants Next_STR] : nil;
+}
+
+- (void)setEditing:(BOOL)editing animated:(BOOL)animated {
+    [super setEditing:editing animated:animated];
+    [self dispathHeaderChildDelegateForSetEditing:editing animated:animated];
 }
 
 - (void)viewDidLoad {
@@ -135,8 +143,14 @@
 }
 
 - (void)dispathHeaderChildDelegateForViewDidLoad {
-    if ([self.headerChildDelegate respondsToSelector:@selector(containerViewDidLoad)]) {
-        [self.headerChildDelegate containerViewDidLoad];
+    if ([self.headerChildDelegate respondsToSelector:@selector(containerViewDidLoad:)]) {
+        [self.headerChildDelegate containerViewDidLoad:self];
+    }
+}
+
+- (void)dispathHeaderChildDelegateForSetEditing:(BOOL)editing animated:(BOOL)animated {
+    if ([self.headerChildDelegate respondsToSelector:@selector(container:setEditing:animated:)]) {
+        [self.headerChildDelegate container:self setEditing:editing animated:animated];
     }
 }
 

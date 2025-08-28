@@ -12,7 +12,9 @@
 #ifdef __OBJC__
 #import <UIKit/UIKit.h>
 #import "Constants.h"
+#import "MKUAssets.h"
 #import "AppTheme.h"
+#import "MKUViewControllerProtocols.h"
 #endif
 
 #endif /* UtilityPrefixHeader_pch */

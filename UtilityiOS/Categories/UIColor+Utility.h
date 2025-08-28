@@ -44,9 +44,3 @@
 - (MKUColorComponents *)colorComponents;
 
 @end
-
-@interface MKUColorComponents (MKUTheme)
-
-+ (MKUColorComponents *)MKUInkBlueComponents;
-
-@end

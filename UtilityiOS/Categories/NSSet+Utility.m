@@ -22,5 +22,10 @@
 
 @implementation NSMutableSet (Utility)
 
+- (void)addNullableObject:(id)anObject {
+    if (!anObject) return;
+    [self addObject:anObject];
+}
+
 @end
 

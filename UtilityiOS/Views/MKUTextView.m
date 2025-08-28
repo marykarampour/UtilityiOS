@@ -14,8 +14,8 @@
 
 @property (nonatomic, strong) MKULabel *charView;
 @property (nonatomic, strong) MKULabel *placeHolder;
-@property (nonatomic, assign, readwrite) BOOL hasCharCount;
 @property (nonatomic, strong, readwrite) MKUText *textObject;
+@property (nonatomic, strong, readwrite) TextViewController *controller;
 
 @end
 
@@ -62,22 +62,30 @@
         [self addSubview:self.placeHolder];
         [self addSubview:self.charView];
         
-        NSDictionary *views = NSDictionaryOfVariableBindings(_placeHolder, _charView);
         [self removeConstraintsMask];
+        [self constraint:NSLayoutAttributeTop view:self.placeHolder margin:[Constants VerticalSpacing]];
+        [self constraint:NSLayoutAttributeLeft view:self.placeHolder margin:[Constants HorizontalSpacing]];
+        [self constraint:NSLayoutAttributeRight view:self.charView margin:-[Constants HorizontalSpacing]];
+        [self constraint:NSLayoutAttributeBottom view:self.charView margin:-[Constants VerticalSpacing]];
         
-        [self addConstraintsWithFormat:[NSString stringWithFormat:@"H:|-(%f)-[_placeHolder]", [Constants HorizontalSpacing]] options:0 metrics:nil views:views];
-        [self addConstraintsWithFormat:[NSString stringWithFormat:@"V:|-(%f)-[_placeHolder]", [Constants VerticalSpacing]] options:0 metrics:nil views:views];
-        
-        [self addConstraintWithItem:self.charView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1.0 constant:0.0];
-        [self addConstraintWithItem:self.charView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0];
+        self.controller = [[TextViewController alloc] initWithTextView:self];  
     }
     return self;
 }
 
 - (void)setText:(NSString *)text {
     [super setText:text];
-    [self setCharText:[NSString stringWithFormat:@"%lu", text.length]];
     [self showHidePlaceholder];
+    if (self.hasCharCount) [self updateCharCount];
+}
+
+- (void)setHasCharCount:(BOOL)hasCharCount {
+    _hasCharCount = hasCharCount;
+    [self updateCharCount];
+}
+
+- (void)updateCharCount {
+    [self setCharText:[NSString stringWithFormat:@"%lu", self.text.length]];
 }
 
 - (void)setCharText:(NSString *)text {

@@ -21,7 +21,10 @@
 
 /** @brief By default all items have self as their transitionDelegate as long as they conforms to MKUViewControllerTransitionProtocol.
  It pops the navigation controller to self.
- It is called in viewController:didReturnWithResultType:andObject: */
+ It is called in viewController:didReturnWithResultType:object: */
 - (void)handleViewController:(UIViewController *)viewController didReturnWithObject:(id)object;
+
+/** @brief Use to transition to DetailViewController in a SplitViewController */
+- (void)transitionToDetailViewAtIndexPath:(NSIndexPath *)indexPath;
 
 @end

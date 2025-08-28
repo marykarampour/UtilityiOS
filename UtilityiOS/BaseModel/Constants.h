@@ -61,23 +61,10 @@
 #define kEmptyString                            @""
 #define kElipsisString                          @"..."
 
-
 #define kInkBlueHEXValue                        0x0039a6
 
 
 #pragma mark - typedefs
-
-typedef UIView * (^VIEW_CREATION_HANDLER)(void);
-typedef UIView * (^SINGLE_INDEX_VIEW_CREATION_HANDLER)(NSUInteger index);
-typedef UIView * (^SINGLE_INDEX_SIZE_VIEW_CREATION_HANDLER)(NSUInteger index, CGFloat size);
-typedef UIView * (^DOUBLE_INDEX_VIEW_CREATION_HANDLER)(NSUInteger row, NSUInteger column);
-typedef UIView * (^DOUBLE_INDEX_SIZE_VIEW_CREATION_HANDLER)(NSUInteger row, NSUInteger column, CGFloat width, CGFloat height);
-
-typedef BOOL (^EvaluateObjectHandler)(id  _Nullable obj);
-typedef void (^VoidActionHandler)();
-
-typedef NSDictionary <NSString *, VoidActionHandler> *TitleVoidActionHandlers;
-
 
 typedef NSInteger ServerEnvironment;
 typedef NSInteger TargetType;
@@ -116,7 +103,18 @@ typedef NS_ENUM(NSInteger, MKU_TEXT_TYPE) {
     MKU_TEXT_TYPE_DATE,
     MKU_TEXT_TYPE_GENDER,
     MKU_TEXT_TYPE_PASSWORD,
+    MKU_TEXT_TYPE_HTML,
     MKU_TEXT_TYPE_COUNT
+};
+
+typedef NS_OPTIONS(NSUInteger, MKU_IMAGE_PICKER_TYPE) {
+    MKU_IMAGE_PICKER_TYPE_CAMERA        = 1 << 0,
+    MKU_IMAGE_PICKER_TYPE_VISION        = 1 << 1,
+    MKU_IMAGE_PICKER_TYPE_DOCS_IMPORT   = 1 << 2,
+    MKU_IMAGE_PICKER_TYPE_DOCS_EXPORT   = 1 << 3,
+    MKU_IMAGE_PICKER_TYPE_PHOTOS_IMPORT = 1 << 4,
+    MKU_IMAGE_PICKER_TYPE_PHOTOS_EXPORT = 1 << 5,
+    MKU_IMAGE_PICKER_TYPE_BROWSER       = 1 << 6
 };
 
 typedef NS_ENUM(NSUInteger, ViewPosition) {
@@ -140,7 +138,13 @@ typedef NS_ENUM(NSUInteger, CELL_SIZE_TYPE) {
 
 typedef NS_OPTIONS(NSUInteger, LINEAR_BOUNDARY_POINT) {
     LINEAR_BOUNDARY_POINT_START = 1 << 0,
-    LINEAR_BOUNDARY_POINT_END = 1 << 1
+    LINEAR_BOUNDARY_POINT_END   = 1 << 1
+};
+
+typedef NS_ENUM(NSUInteger, MKU_BINARY_TYPE) {
+    MKU_BINARY_TYPE_NO,
+    MKU_BINARY_TYPE_YES,
+    MKU_BINARY_TYPE_COUNT
 };
 
 typedef NS_ENUM(NSInteger, MKU_TENARY_TYPE) {
@@ -192,13 +196,13 @@ typedef NS_ENUM(NSUInteger, MKU_VIEW_HIERARCHY_POSITION) {
 };
 
 typedef NS_OPTIONS(NSUInteger, MKU_VIEW_POSITION) {
-    MKU_VIEW_POSITION_NONE = 0,
-    MKU_VIEW_POSITION_TOP = 1 << 0,
-    MKU_VIEW_POSITION_LEFT = 1 << 1,
-    MKU_VIEW_POSITION_BOTTOM = 1 << 2,
-    MKU_VIEW_POSITION_RIGHT = 1 << 3,
-    MKU_VIEW_POSITION_CENTER_Y = 1 << 4,
-    MKU_VIEW_POSITION_CENTER_X = 1 << 5
+    MKU_VIEW_POSITION_NONE      = 0,
+    MKU_VIEW_POSITION_TOP       = 1 << 0,
+    MKU_VIEW_POSITION_LEFT      = 1 << 1,
+    MKU_VIEW_POSITION_BOTTOM    = 1 << 2,
+    MKU_VIEW_POSITION_RIGHT     = 1 << 3,
+    MKU_VIEW_POSITION_CENTER_Y  = 1 << 4,
+    MKU_VIEW_POSITION_CENTER_X  = 1 << 5
 };
 
 typedef NS_ENUM(NSUInteger, MKU_UI_TYPE) {
@@ -211,11 +215,22 @@ typedef NS_ENUM(NSUInteger, MKU_APP_TARGET_TYPE) {
     MKU_APP_TARGET_TYPE_ENTERPRISE
 };
 
-typedef NS_ENUM(NSUInteger, MKU_VIEW_STYLE) {
-    MKU_VIEW_STYLE_PLAIN,
-    MKU_VIEW_STYLE_BORDER,
-    MKU_VIEW_STYLE_ROUND_CORNERS
+typedef NS_OPTIONS(NSUInteger, MKU_VIEW_STYLE) {
+    MKU_VIEW_STYLE_PLAIN         = 0,
+    MKU_VIEW_STYLE_BORDER        = 1 << 0,
+    MKU_VIEW_STYLE_ROUND_CORNERS = 1 << 1
 };
+
+typedef UIView * (^VIEW_CREATION_HANDLER)(void);
+typedef UIView * (^SINGLE_INDEX_VIEW_CREATION_HANDLER)(NSUInteger index);
+typedef UIView * (^SINGLE_INDEX_SIZE_VIEW_CREATION_HANDLER)(NSUInteger index, CGFloat size);
+typedef UIView * (^DOUBLE_INDEX_VIEW_CREATION_HANDLER)(NSUInteger row, NSUInteger column);
+typedef UIView * (^DOUBLE_INDEX_SIZE_VIEW_CREATION_HANDLER)(NSUInteger row, NSUInteger column, CGFloat width, CGFloat height);
+
+typedef BOOL (^EvaluateSelectedObjectHandler)(id  _Nullable obj);
+typedef void (^VoidActionHandler)();
+typedef MKU_LIST_ITEM_SELECTED_ACTION (^LIST_ITEM_SELECTED_ACTION_HANDLER)(NSUInteger type);
+typedef NSDictionary <NSString *, VoidActionHandler> *TitleVoidActionHandlers;
 
 typedef NSSet<NSString *>                                       StringSet;
 typedef NSMutableSet<NSString *>                                MStringSet;
@@ -264,6 +279,19 @@ typedef NSMutableArray<NSIndexPath *>                           MIndexPathArr;
 
 typedef NSDictionary <Class, NSString *>                        ClassStringDict;
 
+typedef NSDictionary<NSString *, NSString *>                    StringDict;
+typedef NSMutableDictionary<NSString *, NSString *>             MStringDict;
+
+typedef NSDictionary<NSNumber *, NSString *>                    NumStringDict;
+typedef NSMutableDictionary<NSNumber *, NSString *>             MNumStringDict;
+
+typedef NSDictionary<NSString *, NSNumber *>                    StringNumDict;
+typedef NSMutableDictionary<NSString *, NSNumber *>             MStringNumDict;
+
+typedef NSDictionary<NSNumber *, NSNumber *>                    NumNumDict;
+typedef NSMutableDictionary<NSNumber *, NSNumber *>             MNumNumDict;
+
+
 #pragma mark - defaults
 
 extern NSString * const DefaultLoggedInUsersKey;
@@ -297,6 +325,7 @@ extern NSString * const DateFormatDayTimeStyleLineBreak;
 extern NSString * const DateFormatDayStyle;
 extern NSString * const DateFormatDateTimeStyle;
 extern NSString * const DateFormatDateTimeCompactStyle;
+extern NSString * const DateFormatMonthTimeCompactStyle;
 
 typedef NS_ENUM(NSUInteger, DATE_FORMAT_STYLE) {
     DATE_FORMAT_SERVER_STYLE,
@@ -323,6 +352,26 @@ typedef NS_ENUM(NSUInteger, DATE_FORMAT_STYLE) {
     DATE_FORMAT_DAY_STYLE,
     DATE_FORMAT_DATE_TIME_STYLE,
     DATE_FORMAT_DATE_TIME_COMPACT_STYLE,
+    DATE_FORMAT_MONTH_TIME_COMPACT_STYLE
+};
+
+typedef NS_ENUM(NSUInteger, NUMBER_FORMAT_STYLE) {
+    NUMBER_FORMAT_STYLE_FLOAT,
+    NUMBER_FORMAT_STYLE_INT,
+    NUMBER_FORMAT_STYLE_FLOAT_PERCENT,
+    NUMBER_FORMAT_STYLE_INT_PERCENT,
+    NUMBER_FORMAT_STYLE_TWO_FLOAT
+};
+
+typedef NS_ENUM(NSUInteger, MKU_LIST_DATE_SECTION) {
+    MKU_LIST_DATE_SECTION_DATE,
+    MKU_LIST_DATE_SECTION_LIST,
+    MKU_LIST_DATE_SECTION_COUNT
+};
+
+typedef NS_ENUM(NSUInteger, MKU_BADGE_VIEW_STATE) {
+    MKU_BADGE_VIEW_STATE_ALERT,
+    MKU_BADGE_VIEW_STATE_DONE
 };
 
 #pragma mark - classes
@@ -337,7 +386,8 @@ typedef NS_ENUM(NSUInteger, DATE_FORMAT_STYLE) {
 
 + (ServerEnvironment)ServerEnvironmentVariable;
 + (BOOL)USING_HTTPS;
-
+/** @brief Default is NO. If NO, JSONModel methods will be used, otherwise XMLSerialize which is compatible with XML will be done. */
++ (BOOL)USING_SOAP;
 /** @brief This url must be of form ://domain */
 + (NSString *)BaseLocalHostURL;
 /** @brief This url must be of form ://domain */
@@ -359,6 +409,7 @@ typedef NS_ENUM(NSUInteger, DATE_FORMAT_STYLE) {
 + (NSString *)URLStringWithHttps:(NSString *)https url:(NSString *)url port:(NSString *)port;
 + (NSString *)TestUsername;
 + (NSString *)TestPassword;
++ (StringArr *)ServerDateFormats;
 
 #pragma mark - constants
 
@@ -395,10 +446,12 @@ typedef NS_ENUM(NSUInteger, DATE_FORMAT_STYLE) {
 + (CGFloat)VerticalSpacing;
 + (UIEdgeInsets)TabBarItemImageInsets;
 + (CGFloat)TabBarHeight;
++ (CGFloat)NavbarItemSpaceWidth;
 + (CGFloat)SplitViewPrimaryWidth;
 + (CGFloat)LoginViewInset;
 + (CGFloat)LoginViewWidth;
 + (CGFloat)BadgeHeight;
++ (CGFloat)SpinnerBadgeSpacing;
 + (CGSize)TableCellDisclosureIndicatorSize;
 + (CGFloat)Toast_Length_Seconds;
 + (CGFloat)Subsection_Left_Spacing;
@@ -406,6 +459,7 @@ typedef NS_ENUM(NSUInteger, DATE_FORMAT_STYLE) {
 + (CGFloat)DatePickerCalendarHeight;
 + (CGFloat)ButtonChevronSize;
 + (CGSize)SpinnerSize;
++ (CGSize)ImageShrinkMaxSize;
 + (CGSize)DateViewControllerPopoverSize;
 + (CGSize)DateViewControllerCalPopoverSize;
 + (NSUInteger)MaxValue1CellCharacterCount;
@@ -427,6 +481,7 @@ typedef NS_ENUM(NSUInteger, DATE_FORMAT_STYLE) {
 + (NSString *)Login_Failed_Title_STR;
 + (NSString *)Login_Failed_Message_STR;
 + (NSString *)Update_Failed_Title_STR;
++ (NSString *)Save_Successful_STR;
 + (NSString *)FaceID_STR;
 + (NSString *)TouchID_STR;
 + (NSString *)Done_STR;
@@ -474,6 +529,7 @@ typedef NS_ENUM(NSUInteger, DATE_FORMAT_STYLE) {
 + (NSString *)NoCamera_STR;
 + (NSString *)Invalid_STR;
 + (NSString *)Error_STR;
++ (NSString *)Untitled_STR;
 + (NSString *)First_Name_STR;
 + (NSString *)Last_Name_STR;
 + (NSString *)No_Items_Available_STR;
@@ -481,21 +537,19 @@ typedef NS_ENUM(NSUInteger, DATE_FORMAT_STYLE) {
 + (NSString *)Placeholder_Phone_STR;
 + (NSString *)NO_Connection_Title_STR;
 + (NSString *)Add_New_Item_STR;
-+ (NSString *)Generic_Error_Message;
-+ (NSString *)No_Camera_Error_Message;
-+ (NSString *)Camera_Disabled_Error_Title;
-+ (NSString *)Camera_Disabled_Error_Message;
-+ (NSString *)Missing_Value_Error_Message;
-+ (NSString *)Missing_Object_Error_Message;
-+ (NSString *)StringTouchID;
-+ (NSString *)StringFaceID;
-+ (NSString *)LoginBiometricsMessage;
-+ (NSString *)BiometricsAuthenticationFailedMessage;
-+ (NSString *)BiometricsCannotPerformMessage;
-+ (NSString *)BiometricsUserMismatchMessage;
-+ (NSString *)ColonEmptyString;
-
-
++ (NSString *)Generic_Error_Message_STR;
++ (NSString *)No_Camera_Error_Message_STR;
++ (NSString *)Camera_Disabled_Error_Title_STR;
++ (NSString *)Camera_Disabled_Error_Message_STR;
++ (NSString *)Missing_Value_Error_Message_STR;
++ (NSString *)Missing_Object_Error_Message_STR;
++ (NSString *)Touch_ID_STR;
++ (NSString *)Face_ID_STR;
++ (NSString *)Login_Biometrics_Message_STR;
++ (NSString *)Biometrics_Authentication_Failed_Message_STR;
++ (NSString *)Biometrics_Cannot_Perform_Message_STR;
++ (NSString *)Biometrics_User_Mismatch_Message_STR;
++ (NSString *)Colon_Empty_STR;
 
 #pragma mark - app
 
@@ -600,13 +654,16 @@ typedef NS_ENUM(NSUInteger, DATE_FORMAT_STYLE) {
 + (NSUInteger)Image_Shrink_Max_Size_Bytes;
 + (NSUInteger)Image_Shrink_Compression_Ratio;
 + (NSUInteger)Image_Shrink_Resize_Factor;
++ (NSUInteger)Image_Picker_Max_Selection;
 
 #pragma mark - methods and actions
 
 + (void)callPhoneNumber:(NSString *)num;
-+ (void)clearTempDirectory;
 + (void)copyToClipboard:(NSString *)text;
 + (void)emailToAddress:(NSString *)text;
++ (void)clearTempDirectory;
++ (NSURL *)writeToTempDirectoryWithFileName:(NSString *)fileName directory:(NSString *)directory data:(NSData *)data;
++ (NSString *)tempDirectoryWithDirectory:(NSString *)directory;
 
 #pragma mark - biometrics
 

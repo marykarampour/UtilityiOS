@@ -11,9 +11,19 @@
 @implementation UITextView (Editing)
 
 - (BOOL)textViewShouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text maxLength:(NSUInteger)maxLength {
-    if (range.length + range.location > self.text.length)
+    if (self.text.length < range.length + range.location)
         return NO;
     return self.text.length + text.length - range.length <= maxLength;
+}
+
+- (BOOL)textViewShouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+    if (self.text.length < range.length + range.location)
+        return NO;
+    
+    NSUInteger newLength = self.text.length + text.length - range.length;
+    if (newLength <= [Constants MaxTextViewCharacters])
+        return YES;
+    return NO;
 }
 
 @end

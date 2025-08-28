@@ -22,6 +22,12 @@
 - (NSData *)resize:(CGSize)size withCompression:(CGFloat)compression;
 /** @brief It resizes the image by fitting it preservng its aspect ratio. */
 - (NSData *)aspectFitResize:(CGSize)size;
+/** @brief It resizes the image by fitting it preservng its aspect ratio. */
+- (UIImage *)aspectFitImageResize:(CGSize)size;
+/** @brief It resizes the image by fitting it preservng its aspect ratio. */
++ (NSData *)aspectFitImageData:(NSData *)data resize:(CGSize)size;
+/** @brief It resizes the image by fitting it preservng its aspect ratio. Default size is 1920 x 1080. */
++ (NSData *)aspectFitShrinkImageData:(NSData *)data;
 - (UIImage *)rotate:(float)radian;
 - (BOOL)hasNonWhitePixelsForMinimumPercent:(float)minimumPercent;
 + (UIImage *)thumbnailImageFromData:(NSData *)data width:(int)width;

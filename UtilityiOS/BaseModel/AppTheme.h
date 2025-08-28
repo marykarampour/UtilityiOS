@@ -38,6 +38,14 @@ extern MKU_THEME_STYLE APP_THEME_STYLE;
 + (UIColor *)sectionHeaderBackgroundColor;
 + (UIColor *)sectionFooterTextColor;
 + (UIColor *)sectionFooterBackgroundColor;
++ (UIColor *)sectionHeaderLightTextColor;
++ (UIColor *)sectionHeaderLightBackgroundColor;
++ (UIColor *)sectionFooterLightTextColor;
++ (UIColor *)sectionFooterLightBackgroundColor;
++ (UIColor *)sectionHeaderDarkTextColor;
++ (UIColor *)sectionHeaderDarkBackgroundColor;
++ (UIColor *)sectionFooterDarkTextColor;
++ (UIColor *)sectionFooterDarkBackgroundColor;
 + (UIColor *)tableFooterBackgroundColor;
 + (UIColor *)tableFooterTextColor;
 + (UIColor *)tableCellBackgroundColor;
@@ -81,6 +89,7 @@ extern MKU_THEME_STYLE APP_THEME_STYLE;
 + (UIColor *)buttonBorderColor;
 + (UIColor *)buttonDisclosureBorderColor;
 + (UIColor *)buttonDisclosureChevronColor;
++ (UIFont *)buttonFont;
 
 + (UIColor *)textViewBackgroundColor;
 + (UIColor *)textViewBorderColor;
@@ -93,7 +102,7 @@ extern MKU_THEME_STYLE APP_THEME_STYLE;
 + (UIColor *)textFieldPlaceholderColor;
 + (UIColor *)textFieldTextColor;
 
-+ (UIColor *)badgeBackgroundColor;
++ (UIColor *)badgeBackgroundColorForState:(MKU_BADGE_VIEW_STATE)state;
 + (UIColor *)badgeTextColor;
 
 //font
@@ -142,6 +151,7 @@ extern MKU_THEME_STYLE APP_THEME_STYLE;
 + (UIColor *)collectionViewSectionHeaderTextColor;
 + (UIFont *)collectionViewSectionHeaderFont;
 
++ (UIColor *)searchBarBackgroundColor;
 + (UIColor *)searchBarTintColor;
 + (UIColor *)searchBarElementsTintColor;
 + (UIColor *)searchBarTextColor;

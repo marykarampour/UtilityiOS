@@ -8,6 +8,7 @@
 
 #import "MKUMutableObjectTableViewController.h"
 #import "MKUTableViewController+ItemsListTransition.h"
+#import "MKUSearchResultsTransitionViewController.h"
 #import "MKUHorizontalLabelFieldTableViewCell.h"
 #import "MKUMessageComposerController.h"
 #import "NSString+AttributedText.h"
@@ -23,15 +24,27 @@
 
 @interface MKUMutableObjectTableViewController ()
 
+@property (nonatomic, strong) NSIndexPath *selectedIndexPath;
+
 @end
 
 @implementation MKUMutableObjectTableViewController
 
 - (void)initBase {
-    self.isEditable = YES;
-    
     [super initBase];
-    [self setUseDarkTheme:NO];
+
+    self.isEditable = YES;
+    self.transitionVCDelegate = self;
+    self.updateDelegate = self;
+}
+
+- (void)initSelectedActionHandler {
+    __weak __typeof(self) weakSelf = self;
+    
+    self.selectedActionHandler = ^MKU_LIST_ITEM_SELECTED_ACTION(NSUInteger section) {
+        MKU_MUTABLE_OBJECT_FIELD_TYPE type = [weakSelf typeForSection:section];
+        return type == MKU_MUTABLE_OBJECT_FIELD_TYPE_LIST ? MKU_LIST_ITEM_SELECTED_ACTION_TRANSITION_TO_DETAIL : MKU_LIST_ITEM_SELECTED_ACTION_NONE;
+    };
 }
 
 - (SEL)actionForButtonOfType:(MKU_NAV_BAR_BUTTON_TYPE)type {
@@ -124,7 +137,7 @@
         case MKU_MUTABLE_OBJECT_FIELD_TYPE_FIELD:
         case MKU_MUTABLE_OBJECT_FIELD_TYPE_CHECKBOX:
         case MKU_MUTABLE_OBJECT_FIELD_TYPE_STEPPER_FIELD:
-            return [Constants DefaultRowHeight];
+            return [Constants ExtendedRowHeight];
             
         case MKU_MUTABLE_OBJECT_FIELD_TYPE_CHECKBOX_BUTTON:
             return [self checkboxButtonRowHeightForSection:section];
@@ -309,9 +322,11 @@
             break;
             
         case MKU_MUTABLE_OBJECT_FIELD_TYPE_LIST: {
-            if ([self isAddIndexPath:indexPath] && [self canAddItemToListOfType:section]) {
+            NSUInteger listType = [self listTypeForListInSection:section];
+
+            if ([self isAddIndexPath:indexPath] && [self canAddItemToListOfType:listType]) {
                 MKUEditingTableViewCell *cell = [[MKUEditingTableViewCell alloc] init];
-                cell.textLabel.text = [self titleForAddCellInListOfType:section];
+                cell.textLabel.text = [self titleForAddCellInListOfType:listType];
                 return cell;
             }
             
@@ -353,8 +368,9 @@
             break;
             
         case MKU_MUTABLE_OBJECT_FIELD_TYPE_LIST: {
+            self.selectedIndexPath = indexPath;
             NSObject<MKUPlaceholderProtocol> *item = [self listItemAtIndexPath:indexPath];
-            [self didSelectListItem:item atIndexPath:indexPath];
+            [self handleDidSelectListItem:item atIndexPath:indexPath];
         }
             break;
             
@@ -371,20 +387,29 @@
 }
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [self isAddIndexPath:indexPath] && [self canAddItemToListOfType:indexPath.section] ? UITableViewCellEditingStyleInsert : UITableViewCellEditingStyleDelete;
+    if (!self.editing)
+        return UITableViewCellEditingStyleNone;
+    if ([self isAddIndexPath:indexPath] && [self canAddItemToListOfType:indexPath.section])
+        return UITableViewCellEditingStyleInsert;
+    else if ([self canDeleteFromListOfType:indexPath.section])
+        return UITableViewCellEditingStyleDelete;
+    return UITableViewCellEditingStyleNone;
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    self.selectedIndexPath = indexPath;
     NSUInteger section = indexPath.section;
-    
+    NSUInteger type = [self listTypeForListInSection:section];
+
     if (editingStyle == UITableViewCellEditingStyleInsert) {
-        [self willAddItemToListOfType:section withCompletion:^(__kindof NSObject<MKUPlaceholderProtocol> *item) {
-            if (!item || ![self shouldAddItem:item toListOfType:section]) {
-                [self didSelectListItem:item atIndexPath:indexPath];
+        [self willAddItemToListOfType:type withCompletion:^(__kindof NSObject<MKUPlaceholderProtocol> *item) {
+            if (!item || ![self shouldAddItem:item toListOfType:type]) {
+                [self handleDidSelectListItem:item atIndexPath:indexPath];
             }
             else {
-                [self addItem:item toListSection:section];
+                [self addItem:item toListOfType:type];
+                [self didAddItem:item forRowAtIndexPath:indexPath];
             }
             [self didFinishCommitEditingStyle:editingStyle forRowAtIndexPath:indexPath];
         }];
@@ -393,18 +418,84 @@
         NSObject<MKUPlaceholderProtocol> *item = [self listItemAtIndexPath:indexPath];
         [self willDeleteItem:item forRowAtIndexPath:indexPath withCompletion:^(BOOL success, NSError *error) {
             if (success && !error) {
-                [self deleteItem:item fromListSection:section];
+                [self deleteItem:item fromListOfType:type];
+                [self didDeleteItem:item forRowAtIndexPath:indexPath];
+            }
+            else if (error) {
+                [self OKAlertWithTitle:kDeleteFailedTitle message:error.localizedDescription];
             }
             [self didFinishCommitEditingStyle:editingStyle forRowAtIndexPath:indexPath];
         }];
     }
 }
 
+- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([self typeForSection:indexPath.section] != MKU_MUTABLE_OBJECT_FIELD_TYPE_LIST) return NO;
+    if ([self isAddIndexPath:indexPath]) return NO;
+    
+    NSMutableArray *items = [self listItemsForListInSection:indexPath.section];
+    if (items.count <= 1) return NO;
+    
+    return [self canMoveItemsInListOfType:indexPath.section];
+}
+
+- (NSIndexPath *)tableView:(UITableView *)tableView targetIndexPathForMoveFromRowAtIndexPath:(NSIndexPath *)sourceIndexPath toProposedIndexPath:(NSIndexPath *)proposedDestinationIndexPath {
+    if ([self isAddIndexPath:proposedDestinationIndexPath])
+        return sourceIndexPath;
+    return proposedDestinationIndexPath;
+}
+
+//TODO: Add a method to indicate if move between sections is allowed
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
+    if (sourceIndexPath.section != destinationIndexPath.section) return;
+    if (sourceIndexPath.row == destinationIndexPath.row) return;
+    if ([self isAddIndexPath:sourceIndexPath] || [self isAddIndexPath:destinationIndexPath]) return;
+    
+    NSMutableArray *items = [self listItemsForListInSection:sourceIndexPath.section];
+    if (items.count < destinationIndexPath.row) return;
+
+    NSObject<MKUPlaceholderProtocol> *item = [self listItemAtIndexPath:sourceIndexPath];
+
+    [items removeObjectAtIndex:sourceIndexPath.row];
+    [items insertOrAddObject:item atIndex:destinationIndexPath.row];
+    
+    if ([self respondsToSelector:@selector(item:didMoveFromIndex:toIndex:inListOfType:)]) {
+        [self item:item didMoveFromIndex:sourceIndexPath.row toIndex:destinationIndexPath.row inListOfType:sourceIndexPath.section];
+    }
+}
+
+#pragma mark - transitions
+
+- (void)viewController:(UIViewController *)viewController didReturnWithResultType:(VC_TRANSITION_RESULT_TYPE)resultType object:(id)object {
+    if (resultType == VC_TRANSITION_RESULT_TYPE_OK) {
+        
+        NSUInteger section = self.selectedIndexPath.section;
+        NSUInteger type = [self listTypeForListInSection:section];
+        Class addClass = [self itemsClassInListOfType:type];
+        BOOL canUpdate = [object isKindOfClass:addClass];
+        
+        if (canUpdate)
+            [self addItem:object toListOfType:type];
+        
+        [self didUpdate:canUpdate item:object atIndexPath:self.selectedIndexPath];
+        [self resetSelectedSets];
+        [self setSelectedIndexPath:nil];
+        [self reloadDataAnimated:NO];
+        [self.transitionVCDelegate handleDismissDestinationViewController:viewController];
+    }
+}
+
+- (void)handleDismissDestinationViewController:(UIViewController *)VC {
+    [VC.navigationController popViewControllerAnimated:YES];
+}
+
 #pragma mark - list
 
 - (NSUInteger)numberOfRowsInListSection:(NSUInteger)section {
-    NSUInteger count = [self listItemsForListOfType:section].count;
-    return [self canAddItemToListOfType:section] ? count + 1 : count;
+    NSUInteger count = [self listItemsForListInSection:section].count;
+    NSUInteger type = [self listTypeForListInSection:section];
+
+    return [self canAddItemToListOfType:type] && self.isEditing ? count + 1 : count;
 }
 
 - (CGFloat)heightForNonEditingListRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -416,29 +507,163 @@
 }
 
 - (void)didSelectListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath {
-    [self presentTransitioningViewControllerWithItem:item atIndexPath:indexPath];
+    if (self.selectedActionHandler(0) == MKU_LIST_ITEM_SELECTED_ACTION_TRANSITION_TO_DETAIL)
+        [self presentTransitioningViewControllerWithItem:item atIndexPath:indexPath];
+}
+
+- (void)handleDidSelectListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath {
+    BOOL selected = [self isSelectedRowAtIndexPath:indexPath];
+    NSUInteger section = indexPath.section;
+
+    if (self.selectedActionHandler(section) == MKU_LIST_ITEM_SELECTED_ACTION_TRANSITION_TO_DETAIL) {
+        [self transitioningViewControllerForItem:item atIndexPath:indexPath completion:^(UIViewController *VC) {
+            if (VC)
+                [self handleTransitionForViewController:VC item:item atIndexPath:indexPath];
+            else {
+                [self dispatchUpdateDelegateToSetSelected:!selected item:item];
+            }
+        }];
+    }
+    else if (self.selectedActionHandler(section) == MKU_LIST_ITEM_SELECTED_ACTION_SELECT ||
+             self.selectedActionHandler(section) == MKU_LIST_ITEM_SELECTED_ACTION_SHOW_DETAIL) {
+        if (selected) {
+            [self setDeselectedObject:item reload:NO];
+        }
+        else {
+            [self setSelectedObject:item reload:NO];
+            [self didSelectListItem:item atIndexPath:indexPath];
+        }
+        
+        [self dispatchUpdateDelegateToSetSelected:!selected item:item];
+        [self reloadDataAnimated:NO];
+
+        if (self.selectedActionHandler(section) == MKU_LIST_ITEM_SELECTED_ACTION_SELECT &&
+            !self.tableView.allowsMultipleSelection)
+            [self dispathTransitionDelegateToReturnWithObject:[self returnedInSelectObject]];
+    }
+    else {
+        [self setSelectedObject:item reload:NO];
+        [self didSelectListItem:item atIndexPath:indexPath];
+        [self dispatchUpdateDelegateToSetSelected:!selected item:item];
+        [self reloadDataAnimated:NO];
+    }
+}
+
+- (NSMutableArray<NSObject<MKUPlaceholderProtocol> *> *)listItemsForListInSection:(NSUInteger)section {
+    return [self listItemsForListOfType:[self listTypeForListInSection:section]];
 }
 
 - (NSMutableArray<NSObject<MKUPlaceholderProtocol> *> *)listItemsForListOfType:(NSUInteger)type {
     return [self.object.UpdatedObject arrayForSectionType:type];
 }
 
-- (void)addItem:(NSObject<MKUPlaceholderProtocol> *)item toListSection:(NSUInteger)section {
-    [[self listItemsForListOfType:section] addObject:item];
-    [self reloadSection:section];
+- (NSUInteger)listTypeForListInSection:(NSUInteger)section {
+    return section;
 }
 
-- (void)deleteItem:(NSObject<MKUPlaceholderProtocol> *)item fromListSection:(NSUInteger)section {
-    [[self listItemsForListOfType:section] removeObject:item];
-    [self reloadSection:section];
+- (BOOL)addItem:(NSObject<MKUPlaceholderProtocol> *)item toListOfType:(NSUInteger)type {
+    if (!item) return NO;
+    return [self addItems:@[item] toListOfType:type].count == 0;
+}
+
+- (void)deleteItem:(NSObject<MKUPlaceholderProtocol> *)item fromListOfType:(NSUInteger)type {
+    if (!item) return;
+    [self deleteItems:@[item] fromListOfType:type];
+}
+
+- (NSArray *)addItems:(NSArray<NSObject<MKUPlaceholderProtocol> *> *)items toListOfType:(NSUInteger)type {
+    NSArray *existing = [[self listItemsForListOfType:type] addOrReplaceUniqueObjectsFromArray:items];
+    
+    [self resetSelectedSets];
+    MIndexPathArr *addIndexPaths = [[NSMutableArray alloc] init];
+    MIndexPathArr *replaceIndexPaths = [[NSMutableArray alloc] init];
+    
+    for (NSObject<MKUPlaceholderProtocol> *item in items) {
+        NSIndexPath *path = [self indexPathForItem:item];
+        if (path) {
+            if ([existing containsObject:item])
+                [replaceIndexPaths addObject:path];
+            else
+                [addIndexPaths addObject:path];
+        }
+    }
+    
+    [self insertRowsAtIndexPaths:addIndexPaths];
+    [self reloadIndexPaths:replaceIndexPaths];
+    [self didFinishUpdatesInListOfType:type];
+    
+    return existing;
+}
+
+- (void)deleteItems:(NSArray<NSObject<MKUPlaceholderProtocol> *> *)items fromListOfType:(NSUInteger)type {
+    MIndexPathArr *indexPaths = [[NSMutableArray alloc] init];
+    
+    for (NSObject<MKUPlaceholderProtocol> *item in items) {
+        NSIndexPath *path = [self indexPathForItem:item];
+        if (path)
+            [indexPaths addObject:path];
+    }
+    
+    [[self listItemsForListOfType:type] removeObjectsInArray:items];
+    [self resetSelectedSets];
+    [self removeRowsAtIndexPaths:indexPaths];
+    [self didFinishUpdatesInListOfType:type];
+}
+
+- (void)deleteAllItemsFromListOfType:(NSUInteger)type {
+    [[self listItemsForListOfType:type] removeAllObjects];
+    [self reloadDataAnimated:NO];
+    [self didFinishUpdatesInListOfType:type];
+}
+
+- (void)setItems:(NSArray<NSObject<MKUPlaceholderProtocol> *> *)items forListOfType:(NSUInteger)type {
+    [[self listItemsForListOfType:type] removeAllObjects];
+    [[self listItemsForListOfType:type] addUniqueObjectsFromArray:items];
+    
+    NSCache *selectedSets = self.selectedSets;
+    [self resetSelectedSets];
+    [self setSelectedSets:selectedSets];
+    [self reloadDataAnimated:NO];
+    [self didFinishUpdatesInListOfType:type];
+}
+
+- (void)didFinishUpdatesInListOfType:(NSUInteger)section {
+    if ([self.updateDelegate respondsToSelector:@selector(itemsListVC:didUpdateItems:inSection:)]) {
+        [self.updateDelegate itemsListVC:self didUpdateItems:[self listItemsForListInSection:section] inSection:section];
+    }
+}
+
+- (void)dispatchUpdateDelegateToRefreshItem:(__kindof NSObject<NSCopying> *)item {
+    if ([self.updateDelegate respondsToSelector:@selector(itemsListVC:didUpdateItem:atIndexPath:)]) {
+        [self.updateDelegate itemsListVC:self didUpdateItem:item atIndexPath:[self indexPathForItem:item]];
+    }
+}
+
+- (void)dispatchUpdateDelegateToSetSelected:(BOOL)selected item:(__kindof NSObject<NSCopying> *)item {
+    if ([self.updateDelegate respondsToSelector:@selector(itemsListVC:didSetSelected:item:atIndexPath:)]) {
+        [self.updateDelegate itemsListVC:self didSetSelected:selected item:item atIndexPath:[self indexPathForItem:item]];
+    }
 }
 
 - (BOOL)isAddIndexPath:(NSIndexPath *)indexPath {
     if ([self typeForSection:indexPath.section] != MKU_MUTABLE_OBJECT_FIELD_TYPE_LIST)
         return NO;
     
-    NSUInteger count = [self listItemsForListOfType:indexPath.section].count;
+    NSUInteger count = [self listItemsForListInSection:indexPath.section].count;
     return count <= indexPath.row;
+}
+
+- (NSIndexPath *)indexPathForItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item {
+    for (NSUInteger i=0; i<[self numberOfSectionsInTableView:self.tableView]; i++) {
+        NSUInteger type = [self typeForSection:i];
+        if (type != MKU_MUTABLE_OBJECT_FIELD_TYPE_LIST) continue;
+        
+        NSArray *arr = [self listItemsForListInSection:i];
+        if ([arr containsObject:item]) {
+            return [NSIndexPath indexPathForRow:[arr indexOfObject:item] inSection:i];
+        }
+    }
+    return nil;
 }
 
 - (BOOL)canAddItemToListOfType:(NSUInteger)type {
@@ -453,12 +678,25 @@
     return NO;
 }
 
+- (BOOL)canMoveItemsInListOfType:(NSUInteger)type {
+    return NO;
+}
+
+- (void)item:(__kindof NSObject<MKUPlaceholderProtocol> *)item1 didMoveFromIndex:(NSUInteger)index1 toIndex:(NSUInteger)index2 inListOfType:(NSUInteger)type {
+}
+
 - (NSString *)titleForAddCellInListOfType:(NSUInteger)type {
     return [Constants Add_New_Item_STR];
 }
 
 - (void)willDeleteItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item forRowAtIndexPath:(NSIndexPath *)indexPath withCompletion:(void (^)(BOOL, NSError *))completion {
     if (completion) completion(YES, nil);
+}
+
+- (void)didAddItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item forRowAtIndexPath:(NSIndexPath *)indexPath {
+}
+
+- (void)didDeleteItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item forRowAtIndexPath:(NSIndexPath *)indexPath {
 }
 
 - (void)didFinishCommitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -486,9 +724,6 @@
     return nil;
 }
 
-- (void)item:(__kindof NSObject<MKUPlaceholderProtocol> *)item1 didMoveFromIndex:(NSUInteger)index1 toIndex:(NSUInteger)index2 inListOfType:(NSUInteger)type {
-}
-
 - (void)transitioningViewControllerForItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath completion:(void (^)(UIViewController *))completion {
     [self createPresentingSelectionVCForItem:item atIndexPath:indexPath completion:completion];
 }
@@ -497,8 +732,98 @@
     return nil;
 }
 
-- (BOOL)isSelectedRowAtIndexPath:(NSIndexPath *)indexPath {
+- (BOOL)canSelectItemsInListOfType:(NSUInteger)type {
     return NO;
+}
+
+- (NSSet *)selectedSetsInListOfType:(NSUInteger)type {
+    return [self.selectedSets objectForKey:@(type)];
+}
+
+- (BOOL)isSelectedRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSUInteger type = [self listTypeForListInSection:indexPath.section];
+    if (![self canSelectItemsInListOfType:type]) return NO;
+    NSObject <MKUPlaceholderProtocol> *object = [self listItemAtIndexPath:indexPath];
+    NSSet *set = [self selectedSetsInListOfType:type];
+    return [set containsObject:object];
+}
+
+- (void)setSelectedObject:(__kindof NSObject<MKUPlaceholderProtocol> *)obj {
+    [self setSelectedObject:obj reload:YES];
+}
+
+- (void)setSelectedObject:(__kindof NSObject<MKUPlaceholderProtocol> *)obj reload:(BOOL)reload {
+    if (!obj) return;
+    
+    NSIndexPath *indexPath = [self indexPathForItem:obj];
+    NSUInteger type = [self listTypeForListInSection:indexPath.section];
+    
+    if (![self canSelectItemsInListOfType:type]) return;
+    
+    NSSet *set = [self selectedSetsInListOfType:type];
+    NSMutableSet *selectedObjects = [[NSMutableSet alloc] initWithSet:set];
+    
+    if (!selectedObjects)
+        selectedObjects = [[NSMutableSet alloc] init];
+    if (!self.tableView.allowsMultipleSelection)
+        [selectedObjects removeAllObjects];
+    
+    [selectedObjects addObject:obj];
+    [self setSelectedObjectsWithSet:selectedObjects inListOfType:type reload:reload];
+}
+
+- (void)setDeselectedObject:(__kindof NSObject<MKUPlaceholderProtocol> *)obj {
+    [self setDeselectedObject:obj reload:YES];
+}
+
+- (void)setDeselectedObject:(__kindof NSObject<MKUPlaceholderProtocol> *)obj reload:(BOOL)reload {
+    if (!obj) return;
+    
+    NSIndexPath *indexPath = [self indexPathForItem:obj];
+    NSUInteger type = [self listTypeForListInSection:indexPath.section];
+    NSSet *set = [self selectedSetsInListOfType:type];
+    NSMutableSet *selectedObjects = [[NSMutableSet alloc] initWithSet:set];
+
+    [selectedObjects removeObject:obj];
+    [self setSelectedObjectsWithSet:selectedObjects inListOfType:type reload:reload];
+}
+
+- (void)resetSelectedSets {
+    self.selectedSets = [[NSCache alloc] init];
+}
+
+- (void)resetSelectedSetsInListOfType:(NSUInteger)type {
+    [self.selectedSets setObject:[[NSSet alloc] init] forKey:@(type)];
+}
+
+- (void)setSelectedObjectsWithSet:(NSSet *)selectedObjects inListOfType:(NSUInteger)type {
+    [self setSelectedObjectsWithSet:selectedObjects inListOfType:type reload:YES];
+}
+
+- (void)setSelectedObjectsWithSet:(NSSet *)selectedObjects inListOfType:(NSUInteger)type reload:(BOOL)reload {
+    if (![self canSelectItemsInListOfType:type]) return;
+
+    if (!selectedObjects)
+        [self.selectedSets removeObjectForKey:@(type)];
+    else
+        [self.selectedSets setObject:selectedObjects forKey:@(type)];
+    if (reload) [self reloadDataAnimated:NO];
+}
+
+- (void)didUpdate:(BOOL)update item:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath {
+}
+
+- (void)handleTransitionToViewController:(UIViewController *)VC sourceViewController:(UIViewController *)sourceVC didSelectListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath {
+    [self.navigationController pushViewController:VC animated:YES];
+}
+
+- (void)itemsListVC:(MKUItemsListViewController *)VC didUpdateItems:(NSArray <__kindof NSObject<MKUPlaceholderProtocol> *> *)items inSection:(NSUInteger)section {
+}
+
+- (void)itemsListVC:(MKUItemsListViewController *)VC didUpdateItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath {
+}
+
+- (void)itemsListVC:(MKUItemsListViewController *)VC didSetSelected:(BOOL)selected item:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath {
 }
 
 #pragma mark - dates
@@ -582,7 +907,8 @@
 }
 
 - (NSUInteger)rowForFieldAtIndex:(NSUInteger)index inSection:(NSUInteger)section {
-    return [[self.object.UpdatedObject class] objectTypesForSectionType:section].firstObject.integerValue;
+    NSArray<NSNumber *> *nums = [[self.object.UpdatedObject class] objectTypesForSectionType:section];
+    return [nums nullableObjectAtIndex:index].integerValue;
 }
 
 - (BOOL)isHiddenFieldAtIndex:(NSUInteger)index inSection:(NSUInteger)section {
@@ -590,7 +916,7 @@
 }
 
 - (MKUStepperValueObject *)stepperValuesForSection:(NSUInteger)section {
-    return nil;
+    return [MKUStepperValueObject objectWithTitle:[self titleForSection:section] value:0 start:0 end:MAX_QUANTITY];
 }
 
 - (void)switchBoolValueAtIndexPath:(NSIndexPath *)indexPath {
@@ -603,7 +929,6 @@
 }
 
 - (void)handleSelectionAtIndexPath:(NSIndexPath *)indexPath {
-    
     NSUInteger section = indexPath.section;
     
     if ([self canTransitionToPresentingSelectionVCInSection:section] && [self hasTypesForSection:section]) {
@@ -617,6 +942,14 @@
     else {
         [self didSelectSection:section];
     }
+}
+
+- (id)returnedInSelectObject {
+    return [self selectedSets];
+}
+
+- (id)returnedInCloseObject {
+    return self.object.UpdatedObject;
 }
 
 - (void)createPresentingSelectionVCAtIndexPath:(NSIndexPath *)indexPath completion:(void (^)(UIViewController *))completion {
@@ -683,6 +1016,10 @@
     [self reloadDataAnimated:NO];
 }
 
+- (void)didSetObject:(__kindof MKUUpdateObject *)object {
+    [self resetSelectedSets];
+}
+
 - (void)updateDatesWithUpdateObject:(__kindof MKUFieldModel *)object {
     if (![object isKindOfClass:[MKUFieldModel class]]) return;
     
@@ -704,7 +1041,7 @@
     [self updateDatesWithUpdateObject:self.object.UpdatedObject];
 }
 
-- (void)loadSelectionVCWithTitle:(NSString *)title allowsMultipleSelection:(BOOL)allowsMultipleSelection items:(NSArray *)items selectedObjectHandler:(EvaluateObjectHandler)selectedObjectHandler completion:(void (^)(UIViewController *))completion {
+- (void)loadSelectionVCWithTitle:(NSString *)title allowsMultipleSelection:(BOOL)allowsMultipleSelection items:(NSArray *)items selectedObjectHandler:(EvaluateSelectedObjectHandler)selectedObjectHandler completion:(void (^)(UIViewController *))completion {
     
     Class cls = allowsMultipleSelection ? [MKUSearchResultsViewController class] : [MKUSearchResultsTransitionViewController class];
     [cls loadSelectionVCWithTitle:title allowsMultipleSelection:allowsMultipleSelection items:items transitionDelegate:self selectedObjectHandler:selectedObjectHandler completion:completion];
@@ -734,7 +1071,7 @@
     switch (type) {
         case MKU_TEXT_TYPE_INT:
         case MKU_TEXT_TYPE_FLOAT:
-            return [UIImage systemImageNamed:@"plusminus"];
+            return [UIImage systemImageNamed:[MKUAssets Plusminus_square_Name]];
         default:
             return nil;
     }
@@ -863,7 +1200,7 @@
 }
 
 - (BOOL)hideSection:(NSUInteger)section {
-    if ([self isDateSection:section] || [self canEditSection:section]) return NO;
+    if ([self isDateSection:section] || [self canEditSection:section] || [self typeForSection:section] == MKU_MUTABLE_OBJECT_FIELD_TYPE_LIST) return NO;
     return !self.isEditable && [self hasNoValueOrAattributedValueInSection:section] && ![self hasTypesForSection:section];
 }
 
@@ -880,7 +1217,7 @@
 
 - (BOOL)hasNoValueOrAattributedValueInSection:(NSUInteger)section {
     return [self valueForSection:section].length == 0 && ![self attributedValueForSection:section] &&
-    [self subvalueForSection:section].length == 0 && ![self attributedSubvalueForSection:section];
+           [self subvalueForSection:section].length == 0 && ![self attributedSubvalueForSection:section];
 }
 
 - (BOOL)shouldHideSelectionSection:(NSUInteger)section {
@@ -895,6 +1232,10 @@
 }
 
 - (void)object:(MKUFieldModel *)obj didUpdateObjectType:(NSInteger)type {
+}
+
+- (BOOL)showSaveSuccessAlert {
+    return YES;
 }
 
 - (MKULabelAttributes *)labelAttributesForSection:(NSInteger)section {

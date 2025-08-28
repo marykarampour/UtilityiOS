@@ -65,6 +65,8 @@
 - (void)dispatchDelegateForSaveDone;
 + (Class)classForObject;
 
+- (BOOL)showSaveSuccessAlert;
+
 #pragma mark - KVO
 
 - (void)updateObject:(__kindof NSObject<MKUFieldModelProtocol> *)object didUpdateKey:(NSString *)key;

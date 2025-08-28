@@ -135,50 +135,38 @@
     return [[NSDateFormatter alloc] init].monthSymbols;
 }
 
-- (NSString *)DATE_FORMAT_StringForFormat:(DATE_FORMAT_STYLE)format {
+- (NSString *)dateFormatStringForFormat:(DATE_FORMAT_STYLE)format {
     switch (format) {
         case DATE_FORMAT_FULL_STYLE:
             return DateFormatFullStyle;
-            break;
         case DATE_FORMAT_FULL_TIMEZONE_STYLE:
             return DateFormatFullTimeZoneStyle;
-            break;
         case DATE_FORMAT_LONG_STYLE:
             return DateFormatLongStyle;
-            break;
         case DATE_FORMAT_SHORT_STYLE:
             return DateFormatShortStyle;
-            break;
         case DATE_FORMAT_MONTH_YEAR_STYLE:
             return DateFormatMonthYearStyle;
-            break;
         case DATE_FORMAT_TIME_LONG_STYLE:
             return DateFormatTimeLongStyle;
-            break;
         case DATE_FORMAT_TIME_SHORT_STYLE:
             return DateFormatTimeShortStyle;
-            break;
         case DATE_FORMAT_DAY_TIME_STYLE:
             return DateFormatDayTimeStyle;
-            break;
         case DATE_FORMAT_DAY_TIME_LINEBREAK_STYLE:
             return DateFormatDayTimeStyleLineBreak;
-            break;
         case DATE_FORMAT_DAY_STYLE:
             return DateFormatDayStyle;
-            break;
         case DATE_FORMAT_DATE_TIME_STYLE:
             return DateFormatDateTimeStyle;
-            break;
         case DATE_FORMAT_DATE_TIME_COMPACT_STYLE:
             return DateFormatDateTimeCompactStyle;
-            break;
         case DATE_FORMAT_TIME_STYLE:
             return DateFormatTimeStyle;
-            break;
+        case DATE_FORMAT_MONTH_TIME_COMPACT_STYLE:
+            return DateFormatMonthTimeCompactStyle;
         default:
             return @"";
-            break;
     }
 }
 
@@ -194,7 +182,7 @@
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setTimeZone:[NSDate UTCTimeZone]];
-    [formatter setDateFormat:[self DATE_FORMAT_StringForFormat:format]];
+    [formatter setDateFormat:[self dateFormatStringForFormat:format]];
     return [formatter stringFromDate:[self copy]];
 }
 
@@ -202,7 +190,7 @@
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setTimeZone:[NSDate systemTimeZone]];
-    [formatter setDateFormat:[self DATE_FORMAT_StringForFormat:format]];
+    [formatter setDateFormat:[self dateFormatStringForFormat:format]];
     return [formatter stringFromDate:[self copy]];
 }
 
@@ -309,7 +297,7 @@
     
     NSCalendar *calendar = [NSCalendar currentCalendar];
     
-    NSDateComponents *nowComponents = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth  | NSCalendarUnitWeekOfYear | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:[self copy]];
+    NSDateComponents *nowComponents = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitWeekOfYear | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:[self copy]];
     
     [nowComponents setHour:23];
     [nowComponents setMinute:59];
@@ -323,7 +311,7 @@
     NSCalendar *calendar = [NSCalendar currentCalendar];
     [calendar setTimeZone:[NSDate UTCTimeZone]];
     
-    NSDateComponents *nowComponents = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth  | NSCalendarUnitWeekOfYear | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:[self copy]];
+    NSDateComponents *nowComponents = [calendar components:NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitWeekOfYear | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond fromDate:[self copy]];
     
     [nowComponents setHour:0];
     [nowComponents setMinute:0];
@@ -474,6 +462,76 @@
     else {
         [arr addObject:[self dateStringWithFormat:format]];
     }
+    return arr;
+}
+
++ (NSUInteger)componentValueWithUnit:(NSCalendarUnit)unit betweenFromDate:(NSDate *)from toDate:(NSDate *)to inclusive:(BOOL)inclusive {
+    if (!from || !to) return 0;
+    
+    NSDate *fromDate = [from copy];
+    NSDate *toDate = [to copy];
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    
+    if (!inclusive) {
+        [cal rangeOfUnit:unit startDate:&fromDate interval:NULL forDate:from];
+        [cal rangeOfUnit:unit startDate:&toDate interval:NULL forDate:to];
+    }
+    
+    NSDateComponents *diffComps = [cal components:unit fromDate:fromDate toDate:toDate options:0];
+    return [diffComps valueForComponent:unit];
+}
+
++ (NSDateComponents *)componentsWithUnits:(NSCalendarUnit)unit betweenFromDate:(NSDate *)from toDate:(NSDate *)to inclusive:(BOOL)inclusive {
+   
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDateComponents *comps = [cal components:unit fromDate:[NSDate date]];
+    
+    [comps setYear:0];
+    [comps setMonth:0];
+    [comps setDay:0];
+    [comps setHour:0];
+    [comps setMinute:0];
+    [comps setSecond:0];
+    
+    if (unit & NSCalendarUnitYear)   [comps setYear:   [self componentValueWithUnit:NSCalendarUnitYear betweenFromDate:from toDate:to inclusive:inclusive]];
+    if (unit & NSCalendarUnitMonth)  [comps setMonth:  [self componentValueWithUnit:NSCalendarUnitMonth betweenFromDate:from toDate:to inclusive:inclusive]];
+    if (unit & NSCalendarUnitDay)    [comps setDay:    [self componentValueWithUnit:NSCalendarUnitDay betweenFromDate:from toDate:to inclusive:inclusive]];
+    if (unit & NSCalendarUnitHour)   [comps setHour:   [self componentValueWithUnit:NSCalendarUnitHour betweenFromDate:from toDate:to inclusive:inclusive]];
+    if (unit & NSCalendarUnitMinute) [comps setMinute: [self componentValueWithUnit:NSCalendarUnitMinute betweenFromDate:from toDate:to inclusive:inclusive]];
+    if (unit & NSCalendarUnitSecond) [comps setSecond: [self componentValueWithUnit:NSCalendarUnitSecond betweenFromDate:from toDate:to inclusive:inclusive]];
+    
+    return comps;
+}
+
++ (NSString *)componentsDescriptionWithUnits:(NSCalendarUnit)unit betweenFromDate:(NSDate *)from toDate:(NSDate *)to {
+    
+    NSArray<MKUPair<NSString *,NSNumber *> *> *values = [self componentsValuesWithUnits:unit betweenFromDate:from toDate:to];
+    
+    if (values.count == 0) return nil;
+
+    NSMutableString *string = [[NSMutableString alloc] init];
+    
+    for (MKUPair *pair in values) {
+        [string appendString:[NSString stringWithFormat:@"%@ %@", pair.second, pair.first]];
+        if (pair != values.lastObject)
+            [string appendString:@", "];
+    }
+    
+    return string;
+}
+
++ (NSArray<MKUPair<NSString *,NSNumber *> *> *)componentsValuesWithUnits:(NSCalendarUnit)unit betweenFromDate:(NSDate *)from toDate:(NSDate *)to {
+    
+    NSDateComponents *comps = [self componentsWithUnits:unit betweenFromDate:from toDate:to inclusive:YES];
+    NSMutableArray<MKUPair<NSString *,NSNumber *> *> *arr = [[NSMutableArray alloc] init];
+    
+    if ((unit & NSCalendarUnitYear)     && 0 < comps.year)   [arr addObject:[MKUPair pairWithFirst:NSStringFromSelector(@selector(year))   second:@(comps.year)]];
+    if ((unit & NSCalendarUnitMonth)    && 0 < comps.month)  [arr addObject:[MKUPair pairWithFirst:NSStringFromSelector(@selector(month))  second:@(comps.month - comps.year*12)]];
+    if ((unit & NSCalendarUnitDay)      && 0 < comps.day)    [arr addObject:[MKUPair pairWithFirst:NSStringFromSelector(@selector(day))    second:@(comps.day - comps.month*30)]];//TODO: This one is not correct
+    if ((unit & NSCalendarUnitHour)     && 0 < comps.hour)   [arr addObject:[MKUPair pairWithFirst:NSStringFromSelector(@selector(hour))   second:@(comps.hour - comps.day*24)]];
+    if ((unit & NSCalendarUnitMinute)   && 0 < comps.minute) [arr addObject:[MKUPair pairWithFirst:NSStringFromSelector(@selector(minute)) second:@(comps.minute - comps.hour*60)]];
+    if ((unit & NSCalendarUnitSecond)   && 0 < comps.second) [arr addObject:[MKUPair pairWithFirst:NSStringFromSelector(@selector(second)) second:@(comps.second - comps.minute*60)]];
+    
     return arr;
 }
 

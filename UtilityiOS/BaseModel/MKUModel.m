@@ -7,9 +7,12 @@
 //
 
 #import "MKUModel.h"
-#import "NSArray+Utility.h"
+#import "NSNumber+Utility.h"
 #import "NSObject+Utility.h"
 #import "NSString+Utility.h"
+#import "NSArray+Utility.h"
+#import "NSString+Server.h"
+#import "NSDate+Utility.h"
 #import <objc/runtime.h>
 
 const void * _Nonnull DATE_PROPERTIES_KEY;
@@ -17,6 +20,17 @@ const void * _Nonnull PROPERTIES_KEY;
 const void * _Nonnull ATTRIBUTES_KEY;
 const void * _Nonnull ATTRIBUTES_CLASS_KEY;
 const void * _Nonnull MAPPER_FORMAT_KEY;
+
+@interface MKUModel ()
+
+- (NSDictionary *)XMLSerialize;
+/** @brief Each element of the resulting array will be a one item dictionary with class name as a tag. */
++ (NSArray *)XMLSerializeArray:(NSArray<MKUModel *> *)items;
+/** @param tags If YES it adds self class name as a tag, each element of the resulting array will be a one item dictionary. */
++ (NSArray *)XMLSerializeArray:(NSArray<NSDictionary *> *)items withTags:(BOOL)tags;
++ (NSArray<__kindof MKUModel *> *)XMLDeserializeArray:(NSArray<NSDictionary *> *)items;
+
+@end
 
 @implementation MKUModel
 
@@ -72,10 +86,15 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
 - (instancetype)initWithStringsDictionary:(NSDictionary *)values {
     return [self initWithStringsDictionary:values mapper:[[self class] keyMapper]];
 }
+
 //overriding this only to support date formates not supporeted by JSONModel
 - (instancetype)initWithDictionary:(NSDictionary *)dict error:(NSError *__autoreleasing *)err {
+    if ([Constants USING_SOAP]) {
+        self = [super init];
+        [self XMLDeserialize:dict];
+        return self;
+    }
     if (self = [super initWithDictionary:dict error:err]) {
-
         for (NSString *name in self.class.dateProperties) {
             NSString *propertyName = [self.class convertToJson:name];
             
@@ -92,6 +111,11 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
 }
 
 - (instancetype)initWithStringsDictionary:(NSDictionary *)values mapper:(JSONKeyMapper *)mapper {
+    if ([Constants USING_SOAP]) {
+        self = [super init];
+        [self XMLDeserialize:values];
+        return self;
+    }
     if (self = [super init]) {
         NSSet *names = [[self class] propertyNames];
         for (NSString *name in names) {
@@ -246,7 +270,32 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
 }
 
 - (NSDictionary *)toDictionary {
-    return [self toDictionaryWithExcludedKeys:[[self class] excludedKeys]];
+    NSSet *set = [[self class] excludedKeys];
+    if ([Constants USING_SOAP])
+        return [self XMLSerializeIgnoringKeys:set];
+    return [self toDictionaryWithExcludedKeys:set];
+}
+
++ (NSArray *)toDictionaryWithArray:(NSArray<MKUModel *> *)items {
+    return [self toDictionaryWithArray:items withTags:YES];
+}
+
++ (NSArray *)toDictionaryWithArray:(NSArray<MKUModel *> *)items withTags:(BOOL)tags {
+    
+    NSMutableArray *arr = [[NSMutableArray alloc] init];
+    for (MKUModel *object in items) {
+        if ([object isKindOfClass:[MKUModel class]]) {
+            NSDictionary *dict = [Constants USING_SOAP] ? [object XMLSerialize] : [object toDictionary];
+            if (tags)
+                [arr addObject:@{[[object class] tagName] : dict}];
+            else
+                [arr addObject:object];
+        }
+        else {
+            [arr addObject:object];
+        }
+    }
+    return arr;
 }
 
 + (JSONKeyMapper *)keyMapper {
@@ -327,6 +376,10 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
 
 #pragma mark - MKUModelCustomKeysProtocol
 
+- (Class)classForProperty:(NSString *)property {
+    return nil;
+}
+
 + (BOOL)usingAncestors {
     return NO;
 }
@@ -383,11 +436,17 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
     return arr;
 }
 
+- (DATE_FORMAT_STYLE)dateFormatForProperty:(NSString *)propertyName {
+    return DATE_FORMAT_FULL_STYLE;
+}
 
 #pragma mark - search predicate
 
 + (NSArray<Class> *)searchPredicateClasses {
-    NSSet<NSString *> *properties = [self searchPredicatePropertyNames];
+    if (![self respondsToSelector:@selector(searchPredicatePropertyNames)]) return nil;
+    Class searchClass = [self class];
+    
+    NSSet<NSString *> *properties = [searchClass searchPredicatePropertyNames];
     
     if (properties.count == 0) return @[self];
 
@@ -400,11 +459,10 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
     return set;
 }
 
-+ (NSSet<NSString *> *)searchPredicatePropertyNames {
-    return nil;
-}
-
 + (DictStringString *)searchPredicateKeyValues {
+    if (![self respondsToSelector:@selector(searchPredicateKeys)]) return nil;
+    if (![self respondsToSelector:@selector(searchPredicatePropertyNames)]) return nil;
+
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     NSArray<Class> *searchClasses = [self searchPredicateClasses];
     
@@ -423,12 +481,7 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
             [dict setObject:className forKey:name];
         }
     }
-
     return dict;
-}
-
-+ (NSSet<NSString *> *)searchPredicateKeys {
-    return [NSSet set];
 }
 
 #pragma mark - utility
@@ -456,6 +509,14 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
     return ([type characterAtIndex:0] == 'c' || [type characterAtIndex:0] == 'B');
 }
 
++ (NSString *)stringValueForBOOL:(BOOL)value {
+    return value ? @"true" : @"false";
+}
+
++ (BOOL)boolValueForObject:(NSObject *)value {
+    return [[value description] isEqualToString:@"true"] ? YES : NO;
+}
+
 + (BOOL)propertyIsEnum:(NSString *)name {
     NSString *type = [[self.class propertyClassNames] objectForKey:name];
     return [type characterAtIndex:0] == 'Q';
@@ -470,8 +531,13 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
 }
 
 - (NSString *)stringValue {
-    NSData *data = [NSJSONSerialization dataWithJSONObject:[self toDictionary] options:0 error:nil];
+    NSData *data = [self dataValue];
     return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+}
+
+- (NSData *)dataValue {
+    NSDictionary *dict = [Constants USING_SOAP] ? [self XMLSerialize] : [self toDictionary];
+    return [NSJSONSerialization dataWithJSONObject:dict options:0 error:nil];
 }
 
 + (instancetype)objectWithJSON:(NSString *)string {
@@ -534,6 +600,244 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
     return dict;
 }
 
+#pragma mark Serializer
+
+- (NSDictionary *)XMLSerialize {
+    return [self XMLSerializeIgnoringKeys:[self.class excludedKeysWithAncestors]];
+}
+
+- (id)XMLSerialize:(NSString *)key withAttribute:(NSString *)attribute {
+    id serialized = nil;
+    id value = [self valueForKey:key];
+    
+    if ([value isKindOfClass:[MKUModel class]]) {
+        id superDictionary = [value XMLSerialize];
+        if (superDictionary) {
+            serialized = superDictionary;
+        }
+    }
+    else if ([value isKindOfClass:[NSArray class]]) {
+        NSMutableArray *arr = [[NSMutableArray alloc] initWithCapacity:[value count]];
+        for (id object in value) {
+            if ([object isKindOfClass:[MKUModel class]]) {
+                MKUModel *ser = (MKUModel *)object;
+                NSDictionary *dict = [object XMLSerialize];
+                if (dict) [arr addObject:@{[[ser class] tagName] : dict}];
+            }
+            else {
+                [arr addObject:object];
+            }
+        }
+        serialized = [arr count] > 0 ? arr : nil;
+    }
+    else if ([value isKindOfClass:[NSDictionary class]]) {
+        NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+        for (NSString *key in value) {
+            id object = value[key];
+            
+            if ([object isKindOfClass:[MKUModel class]]) {
+                dict[key] = [object XMLSerialize];
+            }
+            else {
+                dict[key] = object;
+            }
+        }
+        serialized = [dict count] > 0 ? dict : nil;
+    }
+    else if ([value isKindOfClass:[NSDate class]]) {
+        BOOL isUTC = [self datePropertyIsUTC:key];
+        serialized = [((NSDate *)value) dateStringWithFormat:[self dateFormatForProperty:key] isUTC:isUTC];
+    }
+    else if (value && ([attribute characterAtIndex:1] == 'B' || [attribute characterAtIndex:1] == 'c') && ([value isEqualToNumber:@0] || [value isEqualToNumber:@1])) {
+        serialized = [self.class stringValueForBOOL:[value boolValue]];
+    }
+    else if ([value isKindOfClass:[NSNumber class]]) {
+        serialized = [value stringValue];
+    }
+    else if (value) {
+        serialized = value;
+    }
+    
+    return serialized;
+}
+
+- (NSDictionary *)XMLSerializeIgnoringKeys:(NSSet *)excludedKeys {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    NSMutableDictionary *data = [[[self class] propertyAttributes] mutableCopy];
+    [data removeObjectsForKeys:[excludedKeys allObjects]];
+    
+    for (NSString *key in [data allKeys]) {
+        if ([self propertyExists:key]) {
+            id value = [self XMLSerialize:key withAttribute:data[key]];
+            if (value) {
+                [dict setObject:value forKey:[self nameForProperty:key]];
+            }
+        }
+    }
+    
+    return [dict count] > 0 ? dict : nil;
+}
+
+#pragma mark Deserializer
+
+- (void)XMLDeserialize:(NSDictionary *)dictionary {
+    if (![dictionary isKindOfClass:[NSDictionary class]]) return;
+    
+    NSDictionary *data = [[self class] propertyAttributes];
+
+    for (NSString *key in [data allKeys]) {
+        [self XMLDeserialize:key withAttribute:data[key] withValue:dictionary[[self nameForProperty:key]]];
+    }
+}
+
+- (void)XMLDeserialize:(NSString *)key withAttribute:(NSString *)attribute withValue:(id)value {
+    NSParameterAssert(key != nil);
+    
+    id old_value = [self valueForKey:key];
+    if (old_value == value) {
+        return;
+    }
+    
+    [self willChangeValueForKey:key];
+    
+    if ([attribute characterAtIndex:1] == '@') {
+        NSArray *components = [attribute componentsSeparatedByString:@"\""];
+        if ([components count] > 1) {
+            
+            id deserialized = nil;
+            NSString *className = [components[1] componentsSeparatedByString:@"<"].firstObject;//To remove protocols
+            Class propertyClass = NSClassFromString(className);
+            Class cls = [self classForProperty:key];
+
+            if ([value isKindOfClass:[NSArray class]]) {
+                deserialized = value;
+                if ([cls isSubclassOfClass:[MKUModel class]]) {
+                    NSMutableArray *map = [NSMutableArray arrayWithArray:value];
+                    
+                    for (NSUInteger i = 0; i < [map count]; ++i) {
+                        map[i] = [(MKUModel *)[cls alloc] initWithStringsDictionary:map[i]];
+                    }
+                    deserialized = map;
+                }
+                else if ([cls isSubclassOfClass:[NSString class]]) {
+                    deserialized = [NSObject deserializeStringResult:value];
+                }
+            }
+            else if ([value isKindOfClass:[NSDictionary class]]) {
+                if ([value count] > 0) {
+                    if ([propertyClass isSubclassOfClass:[MKUModel class]]) {
+                        deserialized = [(MKUModel *) [propertyClass alloc] initWithStringsDictionary:value];
+                    }
+                    else {
+                        deserialized = value;
+                        NSMutableDictionary *classMap = [NSMutableDictionary dictionaryWithDictionary:value];
+                        NSArray *keys = [classMap allKeys];
+                        id object;
+                        
+                        for (NSString *key in keys) {
+                            if ([classMap[key] isKindOfClass:[NSArray class]]) {
+                                NSMutableArray *map = [NSMutableArray arrayWithArray:classMap[key]];
+                                
+                                if ([cls isSubclassOfClass:[MKUModel class]]) {
+                                    for (NSUInteger i = 0; i < [map count]; ++i) {
+                                        if ([cls isSubclassOfClass:[MKUModel class]]) {
+                                            map[i] = [(MKUModel *)[cls alloc] initWithStringsDictionary:map[i]];
+                                        }
+                                    }
+                                    object = (id)map;
+                                }
+                                else if (classMap.count == 1) {
+                                    object = [NSObject deserializeObjectResult:value objectClass:cls key:keys.firstObject];
+                                }
+                            }
+                            else {
+                                if ([cls isSubclassOfClass:[MKUModel class]]) {
+                                    object = (id)@[[(MKUModel *) [cls alloc] initWithStringsDictionary:classMap[key]]];
+                                }
+                                else if (classMap.count == 1) {
+                                    object = (id)@[classMap.allValues.firstObject];
+                                }
+                                else {
+                                    object = (id)@[classMap];
+                                }
+                                
+                                BOOL isMutable = [propertyClass isSubclassOfClass:[NSMutableArray class]];
+                                if (isMutable)
+                                    object = [object mutableCopy];
+                            }
+                        }
+                        deserialized = object;
+                    }
+                }
+            }
+            else if ([propertyClass isSubclassOfClass:[NSDate class]] && [value isKindOfClass:[NSNumber class]]) {
+                deserialized = [NSDate dateWithTimeIntervalSince1970:[value doubleValue]];
+            }
+            else if ([propertyClass isSubclassOfClass:[NSDate class]] && [value isKindOfClass:[NSString class]]) {
+                BOOL isUTC = [self datePropertyIsUTC:key];
+                deserialized = [value dateWithAnyFormatIsUTC:isUTC];
+            }
+            else if ([propertyClass isSubclassOfClass:[NSNumber class]]) {
+                if ([value isEqualToString:@"true"] || [value isEqualToString:@"false"]) {
+                    [self setValue:@([MKUModel boolValueForObject:value]) forKey:key];
+                }
+                else if ([value isKindOfClass:[NSString class]]) {
+                    deserialized = [value stringToNumber];
+                }
+            }
+            else if ([propertyClass isSubclassOfClass:[NSData class]] && [value isKindOfClass:[NSString class]]) {
+                deserialized = [value dataUsingEncoding:NSUTF8StringEncoding];
+            }
+            else if (0 < [value description].length && [propertyClass isSubclassOfClass:[NSArray class]] && ![value isKindOfClass:[NSArray class]]) {
+                
+                BOOL isMutable = [propertyClass isSubclassOfClass:[NSMutableArray class]];
+                if ([cls isSubclassOfClass:[MKUModel class]]) {
+                    NSObject *obj = [(MKUModel *)[cls alloc] initWithStringsDictionary:value];
+                    deserialized = isMutable ? [@[obj] mutableCopy] : @[obj];
+                }
+                else {
+                    deserialized = isMutable ? [@[value] mutableCopy] : @[value];
+                }
+            }
+            else {
+                deserialized = value;
+            }
+            
+            if ([deserialized isKindOfClass:propertyClass]) {
+                [self setValue:deserialized forKey:key];
+            }
+            else if (deserialized && ![deserialized isKindOfClass:[NSNull class]]) {
+                DEBUGLOG(@"Cannot Set Property of Type: %@ With A Value of Type: %@", className, NSStringFromClass([value class]));
+            }
+        }
+    }
+    else if ([attribute characterAtIndex:1] != '{') {
+        if ([value isKindOfClass:[NSNumber class]]) {
+            [self setValue:value forKey:key];
+        }
+        else {
+            if (([attribute characterAtIndex:1] == 'B' || [attribute characterAtIndex:1] == 'c') && ([value isEqualToString:@"true"] || [value isEqualToString:@"false"])) {
+                [self setValue:@([MKUModel boolValueForObject:value]) forKey:key];
+            }
+            else if ([value integerValue]) {
+                [self setValue:@([value integerValue]) forKey:key];
+            }
+        }
+    }
+    
+    [self didChangeValueForKey:key];
+}
+
++ (NSArray<MKUModel *> *)XMLDeserializeArray:(NSArray<NSDictionary *> *)items {
+    
+    NSMutableArray *arr = [[NSMutableArray alloc] init];
+    for (NSDictionary *dict in items) {
+        MKUModel *object = [[self alloc] initWithStringsDictionary:dict];
+        [arr addObject:object];
+    }
+    return arr;
+}
+
 #pragma mark - utility
 
 - (NSString *)titleText {
@@ -551,27 +855,6 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
         }
     }
     free(properties);
-}
-
-- (void)setValuesOfObject:(__kindof MKUModel *)object ancestors:(BOOL)ancestors {
-    NSMutableSet<NSString *> *arr = [[NSMutableSet alloc] init];
-    MKUModel *currentObject = object;
-    Class currentClass = [currentObject class];
-    if (ancestors) {
-        while (currentClass != [MKUModel class]) {
-            [arr addObjectsFromArray:[[NSObject propertyNamesOfClass:currentClass] allObjects]];
-            currentClass = [currentClass superclass];
-        }
-    }
-    else {
-        [arr addObjectsFromArray:[[NSObject propertyNamesOfClass:currentClass] allObjects]];
-    }
-    for (NSString *name in arr) {
-        id value = [object valueForKey:name];
-        if ([self respondsToSelector:NSSelectorFromString(name)]) {
-            [self setValue:value forKey:name];
-        }
-    }
 }
 
 #pragma mark - override NSObject
@@ -652,10 +935,35 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
 }
 
 + (NSArray<MKUOption *> *)optionsForOptions:(NSArray<MKUOption *> *)options range:(NSRange)range {
-    NSArray *arr = [options filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(MKUOption * _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+    return [options filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(MKUOption * _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
         return NSLocationInRange(evaluatedObject.value, range);
     }]];
-    return [NSArray arrayFromArray:arr forKey:NSStringFromSelector(@selector(title))];
+}
+
++ (NSArray<MKUOption *> *)optionsForOptions:(NSArray<MKUOption *> *)options values:(NSArray<NSNumber *> *)values {
+    return [options filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(MKUOption * _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+        return [values indexOfObjectPassingTest:^BOOL(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            return evaluatedObject.value & obj.integerValue;
+        }] != NSNotFound;
+    }]];
+}
+
++ (NSArray<MKUOption *> *)optionsForOptions:(NSArray<MKUOption *> *)options value:(NSInteger)value {
+    return [options filteredArrayUsingPredicate:[self predicateWithValue:@(value) field:NSStringFromSelector(@selector(value))]];
+}
+
++ (NSArray<MKUOption *> *)optionsForOptions:(NSArray<MKUOption *> *)options name:(NSString *)name {
+    return [options filteredArrayUsingPredicate:[self predicateWithValue:name field:NSStringFromSelector(@selector(name))]];
+}
+
++ (NSArray<MKUOption *> *)optionsForOptions:(NSArray<MKUOption *> *)options title:(NSString *)title {
+    return [options filteredArrayUsingPredicate:[self predicateWithValue:title field:NSStringFromSelector(@selector(title))]];
+}
+
++ (NSPredicate *)predicateWithValue:(NSObject *)value field:(NSString *)field {
+    return [NSPredicate predicateWithBlock:^BOOL(MKUOption * _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
+        return [[evaluatedObject valueForKey:field] isEqual:value];
+    }];
 }
 
 + (instancetype)optionForNameOrTitle:(NSString *)text options:(NSArray<MKUOption *> *)options {
@@ -688,6 +996,10 @@ const void * _Nonnull MAPPER_FORMAT_KEY;
             return obj;
         return nil;
     }];
+}
+
+- (NSComparisonResult)compare:(MKUOption *)option {
+    return [@(self.value) compare:@(option.value)];
 }
 
 @end

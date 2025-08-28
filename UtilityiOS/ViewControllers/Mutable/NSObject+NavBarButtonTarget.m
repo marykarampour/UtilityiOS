@@ -65,64 +65,50 @@ static char TARGETS_KEY;
 - (void)addButtonOfType:(NSUInteger)type position:(MKU_NAV_BAR_BUTTON_POSITION)position {
     
     UIBarButtonItem *button = [self buttonOfType:type position:position];
-    BOOL buttonExists = button;
-    UIBarButtonItem *doneButton = [self doneButton];
-    BOOL doneButtonExists = doneButton && doneButton.type != type && [self isDoneButtonOfType:type];
     
-    if (doneButtonExists)
-        [self.barButtons[@(position)] removeObject:doneButton];
-    
-    if (!self.barButtons)
+    if (!self.barButtons) {
         self.barButtons = @{@(MKU_NAV_BAR_BUTTON_POSITION_RIGHT) : [[NSMutableArray alloc] init],
                             @(MKU_NAV_BAR_BUTTON_POSITION_LEFT)  : [[NSMutableArray alloc] init]};
-    
-    BOOL enabled = [self respondsToSelector:@selector(isEnabledButtonOfType:)] ? [self isEnabledButtonOfType:type] : NO;
-    
+    }
+    else if (button) {
+        [self.barButtons[@(position)] removeObject:button];
+    }
+        
     if (type == MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_EDIT) {
         button = [UIBarButtonItem editNavBarButtonObject];
     }
     else {
+        MKU_NAV_BAR_BUTTON_POSITION position = [self respondsToSelector:@selector(positionForButtonOfType:)] ? [self positionForButtonOfType:type] : MKU_NAV_BAR_BUTTON_POSITION_RIGHT;
         NSString *title = [self respondsToSelector:@selector(titleForButtonOfType:)] ? [self titleForButtonOfType:type] : nil;
         UIImage *image = [self respondsToSelector:@selector(imageForButtonOfType:)] ? [self imageForButtonOfType:type] : nil;
-        MKU_NAV_BAR_BUTTON_POSITION position = [self respondsToSelector:@selector(positionForButtonOfType:)] ? [self positionForButtonOfType:type] : MKU_NAV_BAR_BUTTON_POSITION_RIGHT;
-        
+        BOOL enabled = [self respondsToSelector:@selector(isEnabledButtonOfType:)] ? [self isEnabledButtonOfType:type] : NO;
         id target = [self respondsToSelector:@selector(targetForButtonOfType:)] ? [self targetForButtonOfType:type] : self;
-        
-        SEL objectAction = button.objectAction;
-        if (!objectAction) {
-            if (target != self)
-                objectAction = [self respondsToSelector:@selector(actionForButtonOfType:)] ? [self actionForButtonOfType:type] : nil;
-            else
-                objectAction = [target respondsToSelector:@selector(actionForButtonOfType:)] ? [target actionForButtonOfType:type] : nil;
-        }
-        
+        SEL objectAction;
         void(^actionHandler)(id) = button.actionHandler;
-        if (!actionHandler) {
-            if (target != self)
-                actionHandler = [self respondsToSelector:@selector(actionHandlerForButtonOfType:)] ? [self actionHandlerForButtonOfType:type] : nil;
-            else
-                [target respondsToSelector:@selector(actionHandlerForButtonOfType:)] ? [target actionHandlerForButtonOfType:type] : nil;
-        }
+
+        if (target != self)
+            objectAction = [self respondsToSelector:@selector(actionForButtonOfType:)] ? [self actionForButtonOfType:type] : button.objectAction;
+        else
+            objectAction = [target respondsToSelector:@selector(actionForButtonOfType:)] ? [target actionForButtonOfType:type] : button.objectAction;
         
-        if (!buttonExists || doneButtonExists) {
-            if (image)
-                button = [UIBarButtonItem navBarButtonWithImage:image type:type target:self action:@selector(internalButtonPressed:)];
-            else if (type < MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_COUNT || 0 < title.length)
-                button = [UIBarButtonItem navBarButtonWithTitle:title type:type target:self action:@selector(internalButtonPressed:)];
-            else
-                button = [UIBarButtonItem spacer];
-        }
+        if (target != self)
+            actionHandler = [self respondsToSelector:@selector(actionHandlerForButtonOfType:)] ? [self actionHandlerForButtonOfType:type] : nil;
+        else
+            [target respondsToSelector:@selector(actionHandlerForButtonOfType:)] ? [target actionHandlerForButtonOfType:type] : nil;
+        
+        if (image)
+            button = [UIBarButtonItem navBarButtonWithImage:image type:type target:self action:@selector(internalButtonPressed:)];
+        else if (type < MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_COUNT || 0 < title.length)
+            button = [UIBarButtonItem navBarButtonWithTitle:title type:type target:self action:@selector(internalButtonPressed:)];
+        else
+            button = [UIBarButtonItem spacer];
         
         button.objectAction = objectAction;
         button.actionHandler = actionHandler;
         button.position = position;
         button.enabled = enabled;
-        button.title = title;
-        button.image = image;
         button.type = type;
     }
-    
-    if (buttonExists) return;
     
     [self.barButtons[@(position)] addObject:button];
 }
@@ -254,6 +240,12 @@ static char TARGETS_KEY;
 }
 
 - (void)setBarButtonsOfViewControllerContainingNavigationBar {
+    [self.viewControllerContainingNavigationBar addNavBarTarget:self];
+    [self.viewControllerContainingNavigationBar setNavBarItemsOfTarget:self];
+}
+
+- (void)resetBarButtonsOfViewControllerContainingNavigationBar {
+    [self.viewControllerContainingNavigationBar clearBarButtons];
     [self.viewControllerContainingNavigationBar addNavBarTarget:self];
     [self.viewControllerContainingNavigationBar setNavBarItemsOfTarget:self];
 }

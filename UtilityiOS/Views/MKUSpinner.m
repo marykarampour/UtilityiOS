@@ -32,7 +32,6 @@
 
 - (instancetype)init {
     if (self = [super init]) {
-        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged) name:UIDeviceOrientationDidChangeNotification object:nil];
         self.frame = [[UIScreen mainScreen] bounds];
         [self setViews];
@@ -57,6 +56,7 @@
         [[MKUSpinner spinner] setViews];
         [[MKUSpinner spinner].hud startAnimating];
         [[MKUSpinner spinner] setHidden:NO];
+        [[MKUSpinner spinner].superview bringSubviewToFront:[MKUSpinner spinner]];
     });
 }
 
@@ -84,7 +84,8 @@
     self.back.alpha = 0.75;
     self.back.backgroundColor = [UIColor blackColor];
     [self.back setHidden:NO];
-    self.hud = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+    
+    self.hud = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleLarge];
     [self.hud setColor:[UIColor whiteColor]];
     [self.hud setCenter:self.center];
     [self.hud setHidden:NO];
@@ -96,14 +97,12 @@
     [self removeConstraintsMask];
     [self.back removeConstraintsMask];
     
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[back(%f)]", self.hudWidth] options:0 metrics:nil views:@{@"back":self.back}]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[back(%f)]", self.hudHeight] options:0 metrics:nil views:@{@"back":self.back}]];
-    
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.back attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0]];
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.back attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0]];
-    
-    [self.back addConstraint:[NSLayoutConstraint constraintWithItem:self.hud attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.back attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0]];
-    [self.back addConstraint:[NSLayoutConstraint constraintWithItem:self.hud attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.back attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0]];
+    [self constraintWidth:self.hudWidth forView:self.back];
+    [self constraintHeight:self.hudHeight forView:self.back];
+    [self constraint:NSLayoutAttributeCenterX view:self.back];
+    [self constraint:NSLayoutAttributeCenterY view:self.back];
+    [self.back constraint:NSLayoutAttributeCenterX view:self.hud];
+    [self.back constraint:NSLayoutAttributeCenterY view:self.hud];
 }
 
 @end

@@ -10,6 +10,7 @@
 #import <objc/runtime.h>
 
 static char UICONTROL_INDEXPATH_KEY;
+static char UICONTROL_GUID_KEY;
 
 @implementation UIControl (IndexPath)
 
@@ -19,6 +20,14 @@ static char UICONTROL_INDEXPATH_KEY;
 
 - (NSIndexPath *)indexPath {
     return (NSIndexPath *)objc_getAssociatedObject(self, &UICONTROL_INDEXPATH_KEY);
+}
+
+- (void)setGUID:(NSString *)GUID {
+    objc_setAssociatedObject(self, &UICONTROL_GUID_KEY, GUID, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSString *)GUID {
+    return (NSString *)objc_getAssociatedObject(self, &UICONTROL_GUID_KEY);
 }
 
 @end

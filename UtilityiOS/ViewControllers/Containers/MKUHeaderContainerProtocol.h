@@ -9,7 +9,6 @@
 #import "MKUViewControllerTransitionProtocol.h"
 
 @class MKUHeaderFooterContainerViewController;
-
 @class MKUTableViewController;
 
 @protocol HeaderVCChildViewDelegate <NSObject>
@@ -19,7 +18,8 @@
 
 @optional
 - (void)nextPressed:(UIBarButtonItem *)sender;
-- (void)containerViewDidLoad;
+- (void)containerViewDidLoad:(MKUHeaderFooterContainerViewController *)container;
+- (void)container:(MKUHeaderFooterContainerViewController *)container setEditing:(BOOL)editing animated:(BOOL)animated;
 
 @end
 

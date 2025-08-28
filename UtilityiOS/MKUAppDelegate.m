@@ -19,7 +19,6 @@
 
 @implementation MKUAppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [self initializeInstances];
     [self setNotificationCateories];
@@ -42,6 +41,7 @@
 }
 
 - (void)setNotificationCateories {
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
 }
 
 - (UIViewController *)windowRootViewController {
@@ -62,7 +62,7 @@
 
 #pragma mark - application
 
-+ (MKUAppDelegate *)application {
++ (instancetype)application {
     return (MKUAppDelegate *)[UIApplication sharedApplication].delegate;
 }
 

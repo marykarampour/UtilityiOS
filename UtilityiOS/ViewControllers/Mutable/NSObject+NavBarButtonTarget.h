@@ -35,6 +35,8 @@
 /** @brief Removes all buttons added via addButtonOfType: position: */
 - (void)clearBarButtons;
 
+- (UIViewController *)viewControllerContainingNavigationBar;
+
 @end
 
 
@@ -68,8 +70,11 @@
 /** @brief Clalls setBarButtonsOfTarget on all targets. */
 - (void)setBarButtonsOfTargets;
 
-/** @brief Clears the navbar and calls setAsNavBarTarget of viewControllerContainingNavigationBar on self as target. */
+/** @brief Calls setAsNavBarTarget of viewControllerContainingNavigationBar on self as target. */
 - (void)setBarButtonsOfViewControllerContainingNavigationBar;
+
+/** @brief Clears the navbar and calls setAsNavBarTarget of viewControllerContainingNavigationBar on self as target. */
+- (void)resetBarButtonsOfViewControllerContainingNavigationBar;
 
 @end
 

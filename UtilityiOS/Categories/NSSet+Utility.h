@@ -8,13 +8,16 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSSet (Utility)
+@interface NSSet <ObjectType> (Utility)
 
 - (instancetype)setByRemovingObjects:(NSSet *)set;
 
 @end
 
-@interface NSMutableSet (Utility)
+@interface NSMutableSet <ObjectType> (Utility)
+
+/** @brief If object is nil, nothing will happen. */
+- (void)addNullableObject:(ObjectType)anObject;
 
 @end
 

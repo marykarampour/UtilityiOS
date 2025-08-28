@@ -127,7 +127,8 @@ static char PERFORM_SAVE_ACTION_HANDLER_KEY;
     if (!error && success) {
         if (ID && [self respondsToSelector:@selector(didFinishUpdateWithResultID:)])
             [self didFinishUpdateWithResultID:ID];
-        [self OKAlertWithTitle:[Constants Save_STR] message:nil];
+        if ([self respondsToSelector:@selector(showSaveSuccessAlert)] && [self showSaveSuccessAlert])
+            [self OKAlertWithTitle:[Constants Save_Successful_STR] message:nil];
         [self dispatchDelegateForSaveDone];
     }
     else if (error) {

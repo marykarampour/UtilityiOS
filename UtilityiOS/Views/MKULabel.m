@@ -21,23 +21,9 @@
         self.text = text;
         self.font = [AppTheme mediumLabelFont];
         self.textColor = [AppTheme labelDarkColor];
-        self.numberOfLines = 0;
-        self.lineBreakMode = NSLineBreakByWordWrapping;
         [self sizeToFit];
     }
     return self;
-}
-
-- (CGSize)intrinsicContentSize {
-    CGSize size = [super intrinsicContentSize];
-    size.width += [Constants TextPadding]*2;
-    size.height += [Constants TextPadding]*2;
-    return size;
-}
-
-- (void)drawTextInRect:(CGRect)rect {
-    UIEdgeInsets insets = UIEdgeInsetsMake([Constants TextPadding], [Constants TextPadding], [Constants TextPadding], [Constants TextPadding]);
-    [super drawTextInRect:UIEdgeInsetsInsetRect(rect, insets)];
 }
 
 - (CGFloat)textHeight {
@@ -78,6 +64,13 @@
     label.minimumScaleFactor = 0.4;
     [label sizeToFit];
     return label;
+}
+
+- (CGSize)intrinsicContentSize {
+    CGSize size = [super intrinsicContentSize];
+    size.width  += (self.insets.left + self.insets.right);
+    size.height += (self.insets.top + self.insets.bottom);
+    return size;
 }
 
 @end

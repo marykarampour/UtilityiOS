@@ -20,5 +20,6 @@
 
 - (BOOL)isInternetConnectionOffline;
 + (NSError *)errorWithMessage:(NSString *)message;
++ (NSError *)errorWithCode:(NSInteger)code;
 
 @end

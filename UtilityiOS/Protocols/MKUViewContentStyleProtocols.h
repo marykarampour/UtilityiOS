@@ -1,5 +1,5 @@
 //
-//  MKUTableViewCellContentProtocols.h
+//  MKUViewContentStyleProtocols.h
 //  UtilityiOS
 //
 //  Created by Maryam Karampour on 2024-11-23.
@@ -33,7 +33,9 @@
 + (NSString *)searchPredicateKey;
 /** @brief Used in constructing OR predicate in search.
  If this has count greater than 0, searchPredicateKey will be ignored. */
-+ (StringArr *)searchPredicateKeys;
++ (NSSet<NSString *> *)searchPredicateKeys;
+/** @brief Search property name, return nil if searching self. */
++ (NSSet<NSString *> *)searchPredicatePropertyNames;
 - (BOOL)hasDetail;
 - (NSUInteger)numberOfLines;
 

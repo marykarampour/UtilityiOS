@@ -7,15 +7,14 @@
 //
 
 #import "MKUTableViewController.h"
-#import "MKUSearchResultsTransitionViewController.h"
 #import "MKUGenericTableViewControllerProtocols.h"
 #import "UIViewController+MutableObjectVC.h"
 #import "MKURadioButtonTableViewCell.h"
-#import "MKUCheckboxButtonView.h"
+#import "MKUCheckboxAccessoryView.h"
 #import "MKUStepperFieldView.h"
 #import "NSObject+KVO.h"
 
-typedef NS_ENUM(NSUInteger, MKU_MUTABLE_OBJECT_FIELD_TYPE) {
+typedef NS_ENUM(NSInteger, MKU_MUTABLE_OBJECT_FIELD_TYPE) {
     /** @brief Use for date cells */
     MKU_MUTABLE_OBJECT_FIELD_TYPE_BLANK,
     /** @brief Same as SELECTION without the ability to select or indicator */
@@ -148,11 +147,19 @@ typedef NS_ENUM(NSUInteger, MKU_MUTABLE_OBJECT_FIELD_TYPE) {
 /** @brief This is a utility class to facilitate simple screen with low vertically stacked UI elements. Although it is a
  tableview it does not do any dequeing, all cells are static and recreated on reload by default, unless subclass return a
  predefined cells for any type in particular for MKU_MUTABLE_OBJECT_FIELD_TYPE_SINGLE_CELL. */
-@interface MKUMutableObjectTableViewController <__covariant ObjectType : __kindof NSObject<MKUFieldModelProtocol> *, __covariant UpdateObjectType : __kindof NSObject<MKUFieldModelProtocol> *> : MKUTableViewController <MKUMutableObjectTableVCProtocol, MKUViewControllerTransitionProtocol, MKUItemsListVCProtocol, MKUEditingListVCProtocol, MKUKVOProtocol>
+@interface MKUMutableObjectTableViewController <__covariant ObjectType : __kindof NSObject<MKUFieldModelProtocol> *, __covariant UpdateObjectType : __kindof NSObject<MKUFieldModelProtocol> *> : MKUTableViewController <MKUMutableObjectTableVCProtocol, MKUViewControllerTransitionProtocol, MKUItemsListVCProtocol, MKUEditingListVCProtocol, MKUItemsListVCTransitionDelegate, MKUItemsListVCUpdateDelegate, MKUKVOProtocol>
 
 
 - (__kindof MKUUpdateObject<ObjectType, UpdateObjectType> *)object;
 - (void)setObject:(__kindof MKUUpdateObject<ObjectType, UpdateObjectType> *)object;
+
+/** @brief Keys are list sections. It is empty set if nothing is selected, rows in list section if an item is selected.
+ NSCache is used instead of NSDictionary primarily for thread safety. */
+@property (nonatomic, strong) NSCache<NSNumber *, NSSet *> *selectedSets;
+
+/** @brief By default is is self. If this view is within a container, it can be assigned the container to handle
+ transitions when an item is selected. */
+@property (nonatomic, weak) id<MKUItemsListVCUpdateDelegate> updateDelegate;
 
 /** @brief It makes the view completely uneditable. It has more precedence than isEditableSectionType of both this class and the object
  if NO, that is, if it is NO, nothing will be editable. But if it is YES, then isEditableSectionType will be used. Default is YES.
@@ -165,13 +172,40 @@ typedef NS_ENUM(NSUInteger, MKU_MUTABLE_OBJECT_FIELD_TYPE) {
 @property (nonatomic, weak) id<MKUMutableObjectTransitionDelegate> transitionMutableVCDelegate;
 
 /** @brief selectedObjectHandler The handler to evalaute and set the selected item in the array of items. */
-- (void)loadSelectionVCWithTitle:(NSString *)title allowsMultipleSelection:(BOOL)allowsMultipleSelection items:(NSArray *)items selectedObjectHandler:(EvaluateObjectHandler)selectedObjectHandler completion:(void(^)(UIViewController *VC))completion;
+- (void)loadSelectionVCWithTitle:(NSString *)title allowsMultipleSelection:(BOOL)allowsMultipleSelection items:(NSArray *)items selectedObjectHandler:(EvaluateSelectedObjectHandler)selectedObjectHandler completion:(void(^)(UIViewController *VC))completion;
 
 - (void)updateDatesWithUpdateObject:(UpdateObjectType)object;
 - (MKUSingleViewTableViewCell <MKUCheckboxButtonView *> *)checkboxButtonCellInSection:(NSUInteger)section enabled:(BOOL)enabled singleLine:(BOOL)singleLine;
 - (MKURadioButtonTableViewCell *)radioButtonCellForRowAtIndexPath:(NSIndexPath *)indexPath title:(NSString *)title enabled:(BOOL)enabled on:(BOOL)on singleLine:(BOOL)singleLine;
 
 - (BOOL)isAddIndexPath:(NSIndexPath *)indexPath;
+- (NSIndexPath *)indexPathForItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item;
+
+- (void)resetSelectedSets;
+- (void)resetSelectedSetsInListOfType:(NSUInteger)type;
+- (void)setSelectedObjectsWithSet:(NSSet *)selectedObjects inListOfType:(NSUInteger)type;
+- (NSSet *)selectedSetsInListOfType:(NSUInteger)type;
+- (void)setSelectedObject:(__kindof NSObject<MKUPlaceholderProtocol> *)obj;
+- (void)setDeselectedObject:(__kindof NSObject<MKUPlaceholderProtocol> *)obj;
+
+/** @brief Adds the item to the list only if it doesn't already contain it, i.e., isEqual returns NO.
+ @return A BOOL indicating if the object was added to the array.  */
+- (BOOL)addItem:(NSObject<MKUPlaceholderProtocol> *)item toListOfType:(NSUInteger)type;
+- (void)deleteItem:(NSObject<MKUPlaceholderProtocol> *)item fromListOfType:(NSUInteger)type;
+- (NSArray *)addItems:(NSArray<NSObject<MKUPlaceholderProtocol> *> *)items toListOfType:(NSUInteger)type;
+- (void)deleteItems:(NSArray<NSObject<MKUPlaceholderProtocol> *> *)items fromListOfType:(NSUInteger)type;
+- (void)deleteAllItemsFromListOfType:(NSUInteger)type;
+- (void)setItems:(NSArray<NSObject<MKUPlaceholderProtocol> *> *)items forListOfType:(NSUInteger)type;
+/** @brief Called when setItems: addItems: and deleteItems: are done. Default calles updateDelegate
+ itemsListVC:didUpdateItems:inSection: call super. */
+- (void)didFinishUpdatesInListOfType:(NSUInteger)section;
+- (void)dispatchUpdateDelegateToRefreshItem:(__kindof NSObject<NSCopying> *)item;
+- (void)dispatchUpdateDelegateToSetSelected:(BOOL)selected item:(__kindof NSObject<NSCopying> *)item;
+/** @brief It uses the section itself contrary to listItemsForListOfType which uses a type which might not match the section, e.g., bitmask. */
+- (NSMutableArray<NSObject<MKUPlaceholderProtocol> *> *)listItemsForListInSection:(NSUInteger)section;
+/** @brief Called in tableView: didSelectRowAtIndexPath: when a section is of type MKU_MUTABLE_OBJECT_FIELD_TYPE_LIST.
+ Handles different actions corresponding to selectedActionHandler */
+- (void)handleDidSelectListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath;
 
 @end
 

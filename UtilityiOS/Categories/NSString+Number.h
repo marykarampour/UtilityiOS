@@ -6,7 +6,6 @@
 //  Copyright © 2015 BHS Consultants. All rights reserved.
 //
 
-
 @interface NSString (Number)
 
 /** @brief If self.length == 0 it will return @0. */

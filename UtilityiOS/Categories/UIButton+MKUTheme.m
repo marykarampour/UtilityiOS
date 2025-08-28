@@ -48,7 +48,7 @@
     button.titleLabel.numberOfLines = 2;
     button.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
     button.titleLabel.textAlignment = NSTextAlignmentCenter;
-    button.backgroundColor = [AppTheme sectionFooterBackgroundColor];
+    button.backgroundColor = [AppTheme defaultSectionHeaderColor];
     [button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
     [button setTitle:title forState:UIControlStateNormal];
     [button setTitleColor:[AppTheme textDarkColor] forState:UIControlStateNormal];

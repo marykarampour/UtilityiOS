@@ -3,7 +3,7 @@
 //  UtilityiOS
 //
 //  Created by Maryam Karampour on 2024-12-07.
-//
+//  Copyright © 2024 Prometheus Software. All rights reserved.
 
 #import "MKUCollapsableSectionsViewController.h"
 #import "NSArray+Utility.h"

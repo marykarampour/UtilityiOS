@@ -18,11 +18,25 @@ typedef NS_ENUM(NSUInteger, MKU_REFERENCE_DATE_TYPE) {
 
 @interface NSDate (Utility)
 
+- (NSString *)dateStringWithFormat:(DATE_FORMAT_STYLE)format isUTC:(BOOL)isUTC;
+- (NSString *)UTCDateString;
+- (NSString *)UTCDateStringWithFormat:(DATE_FORMAT_STYLE)format;
+- (NSString *)localDateStringWithFormat:(DATE_FORMAT_STYLE)format;
+- (NSComparisonResult)compareDayComponents:(NSDate *)date;
+- (NSComparisonResult)compareTimeComponents:(NSDate *)date;
+- (NSNumber *)minute;
+- (NSNumber *)hour;
+- (NSNumber *)day;
+- (NSNumber *)month;
+- (NSNumber *)year;
+- (NSDate *)firstDateOfMonth;
+
 - (NSDate *)endOfWeekLocal;
 - (NSDate *)startOfWeekLocal;
 - (NSDate *)endOfWeekGMT;
 - (NSDate *)startOfWeekGMT;
 - (NSDate *)midnightLocal;
+- (NSDate *)secondBeforeNextMidnightLocal;
 - (NSDate *)midnightGMT;
 - (NSDate *)endOfDay;
 
@@ -32,6 +46,7 @@ typedef NS_ENUM(NSUInteger, MKU_REFERENCE_DATE_TYPE) {
 - (NSDate *)updateCalendarUnit:(NSCalendarUnit)unit value:(NSInteger)value;
 - (NSUInteger)valueForCalendarUnit:(NSCalendarUnit)unit;
 
+- (NSDate *)updateHourWithValue:(NSInteger)value;
 - (NSDate *)updateDayWithValue:(NSInteger)value;
 - (NSDate *)updateMonthWithValue:(NSInteger)value;
 - (NSDate *)updateYearWithValue:(NSInteger)value;
@@ -56,20 +71,20 @@ typedef NS_ENUM(NSUInteger, MKU_REFERENCE_DATE_TYPE) {
 + (StringArr *)monthsOfYear;
 + (StringArr *)longMonthsOfYear;
 
-- (NSString *)dateStringWithFormat:(DATE_FORMAT_STYLE)format isUTC:(BOOL)isUTC;
-- (NSString *)UTCDateString;
-- (NSString *)UTCDateStringWithFormat:(DATE_FORMAT_STYLE)format;
-- (NSString *)localDateStringWithFormat:(DATE_FORMAT_STYLE)format;
-- (NSComparisonResult)compareDayComponents:(NSDate *)date;
-- (NSComparisonResult)compareTimeComponents:(NSDate *)date;
-
-- (NSNumber *)minute;
-- (NSNumber *)hour;
-- (NSNumber *)day;
-- (NSNumber *)month;
-- (NSNumber *)year;
-- (NSDate *)firstDateOfMonth;
-
+/** @brief Returns the number of the calendar unit between given dates.
+ @param inclusive If NO partial units will be ignored, e.g., if from is 1 hour 40 minutes and to is 23 hours before that, it  will return -1 for NSCalendarUnitDay.and If YES, it will return 0.
+ @note Only use a single unit. */
++ (NSUInteger)componentValueWithUnit:(NSCalendarUnit)unit betweenFromDate:(NSDate *)from toDate:(NSDate *)to inclusive:(BOOL)inclusive;
+/** @brief Returns the number of the calendar unit between given dates.
+ @param inclusive If NO partial units will be ignored, e.g., if from is 1 hour 40 minutes and to is 23 hours before that, it  will return -1 for NSCalendarUnitDay.and If YES, it will return 0.
+ @return Only components given as unit are returned. */
++ (NSDateComponents *)componentsWithUnits:(NSCalendarUnit)unit betweenFromDate:(NSDate *)from toDate:(NSDate *)to inclusive:(BOOL)inclusive;
+/** @brief Returns the number of the calendar unit between given dates.
+ @return Only components given as unit are returned. */
++ (NSString *)componentsDescriptionWithUnits:(NSCalendarUnit)unit betweenFromDate:(NSDate *)from toDate:(NSDate *)to;
+/** @brief Returns the number of the calendar unit between given dates.
+ @return Only components given as unit are returned.. first is key and second is value. */
++ (NSArray<MKUPair<NSString *, NSNumber *> *> *)componentsValuesWithUnits:(NSCalendarUnit)unit betweenFromDate:(NSDate *)from toDate:(NSDate *)to;
 - (NSDate *)setTimeComponentToDate:(NSDate *)date;
 - (NSDate *)setTimeComponentToDate:(NSDate *)date startDate:(NSDate *)startDate;
 - (NSDate *)setDayComponentToDate:(NSDate *)date;
