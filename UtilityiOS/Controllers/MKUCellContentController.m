@@ -68,7 +68,7 @@
             break;
     }
     self.cellType = type;
-    MKUCellContentController *ll;
+    
     return self;
 }
 

@@ -6,7 +6,7 @@
 //  Copyright © 2018 BHS Consultants. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "MKUViewObjectProtocol.h"
 
 typedef NS_ENUM(NSUInteger, MKUCellType) {
     MKUCellTypeTableView,
@@ -23,7 +23,7 @@ typedef NS_ENUM(NSUInteger, MKUCellType) {
 
 @end
 
-@interface MKUCellContentController : NSObject <MKUCellContentControllerProtocol>
+@interface MKUCellContentController : NSObject <MKUCellContentControllerProtocol, MKUViewObjectProtocol>
 
 @property (nonatomic, assign, readonly) MKUCellType cellType;
 /** @brief this is the content view of cell */

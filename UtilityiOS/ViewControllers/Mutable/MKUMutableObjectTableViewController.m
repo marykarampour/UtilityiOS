@@ -24,7 +24,7 @@
 
 @interface MKUMutableObjectTableViewController ()
 
-@property (nonatomic, strong) NSIndexPath *selectedIndexPath;
+@property (nonatomic, strong, readwrite) NSIndexPath *selectedIndexPath;
 
 @end
 

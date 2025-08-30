@@ -9,7 +9,7 @@
 #import "MKUMutableObjectVCProtocol.h"
 
 /** @brief This category does not synthesize the properties. It only implements the required methods.
- @note saveObject of MKUSaveBarButtonProtocol is implemented as self.object */
+ @note saveObject of MKUNavBarButtonTargetProtocol is implemented as self.object */
 @interface UIViewController (MutableObjectVC) <MKUMutableObjectVCProtocol>
 
 

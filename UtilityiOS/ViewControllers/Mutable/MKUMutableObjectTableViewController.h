@@ -157,6 +157,9 @@ typedef NS_ENUM(NSInteger, MKU_MUTABLE_OBJECT_FIELD_TYPE) {
  NSCache is used instead of NSDictionary primarily for thread safety. */
 @property (nonatomic, strong) NSCache<NSNumber *, NSSet *> *selectedSets;
 
+/** @brief The indexpath of the row that was selected or edited. */
+@property (nonatomic, strong, readonly) NSIndexPath *selectedIndexPath;
+
 /** @brief By default is is self. If this view is within a container, it can be assigned the container to handle
  transitions when an item is selected. */
 @property (nonatomic, weak) id<MKUItemsListVCUpdateDelegate> updateDelegate;
