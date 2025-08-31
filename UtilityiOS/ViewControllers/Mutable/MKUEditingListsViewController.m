@@ -136,8 +136,8 @@ static NSString * const MULTI_SELECT_KEY = @"allowsMultipleSelection";
     }
     
     switch (type) {
-        case MKU_NAV_BAR_BUTTON_TYPE_CLOSE: return kCloseTitle;
-        case MKU_NAV_BAR_BUTTON_TYPE_CLEAR: return kClearTitle;
+        case MKU_NAV_BAR_BUTTON_TYPE_CLOSE: return [Constants Close_STR];
+        case MKU_NAV_BAR_BUTTON_TYPE_CLEAR: return [Constants Clear_STR];
         default: return nil;
     }
 }
