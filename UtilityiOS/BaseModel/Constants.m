@@ -672,6 +672,10 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
     return LOCALIZED(@"Please select a %@");
 }
 
++ (NSString *)Search_Not_Found_STR {
+    return LOCALIZED(@"No items with this search criteria were found!");
+}
+
 + (CGFloat)GeoFenceRadiousKiloMeter {
     return 1.0;
 }

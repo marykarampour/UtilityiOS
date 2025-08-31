@@ -72,7 +72,7 @@
 }
 
 - (NSString *)noItemAvailableTitleForListOfType:(NSUInteger)type {
-    return kStringSearchNotFound;
+    return [Constants Search_Not_Found_STR];
 }
 
 @end
