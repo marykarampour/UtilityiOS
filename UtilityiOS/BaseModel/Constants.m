@@ -676,6 +676,18 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
     return LOCALIZED(@"No items with this search criteria were found!");
 }
 
++ (NSString *)Save_Failed_STR {
+    return LOCALIZED(@"Save Failed!");
+}
+
++ (NSString *)Delete_Failed_STR {
+    return LOCALIZED(@"Delete Failed!");
+}
+
++ (NSString *)Try_Again_STR {
+    return LOCALIZED(@"Please try again");
+}
+
 + (CGFloat)GeoFenceRadiousKiloMeter {
     return 1.0;
 }

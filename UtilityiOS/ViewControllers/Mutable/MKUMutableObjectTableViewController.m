@@ -422,7 +422,7 @@
                 [self didDeleteItem:item forRowAtIndexPath:indexPath];
             }
             else if (error) {
-                [self OKAlertWithTitle:kDeleteFailedTitle message:error.localizedDescription];
+                [self OKAlertWithTitle:[Constants Delete_Failed_STR] message:error.localizedDescription];
             }
             [self didFinishCommitEditingStyle:editingStyle forRowAtIndexPath:indexPath];
         }];

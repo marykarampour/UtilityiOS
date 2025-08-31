@@ -544,6 +544,9 @@ typedef NS_ENUM(NSUInteger, MKU_BADGE_VIEW_STATE) {
 + (NSString *)Missing_Value_Error_Message_STR;
 + (NSString *)Missing_Object_Error_Message_STR;
 + (NSString *)Search_Not_Found_STR;
++ (NSString *)Save_Failed_STR;
++ (NSString *)Delete_Failed_STR;
++ (NSString *)Try_Again_STR;
 + (NSString *)Touch_ID_STR;
 + (NSString *)Face_ID_STR;
 + (NSString *)Login_Biometrics_Message_STR;
