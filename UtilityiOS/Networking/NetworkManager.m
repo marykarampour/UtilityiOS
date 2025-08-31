@@ -26,7 +26,6 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
 
 @interface AFHTTPSessionManager (Operators)
 
-
 - (nullable NSURLSessionDataTask *)POST:(NSString *)URLString
                              parameters:(nullable id)parameters
                                 headers:(nullable NSDictionary <NSString *, NSString *> *)headers
@@ -51,7 +50,6 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
                                 failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure {
     
     return [self POST:URLString parameters:parameters headers:headers progress:nil success:success failure:failure];
-    
 }
 
 - (NSURLSessionDataTask *)GET:(NSString *)URLString
@@ -86,27 +84,27 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
 
 + (void)initialize {
     if (!selectors) {
-        selectors = @{@(NetworkRequestType_GET)    :[NSValue valueWithPointer:@selector(GET:parameters:headers:success:failure:)],
-                      @(NetworkRequestType_POST)   :[NSValue valueWithPointer:@selector(POST:parameters:headers:success:failure:)],
-                      @(NetworkRequestType_PUT)    :[NSValue valueWithPointer:@selector(PUT:parameters:headers:success:failure:)],
-                      @(NetworkRequestType_DELETE) :[NSValue valueWithPointer:@selector(DELETE:parameters:headers:success:failure:)],
-                      @(NetworkRequestType_HEAD)   :[NSValue valueWithPointer:@selector(HEAD:parameters:headers:success:failure:)],
-                      @(NetworkRequestType_PATCH)  :[NSValue valueWithPointer:@selector(PATCH:parameters:headers:success:failure:)]};
+        selectors = @{@(NETWORK_REQUEST_TYPE_GET)    :[NSValue valueWithPointer:@selector(GET:parameters:headers:success:failure:)],
+                      @(NETWORK_REQUEST_TYPE_POST)   :[NSValue valueWithPointer:@selector(POST:parameters:headers:success:failure:)],
+                      @(NETWORK_REQUEST_TYPE_PUT)    :[NSValue valueWithPointer:@selector(PUT:parameters:headers:success:failure:)],
+                      @(NETWORK_REQUEST_TYPE_DELETE) :[NSValue valueWithPointer:@selector(DELETE:parameters:headers:success:failure:)],
+                      @(NETWORK_REQUEST_TYPE_HEAD)   :[NSValue valueWithPointer:@selector(HEAD:parameters:headers:success:failure:)],
+                      @(NETWORK_REQUEST_TYPE_PATCH)  :[NSValue valueWithPointer:@selector(PATCH:parameters:headers:success:failure:)]};
     }
     if (!requestTypeStrings) {
-        requestTypeStrings = @{@(NetworkRequestType_GET):@"GET",
-                               @(NetworkRequestType_POST):@"POST",
-                               @(NetworkRequestType_PUT):@"PUT",
-                               @(NetworkRequestType_DELETE):@"DELETE",
-                               @(NetworkRequestType_HEAD):@"HEAD",
-                               @(NetworkRequestType_PATCH):@"PATCH"};
+        requestTypeStrings = @{@(NETWORK_REQUEST_TYPE_GET):@"GET",
+                               @(NETWORK_REQUEST_TYPE_POST):@"POST",
+                               @(NETWORK_REQUEST_TYPE_PUT):@"PUT",
+                               @(NETWORK_REQUEST_TYPE_DELETE):@"DELETE",
+                               @(NETWORK_REQUEST_TYPE_HEAD):@"HEAD",
+                               @(NETWORK_REQUEST_TYPE_PATCH):@"PATCH"};
     }
     if (!contentTypes) {
-        contentTypes = @{@(NetworkContentType_OCTET):@"application/octet-stream",
-                         @(NetworkContentType_JSON):@"application/json",
-                         @(NetworkContentType_HTML):@"text/html;charset=utf-8",
-                         @(NetworkContentType_GZIP):@"application/x-gzip",
-                         @(NetworkContentType_JPEG):@"image/jpeg"};
+        contentTypes = @{@(NETWORK_CONTENT_TYPE_OCTET):@"application/octet-stream",
+                         @(NETWORK_CONTENT_TYPE_JSON):@"application/json",
+                         @(NETWORK_CONTENT_TYPE_HTML):@"text/html;charset=utf-8",
+                         @(NETWORK_CONTENT_TYPE_GZIP):@"application/x-gzip",
+                         @(NETWORK_CONTENT_TYPE_JPEG):@"image/jpeg"};
     }
 }
 
@@ -118,23 +116,23 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
     return self;
 }
 
-- (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NetworkRequestType)type parameters:(NSDictionary *)parameters completion:(void (^)(id, NSError *))completion {
+- (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters completion:(void (^)(id, NSError *))completion {
     return [self requestURL:url type:type parameters:parameters completionHeaders:^(id result, NSDictionary *headers, NSError *error) {
         completion(result, error);
     }];
 }
 
-- (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NetworkRequestType)type parameters:(NSDictionary *)parameters completionHeaders:(ServerResultHeaderErrorBlock)completion {
+- (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters completionHeaders:(ServerResultHeaderErrorBlock)completion {
     return [self requestManagerAtIndex:0 URL:url type:type parameters:parameters completionHeaders:completion];
 }
 
-- (AFHTTPSessionManager *)requestManagerAtIndex:(NSUInteger)index URL:(NSString *)url type:(NetworkRequestType)type parameters:(NSDictionary *)parameters completion:(ServerResultErrorBlock)completion {
+- (AFHTTPSessionManager *)requestManagerAtIndex:(NSUInteger)index URL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters completion:(ServerResultErrorBlock)completion {
     return [self requestManagerAtIndex:index URL:url type:type parameters:parameters completionHeaders:^(id result, NSDictionary *headers, NSError *error) {
         completion(result, error);
     }];
 }
 
-- (AFHTTPSessionManager *)requestManagerAtIndex:(NSUInteger)index URL:(NSString *)url type:(NetworkRequestType)type parameters:(NSDictionary *)parameters completionHeaders:(ServerResultHeaderErrorBlock)completion {
+- (AFHTTPSessionManager *)requestManagerAtIndex:(NSUInteger)index URL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters completionHeaders:(ServerResultHeaderErrorBlock)completion {
     return [self requestManagerAtIndex:index URL:url type:type parameters:parameters headers:nil completionHeaders:completion];
 }
 
@@ -142,25 +140,25 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
     return [self downloadManagerAtIndex:0 URL:url toFile:filname completion:completion];
 }
 
-- (NSMutableURLRequest *)requestMultipartFormURL:(NSString *)url type:(NetworkRequestType)type parameters:(NSDictionary *)parameters data:(NSArray<MultipartInfo *> *)data completion:(void (^)(NSURLResponse * _Nonnull, id _Nullable, NSError * _Nullable))completion {
+- (NSMutableURLRequest *)requestMultipartFormURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters data:(NSArray<MultipartInfo *> *)data completion:(void (^)(NSURLResponse * _Nonnull, id _Nullable, NSError * _Nullable))completion {
     return [self requestManagerAtIndex:0 multipartFormURL:url type:type parameters:parameters data:data completion:completion];
 }
 
-- (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NetworkRequestType)type parameters:(NSDictionary *)parameters headers:(nullable NSDictionary <NSString *, NSString *> *)headers completion:(ServerResultErrorBlock)completion {
+- (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(nullable NSDictionary <NSString *, NSString *> *)headers completion:(ServerResultErrorBlock)completion {
     return [self requestManagerAtIndex:0 URL:url type:type parameters:parameters headers:headers completionHeaders:^(id result, NSDictionary *headers, NSError *error) {
         completion(result, error);
     }];
 }
 
-- (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NetworkRequestType)type parameters:(NSDictionary *)parameters headers:(nullable NSDictionary <NSString *, NSString *> *)headers completionHeaders:(ServerResultHeaderErrorBlock)completion {
+- (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(nullable NSDictionary <NSString *, NSString *> *)headers completionHeaders:(ServerResultHeaderErrorBlock)completion {
     return [self requestManagerAtIndex:0 URL:url type:type parameters:parameters headers:headers completionHeaders:completion];
 }
 
-- (AFHTTPSessionManager *)requestManagerAtIndex:(NSUInteger)index URL:(NSString *)url type:(NetworkRequestType)type parameters:(NSDictionary *)parameters headers:(nullable NSDictionary <NSString *, NSString *> *)headers completion:(ServerResultErrorBlock)completion {
+- (AFHTTPSessionManager *)requestManagerAtIndex:(NSUInteger)index URL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(nullable NSDictionary <NSString *, NSString *> *)headers completion:(ServerResultErrorBlock)completion {
     return [self requestManagerAtIndex:index URL:url type:type parameters:parameters headers:headers completion:completion];
 }
 
-- (AFHTTPSessionManager *)requestManagerAtIndex:(NSUInteger)index URL:(NSString *)url type:(NetworkRequestType)type parameters:(NSDictionary *)parameters headers:(nullable NSDictionary <NSString *, NSString *> *)headers completionHeaders:(ServerResultHeaderErrorBlock)completion {
+- (AFHTTPSessionManager *)requestManagerAtIndex:(NSUInteger)index URL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(nullable NSDictionary <NSString *, NSString *> *)headers completionHeaders:(ServerResultHeaderErrorBlock)completion {
     
     AFHTTPSessionManager *manager = [self.managers objectForKey:@(index)];
     if (!manager) return nil;
@@ -200,7 +198,7 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
     });
 }
 
-- (NSMutableURLRequest *)requestManagerAtIndex:(NSUInteger)index multipartFormURL:(NSString *)url type:(NetworkRequestType)type parameters:(NSDictionary *)parameters data:(NSArray<MultipartInfo *> *)data completion:(void (^)(NSURLResponse * _Nonnull, id _Nullable, NSError * _Nullable))completion {
+- (NSMutableURLRequest *)requestManagerAtIndex:(NSUInteger)index multipartFormURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters data:(NSArray<MultipartInfo *> *)data completion:(void (^)(NSURLResponse * _Nonnull, id _Nullable, NSError * _Nullable))completion {
     
     AFHTTPSessionManager *manager = [self.managers objectForKey:@(index)];
     if (!manager) return nil;
@@ -366,7 +364,7 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
     return manager;
 }
 
-- (NSString *)requesNameForType:(NetworkContentType)type {
+- (NSString *)requesNameForType:(NETWORK_CONTENT_TYPE)type {
     return [requestTypeStrings objectForKey:@(type)];
 }
 
@@ -386,8 +384,8 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
 - (void)defaultEncodeParametersInURLForManagerAtIndex:(NSUInteger)index {
     
     NSMutableIndexSet *set = [[NSMutableIndexSet alloc] init];
-    [set addIndex:NetworkRequestType_GET];
-    [set addIndex:NetworkRequestType_HEAD];
+    [set addIndex:NETWORK_REQUEST_TYPE_GET];
+    [set addIndex:NETWORK_REQUEST_TYPE_HEAD];
     [self encodeParametersForRequestTypes:set inURLForManagerAtIndex:index];
 }
 
