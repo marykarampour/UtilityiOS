@@ -17,18 +17,18 @@ typedef NS_ENUM(NSUInteger, MKU_TABBAR_SPLIT_POPTOROOT_TYPE) {
 
 @interface MKUTabBarSplitViewController : NSObject
 
-@property (nonatomic, strong, readonly, nonnull) NSArray<__kindof MasterDetailNavControllerPair *> *pairs;
-@property (nonatomic, strong, readonly, nonnull) MKUSplitViewController *splitViewController;
-@property (nonatomic, strong, readonly, nonnull) UIViewController *detailViewController;
+@property (nonatomic, strong, readonly) NSArray<__kindof MasterDetailNavControllerPair *> *pairs;
+@property (nonatomic, strong) MKUSplitViewController *splitViewController;
+@property (nonatomic, strong) UIViewController *detailViewController;
 @property (nonatomic, strong, readonly) UITabBarController *primaryTabBarController;
 
 
-- (_Nonnull instancetype)initWithBaseMasterDetailPair:(MasterDetailNavControllerPair * _Nullable)pair;
-- (void)pushToBase:(MasterDetailNavControllerPair * _Nonnull)pair addMasterDetailPairs:(NSArray<__kindof MasterDetailNavControllerPair *> *)pairs;
+- (instancetype)initWithBaseMasterDetailPair:(MasterDetailNavControllerPair * )pair;
+- (void)pushToBase:(MasterDetailNavControllerPair *)pair addMasterDetailPairs:(NSArray<__kindof MasterDetailNavControllerPair *> *)pairs;
 
-- (UINavigationController *_Nullable)splitViewDetailMainNavController;
+- (UINavigationController *)splitViewDetailMainNavController;
 - (void)updatePrimaryViewWithState:(PrimaryViewState)state;
-- (UIViewController *_Nullable)selectedTabViewController;
+- (UIViewController *)selectedTabViewController;
 - (void)setSelectedTab:(TabBarIndex)index;
 - (NSUInteger)tabCount;
 

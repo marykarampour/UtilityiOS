@@ -916,7 +916,7 @@
 }
 
 - (MKUStepperValueObject *)stepperValuesForSection:(NSUInteger)section {
-    return [MKUStepperValueObject objectWithTitle:[self titleForSection:section] value:0 start:0 end:MAX_QUANTITY];
+    return [MKUStepperValueObject objectWithTitle:[self titleForSection:section] value:0 start:0 end:[Constants Max_Stepper_Quantity]];
 }
 
 - (void)switchBoolValueAtIndexPath:(NSIndexPath *)indexPath {

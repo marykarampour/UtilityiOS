@@ -41,7 +41,7 @@ typedef NSDictionary<NSNumber *, MKUDateViewInfoObject *> DateSectionInfoObjctDi
 - (NSAttributedString *)attributedTitleForAccessoryLabelOfType:(MKU_TABLEVIEW_ACCESSORY_VIEW_TYPE)type inSection:(NSInteger)section;
 
 @required
-- (CGFloat)heightForNonDateRowAtIndexPath:(NSIndexPath * _Nullable)indexPath;
+- (CGFloat)heightForNonDateRowAtIndexPath:(NSIndexPath * )indexPath;
 - (UITableViewCell * _Nonnull)tableView:(UITableView * _Nonnull)tableView cellForNonDateRowAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
 - (void)didSelectNonDateRowAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
 - (void)didHideDatePickerAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
@@ -56,7 +56,7 @@ typedef NSDictionary<NSNumber *, MKUDateViewInfoObject *> DateSectionInfoObjctDi
  An Identifier for a cell is auto generated for subclasses of MKUBaseTableViewCell. Use it as: [<Cell class> identifier].*/
 @interface MKUTableViewController : UITableViewController <MKUTableViewControllerProtocol, MKUDatePickerDelegate, MKUViewControllerViewProtocol, MKUViewControllerProtocol>
 
-@property (nonatomic, weak) _Nullable id<MKURefreshViewControllerDelegate> refreshDelegate;
+@property (nonatomic, weak)  id<MKURefreshViewControllerDelegate> refreshDelegate;
 
 //TODO: Dark and light styles
 @property (nonatomic, strong) MKULabelStyleObject *sectionHeaderStyle;
@@ -79,10 +79,10 @@ typedef NSDictionary<NSNumber *, MKUDateViewInfoObject *> DateSectionInfoObjctDi
 - (void)reloadSections:(NSArray<NSNumber *> *)sections;
 - (void)reloadSectionsInSet:(NSIndexSet *)sections;
 - (void)reloadAllSections;
-- (void)reloadIndexPaths:(IndexPathArr * _Nullable)indexPaths;
+- (void)reloadIndexPaths:(IndexPathArr * )indexPaths;
 - (void)reloadSection:(NSUInteger)section withHeader:(BOOL)header;
-- (void)removeRowsAtIndexPaths:(IndexPathArr * _Nullable)indexPaths;
-- (void)insertRowsAtIndexPaths:(IndexPathArr * _Nullable)indexPaths;
+- (void)removeRowsAtIndexPaths:(IndexPathArr * )indexPaths;
+- (void)insertRowsAtIndexPaths:(IndexPathArr * )indexPaths;
 - (void)setBlankFooter;
 - (BOOL)isDateSection:(NSUInteger)section;
 /** @brief Default is type DATE_INFO_OBJECT_TYPE_DAY */
@@ -109,7 +109,7 @@ typedef NSDictionary<NSNumber *, MKUDateViewInfoObject *> DateSectionInfoObjctDi
 #pragma mark - custom cell templates
 
 - (MKUBaseTableViewCell *)emptyCell;
-- (MKUBaseTableViewCell * _Nullable)tableView:(UITableView * _Nonnull)tableView dateCellWithInfo:(MKUDateViewInfoObject * _Nullable)info;
+- (MKUBaseTableViewCell * )tableView:(UITableView * _Nonnull)tableView dateCellWithInfo:(MKUDateViewInfoObject * )info;
 - (MKUBaseTableViewCell *)cellContainingView:(UIView *)view;
 - (MKUBaseTableViewCell *)textViewCellForIndexPath:(NSIndexPath * _Nonnull)indexPath title:(NSString *)title delegate:(id<TextViewDelegate>)delegate viewIndexPath:(NSIndexPath *)viewIndexPath text:(NSString *)text;
 - (MKUBaseTableViewCell *)textViewCellForIndexPath:(NSIndexPath * _Nonnull)indexPath title:(NSString *)title delegate:(id<TextViewDelegate>)delegate viewIndexPath:(NSIndexPath *)viewIndexPath text:(NSString *)text placeholder:(NSString *)placeholder;

@@ -60,7 +60,7 @@ static NSDictionary *headers;
     info.data = data;
     info.contentType = NETWORK_CONTENT_TYPE_OCTET;
     [[NetworkManager instance] setHeaders:[self headers]];
-    return [[NetworkManager instance] requestMultipartFormURL:endpoint type:NETWORK_REQUEST_TYPE_POST parameters:nil data:@[info] completion:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+    return [[NetworkManager instance] requestMultipartFormURL:endpoint type:NETWORK_REQUEST_TYPE_POST parameters:nil data:@[info] completion:^(NSURLResponse *response, id   responseObject, NSError *error) {
         DEBUGLOG(@"%@", response);
         completion (response, error);
     }];

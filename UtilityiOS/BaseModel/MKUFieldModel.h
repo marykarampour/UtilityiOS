@@ -127,7 +127,7 @@
 /** @brief Automatically assigned in init. Gets reset in copy. */
 @property (nonatomic, strong, readonly) NSString *GUID;
 
-+ (void)iterateOverTypesForSectionType:(NSInteger)type block:(void(^)(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop))block;
++ (void)iterateOverTypesForSectionType:(NSInteger)type block:(void(^)(NSNumber *obj, NSUInteger idx, BOOL *stop))block;
 
 //validation
 /** @brief Loops through object types in the propertyEnumDictionary and checks for objects not being nil in case of NSObject,

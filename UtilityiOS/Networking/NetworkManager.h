@@ -83,17 +83,17 @@ typedef NS_ENUM(NSUInteger, NETWORK_MANAGER_TYPE_) {
 
 - (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters completion:(ServerResultErrorBlock)completion;
 - (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters completionHeaders:(ServerResultHeaderErrorBlock)completion;
-- (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(nullable NSDictionary <NSString *, NSString *> *)headers completion:(ServerResultErrorBlock)completion;
-- (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(nullable NSDictionary <NSString *, NSString *> *)headers completionHeaders:(ServerResultHeaderErrorBlock)completion;
+- (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary <NSString *, NSString *> *)headers completion:(ServerResultErrorBlock)completion;
+- (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary <NSString *, NSString *> *)headers completionHeaders:(ServerResultHeaderErrorBlock)completion;
 - (AFHTTPSessionManager *)requestManagerAtIndex:(NSUInteger)index URL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters completion:(ServerResultErrorBlock)completion;
 - (AFHTTPSessionManager *)requestManagerAtIndex:(NSUInteger)index URL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters completionHeaders:(ServerResultHeaderErrorBlock)completion;
-- (AFHTTPSessionManager *)requestManagerAtIndex:(NSUInteger)index URL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(nullable NSDictionary <NSString *, NSString *> *)headers completion:(ServerResultErrorBlock)completion;
-- (AFHTTPSessionManager *)requestManagerAtIndex:(NSUInteger)index URL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(nullable NSDictionary <NSString *, NSString *> *)headers completionHeaders:(ServerResultHeaderErrorBlock)completion;
+- (AFHTTPSessionManager *)requestManagerAtIndex:(NSUInteger)index URL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary <NSString *, NSString *> *)headers completion:(ServerResultErrorBlock)completion;
+- (AFHTTPSessionManager *)requestManagerAtIndex:(NSUInteger)index URL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary <NSString *, NSString *> *)headers completionHeaders:(ServerResultHeaderErrorBlock)completion;
 
 #pragma - mark form
 
-- (NSMutableURLRequest *)requestMultipartFormURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters data:(NSArray<MultipartInfo *> *)data completion:(void (^ _Nullable )(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error))completion;
-- (NSMutableURLRequest *)requestManagerAtIndex:(NSUInteger)index multipartFormURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters data:(NSArray<MultipartInfo *> *)data completion:(void (^ _Nullable )(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error))completion;
+- (NSMutableURLRequest *)requestMultipartFormURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters data:(NSArray<MultipartInfo *> *)data completion:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completion;
+- (NSMutableURLRequest *)requestManagerAtIndex:(NSUInteger)index multipartFormURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters data:(NSArray<MultipartInfo *> *)data completion:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completion;
 
 - (AFHTTPSessionManager *)downloadURL:(NSString *)url toFile:(NSString *)filname completion:(ServerResultErrorBlock)completion;
 - (AFHTTPSessionManager *)downloadManagerAtIndex:(NSUInteger)index URL:(NSString *)url toFile:(NSString *)filname completion:(ServerResultErrorBlock)completion;

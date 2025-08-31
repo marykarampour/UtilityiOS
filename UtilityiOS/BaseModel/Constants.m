@@ -888,7 +888,7 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
     return nil;
 }
 
-+ (void)autentiacteWithBiometrics:(void (^)(BOOL, NSError * _Nullable))completion {
++ (void)autentiacteWithBiometrics:(void (^)(BOOL, NSError *))completion {
     
     LAContext *context = [[LAContext alloc] init];
     BOOL hasBiometry = [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil];
@@ -941,7 +941,7 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
     }
 }
 
-+ (void)handleAutentiacteWithBiometricsMessage:(NSString *)message type:(NSString *)type completion:(void (^)(BOOL, NSError * _Nullable))completion {
++ (void)handleAutentiacteWithBiometricsMessage:(NSString *)message type:(NSString *)type completion:(void (^)(BOOL, NSError *))completion {
     if (0 < message.length)
         message = [NSString stringWithFormat:message, type];
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -1261,6 +1261,10 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
 
 + (NSUInteger)Image_Picker_Max_Selection {
     return 1;
+}
+
++ (NSUInteger)Max_Stepper_Quantity {
+    return 99999;
 }
 
 + (NSString *)Remember_Me_STR {

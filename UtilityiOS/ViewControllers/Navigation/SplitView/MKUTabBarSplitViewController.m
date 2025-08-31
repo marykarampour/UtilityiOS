@@ -7,7 +7,6 @@
 //
 
 #import "MKUTabBarSplitViewController.h"
-#import "TabBarSplitViewController_Extension.h"
 #import "UINavigationController+Transition.h"
 #import "ShrunkenMenuViewController.h"
 #import "BaseDetailViewController.h"

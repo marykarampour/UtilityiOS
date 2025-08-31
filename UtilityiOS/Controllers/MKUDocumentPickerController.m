@@ -538,7 +538,7 @@ static NSDictionary <NSNumber *, UTType *> *supportedDocTypes;
 - (void)picker:(PHPickerViewController *)picker didFinishPicking:(NSArray<PHPickerResult *> *)results  API_AVAILABLE(ios(14)){
     [self dismissViewController:picker];
     for (PHPickerResult *obj in results) {
-        [obj.itemProvider loadDataRepresentationForTypeIdentifier:@"public.image" completionHandler:^(NSData * _Nullable data, NSError * _Nullable error) {
+        [obj.itemProvider loadDataRepresentationForTypeIdentifier:@"public.image" completionHandler:^(NSData *  data, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self dispatchDelegateWithData:data];
             });

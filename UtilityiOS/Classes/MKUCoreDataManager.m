@@ -74,7 +74,7 @@
     }];
 }
 
-- (void)loadItemsOfClass:(Class)itemClass predicate:(NSPredicate *)predicate sortDescriptor:(NSSortDescriptor * _Nullable)sortDescriptor entityName:(NSString *)entityName completion:(void (^)(NSArray *, NSError *))completion {
+- (void)loadItemsOfClass:(Class)itemClass predicate:(NSPredicate *)predicate sortDescriptor:(NSSortDescriptor * )sortDescriptor entityName:(NSString *)entityName completion:(void (^)(NSArray *, NSError *))completion {
     
     [self.mainManagedObjectContext performBlock:^{
         

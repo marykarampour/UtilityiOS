@@ -227,7 +227,7 @@ typedef UIView * (^SINGLE_INDEX_SIZE_VIEW_CREATION_HANDLER)(NSUInteger index, CG
 typedef UIView * (^DOUBLE_INDEX_VIEW_CREATION_HANDLER)(NSUInteger row, NSUInteger column);
 typedef UIView * (^DOUBLE_INDEX_SIZE_VIEW_CREATION_HANDLER)(NSUInteger row, NSUInteger column, CGFloat width, CGFloat height);
 
-typedef BOOL (^EvaluateSelectedObjectHandler)(id  _Nullable obj);
+typedef BOOL (^EvaluateSelectedObjectHandler)(id obj);
 typedef void (^VoidActionHandler)();
 typedef MKU_LIST_ITEM_SELECTED_ACTION (^LIST_ITEM_SELECTED_ACTION_HANDLER)(NSUInteger type);
 typedef NSDictionary <NSString *, VoidActionHandler> *TitleVoidActionHandlers;
@@ -660,6 +660,8 @@ typedef NS_ENUM(NSUInteger, MKU_BADGE_VIEW_STATE) {
 + (NSUInteger)Image_Shrink_Resize_Factor;
 + (NSUInteger)Image_Picker_Max_Selection;
 
++ (NSUInteger)Max_Stepper_Quantity;
+
 #pragma mark - methods and actions
 
 + (void)callPhoneNumber:(NSString *)num;
@@ -675,7 +677,7 @@ typedef NS_ENUM(NSUInteger, MKU_BADGE_VIEW_STATE) {
 + (BOOL)touchIDIsAvaialable;
 + (BOOL)faceIDIsAvaialable;
 + (NSString *)bioMetricName;
-+ (void)autentiacteWithBiometrics:(void (^)(BOOL success, NSError * _Nullable error))completion;
++ (void)autentiacteWithBiometrics:(void (^)(BOOL success, NSError *error))completion;
 
 @end
 

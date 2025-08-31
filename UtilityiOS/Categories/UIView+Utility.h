@@ -15,11 +15,11 @@ static CGFloat const CONSTRAINT_NO_PADDING = MAXFLOAT;
 - (void)removeConstraintsMask;
 - (void)removeAllSubviewConstraints;
 
-- (void)addConstraintsWithFormat:(NSString * _Nullable)format options:(NSLayoutFormatOptions)opts metrics:(nullable NSDictionary<NSString *,id> *)metrics views:(NSDictionary<NSString *, id> *_Nullable)views;
+- (void)addConstraintsWithFormat:(NSString * )format options:(NSLayoutFormatOptions)opts metrics:(nullable NSDictionary<NSString *,id> *)metrics views:(NSDictionary<NSString *, id> *)views;
 
-- (NSLayoutConstraint *)addConstraintWithItem:(__kindof UIView * _Nullable)view1 attribute:(NSLayoutAttribute)attr1 relatedBy:(NSLayoutRelation)relation toItem:(nullable __kindof UIView *)view2 attribute:(NSLayoutAttribute)attr2 multiplier:(CGFloat)multiplier constant:(CGFloat)c;
+- (NSLayoutConstraint *)addConstraintWithItem:(__kindof UIView * )view1 attribute:(NSLayoutAttribute)attr1 relatedBy:(NSLayoutRelation)relation toItem:(nullable __kindof UIView *)view2 attribute:(NSLayoutAttribute)attr2 multiplier:(CGFloat)multiplier constant:(CGFloat)c;
 
-- (NSLayoutConstraint *)addConstraintWithItem:(__kindof UIView * _Nullable)view1 attribute:(NSLayoutAttribute)attr1 relatedBy:(NSLayoutRelation)relation toItem:(nullable __kindof UIView *)view2 attribute:(NSLayoutAttribute)attr2 multiplier:(CGFloat)multiplier constant:(CGFloat)c priority:(UILayoutPriority)priority;
+- (NSLayoutConstraint *)addConstraintWithItem:(__kindof UIView * )view1 attribute:(NSLayoutAttribute)attr1 relatedBy:(NSLayoutRelation)relation toItem:(nullable __kindof UIView *)view2 attribute:(NSLayoutAttribute)attr2 multiplier:(CGFloat)multiplier constant:(CGFloat)c priority:(UILayoutPriority)priority;
 
 - (void)constraintSidesForView:(__kindof UIView *)view insets:(UIEdgeInsets)insets;
 - (void)constraintSidesForView:(__kindof UIView *)view;

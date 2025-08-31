@@ -26,37 +26,37 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
 
 @interface AFHTTPSessionManager (Operators)
 
-- (nullable NSURLSessionDataTask *)POST:(NSString *)URLString
-                             parameters:(nullable id)parameters
-                                headers:(nullable NSDictionary <NSString *, NSString *> *)headers
-                                success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success
-                                failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure;
+- (NSURLSessionDataTask *)POST:(NSString *)URLString
+                             parameters:(id)parameters
+                                headers:(NSDictionary <NSString *, NSString *> *)headers
+                                success:(void (^)(NSURLSessionDataTask *task, id responseObject))success
+                                failure:(void (^)(NSURLSessionDataTask *  task, NSError *error))failure;
 
 
 - (NSURLSessionDataTask *)GET:(NSString *)URLString
-                   parameters:(nullable id)parameters
-                      headers:(nullable NSDictionary <NSString *, NSString *> *)headers
-                      success:(nullable void (^)(NSURLSessionDataTask * _Nonnull, id _Nullable))success
-                      failure:(nullable void (^)(NSURLSessionDataTask * _Nullable, NSError * _Nonnull))failure;
+                   parameters:(id)parameters
+                      headers:(NSDictionary <NSString *, NSString *> *)headers
+                      success:(void (^)(NSURLSessionDataTask *, id))success
+                      failure:(void (^)(NSURLSessionDataTask * , NSError *))failure;
 
 @end
 
 @implementation AFHTTPSessionManager (Operators)
 
-- (nullable NSURLSessionDataTask *)POST:(NSString *)URLString
-                             parameters:(nullable id)parameters
-                                headers:(nullable NSDictionary <NSString *, NSString *> *)headers
-                                success:(nullable void (^)(NSURLSessionDataTask *task, id _Nullable responseObject))success
-                                failure:(nullable void (^)(NSURLSessionDataTask * _Nullable task, NSError *error))failure {
+- (NSURLSessionDataTask *)POST:(NSString *)URLString
+                             parameters:(id)parameters
+                                headers:(NSDictionary <NSString *, NSString *> *)headers
+                                success:(void (^)(NSURLSessionDataTask *task, id responseObject))success
+                                failure:(void (^)(NSURLSessionDataTask *  task, NSError *error))failure {
     
     return [self POST:URLString parameters:parameters headers:headers progress:nil success:success failure:failure];
 }
 
 - (NSURLSessionDataTask *)GET:(NSString *)URLString
-                   parameters:(nullable id)parameters
-                      headers:(nullable NSDictionary <NSString *, NSString *> *)headers
-                      success:(nullable void (^)(NSURLSessionDataTask * _Nonnull, id _Nullable))success
-                      failure:(nullable void (^)(NSURLSessionDataTask * _Nullable, NSError * _Nonnull))failure {
+                   parameters:(id)parameters
+                      headers:(NSDictionary <NSString *, NSString *> *)headers
+                      success:(void (^)(NSURLSessionDataTask *, id ))success
+                      failure:(void (^)(NSURLSessionDataTask * , NSError *))failure {
     
     return [self GET:URLString parameters:parameters headers:headers progress:nil success:success failure:failure];
 }
@@ -140,25 +140,25 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
     return [self downloadManagerAtIndex:0 URL:url toFile:filname completion:completion];
 }
 
-- (NSMutableURLRequest *)requestMultipartFormURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters data:(NSArray<MultipartInfo *> *)data completion:(void (^)(NSURLResponse * _Nonnull, id _Nullable, NSError * _Nullable))completion {
+- (NSMutableURLRequest *)requestMultipartFormURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters data:(NSArray<MultipartInfo *> *)data completion:(void (^)(NSURLResponse *, id, NSError *))completion {
     return [self requestManagerAtIndex:0 multipartFormURL:url type:type parameters:parameters data:data completion:completion];
 }
 
-- (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(nullable NSDictionary <NSString *, NSString *> *)headers completion:(ServerResultErrorBlock)completion {
+- (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary <NSString *, NSString *> *)headers completion:(ServerResultErrorBlock)completion {
     return [self requestManagerAtIndex:0 URL:url type:type parameters:parameters headers:headers completionHeaders:^(id result, NSDictionary *headers, NSError *error) {
         completion(result, error);
     }];
 }
 
-- (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(nullable NSDictionary <NSString *, NSString *> *)headers completionHeaders:(ServerResultHeaderErrorBlock)completion {
+- (AFHTTPSessionManager *)requestURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary <NSString *, NSString *> *)headers completionHeaders:(ServerResultHeaderErrorBlock)completion {
     return [self requestManagerAtIndex:0 URL:url type:type parameters:parameters headers:headers completionHeaders:completion];
 }
 
-- (AFHTTPSessionManager *)requestManagerAtIndex:(NSUInteger)index URL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(nullable NSDictionary <NSString *, NSString *> *)headers completion:(ServerResultErrorBlock)completion {
+- (AFHTTPSessionManager *)requestManagerAtIndex:(NSUInteger)index URL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary <NSString *, NSString *> *)headers completion:(ServerResultErrorBlock)completion {
     return [self requestManagerAtIndex:index URL:url type:type parameters:parameters headers:headers completion:completion];
 }
 
-- (AFHTTPSessionManager *)requestManagerAtIndex:(NSUInteger)index URL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(nullable NSDictionary <NSString *, NSString *> *)headers completionHeaders:(ServerResultHeaderErrorBlock)completion {
+- (AFHTTPSessionManager *)requestManagerAtIndex:(NSUInteger)index URL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary <NSString *, NSString *> *)headers completionHeaders:(ServerResultHeaderErrorBlock)completion {
     
     AFHTTPSessionManager *manager = [self.managers objectForKey:@(index)];
     if (!manager) return nil;
@@ -198,7 +198,7 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
     });
 }
 
-- (NSMutableURLRequest *)requestManagerAtIndex:(NSUInteger)index multipartFormURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters data:(NSArray<MultipartInfo *> *)data completion:(void (^)(NSURLResponse * _Nonnull, id _Nullable, NSError * _Nullable))completion {
+- (NSMutableURLRequest *)requestManagerAtIndex:(NSUInteger)index multipartFormURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters data:(NSArray<MultipartInfo *> *)data completion:(void (^)(NSURLResponse *, id, NSError *))completion {
     
     AFHTTPSessionManager *manager = [self.managers objectForKey:@(index)];
     if (!manager) return nil;
@@ -206,7 +206,7 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
     NSString *typeStr = [self requesNameForType:type];
     NSString *urlStr = [self urlWithEndpoint:url managerAtIndex:index];
     
-    NSMutableURLRequest *request = [manager.requestSerializer multipartFormRequestWithMethod:typeStr URLString:urlStr parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+    NSMutableURLRequest *request = [manager.requestSerializer multipartFormRequestWithMethod:typeStr URLString:urlStr parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {
         for (MultipartInfo *info in data) {
             
             NSData *fileData;
@@ -226,7 +226,7 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
     NSString *tmpDir = [NSTemporaryDirectory() stringByAppendingPathComponent:[NSString stringWithFormat:@"tmp_%d", arc4random()]];
     NSURL *fileURL = [NSURL fileURLWithPath:tmpDir];
     
-    return [manager.requestSerializer requestWithMultipartFormRequest:request writingStreamContentsToFile:fileURL completionHandler:^(NSError * _Nullable error) {
+    return [manager.requestSerializer requestWithMultipartFormRequest:request writingStreamContentsToFile:fileURL completionHandler:^(NSError *error) {
         NSURLSessionUploadTask *task = [manager uploadTaskWithRequest:request fromFile:fileURL progress:nil completionHandler:completion];
         [task resume];
     }];
@@ -238,7 +238,7 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
     if (!manager) return nil;
     
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:[self urlWithEndpoint:url managerAtIndex:index]]];
-    NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL * _Nonnull(NSURL * _Nonnull targetPath, NSURLResponse * _Nonnull response) {
+    NSURLSessionDownloadTask *downloadTask = [manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         
         NSURL *docsDirPath = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]];
         NSURL *fileURL = [docsDirPath URLByAppendingPathComponent:filname];
@@ -250,7 +250,7 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
         }
         return fileURL;
         
-    } completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
+    } completionHandler:^(NSURLResponse *response, NSURL *  filePath, NSError *error) {
         completion(filePath, error);
     }];
     [downloadTask resume];
@@ -364,7 +364,7 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
     return manager;
 }
 
-- (NSString *)requesNameForType:(NETWORK_CONTENT_TYPE)type {
+- (NSString *)requesNameForType:(NETWORK_REQUEST_TYPE)type {
     return [requestTypeStrings objectForKey:@(type)];
 }
 
