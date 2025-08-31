@@ -355,7 +355,7 @@ static NSString * const MULTI_SELECT_KEY = @"allowsMultipleSelection";
 }
 
 - (NSString *)noItemAvailableTitleForListOfType:(NSUInteger)type {
-    return kNoItemsAvailable;
+    return [Constants No_Items_Available_STR];
 }
 
 - (void)didFinishUpdates {
