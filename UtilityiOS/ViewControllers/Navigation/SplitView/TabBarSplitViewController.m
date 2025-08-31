@@ -58,7 +58,7 @@
 - (void)pushToBase:(MasterDetailNavControllerPair *)pair addMasterDetailPairs:(NSArray<__kindof MasterDetailNavControllerPair *> *)pairs {
     if (pair) {//TODO: put a dummy in between 0 and 1 for pop to login screen, select tab 0, pop to dummy, pop to root animated
         MasterDetailViewControllerPair *pairVC = [[MasterDetailViewControllerPair alloc] initWithNavPair:pair];
-        [self pushWithType:PopToRootType_Bottom pair:pairVC forTabItem:0];
+        [self pushWithType:MKU_TABBAR_SPLIT_POPTOROOT_TYPE_BOTTOM pair:pairVC forTabItem:0];
     }
     if (pairs.count) {
         NSMutableArray *newPairs = [[NSMutableArray alloc] initWithArray:self.pairs];
@@ -131,12 +131,12 @@
 
 - (void)pushWithType:(PopToRootType)type pair:(MasterDetailViewControllerPair * _Nonnull)pair forTabItem:(TabBarIndex)index {
     switch (type) {
-        case PopToRootType_Fade: {
+        case MKU_TABBAR_SPLIT_POPTOROOT_TYPE_FADE: {
             [(UINavigationController *)self.pairs[index].master pushWithFadeViewController:pair.master withDuration:[Constants TransitionAnimationDuration]];
             [(UINavigationController *)self.pairs[index].detail pushWithFadeViewController:pair.detail withDuration:2*[Constants TransitionAnimationDuration]];
         }
             break;
-        case PopToRootType_Bottom: {
+        case MKU_TABBAR_SPLIT_POPTOROOT_TYPE_BOTTOM: {
             [(UINavigationController *)self.primaryTabBarController.viewControllers[index] pushToBottomViewController:pair.master withDuration:[Constants TransitionAnimationDuration]];
             [(UINavigationController *)self.detailNavigationControllers[index] pushToBottomViewController:pair.detail withDuration:2*[Constants TransitionAnimationDuration]];
         }
