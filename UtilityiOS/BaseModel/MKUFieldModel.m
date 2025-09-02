@@ -328,7 +328,7 @@ static char UPDATE_DELEGATE_KEY;
 
 + (NSString *)titleForSectionType:(NSInteger)type {
     NSString *key = [self.titleEnumDict objectForKey:@(type)];
-    return [key splitedStringForUppercaseComponentsAndGroupUppercase:YES];
+    return [[key capitalizeFirstChar] splitedStringForUppercaseComponentsAndGroupUppercase:YES];
 }
 
 - (void)setValue:(NSObject *)value forObjectType:(NSInteger)type {

@@ -368,7 +368,7 @@ static NSDictionary <NSNumber *, UTType *> *supportedDocTypes;
     
     if (type == MKU_IMAGE_PICKER_TYPE_CAMERA && ![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
 #if !TARGET_IPHONE_SIMULATOR
-        [self.viewController OKAlertWithTitle:kErrorString message:[Constants No_Camera_Error_Message_STR]];
+        [self.viewController OKAlertWithTitle:[Constants Error_STR] message:[Constants No_Camera_Error_Message_STR]];
         return;
 #endif
     }

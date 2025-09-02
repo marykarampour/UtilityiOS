@@ -400,6 +400,10 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
     return LOCALIZED(@"Save Successful!");
 }
 
++ (NSString *)Success_STR {
+    return LOCALIZED(@"Success!");
+}
+
 + (NSString *)FaceID_STR {
     return LOCALIZED(@"Face ID");
 }

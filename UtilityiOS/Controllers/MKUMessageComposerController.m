@@ -8,6 +8,7 @@
 
 #import "MKUMessageComposerController.h"
 #import <MessageUI/MFMailComposeViewController.h>
+#import <MessageUI/MFMessageComposeViewController.h>
 #import "NSString+Validation.h"
 #import "NSString+Utility.h"
 #import "NSArray+Utility.h"
@@ -15,7 +16,7 @@
 #import "NSObject+Alert.h"
 #import "NSData+Utility.h"
 
-@interface MKUMessageComposerController () <MFMailComposeViewControllerDelegate>
+@interface MKUMessageComposerController () <MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate>
 
 @property (nonatomic, weak) __kindof UIViewController *viewController;
 @property (nonatomic, weak) id<MKUMessageComposerProtocol> delegate;
@@ -24,6 +25,8 @@
 @end
 
 @implementation MKUMessageComposerController
+
+#pragma mark - email
 
 - (instancetype)init {
     return [self initWithViewController:[[MKUAppDelegate application] visibleViewController] delegate:nil];
@@ -154,6 +157,48 @@
             self.completionHandler(type);
         }
     }];
+}
+
+- (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
+    
+    [controller dismissViewControllerAnimated:YES completion:^{
+        
+        MKU_MESSAGE_COMPOSER_RESULT type = MKU_MESSAGE_COMPOSER_RESULT_FAILED;
+        switch (result) {
+            case MessageComposeResultSent:
+                type = MKU_MESSAGE_COMPOSER_RESULT_SENT;
+                break;
+                
+            case MessageComposeResultCancelled:
+                type = MKU_MESSAGE_COMPOSER_RESULT_CANCELLED;
+                break;
+                
+            default:
+                break;
+        }
+        
+        if ([self.delegate respondsToSelector:@selector(messageComposerDidFinishWithResult:)]) {
+            [self.delegate messageComposerDidFinishWithResult:type];
+        }
+        else if (self.completionHandler) {
+            self.completionHandler(type);
+        }
+    }];
+}
+
+#pragma mark - SMS
+
+- (BOOL)sendSMSWithMessage:(NSString *)message recipients:(NSArray<NSString *> *)recipients {
+    
+    if (MFMessageComposeViewController.canSendText) {
+        MFMessageComposeViewController *sms = [[MFMessageComposeViewController alloc] init];
+        sms.body = message;
+        sms.recipients = recipients;
+        sms.messageComposeDelegate = self;
+        [self.viewController presentViewController:sms animated:YES completion:nil];
+        return YES;
+    }
+    return NO;
 }
 
 #pragma mark - helpers

@@ -83,6 +83,9 @@ typedef NS_ENUM(NSUInteger, StringFormat) {
 - (NSNumber *)stringToNumberWithFormat:(NSNumberFormatterStyle)format;
 - (NSString *)amount;
 + (NSString *)randomStringWithLenght:(NSUInteger)length;
+- (NSString *)securedHashWithName:(NSString *)name salt:(NSString *)salt;
+- (NSString *)computeHash;
++ (NSString *)computeHashForString:(NSString *)string;
 + (NSString *)telFromString:(NSString *)string;
 + (NSString *)telPromptFromString:(NSString *)string;
 

@@ -482,6 +482,7 @@ typedef NS_ENUM(NSUInteger, MKU_BADGE_VIEW_STATE) {
 + (NSString *)Login_Failed_Message_STR;
 + (NSString *)Update_Failed_Title_STR;
 + (NSString *)Save_Successful_STR;
++ (NSString *)Success_STR;
 + (NSString *)FaceID_STR;
 + (NSString *)TouchID_STR;
 + (NSString *)Done_STR;

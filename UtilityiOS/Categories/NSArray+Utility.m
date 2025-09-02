@@ -88,12 +88,20 @@
 + (instancetype)arrayFromArray:(NSArray *)array forKey:(NSString *)key {
     if (array.count == 0) return nil;
     if (![array.firstObject respondsToSelector:NSSelectorFromString(key)]) return nil;
+    
+    return [self arrayFromArray:array handler:^id(id obj) {
+        return [obj valueForKey:key];
+    }];
+}
+
++ (instancetype)arrayFromArray:(NSArray *)array handler:(id (^)(id))handler {
+    if (array.count == 0) return nil;
 
     NSMutableArray *arr = [[NSMutableArray alloc] init];
-    for (NSObject *obj in array) {
-        id value = [obj valueForKey:key];
+    [array enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        id value = handler(obj);
         if (value && ![arr containsObject:value]) [arr addObject:value];
-    }
+    }];
     return arr;
 }
 
