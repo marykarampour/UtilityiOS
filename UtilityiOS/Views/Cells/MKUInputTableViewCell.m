@@ -11,7 +11,7 @@
 #import "TextFieldController.h"
 #import "UIView+Utility.h"
 
-static CGFloat const PADDING = 4.0;
+static CGFloat const PADDING = 8.0;
 
 @interface MKUInputTableViewCell ()
 
@@ -44,7 +44,7 @@ static CGFloat const PADDING = 4.0;
         [self.button setImage:buttonImage forState:UIControlStateNormal];
         [self.button setHidden:!buttonImage];
         
-        self.textField = [[MKUTextField alloc] initWithPlaceholder:@"" type:MKU_TEXT_FIELD_TYPE_PLAIN textType:type];
+        self.textField = [[MKUTextField alloc] initWithTextType:type];
         self.textField.clearButtonMode = UITextFieldViewModeNever;
         self.textField.textAlignment = NSTextAlignmentRight;
         
