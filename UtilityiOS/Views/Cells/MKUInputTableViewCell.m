@@ -28,7 +28,7 @@ static CGFloat const PADDING = 8.0;
 }
 
 - (instancetype)initWithTextType:(MKU_TEXT_TYPE)type buttonImage:(UIImage *)buttonImage fieldWidth:(CGFloat)fieldWidth horizontalMargin:(CGFloat)horizontalMargin {
-    return [self initWithStyle:UITableViewCellStyleDefault textType:type buttonImage:buttonImage fieldWidth:fieldWidth horizontalMargin:[Constants HorizontalSpacing]];
+    return [self initWithStyle:UITableViewCellStyleDefault textType:type buttonImage:buttonImage fieldWidth:fieldWidth horizontalMargin:horizontalMargin];
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style textType:(MKU_TEXT_TYPE)type buttonImage:(UIImage *)buttonImage fieldWidth:(CGFloat)fieldWidth {

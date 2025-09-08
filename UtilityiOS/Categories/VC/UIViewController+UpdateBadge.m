@@ -55,7 +55,7 @@ static char BADGE_DELEGATE_KEY;
         }
     }
     
-    if (combinedType != badge.type) return;
+    if ((badge.type & combinedType) == 0) return;
     
     badge.count = @(count);
     
