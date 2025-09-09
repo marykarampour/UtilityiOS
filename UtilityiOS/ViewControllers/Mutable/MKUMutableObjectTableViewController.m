@@ -1071,7 +1071,7 @@
     switch (type) {
         case MKU_TEXT_TYPE_INT:
         case MKU_TEXT_TYPE_FLOAT:
-            return [UIImage systemImageNamed:[MKUAssets Plusminus_square_Name]];
+            return [UIImage imageNamed:[MKUAssets Plusminus_square_Name]];
         default:
             return nil;
     }

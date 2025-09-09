@@ -118,6 +118,14 @@
     }
 }
 
++ (UIColor *)extendedLineSeperatorColor {
+    switch (APP_THEME_STYLE) {
+        case MKU_THEME_STYLE_LIGHT: return [UIColor blackColor];
+        case MKU_THEME_STYLE_DARK: return [UIColor grayColor];
+        default: return [UIColor whiteColor];
+    }
+}
+
 + (UIColor *)translusentBackground {
     switch (APP_THEME_STYLE) {
         case MKU_THEME_STYLE_LIGHT: return [UIColor colorWithWhite:0.0 alpha:0.67];

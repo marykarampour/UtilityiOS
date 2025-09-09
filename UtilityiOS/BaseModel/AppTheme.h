@@ -34,6 +34,7 @@ extern MKU_THEME_STYLE APP_THEME_STYLE;
 + (UIColor *)barTextDisabledColor;
 + (UIColor *)stepperTintColor;
 + (UIColor *)seperatorColor;
++ (UIColor *)extendedLineSeperatorColor;
 + (UIColor *)sectionHeaderTextColor;
 + (UIColor *)sectionHeaderBackgroundColor;
 + (UIColor *)sectionFooterTextColor;
