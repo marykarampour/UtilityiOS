@@ -1352,7 +1352,7 @@
 
 @implementation MKUMutableObjectTableViewControllerSingle
 
-- (instancetype)initWithMKUType:(MKU_MUTABLE_OBJECT_FIELD_TYPE)type {
+- (instancetype)initWithType:(MKU_MUTABLE_OBJECT_FIELD_TYPE)type {
     if (self = [super init]) {
         self.type = type;
     }

@@ -58,7 +58,7 @@
 }
 
 - (void)initBase {
-    self.backgroundColor = [AppTheme searchBarTintColor];
+    self.backgroundColor = [AppTheme searchBarBackgroundColor];
     
     self.searchBar = [[UISearchBar alloc] init];
     self.searchBar.searchBarStyle = UISearchBarStyleMinimal;
