@@ -14,11 +14,11 @@
 + (UIButton *)buttonWithTitle:(NSString *)title {
     
     UIButton *view = [[UIButton alloc] init];
-    view.titleLabel.font = [AppTheme mediumBoldLabelFont];
+    view.titleLabel.font = [AppTheme themeButtonFont];
     
     [view setTitle:title forState:UIControlStateNormal];
-    [view setTitleColor:[AppTheme buttonTextColor] forState:UIControlStateNormal];
-    [view setTitleColor:[AppTheme lightBlueColorWithAlpha:1.0] forState:UIControlStateHighlighted];
+    [view setTitleColor:[AppTheme themeButtonTextColor] forState:UIControlStateNormal];
+    [view setTitleColor:[AppTheme themeButtonHighlightedTextColor] forState:UIControlStateHighlighted];
     return view;
 }
 
