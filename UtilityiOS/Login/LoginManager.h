@@ -9,11 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "LoginViewController.h"
 #import "TextFieldController.h"
-#import "KeyboardAdjuster.h"
 
 @interface LoginManager : NSObject<TextFieldDelegate>
-
-@property (nonatomic, strong, readonly) KeyboardAdjuster *viewAdjuster;
 
 - (instancetype)initWithViewController:(__kindof LoginViewController *)viewController;
 - (void)performLoginWithUsername:(NSString *)username password:(NSString *)passsword;

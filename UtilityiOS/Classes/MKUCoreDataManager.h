@@ -30,7 +30,7 @@
 
 - (void)saveItems:(NSArray<__kindof MKUModel *> *)items ofClass:(Class)itemClass entityName:(NSString *)entityName completion:(void (^)(NSError *error))completion;
 
-- (void)loadItemsOfClass:(Class)itemClass predicate:(NSPredicate *)predicate sortDescriptor:(NSSortDescriptor * _Nullable)sortDescriptor entityName:(NSString *)entityName completion:(void (^)(NSArray *result, NSError *error))completion;
+- (void)loadItemsOfClass:(Class)itemClass predicate:(NSPredicate *)predicate sortDescriptor:(NSSortDescriptor * )sortDescriptor entityName:(NSString *)entityName completion:(void (^)(NSArray *result, NSError *error))completion;
 /** @brief utility method for fetching items by date range
  @param dateKey name of date property
  */

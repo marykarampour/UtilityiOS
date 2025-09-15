@@ -24,7 +24,7 @@
 
 @interface MKUMutableObjectTableViewController ()
 
-@property (nonatomic, strong) NSIndexPath *selectedIndexPath;
+@property (nonatomic, strong, readwrite) NSIndexPath *selectedIndexPath;
 
 @end
 
@@ -422,7 +422,7 @@
                 [self didDeleteItem:item forRowAtIndexPath:indexPath];
             }
             else if (error) {
-                [self OKAlertWithTitle:kDeleteFailedTitle message:error.localizedDescription];
+                [self OKAlertWithTitle:[Constants Delete_Failed_STR] message:error.localizedDescription];
             }
             [self didFinishCommitEditingStyle:editingStyle forRowAtIndexPath:indexPath];
         }];
@@ -916,7 +916,7 @@
 }
 
 - (MKUStepperValueObject *)stepperValuesForSection:(NSUInteger)section {
-    return [MKUStepperValueObject objectWithTitle:[self titleForSection:section] value:0 start:0 end:MAX_QUANTITY];
+    return [MKUStepperValueObject objectWithTitle:[self titleForSection:section] value:0 start:0 end:[Constants Max_Stepper_Quantity]];
 }
 
 - (void)switchBoolValueAtIndexPath:(NSIndexPath *)indexPath {
@@ -1071,7 +1071,7 @@
     switch (type) {
         case MKU_TEXT_TYPE_INT:
         case MKU_TEXT_TYPE_FLOAT:
-            return [UIImage systemImageNamed:[MKUAssets Plusminus_square_Name]];
+            return [UIImage imageNamed:[MKUAssets Plusminus_square_Name]];
         default:
             return nil;
     }
@@ -1352,7 +1352,7 @@
 
 @implementation MKUMutableObjectTableViewControllerSingle
 
-- (instancetype)initWithMKUType:(MKU_MUTABLE_OBJECT_FIELD_TYPE)type {
+- (instancetype)initWithType:(MKU_MUTABLE_OBJECT_FIELD_TYPE)type {
     if (self = [super init]) {
         self.type = type;
     }

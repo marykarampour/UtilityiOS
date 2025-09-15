@@ -1,9 +1,9 @@
 //
 //  MKUDocumentPickerController.m
-//  Serafa
+//  UtilityiOS
 //
-//  Created by Maryam Karampour on 2018-04-09.
-//  Copyright © 2018 BHS Consultants. All rights reserved.
+//  Created by Maryam Karampour on 2017-05-04.
+//  Copyright © 2017 Maryam Karampour. All rights reserved.
 //
 
 #import "MKUDocumentPickerController.h"
@@ -368,7 +368,7 @@ static NSDictionary <NSNumber *, UTType *> *supportedDocTypes;
     
     if (type == MKU_IMAGE_PICKER_TYPE_CAMERA && ![UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera]) {
 #if !TARGET_IPHONE_SIMULATOR
-        [self.viewController OKAlertWithTitle:kErrorString message:[Constants No_Camera_Error_Message_STR]];
+        [self.viewController OKAlertWithTitle:[Constants Error_STR] message:[Constants No_Camera_Error_Message_STR]];
         return;
 #endif
     }
@@ -538,7 +538,7 @@ static NSDictionary <NSNumber *, UTType *> *supportedDocTypes;
 - (void)picker:(PHPickerViewController *)picker didFinishPicking:(NSArray<PHPickerResult *> *)results  API_AVAILABLE(ios(14)){
     [self dismissViewController:picker];
     for (PHPickerResult *obj in results) {
-        [obj.itemProvider loadDataRepresentationForTypeIdentifier:@"public.image" completionHandler:^(NSData * _Nullable data, NSError * _Nullable error) {
+        [obj.itemProvider loadDataRepresentationForTypeIdentifier:@"public.image" completionHandler:^(NSData *  data, NSError *error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self dispatchDelegateWithData:data];
             });

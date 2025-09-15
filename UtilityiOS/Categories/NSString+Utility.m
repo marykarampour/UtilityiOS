@@ -9,6 +9,7 @@
 #import "NSString+Utility.h"
 #import "NSObject+Utility.h"
 #import "NSString+Validation.h"
+#import <CommonCrypto/CommonDigest.h>
 
 @implementation NSString (Utility)
 
@@ -176,9 +177,31 @@
     NSString *seed = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     NSMutableString *randomStr = [[NSMutableString alloc] initWithCapacity:length];
     for (unsigned int i=0; i<length; i++) {
-        [randomStr appendFormat:@"%C", [seed characterAtIndex:arc4random_uniform(seed.length)]];
+        [randomStr appendFormat:@"%C", [seed characterAtIndex:arc4random_uniform((uint32_t)seed.length)]];
     }
     return randomStr;
+}
+
+- (NSString *)securedHashWithName:(NSString *)name salt:(NSString *)salt {
+    name = [name stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+    NSString *hashStr = [NSString stringWithFormat:@"%@%@%@", name, self, salt];
+    return [hashStr computeHash];
+}
+
+- (NSString *)computeHash {
+    return [NSString computeHashForString:self];
+}
+
++ (NSString *)computeHashForString:(NSString *)string {
+    const char *cstr = [string cStringUsingEncoding:NSUTF8StringEncoding];
+    NSData *data = [NSData dataWithBytes:cstr length:string.length];
+    uint8_t digest[CC_SHA256_DIGEST_LENGTH];
+    CC_SHA256(data.bytes, (unsigned int)data.length, digest);
+    NSMutableString *mString = [NSMutableString stringWithCapacity:CC_SHA256_DIGEST_LENGTH*2];
+    for (unsigned int i=0; i<CC_SHA256_DIGEST_LENGTH; i++) {
+        [mString appendFormat:@"%02x", digest[i]];
+    }
+    return mString;
 }
 
 + (NSString *)telFromString:(NSString *)string {

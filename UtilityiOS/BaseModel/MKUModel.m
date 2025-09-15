@@ -15,11 +15,11 @@
 #import "NSDate+Utility.h"
 #import <objc/runtime.h>
 
-const void * _Nonnull DATE_PROPERTIES_KEY;
-const void * _Nonnull PROPERTIES_KEY;
-const void * _Nonnull ATTRIBUTES_KEY;
-const void * _Nonnull ATTRIBUTES_CLASS_KEY;
-const void * _Nonnull MAPPER_FORMAT_KEY;
+const void * DATE_PROPERTIES_KEY;
+const void * PROPERTIES_KEY;
+const void * ATTRIBUTES_KEY;
+const void * ATTRIBUTES_CLASS_KEY;
+const void * MAPPER_FORMAT_KEY;
 
 @interface MKUModel ()
 

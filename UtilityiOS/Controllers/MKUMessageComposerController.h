@@ -24,6 +24,8 @@ typedef NS_ENUM(NSUInteger, MKU_MESSAGE_COMPOSER_RESULT) {
 
 @interface MKUMessageComposerController : NSObject
 
+#pragma mark - email
+
 - (instancetype)initWithViewController:(__kindof UIViewController<MKUMessageComposerProtocol> *)viewController;
 - (instancetype)initWithViewController:(__kindof UIViewController *)viewController delegate:(id<MKUMessageComposerProtocol>)delegate;
 + (instancetype)initComposerWithRecipient:(NSString *)recipient completion:(void(^)(MKU_MESSAGE_COMPOSER_RESULT result))completion;
@@ -40,6 +42,10 @@ typedef NS_ENUM(NSUInteger, MKU_MESSAGE_COMPOSER_RESULT) {
 /** @param asHTML == YES it will send the message with isHTML = NO. */
 - (BOOL)sendEmailWithTitle:(NSString *)title message:(NSString *)message asHTML:(BOOL)asHTML;
 + (void)emailToAddress:(NSString *)text;
+
+#pragma mark - SMS
+
+- (BOOL)sendSMSWithMessage:(NSString *)message recipients:(NSArray<NSString *> *)recipients;
 
 @end
 

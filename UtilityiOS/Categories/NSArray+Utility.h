@@ -36,6 +36,8 @@
 
 /** @brief It returns an array of values based on a given key that the objects in the original array responds to. */
 + (instancetype)arrayFromArray:(NSArray<ObjectType> *)array forKey:(NSString *)key;
+/** @brief It returns an array of values based on a given handler's returned value. */
++ (instancetype)arrayFromArray:(NSArray<ObjectType> *)array handler:(id (^)(ObjectType obj))handler;
 + (instancetype)arrayWithArray:(NSArray<ObjectType> *)array byAddingObject:(ObjectType)anObject;
 /** @brief It returns arrays grouped based on a given key that the objects in the original array responds to. */
 - (NSDictionary<NSString *, NSMutableArray<ObjectType> *> *)groupedArrayForKey:(NSString *)key;

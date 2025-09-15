@@ -15,7 +15,7 @@ static NSDictionary *headers;
 
 @implementation ServerController
 
-+ (void)requestURL:(NSString *)url type:(NetworkRequestType)type parameters:(NSDictionary *)parameters completion:(ServerResultErrorBlock)completion {
++ (void)requestURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters completion:(ServerResultErrorBlock)completion {
     [[NetworkManager instance] requestURL:url type:type parameters:parameters headers:[self headers] completion:completion];
 }
 
@@ -26,13 +26,13 @@ static NSDictionary *headers;
 }
 
 + (void)authWithParameters:(NSDictionary *)params completion:(ServerResultErrorBlock)completion {
-    [[NetworkManager instance] requestURL:[ServerEndpoints AUTH] type:NetworkRequestType_POST parameters:params completionHeaders:^(id result, NSDictionary *headers, NSError *error) {
+    [[NetworkManager instance] requestURL:[ServerEndpoints AUTH] type:NETWORK_REQUEST_TYPE_POST parameters:params completionHeaders:^(id result, NSDictionary *headers, NSError *error) {
         [self processLogin:result headers:headers error:error completionHeaders:completion];
     }];
 }
 
 + (void)logoutUserWithCompletion:(ServerResultErrorBlock)completion {
-    [[NetworkManager instance] requestURL:[ServerEndpoints LOGOUT] type:NetworkRequestType_GET parameters:nil completion:^(id result, NSError *error) {
+    [[NetworkManager instance] requestURL:[ServerEndpoints LOGOUT] type:NETWORK_REQUEST_TYPE_GET parameters:nil completion:^(id result, NSError *error) {
         if (!error) {
             [self setHeaders:@{[self tokenKey]:@""}];
         }
@@ -41,13 +41,13 @@ static NSDictionary *headers;
 }
 //sample
 + (void)getWithCompletion:(ServerResultErrorBlock)completion {
-    [[NetworkManager instance] requestURL:@"" type:NetworkRequestType_GET parameters:nil headers:[self basicAuthHeaders] completion:^(id result, NSError *error) {
+    [[NetworkManager instance] requestURL:@"" type:NETWORK_REQUEST_TYPE_GET parameters:nil headers:[self basicAuthHeaders] completion:^(id result, NSError *error) {
         [self processValuesInResult:result error:error completion:completion];
     }];
 }
 //sample
 + (void)getListWithCompletion:(ServerResultErrorBlock)completion {
-    [[NetworkManager instance] requestURL:@"" type:NetworkRequestType_GET parameters:nil headers:[self headers] completion:^(id result, NSError *error) {
+    [[NetworkManager instance] requestURL:@"" type:NETWORK_REQUEST_TYPE_GET parameters:nil headers:[self headers] completion:^(id result, NSError *error) {
         [self processResult:result error:error class:[MKUModel class] completion:completion];
     }];
 }
@@ -58,9 +58,9 @@ static NSDictionary *headers;
     MultipartInfo *info = [[MultipartInfo alloc] init];
     info.fileName = filename;
     info.data = data;
-    info.contentType = NetworkContentType_OCTET;
+    info.contentType = NETWORK_CONTENT_TYPE_OCTET;
     [[NetworkManager instance] setHeaders:[self headers]];
-    return [[NetworkManager instance] requestMultipartFormURL:endpoint type:NetworkRequestType_POST parameters:nil data:@[info] completion:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+    return [[NetworkManager instance] requestMultipartFormURL:endpoint type:NETWORK_REQUEST_TYPE_POST parameters:nil data:@[info] completion:^(NSURLResponse *response, id   responseObject, NSError *error) {
         DEBUGLOG(@"%@", response);
         completion (response, error);
     }];
@@ -77,7 +77,7 @@ static NSDictionary *headers;
 #pragma mark - swizzled in category
 
 + (void)authWithUserID:(__kindof NSObject *)userID password:(NSString *)password completion:(ServerResultErrorBlock)completion {
-    [[NetworkManager instance] requestURL:@"" type:NetworkRequestType_POST parameters:nil completion:completion];
+    [[NetworkManager instance] requestURL:@"" type:NETWORK_REQUEST_TYPE_POST parameters:nil completion:completion];
 }
 
 #pragma mark - helpers

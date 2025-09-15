@@ -1,9 +1,9 @@
 //
 //  NSData+Utility.m
-//  Serafa
+//  UtilityiOS
 //
-//  Created by Maryam Karampour on 2018-04-03.
-//  Copyright © 2018 BHS Consultants. All rights reserved.
+//  Created by Maryam Karampour on 2017-05-04.
+//  Copyright © 2017 Maryam Karampour. All rights reserved.
 //
 
 #import "NSData+Utility.h"

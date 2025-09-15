@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MKUDateRange.h"
+#import "MKUPair.h"
 
 typedef NS_ENUM(NSUInteger, MKU_REFERENCE_DATE_TYPE) {
     MKU_REFERENCE_DATE_TYPE_0,//No change - same date as self

@@ -11,21 +11,21 @@
 
 #import "Constants.h"
 
-typedef NS_ENUM(NSUInteger, NetworkRequestType) {
-    NetworkRequestType_GET,
-    NetworkRequestType_POST,
-    NetworkRequestType_PUT,
-    NetworkRequestType_DELETE,
-    NetworkRequestType_HEAD,
-    NetworkRequestType_PATCH
+typedef NS_ENUM(NSUInteger, NETWORK_REQUEST_TYPE) {
+    NETWORK_REQUEST_TYPE_GET,
+    NETWORK_REQUEST_TYPE_POST,
+    NETWORK_REQUEST_TYPE_PUT,
+    NETWORK_REQUEST_TYPE_DELETE,
+    NETWORK_REQUEST_TYPE_HEAD,
+    NETWORK_REQUEST_TYPE_PATCH
 };
 
-typedef NS_ENUM(NSUInteger, NetworkContentType) {
-    NetworkContentType_JSON,
-    NetworkContentType_HTML,
-    NetworkContentType_OCTET,
-    NetworkContentType_GZIP,
-    NetworkContentType_JPEG
+typedef NS_ENUM(NSUInteger, NETWORK_CONTENT_TYPE) {
+    NETWORK_CONTENT_TYPE_JSON,
+    NETWORK_CONTENT_TYPE_HTML,
+    NETWORK_CONTENT_TYPE_OCTET,
+    NETWORK_CONTENT_TYPE_GZIP,
+    NETWORK_CONTENT_TYPE_JPEG
 };
 
 typedef void (^ServerResultHeaderErrorBlock) (id result, NSDictionary *headers, NSError *error);

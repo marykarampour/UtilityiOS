@@ -19,9 +19,9 @@
 #import "MKUTextView.h"
 #import <objc/runtime.h>
 
-const void * _Nonnull PROPERTY_ENUM_KEY;
-const void * _Nonnull SECTION_ENUM_KEY;
-const void * _Nonnull TITLE_ENUM_KEY;
+const void *PROPERTY_ENUM_KEY;
+const void *SECTION_ENUM_KEY;
+const void *TITLE_ENUM_KEY;
 static char UPDATE_DELEGATE_KEY;
 
 @interface MKUFieldModel ()
@@ -116,7 +116,7 @@ static char UPDATE_DELEGATE_KEY;
     return self.propertyEnumDict;
 }
 
-+ (void)iterateOverTypesForSectionType:(NSInteger)type block:(void(^)(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop))block {
++ (void)iterateOverTypesForSectionType:(NSInteger)type block:(void(^)(NSNumber *obj, NSUInteger idx, BOOL *stop))block {
     
     NSArray<NSNumber *> *types = [self objectTypesForSectionType:type];
     [types enumerateObjectsUsingBlock:block];
@@ -126,7 +126,7 @@ static char UPDATE_DELEGATE_KEY;
     
     __block NSMutableArray *arr = [[NSMutableArray alloc] init];
     
-    [self.class iterateOverTypesForSectionType:type block:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.class iterateOverTypesForSectionType:type block:^(NSNumber *obj, NSUInteger idx, BOOL *stop) {
         
         //Return YES for any type not defined - handled by other controllers
         if (![self.class.propertyEnumDict.allKeys containsObject:obj]) {
@@ -328,7 +328,7 @@ static char UPDATE_DELEGATE_KEY;
 
 + (NSString *)titleForSectionType:(NSInteger)type {
     NSString *key = [self.titleEnumDict objectForKey:@(type)];
-    return [key splitedStringForUppercaseComponentsAndGroupUppercase:YES];
+    return [[key capitalizeFirstChar] splitedStringForUppercaseComponentsAndGroupUppercase:YES];
 }
 
 - (void)setValue:(NSObject *)value forObjectType:(NSInteger)type {

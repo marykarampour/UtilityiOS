@@ -400,6 +400,10 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
     return LOCALIZED(@"Save Successful!");
 }
 
++ (NSString *)Success_STR {
+    return LOCALIZED(@"Success!");
+}
+
 + (NSString *)FaceID_STR {
     return LOCALIZED(@"Face ID");
 }
@@ -672,6 +676,22 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
     return LOCALIZED(@"Please select a %@");
 }
 
++ (NSString *)Search_Not_Found_STR {
+    return LOCALIZED(@"No items with this search criteria were found!");
+}
+
++ (NSString *)Save_Failed_STR {
+    return LOCALIZED(@"Save Failed!");
+}
+
++ (NSString *)Delete_Failed_STR {
+    return LOCALIZED(@"Delete Failed!");
+}
+
++ (NSString *)Try_Again_STR {
+    return LOCALIZED(@"Please try again");
+}
+
 + (CGFloat)GeoFenceRadiousKiloMeter {
     return 1.0;
 }
@@ -872,7 +892,7 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
     return nil;
 }
 
-+ (void)autentiacteWithBiometrics:(void (^)(BOOL, NSError * _Nullable))completion {
++ (void)autentiacteWithBiometrics:(void (^)(BOOL, NSError *))completion {
     
     LAContext *context = [[LAContext alloc] init];
     BOOL hasBiometry = [context canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:nil];
@@ -925,7 +945,7 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
     }
 }
 
-+ (void)handleAutentiacteWithBiometricsMessage:(NSString *)message type:(NSString *)type completion:(void (^)(BOOL, NSError * _Nullable))completion {
++ (void)handleAutentiacteWithBiometricsMessage:(NSString *)message type:(NSString *)type completion:(void (^)(BOOL, NSError *))completion {
     if (0 < message.length)
         message = [NSString stringWithFormat:message, type];
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -1245,6 +1265,10 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
 
 + (NSUInteger)Image_Picker_Max_Selection {
     return 1;
+}
+
++ (NSUInteger)Max_Stepper_Quantity {
+    return 99999;
 }
 
 + (NSString *)Remember_Me_STR {

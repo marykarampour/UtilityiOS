@@ -292,17 +292,11 @@
 }
 
 - (void)addLeftView:(__kindof UIView *)leftView {
-    [self.leftView removeAllSubviews];
-    [self.leftView addSubview:leftView];
-    [self.leftView removeConstraintsMask];
-    [self.leftView constraintSidesForView:leftView];
+    self.leftView.view = leftView;
 }
 
 - (void)addRightView:(__kindof UIView *)rightView {
-    [self.rightView removeAllSubviews];
-    [self.rightView addSubview:rightView];
-    [self.rightView removeConstraintsMask];
-    [self.rightView constraintSidesForView:rightView];
+    self.rightView.view = rightView;
 }
 
 - (void)addBackView:(__kindof UIView *)backView {

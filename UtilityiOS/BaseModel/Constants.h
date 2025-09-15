@@ -227,7 +227,7 @@ typedef UIView * (^SINGLE_INDEX_SIZE_VIEW_CREATION_HANDLER)(NSUInteger index, CG
 typedef UIView * (^DOUBLE_INDEX_VIEW_CREATION_HANDLER)(NSUInteger row, NSUInteger column);
 typedef UIView * (^DOUBLE_INDEX_SIZE_VIEW_CREATION_HANDLER)(NSUInteger row, NSUInteger column, CGFloat width, CGFloat height);
 
-typedef BOOL (^EvaluateSelectedObjectHandler)(id  _Nullable obj);
+typedef BOOL (^EvaluateSelectedObjectHandler)(id obj);
 typedef void (^VoidActionHandler)();
 typedef MKU_LIST_ITEM_SELECTED_ACTION (^LIST_ITEM_SELECTED_ACTION_HANDLER)(NSUInteger type);
 typedef NSDictionary <NSString *, VoidActionHandler> *TitleVoidActionHandlers;
@@ -482,6 +482,7 @@ typedef NS_ENUM(NSUInteger, MKU_BADGE_VIEW_STATE) {
 + (NSString *)Login_Failed_Message_STR;
 + (NSString *)Update_Failed_Title_STR;
 + (NSString *)Save_Successful_STR;
++ (NSString *)Success_STR;
 + (NSString *)FaceID_STR;
 + (NSString *)TouchID_STR;
 + (NSString *)Done_STR;
@@ -543,6 +544,10 @@ typedef NS_ENUM(NSUInteger, MKU_BADGE_VIEW_STATE) {
 + (NSString *)Camera_Disabled_Error_Message_STR;
 + (NSString *)Missing_Value_Error_Message_STR;
 + (NSString *)Missing_Object_Error_Message_STR;
++ (NSString *)Search_Not_Found_STR;
++ (NSString *)Save_Failed_STR;
++ (NSString *)Delete_Failed_STR;
++ (NSString *)Try_Again_STR;
 + (NSString *)Touch_ID_STR;
 + (NSString *)Face_ID_STR;
 + (NSString *)Login_Biometrics_Message_STR;
@@ -656,6 +661,8 @@ typedef NS_ENUM(NSUInteger, MKU_BADGE_VIEW_STATE) {
 + (NSUInteger)Image_Shrink_Resize_Factor;
 + (NSUInteger)Image_Picker_Max_Selection;
 
++ (NSUInteger)Max_Stepper_Quantity;
+
 #pragma mark - methods and actions
 
 + (void)callPhoneNumber:(NSString *)num;
@@ -671,7 +678,7 @@ typedef NS_ENUM(NSUInteger, MKU_BADGE_VIEW_STATE) {
 + (BOOL)touchIDIsAvaialable;
 + (BOOL)faceIDIsAvaialable;
 + (NSString *)bioMetricName;
-+ (void)autentiacteWithBiometrics:(void (^)(BOOL success, NSError * _Nullable error))completion;
++ (void)autentiacteWithBiometrics:(void (^)(BOOL success, NSError *error))completion;
 
 @end
 

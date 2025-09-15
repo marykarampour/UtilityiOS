@@ -32,8 +32,8 @@
 - (void)setView:(UIView *)view {
     [UIView setContentView:view forSuperview:self insets:self.insets setterHandler:^{
         [self.view removeFromSuperview];
-        _view = view;
     }];
+    _view = view;
 }
 
 @end

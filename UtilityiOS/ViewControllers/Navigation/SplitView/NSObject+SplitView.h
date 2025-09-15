@@ -52,7 +52,7 @@ typedef NS_ENUM(NSUInteger, PrimaryViewState) {
 
 @interface NSObject (SplitView)
 
-+ (MasterDetailNavControllerPair * _Nonnull)masterDetailNavPairFor:(Class _Nonnull)masterClass detailClass:(Class _Nonnull)detailClass title:(NSString * _Nullable)title icon:(NSString * _Nullable)icon;
++ (MasterDetailNavControllerPair * _Nonnull)masterDetailNavPairFor:(Class _Nonnull)masterClass detailClass:(Class _Nonnull)detailClass title:(NSString * )title icon:(NSString * )icon;
 + (MasterDetailViewControllerPair * _Nonnull)masterDetailViewPairFor:(Class _Nonnull)masterClass detailClass:(Class _Nonnull)detailClass tabItem:(TabBarIndex)index;
 
 @end

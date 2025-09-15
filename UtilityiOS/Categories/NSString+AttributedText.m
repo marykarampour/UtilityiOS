@@ -331,7 +331,7 @@ typedef NS_OPTIONS(NSUInteger, MKU_LABEL_ATTRIBUTES_TYPE) {
     
     MKU_LABEL_ATTRIBUTES_TYPE type = MKU_LABEL_ATTRIBUTES_TYPE_NONE;
     
-    if ((0 < placeholder.length || 0 < title.length) && value.length == 0 && subvalue.length == 0) {
+    if ((0 < placeholder.length || 0 < title.length) && value.length == 0 && subvalue.length == 0 && attrValue.length == 0 && attrSubvalue.length == 0) {
         type = 0 < placeholder.length ? MKU_LABEL_ATTRIBUTES_TYPE_PLACEHOLDER : MKU_LABEL_ATTRIBUTES_TYPE_TITLE;
     }
     else {

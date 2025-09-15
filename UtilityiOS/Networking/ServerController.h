@@ -14,7 +14,7 @@
 @interface ServerController : NSObject
 
 /** @brief Utiltiy method  that uses [self headers] as headers for the requests */
-+ (void)requestURL:(NSString *)url type:(NetworkRequestType)type parameters:(NSDictionary *)parameters completion:(ServerResultErrorBlock)completion;
++ (void)requestURL:(NSString *)url type:(NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters completion:(ServerResultErrorBlock)completion;
 
 #pragma mark - sample services - subclass may override
 
@@ -26,7 +26,6 @@
 + (void)logoutUserWithCompletion:(ServerResultErrorBlock)completion;
 
 + (AFHTTPSessionManager *)sendFile:(NSData *)data filename:(NSString *)filename endpoint:(NSString *)endpoint completion:(ServerResultErrorBlock)completion;
-
 + (AFHTTPSessionManager *)getFile:(NSString *)filename endpoint:(NSString *)endpoint completion:(ServerResultErrorBlock)completion;
 
 #pragma mark - swizzled in category
