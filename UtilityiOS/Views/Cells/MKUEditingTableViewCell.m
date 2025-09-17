@@ -15,7 +15,7 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.editingAccessoryType = UITableViewCellAccessoryNone;
         self.accessoryType = UITableViewCellAccessoryNone;
-        self.textLabel.font = [AppTheme mediumBoldLabelFont];
+        self.textLabel.font = [AppTheme largeBoldLabelFont];
     }
     return self;
 }
