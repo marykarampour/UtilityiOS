@@ -9,7 +9,7 @@
 #import "MKUTabBarSplitViewController.h"
 #import "UINavigationController+Transition.h"
 #import "ShrunkenMenuViewController.h"
-#import "BaseDetailViewController.h"
+#import "MKUBaseDetailViewController.h"
 #import "LoginViewController.h"
 #import "MKUPair.h"
 
@@ -235,11 +235,11 @@
 }
 
 - (void)showDetailBackground {
-    [(BaseDetailViewController *)self.detailViewController setBackgroundHidden:NO];
+    [(MKUBaseDetailViewController *)self.detailViewController setBackgroundHidden:NO];
 }
 
 - (void)hideDetailBackground {
-    [(BaseDetailViewController *)self.detailViewController setBackgroundHidden:YES];
+    [(MKUBaseDetailViewController *)self.detailViewController setBackgroundHidden:YES];
 }
 
 - (void)showNavigationBar {
@@ -282,7 +282,7 @@
 #pragma mark - updating views
 
 - (void)didAfterSelectingTabItem:(TabBarIndex)index {
-    MasterViewController *master = (MasterViewController *)self.pairs[index].master.visibleViewController;
+    MKUMasterViewController *master = (MKUMasterViewController *)self.pairs[index].master.visibleViewController;
     PrimaryViewState state = ([master isKindOfClass:[ShrunkenMenuViewController class]] ? PrimaryViewStateShrunken : PrimaryViewStateVisible);
     [self updatePrimaryViewWithState:state];
 }

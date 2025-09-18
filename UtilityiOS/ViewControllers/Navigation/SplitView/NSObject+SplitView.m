@@ -9,7 +9,7 @@
 #import "NSObject+SplitView.h"
 #import "SplitViewManager.h"
 
-@implementation MasterViewController
+@implementation MKUMasterViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -18,7 +18,7 @@
 
 @end
 
-@implementation DetailViewController
+@implementation MKUDetailViewController
 
 - (void)viewDidAppear:(BOOL)animated {
     [self.navigationItem setHidesBackButton:YES animated:NO];
@@ -42,11 +42,11 @@
 
 @end
 
-@interface BaseMasterViewController ()
+@interface MKUBaseMasterViewController ()
 
 @end
 
-@implementation BaseMasterViewController
+@implementation MKUBaseMasterViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -64,12 +64,12 @@
 @implementation NSObject (SplitView)
 
 + (MasterDetailNavControllerPair *)masterDetailNavPairFor:(Class)masterClass detailClass:(Class)detailClass title:(NSString *)title icon:(NSString *)icon {
-    MasterViewController *masterListVC = [[masterClass alloc] init];
+    MKUMasterViewController *masterListVC = [[masterClass alloc] init];
     UINavigationController *masterListNav = [[UINavigationController alloc] initWithRootViewController:masterListVC];
     masterListVC.navigationController.tabBarItem = [[UITabBarItem alloc] initWithTitle:title image:[UIImage imageNamed:icon] selectedImage:nil];
     masterListNav.tabBarItem.imageInsets = [Constants TabBarItemImageInsets];
     
-    DetailViewController *detailVC = [[detailClass alloc] init];
+    MKUDetailViewController *detailVC = [[detailClass alloc] init];
     UINavigationController *detailNav = [[UINavigationController alloc] initWithRootViewController:detailVC];
     
     masterListVC.detailDelegate = detailVC;
@@ -82,8 +82,8 @@
 }
 
 + (MasterDetailViewControllerPair *)masterDetailViewPairFor:(Class)masterClass detailClass:(Class)detailClass tabItem:(TabBarIndex)index {
-    MasterViewController *masterListVC = [[masterClass alloc] init];
-    DetailViewController *detailVC = [[detailClass alloc] init];
+    MKUMasterViewController *masterListVC = [[masterClass alloc] init];
+    MKUDetailViewController *detailVC = [[detailClass alloc] init];
     
     masterListVC.detailDelegate = detailVC;
     detailVC.masterDelegate = masterListVC;

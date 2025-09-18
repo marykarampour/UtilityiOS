@@ -10,7 +10,7 @@
 #import "MKUStackedViews.h"
 #import "MKUTextField.h"
 
-@interface LoginViewController : DetailViewController
+@interface LoginViewController : MKUDetailViewController
 
 @property (nonatomic, strong, readonly) MKUStackedViews<MKUTextField *> *loginView;
 

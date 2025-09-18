@@ -18,13 +18,13 @@ typedef NS_ENUM(NSUInteger, PrimaryViewState) {
     PrimaryViewStateShrunken
 };
 
-@interface MasterViewController : MKUTableViewController <MasterProtocol>
+@interface MKUMasterViewController : MKUTableViewController <MasterProtocol>
 
 @property (nonatomic, weak) id<DetailProtocol> detailDelegate;
 
 @end
 
-@interface DetailViewController : UIViewController <DetailProtocol>
+@interface MKUDetailViewController : UIViewController <DetailProtocol>
 
 @property (nonatomic, weak) id<MasterProtocol> masterDelegate;
 
@@ -46,7 +46,7 @@ typedef NS_ENUM(NSUInteger, PrimaryViewState) {
 
 @end
 
-@interface BaseMasterViewController : MasterViewController
+@interface MKUBaseMasterViewController : MKUMasterViewController
 
 @end
 

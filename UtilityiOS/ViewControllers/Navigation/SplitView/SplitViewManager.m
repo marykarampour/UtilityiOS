@@ -7,7 +7,7 @@
 //
 
 #import "SplitViewManager.h"
-#import "BaseDetailViewController.h"
+#import "MKUBaseDetailViewController.h"
 #import "LoginViewController.h"
 #import "ServerController.h"
 #import "NSObject+Utility.h"
