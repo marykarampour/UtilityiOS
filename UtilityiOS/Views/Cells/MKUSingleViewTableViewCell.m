@@ -11,6 +11,10 @@
 
 @implementation MKUSingleViewTableViewCell
 
++ (NSString *)identifierForViewClass:(Class)cls {
+    return [NSString stringWithFormat:@"k%@-%@Identifier", NSStringFromClass(self), NSStringFromClass(cls)];
+}
+
 - (instancetype)init {
     return [self initWithInsets:UIEdgeInsetsZero];
 }
