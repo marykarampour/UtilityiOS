@@ -20,4 +20,7 @@
 
 - (void)constructView;
 
+/** @brief Use this method instead of + (NSString *)identifier if your tableview has single cells with different view types. */
++ (NSString *)identifierForViewClass:(Class)cls;
+
 @end
