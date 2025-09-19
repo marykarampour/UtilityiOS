@@ -127,7 +127,7 @@ static CGFloat const PADDING = 4.0;
 }
 
 + (instancetype)BlueButtonWithTitle:(NSString *)title hidden:(BOOL)hidden {
-    MKUButtonView *view = [[self alloc] initWithStyle:MKU_VIEW_STYLE_ROUND_CORNERS];
+    MKUButtonView *view = [[self alloc] initWithStyle:MKU_VIEW_STYLE_ROUND_CORNERS | MKU_VIEW_STYLE_BORDER];
     view.titleView.font = [AppTheme mediumBoldLabelFont];
     view.titleView.textColor = [AppTheme buttonTextColor];
     view.titleView.text = title;
