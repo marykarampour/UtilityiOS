@@ -34,6 +34,7 @@ extern MKU_THEME_STYLE APP_THEME_STYLE;
 + (UIColor *)barTextDisabledColor;
 + (UIColor *)stepperTintColor;
 + (UIColor *)seperatorColor;
++ (UIColor *)extendedLineSeperatorColor;
 + (UIColor *)sectionHeaderTextColor;
 + (UIColor *)sectionHeaderBackgroundColor;
 + (UIColor *)sectionFooterTextColor;
@@ -90,6 +91,8 @@ extern MKU_THEME_STYLE APP_THEME_STYLE;
 + (UIColor *)buttonDisclosureBorderColor;
 + (UIColor *)buttonDisclosureChevronColor;
 + (UIFont *)buttonFont;
++ (UIColor *)themeButtonTextColor;
++ (UIColor *)themeButtonHighlightedTextColor;
 
 + (UIColor *)textViewBackgroundColor;
 + (UIColor *)textViewBorderColor;
@@ -137,6 +140,8 @@ extern MKU_THEME_STYLE APP_THEME_STYLE;
 + (UIFont *)tableFooterFont;
 
 + (UIFont *)navBarFont;
+
++ (UIFont *)themeButtonFont;
 
 + (UIFont *)segmentedControlFont;
 + (UIColor *)segmentedControlNormalColor;

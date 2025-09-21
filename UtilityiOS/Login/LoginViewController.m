@@ -7,7 +7,6 @@
 //
 
 #import "LoginViewController.h"
-#import "KeyboardAdjuster.h"
 #import "UIView+Utility.h"
 #import "LoginManager.h"
 #import "MKULabel.h"
@@ -69,7 +68,6 @@ typedef NS_ENUM(NSUInteger, TextFieldIndex) {
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self.loginManager.viewAdjuster registerObserver];
 
     [self.view removeConstraintsMask];
     
@@ -79,11 +77,6 @@ typedef NS_ENUM(NSUInteger, TextFieldIndex) {
     [self.view constraint:NSLayoutAttributeCenterY view:self.loginView margin:-[Constants LoginViewInset]];
     [self.view constraint:NSLayoutAttributeCenterX view:self.versionLabel];
     [self.view constraint:NSLayoutAttributeBottom view:self.versionLabel margin:-[Constants VerticalSpacing]];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    [self.loginManager.viewAdjuster removeObserver];
 }
 
 #pragma mark - actions

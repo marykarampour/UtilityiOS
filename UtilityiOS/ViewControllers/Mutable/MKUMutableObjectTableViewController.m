@@ -1071,7 +1071,7 @@
     switch (type) {
         case MKU_TEXT_TYPE_INT:
         case MKU_TEXT_TYPE_FLOAT:
-            return [UIImage systemImageNamed:[MKUAssets Plusminus_square_Name]];
+            return [UIImage imageNamed:[MKUAssets Plusminus_square_Name]];
         default:
             return nil;
     }
@@ -1352,7 +1352,7 @@
 
 @implementation MKUMutableObjectTableViewControllerSingle
 
-- (instancetype)initWithMKUType:(MKU_MUTABLE_OBJECT_FIELD_TYPE)type {
+- (instancetype)initWithType:(MKU_MUTABLE_OBJECT_FIELD_TYPE)type {
     if (self = [super init]) {
         self.type = type;
     }

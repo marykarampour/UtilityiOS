@@ -681,7 +681,7 @@ typedef NS_ENUM(NSUInteger, MKU_DATE_PICKER_ROW) {
 
 - (void)setExtendedLineSeparator {
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    self.tableView.separatorColor = [AppTheme seperatorColor];
+    self.tableView.separatorColor = [AppTheme extendedLineSeperatorColor];
     self.tableView.separatorInset = UIEdgeInsetsZero;
 }
 

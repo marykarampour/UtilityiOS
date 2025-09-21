@@ -14,7 +14,6 @@
 @interface LoginManager ()
 
 @property (nonatomic, weak) __kindof LoginViewController *viewController;
-@property (nonatomic, strong, readwrite) KeyboardAdjuster *viewAdjuster;
 
 @end
 
@@ -23,7 +22,6 @@
 - (instancetype)initWithViewController:(__kindof LoginViewController *)viewController {
     if (self = [super init]) {
         self.viewController = viewController;
-        self.viewAdjuster = [[KeyboardAdjuster alloc] initWithViewController:self.viewController];
     }
     return self;
 }
@@ -38,11 +36,5 @@
         }
     }];
 }
-
-- (void)handleTextFieldBeginEditing:(__kindof UITextField *)textField {
-     [self.viewAdjuster setReferenceView:textField];
-}
-
-
 
 @end

@@ -7,7 +7,7 @@
 //
 
 #import "Constants.h"
-#import "AppDelegate.h"
+#import "MKUAppDelegate.h"
 #import "NSString+Utility.h"
 #import <LocalAuthentication/LocalAuthentication.h>
 #import "MKUMessageComposerController.h"
@@ -782,7 +782,7 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
     return UIEdgeInsetsZero;
 #endif
     
-    UIWindow *window = [AppDelegate application].window;
+    UIWindow *window = [MKUAppDelegate application].window;
     UIEdgeInsets insets = window.safeAreaInsets;
     if ([window respondsToSelector:@selector(safeAreaInsets)]) {
         if (@available(iOS 11.0, *)) {
@@ -798,7 +798,7 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
 #ifdef AF_APP_EXTENSIONS
     return 0.0;
 #else
-    UIWindow *window = ((AppDelegate *)[UIApplication sharedApplication].delegate).window;
+    UIWindow *window = ((MKUAppDelegate *)[UIApplication sharedApplication].delegate).window;
     if ([window respondsToSelector:@selector(safeAreaInsets)]) {
         if (@available(iOS 11.0, *)) {
             CGFloat inset = 0.0;
@@ -822,7 +822,7 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
 #ifdef AF_APP_EXTENSIONS
     return 0.0;
 #else
-    UIWindow *window = ((AppDelegate *)[UIApplication sharedApplication].delegate).window;
+    UIWindow *window = ((MKUAppDelegate *)[UIApplication sharedApplication].delegate).window;
     if ([window respondsToSelector:@selector(safeAreaInsets)]) {
         if (@available(iOS 11.0, *)) {
             CGFloat inset = 0.0;

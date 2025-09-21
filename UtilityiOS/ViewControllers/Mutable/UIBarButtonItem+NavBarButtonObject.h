@@ -31,8 +31,8 @@ typedef NS_ENUM(NSInteger, MKU_NAV_BAR_BUTTON_TYPE) {
     MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_REFRESH  = UIBarButtonSystemItemRefresh,
     MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_SPACER   = UIBarButtonSystemItemFixedSpace,
     MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_CAMERA   = UIBarButtonSystemItemCamera,
-    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_CLOSE    = UIBarButtonSystemItemClose,
     MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_TRASH    = UIBarButtonSystemItemTrash,
+    MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_CLOSE    = UIBarButtonSystemItemClose,
     MKU_NAV_BAR_BUTTON_TYPE_SYSTEM_COUNT,//No item, marks the end of system items
     MKU_NAV_BAR_BUTTON_TYPE_RESET,
     MKU_NAV_BAR_BUTTON_TYPE_CLEAR,

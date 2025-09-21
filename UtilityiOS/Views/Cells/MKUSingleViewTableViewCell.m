@@ -11,6 +11,10 @@
 
 @implementation MKUSingleViewTableViewCell
 
++ (NSString *)identifierForViewClass:(Class)cls {
+    return [NSString stringWithFormat:@"k%@-%@Identifier", NSStringFromClass(self), NSStringFromClass(cls)];
+}
+
 - (instancetype)init {
     return [self initWithInsets:UIEdgeInsetsZero];
 }
@@ -41,10 +45,13 @@
 }
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style insets:(UIEdgeInsets)insets viewCreationHandler:(VIEW_CREATION_HANDLER)handler {
-    if (self = [super initWithStyle:style reuseIdentifier:[self.class identifier]]) {
+    
+    UIView *view = handler();
+    
+    if (self = [super initWithStyle:style reuseIdentifier:[self.class identifierForViewClass:[view class]]]) {
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         self.insets = insets;
-        [self setView:handler()];
+        [self setView:view];
     }
     return self;
 }

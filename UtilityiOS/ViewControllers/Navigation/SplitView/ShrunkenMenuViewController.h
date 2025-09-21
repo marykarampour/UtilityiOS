@@ -8,7 +8,7 @@
 
 #import "NSObject+SplitView.h"
 
-@interface ShrunkenMenuViewController : MasterViewController
+@interface ShrunkenMenuViewController : MKUMasterViewController
 
 - (instancetype)initWithImages:(StringArr *)images;
 
