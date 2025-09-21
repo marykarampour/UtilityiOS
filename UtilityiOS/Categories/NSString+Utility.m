@@ -7,9 +7,10 @@
 //
 
 #import "NSString+Utility.h"
-#import "NSObject+Utility.h"
+#import <CommonCrypto/CommonCrypto.h>
 #import "NSString+Validation.h"
-#import <CommonCrypto/CommonDigest.h>
+#import "NSObject+Utility.h"
+#import "NSArray+Utility.h"
 
 @implementation NSString (Utility)
 
@@ -171,37 +172,6 @@
 
 - (NSString *)numbersOnly {
     return [[self componentsSeparatedByCharactersInSet:[NSCharacterSet decimalDigitCharacterSet].invertedSet] componentsJoinedByString:@""];
-}
-
-+ (NSString *)randomStringWithLenght:(NSUInteger)length {
-    NSString *seed = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    NSMutableString *randomStr = [[NSMutableString alloc] initWithCapacity:length];
-    for (unsigned int i=0; i<length; i++) {
-        [randomStr appendFormat:@"%C", [seed characterAtIndex:arc4random_uniform((uint32_t)seed.length)]];
-    }
-    return randomStr;
-}
-
-- (NSString *)securedHashWithName:(NSString *)name salt:(NSString *)salt {
-    name = [name stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
-    NSString *hashStr = [NSString stringWithFormat:@"%@%@%@", name, self, salt];
-    return [hashStr computeHash];
-}
-
-- (NSString *)computeHash {
-    return [NSString computeHashForString:self];
-}
-
-+ (NSString *)computeHashForString:(NSString *)string {
-    const char *cstr = [string cStringUsingEncoding:NSUTF8StringEncoding];
-    NSData *data = [NSData dataWithBytes:cstr length:string.length];
-    uint8_t digest[CC_SHA256_DIGEST_LENGTH];
-    CC_SHA256(data.bytes, (unsigned int)data.length, digest);
-    NSMutableString *mString = [NSMutableString stringWithCapacity:CC_SHA256_DIGEST_LENGTH*2];
-    for (unsigned int i=0; i<CC_SHA256_DIGEST_LENGTH; i++) {
-        [mString appendFormat:@"%02x", digest[i]];
-    }
-    return mString;
 }
 
 + (NSString *)telFromString:(NSString *)string {
@@ -571,6 +541,20 @@
     return [regex numberOfMatchesInString:self options:0 range:NSMakeRange(0, self.length)];
 }
 
+- (StringArr *)componentsSeparatedByStringPattern:(NSString *)pattern {
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:NSRegularExpressionCaseInsensitive error:nil];
+    NSArray<NSTextCheckingResult *> *result = [regex matchesInString:self options:NSMatchingReportProgress range:NSMakeRange(0, [self length])];
+    MStringArr *arr = [[NSMutableArray alloc] init];
+    NSTextCheckingResult *obj = result.firstObject;
+    
+    for (NSUInteger i=0; i<obj.numberOfRanges; i++) {
+        NSRange range = [obj rangeAtIndex:i];
+        NSString *str = [self substringWithRange:range];
+        [arr addNullableObject:str];
+    }
+    return arr;
+}
+
 - (NSString *)makePrefix {
     if (0 < self.length) {
         return [NSString stringWithFormat:@"%@-", self];
@@ -638,6 +622,83 @@
 - (NSString *)replaceCharacters:(NSString *)charactersToReplace withString:(NSString *)replacementString {
     NSCharacterSet *characterSet = [NSCharacterSet characterSetWithCharactersInString:charactersToReplace];
     return [[self componentsSeparatedByCharactersInSet:characterSet] componentsJoinedByString:replacementString];
+}
+
+#pragma mark - crypto
+
++ (NSString *)randomStringWithLenght:(NSUInteger)length {
+    NSString *seed = @"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    NSMutableString *randomStr = [[NSMutableString alloc] initWithCapacity:length];
+    for (unsigned int i=0; i<length; i++) {
+        [randomStr appendFormat:@"%C", [seed characterAtIndex:arc4random_uniform((uint32_t)seed.length)]];
+    }
+    return randomStr;
+}
+
++ (NSString *)randomBase64StringWithLenght:(NSUInteger)length {
+    NSMutableData *data = [[NSMutableData alloc] initWithLength:length];
+    CCCryptorStatus status = SecRandomCopyBytes(kSecRandomDefault, length, [data mutableBytes]);
+    return [data base64EncodedStringWithOptions:0];
+}
+
+- (NSString *)securedHashWithName:(NSString *)name salt:(NSString *)salt {
+    name = [name stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+    NSString *hashStr = [NSString stringWithFormat:@"%@%@%@", name, self, salt];
+    return [hashStr computeHash];
+}
+
+- (NSString *)computeHash {
+    return [NSString computeHashForString:self];
+}
+
++ (NSString *)computeHashForString:(NSString *)string {
+    const char *cstr = [string cStringUsingEncoding:NSUTF8StringEncoding];
+    NSData *data = [NSData dataWithBytes:cstr length:string.length];
+    uint8_t digest[CC_SHA256_DIGEST_LENGTH];
+    CC_SHA256(data.bytes, (unsigned int)data.length, digest);
+    NSMutableString *mString = [NSMutableString stringWithCapacity:CC_SHA256_DIGEST_LENGTH*2];
+    for (unsigned int i=0; i<CC_SHA256_DIGEST_LENGTH; i++) {
+        [mString appendFormat:@"%02x", digest[i]];
+    }
+    return mString;
+}
+
+- (NSString *)cryptWithKey:(NSString *)key IV:(NSString *)IV salt:(NSString *)salt op:(int)op {
+    
+    NSData *saltData = [salt dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *keyData = [key AESKeyWithSalt:saltData];
+    NSData *IVData = [IV dataUsingEncoding:NSUTF8StringEncoding];
+    NSData *data = op == kCCEncrypt ? [self dataUsingEncoding:NSUTF8StringEncoding] : [[NSData alloc] initWithBase64EncodedString:self options:0];
+    
+    int block = op == kCCEncrypt ? kCCBlockSizeAES128 : 0;
+    size_t size = [data length] + block;
+    NSMutableData *buffer = [[NSMutableData alloc] initWithLength:size];
+    size_t crypted = 0;
+    NSString *str;
+    
+    CCCryptorStatus status = CCCrypt(op, kCCAlgorithmAES128, kCCOptionPKCS7Padding, [keyData bytes], [keyData length], [IVData bytes], [data bytes], [data length], [buffer mutableBytes], size, &crypted);
+    
+    if (status == kCCSuccess) {
+        buffer.length = crypted;
+        str = op == kCCEncrypt ? [buffer base64EncodedStringWithOptions:0] : [[NSString alloc] initWithData:buffer encoding:NSUTF8StringEncoding];
+    }
+    
+    return str;
+}
+
+- (NSString *)decryptWithKey:(NSString *)key IV:(NSString *)IV salt:(NSString *)salt {
+    return [self cryptWithKey:key IV:IV salt:salt op:kCCDecrypt];
+}
+
+- (NSString *)encryptWithKey:(NSString *)key IV:(NSString *)IV salt:(NSString *)salt {
+    return [self cryptWithKey:key IV:IV salt:salt op:kCCEncrypt];
+}
+
+//https://robnapier.net/aes-commoncrypto
+- (NSData *)AESKeyWithSalt:(NSData *)salt {
+    NSMutableData *data = [[NSMutableData alloc] initWithLength:kCCKeySizeAES128];
+    CCCryptorStatus status = CCKeyDerivationPBKDF(kCCPBKDF2, [self UTF8String], [self lengthOfBytesUsingEncoding:NSUTF8StringEncoding], [salt bytes], [salt length], kCCPRFHmacAlgSHA1, kPBKDFRounds, [data mutableBytes], [data length]);
+    return data;
 }
 
 @end
