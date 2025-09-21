@@ -1,9 +1,9 @@
 //
 //  MKUArchive.m
-//  Powerband Exchange
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2019-07-25.
-//  Copyright © 2019 Powerband Global Dealer Services. All rights reserved.
+//  Copyright © 2025 Maryam Karampour. All rights reserved.
 //
 
 #import "MKUArchive.h"

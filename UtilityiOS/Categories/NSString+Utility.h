@@ -82,10 +82,7 @@ typedef NS_ENUM(NSUInteger, StringFormat) {
 - (NSNumber *)stringToNumber;
 - (NSNumber *)stringToNumberWithFormat:(NSNumberFormatterStyle)format;
 - (NSString *)amount;
-+ (NSString *)randomStringWithLenght:(NSUInteger)length;
-- (NSString *)securedHashWithName:(NSString *)name salt:(NSString *)salt;
-- (NSString *)computeHash;
-+ (NSString *)computeHashForString:(NSString *)string;
+
 + (NSString *)telFromString:(NSString *)string;
 + (NSString *)telPromptFromString:(NSString *)string;
 
@@ -149,6 +146,7 @@ typedef NS_ENUM(NSUInteger, StringFormat) {
 
 - (CGRect)rectForWidth:(CGFloat)width font:(UIFont *)font;
 - (NSUInteger)numberOfOccurrencesOfString:(NSString *)string;
+- (StringArr *)componentsSeparatedByStringPattern:(NSString *)pattern;
 - (NSString *)makePrefix;
 /** @brief If self has extension and ext is nil it returns self, otherwise ext will be used as the extension. */
 - (NSString *)fileNameWithExtension:(NSString *)ext;
@@ -165,5 +163,16 @@ typedef NS_ENUM(NSUInteger, StringFormat) {
 - (NSString *)shortenedStringToMaxLength:(NSUInteger)maxLength;
 /** @brief Removes all occurrences of specified charactersToReplace and replaces them with the given replacementString  */
 - (NSString *)replaceCharacters:(NSString *)charactersToReplace withString:(NSString *)replacementString;
+
+#pragma mark - crypto
+
++ (NSString *)randomStringWithLenght:(NSUInteger)length;
+- (NSString *)securedHashWithName:(NSString *)name salt:(NSString *)salt;
+- (NSString *)computeHash;
++ (NSString *)computeHashForString:(NSString *)string;
+/** @brief Supported operations are kCCEncrypt and kCCDecrypt */
+- (NSString *)cryptWithKey:(NSString *)key IV:(NSString *)IV salt:(NSString *)salt op:(int)op;
+- (NSString *)decryptWithKey:(NSString *)key IV:(NSString *)IV salt:(NSString *)salt;
+- (NSString *)encryptWithKey:(NSString *)key IV:(NSString *)IV salt:(NSString *)salt;
 
 @end

@@ -1,5 +1,5 @@
 //
-//  BaseDetailViewController.m
+//  MKUBaseDetailViewController.m
 //  UtilityiOS
 //
 //  Created by Maryam Karampour on 2017-04-21.

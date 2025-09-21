@@ -63,6 +63,10 @@
 
 #define kInkBlueHEXValue                        0x0039a6
 
+#pragma mark - removed from SDKs
+
+#define kPBKDFRounds                            10000 //used in crypto
+
 
 #pragma mark - typedefs
 
