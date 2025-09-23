@@ -102,7 +102,7 @@ typedef NS_ENUM(NSInteger, MKU_MUTABLE_OBJECT_FIELD_TYPE) {
 - (CGFloat)checkboxButtonWidthForSection:(NSUInteger)section;
 - (void)switchBoolValueAtIndexPath:(NSIndexPath *)indexPath;
 /** @brief Default is isEditableSectionType of the object. */
-- (BOOL)isEditableSectionType:(NSInteger)type;
+- (BOOL)isEditableSectionType:(NSInteger)section;
 /** @brief By default reloads the corresonding section only. */
 - (void)didSwitchBoolValueAtIndexPath:(NSIndexPath *)indexPath;
 /** @brief It is called in tableView:didSelectRowAtIndexPath: when type is MKU_MUTABLE_OBJECT_FIELD_TYPE_SELECTION.

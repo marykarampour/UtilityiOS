@@ -116,17 +116,17 @@ static char UPDATE_DELEGATE_KEY;
     return self.propertyEnumDict;
 }
 
-+ (void)iterateOverTypesForSectionType:(NSInteger)type block:(void(^)(NSNumber *obj, NSUInteger idx, BOOL *stop))block {
++ (void)iterateOverTypesForSectionType:(NSInteger)section block:(void(^)(NSNumber *obj, NSUInteger idx, BOOL *stop))block {
     
-    NSArray<NSNumber *> *types = [self objectTypesForSectionType:type];
+    NSArray<NSNumber *> *types = [self objectTypesForSectionType:section];
     [types enumerateObjectsUsingBlock:block];
 }
 
-- (NSArray<NSObject *> *)valuesForSectionType:(NSInteger)type {
+- (NSArray<NSObject *> *)valuesForSectionType:(NSInteger)section {
     
     __block NSMutableArray *arr = [[NSMutableArray alloc] init];
     
-    [self.class iterateOverTypesForSectionType:type block:^(NSNumber *obj, NSUInteger idx, BOOL *stop) {
+    [self.class iterateOverTypesForSectionType:section block:^(NSNumber *obj, NSUInteger idx, BOOL *stop) {
         
         //Return YES for any type not defined - handled by other controllers
         if (![self.class.propertyEnumDict.allKeys containsObject:obj]) {
@@ -214,11 +214,11 @@ static char UPDATE_DELEGATE_KEY;
     return value;
 }
 
-- (BOOL)boolValueForSectionType:(NSInteger)type {
+- (BOOL)boolValueForSectionType:(NSInteger)section {
     
     __block BOOL value = NO;
     
-    [self.class iterateOverTypesForSectionType:type block:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.class iterateOverTypesForSectionType:section block:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         
         NSObject *object = [self valueForObjectType:obj.integerValue];
         if ([NSNumber isBOOL:object]) {
@@ -238,11 +238,11 @@ static char UPDATE_DELEGATE_KEY;
     return nil;
 }
 
-- (NSDate *)dateValueForSectionType:(NSInteger)type {
+- (NSDate *)dateValueForSectionType:(NSInteger)section {
     
     __block NSDate *value;
     
-    [self.class iterateOverTypesForSectionType:type block:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.class iterateOverTypesForSectionType:section block:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         
         value = [self dateValueForObjectType:obj.integerValue];
         if (value) {
@@ -257,7 +257,7 @@ static char UPDATE_DELEGATE_KEY;
     return DATE_FORMAT_DAY_TIME_STYLE;
 }
 
-+ (DATE_FORMAT_STYLE)dateFormatForSectionType:(NSInteger)type {
++ (DATE_FORMAT_STYLE)dateFormatForSectionType:(NSInteger)section {
     return DATE_FORMAT_DAY_TIME_STYLE;
 }
 
@@ -288,11 +288,11 @@ static char UPDATE_DELEGATE_KEY;
     return nil;
 }
 
-- (NSNumber *)numberValueForSectionType:(NSInteger)type {
+- (NSNumber *)numberValueForSectionType:(NSInteger)section {
     
     __block NSNumber *value;
     
-    [self.class iterateOverTypesForSectionType:type block:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.class iterateOverTypesForSectionType:section block:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         
         value = [self numberValueForObjectType:obj.integerValue];
         if (value) {
@@ -307,18 +307,18 @@ static char UPDATE_DELEGATE_KEY;
     return 0 < [[self valueForObjectType:type] description].length;
 }
 
-- (BOOL)hasValueForSectionType:(NSInteger)type {
+- (BOOL)hasValueForSectionType:(NSInteger)section {
     
     __block BOOL hasValue = NO;
     
-    [self.class iterateOverTypesForSectionType:type block:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.class iterateOverTypesForSectionType:section block:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([self hasValueForObjectType:obj.integerValue]) {
             hasValue = YES;
             *stop = YES;
         }
     }];
     
-    return hasValue || [self.class isEditableSectionType:type];
+    return hasValue || [self.class isEditableSectionType:section];
 }
 
 + (NSString *)titleForObjectType:(NSInteger)type {
@@ -326,8 +326,8 @@ static char UPDATE_DELEGATE_KEY;
     return [key splitedStringForUppercaseComponentsAndGroupUppercase:YES];
 }
 
-+ (NSString *)titleForSectionType:(NSInteger)type {
-    NSString *key = [self.titleEnumDict objectForKey:@(type)];
++ (NSString *)titleForSectionType:(NSInteger)section {
+    NSString *key = [self.titleEnumDict objectForKey:@(section)];
     return [[key capitalizeFirstChar] splitedStringForUppercaseComponentsAndGroupUppercase:YES];
 }
 
@@ -339,9 +339,9 @@ static char UPDATE_DELEGATE_KEY;
     }
 }
 
-- (void)setValue:(NSObject *)value forSectionType:(NSInteger)type {
+- (void)setValue:(NSObject *)value forSectionType:(NSInteger)section {
     
-    [self.class iterateOverTypesForSectionType:type block:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.class iterateOverTypesForSectionType:section block:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         
         NSString *key = [self.class.propertyEnumDict objectForKey:@(obj.integerValue)];
         Class cls = [NSObject classOfProperty:key forObjectClass:self.class];
@@ -374,11 +374,11 @@ static char UPDATE_DELEGATE_KEY;
     return [object description];
 }
 
-- (NSString *)stringValueForSectionType:(NSInteger)type {
+- (NSString *)stringValueForSectionType:(NSInteger)section {
     
     __block NSString *value;
     
-    [self.class iterateOverTypesForSectionType:type block:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.class iterateOverTypesForSectionType:section block:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         
         NSInteger type = obj.integerValue;
         value = [self stringValueForObjectType:type];
@@ -388,14 +388,14 @@ static char UPDATE_DELEGATE_KEY;
         }
     }];
     
-    return 0 < value.length ? value : [[self valuesForSectionType:type].firstObject description];
+    return 0 < value.length ? value : [[self valuesForSectionType:section].firstObject description];
 }
 
-+ (NSArray<NSNumber *> *)objectTypesForSectionType:(NSInteger)type {
-    return [self.sectionEnumDict allKeysForObject:@(type)];
++ (NSArray<NSNumber *> *)objectTypesForSectionType:(NSInteger)section {
+    return [self.sectionEnumDict allKeysForObject:@(section)];
 }
 
-- (NSString *)badgeValueForSectionType:(NSInteger)type {
+- (NSString *)badgeValueForSectionType:(NSInteger)section {
     return nil;
 }
 
@@ -429,8 +429,8 @@ static char UPDATE_DELEGATE_KEY;
     }
 }
 
-- (void)switchBoolValueForSectionType:(NSInteger)type {
-    [self.class iterateOverTypesForSectionType:type block:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+- (void)switchBoolValueForSectionType:(NSInteger)section {
+    [self.class iterateOverTypesForSectionType:section block:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         [self switchBoolValueForObjectType:obj.integerValue];
     }];
 }
@@ -439,11 +439,11 @@ static char UPDATE_DELEGATE_KEY;
     return [Constants MaxValue1CellCharacterCount] <= [self stringValueForObjectType:type].length;
 }
 
-- (BOOL)isLongValueForSectionType:(NSInteger)type {
+- (BOOL)isLongValueForSectionType:(NSInteger)section {
     
     __block BOOL isLong = NO;
     
-    [self.class iterateOverTypesForSectionType:type block:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.class iterateOverTypesForSectionType:section block:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([self isLongValueForObjectType:obj.integerValue]) {
             isLong = YES;
             *stop = YES;
@@ -453,11 +453,11 @@ static char UPDATE_DELEGATE_KEY;
     return isLong;
 }
 
-+ (BOOL)isEditableSectionType:(NSInteger)type {
++ (BOOL)isEditableSectionType:(NSInteger)section {
     return YES;
 }
 
-+ (BOOL)isCommentSectionType:(NSInteger)type {
++ (BOOL)isCommentSectionType:(NSInteger)section {
     return NO;
 }
 
@@ -465,11 +465,11 @@ static char UPDATE_DELEGATE_KEY;
     return NO;
 }
 
-+ (BOOL)isEmailSectionType:(NSInteger)type {
++ (BOOL)isEmailSectionType:(NSInteger)section {
     return NO;
 }
 
-+ (BOOL)isPhoneSectionType:(NSInteger)type {
++ (BOOL)isPhoneSectionType:(NSInteger)section {
     return NO;
 }
 
@@ -731,20 +731,20 @@ static char UPDATE_DELEGATE_KEY;
     return obj;
 }
 
-- (BOOL)isLongValueForSectionType:(NSInteger)type {
-    return [self.UpdatedObject isLongValueForSectionType:type];
+- (BOOL)isLongValueForSectionType:(NSInteger)section {
+    return [self.UpdatedObject isLongValueForSectionType:section];
 }
 
-- (BOOL)isEditableSectionType:(NSInteger)type {
-    return [self.classForOriginalObject isEditableSectionType:type];
+- (BOOL)isEditableSectionType:(NSInteger)section {
+    return [self.classForOriginalObject isEditableSectionType:section];
 }
 
-- (BOOL)hasValueForSectionType:(NSInteger)type {
-    return [self.UpdatedObject hasValueForSectionType:type];
+- (BOOL)hasValueForSectionType:(NSInteger)section {
+    return [self.UpdatedObject hasValueForSectionType:section];
 }
 
-- (BOOL)isCommentSectionType:(NSInteger)type {
-    return [[self classForUpdatedObject] isCommentSectionType:type];
+- (BOOL)isCommentSectionType:(NSInteger)section {
+    return [[self classForUpdatedObject] isCommentSectionType:section];
 }
 
 + (BOOL)usingDynamicProperties {
@@ -897,7 +897,7 @@ static char UPDATE_DELEGATE_KEY;
     return 0 < self.length;
 }
 
-- (BOOL)boolValueForSectionType:(NSInteger)type {
+- (BOOL)boolValueForSectionType:(NSInteger)section {
     return 0 < self.length;
 }
 
@@ -905,7 +905,7 @@ static char UPDATE_DELEGATE_KEY;
     return nil;
 }
 
-- (NSDate *)dateValueForSectionType:(NSInteger)type {
+- (NSDate *)dateValueForSectionType:(NSInteger)section {
     return nil;
 }
 
@@ -913,7 +913,7 @@ static char UPDATE_DELEGATE_KEY;
     return DATE_FORMAT_FULL_STYLE;
 }
 
-+ (DATE_FORMAT_STYLE)dateFormatForSectionType:(NSInteger)type {
++ (DATE_FORMAT_STYLE)dateFormatForSectionType:(NSInteger)section {
     return DATE_FORMAT_FULL_STYLE;
 }
 
@@ -929,15 +929,15 @@ static char UPDATE_DELEGATE_KEY;
     return 0 < self.length;
 }
 
-- (BOOL)hasValueForSectionType:(NSInteger)type {
+- (BOOL)hasValueForSectionType:(NSInteger)section {
     return 0 < self.length;
 }
 
-+ (BOOL)isCommentSectionType:(NSInteger)type {
++ (BOOL)isCommentSectionType:(NSInteger)section {
     return NO;
 }
 
-+ (BOOL)isEditableSectionType:(NSInteger)type {
++ (BOOL)isEditableSectionType:(NSInteger)section {
     return NO;
 }
 
@@ -945,47 +945,47 @@ static char UPDATE_DELEGATE_KEY;
     return [Constants MaxValue1CellCharacterCount] <= self.length;
 }
 
-- (BOOL)isLongValueForSectionType:(NSInteger)type {
-    return [self isLongValueForObjectType:type];
+- (BOOL)isLongValueForSectionType:(NSInteger)section {
+    return [self isLongValueForObjectType:section];
 }
 
 - (NSNumber *)numberValueForObjectType:(NSInteger)type {
     return @(self.length);
 }
 
-- (NSNumber *)numberValueForSectionType:(NSInteger)type {
+- (NSNumber *)numberValueForSectionType:(NSInteger)section {
     return @(self.length);
 }
 
-+ (NSArray<NSNumber *> *)objectTypesForSectionType:(NSInteger)type {
++ (NSArray<NSNumber *> *)objectTypesForSectionType:(NSInteger)section {
     return @[@0];
 }
 
 - (void)setValue:(NSObject *)value forObjectType:(NSInteger)type {
 }
 
-- (void)setValue:(NSObject *)value forSectionType:(NSInteger)type {
+- (void)setValue:(NSObject *)value forSectionType:(NSInteger)section {
 }
 
 - (NSString *)stringValueForObjectType:(NSInteger)type {
     return self;
 }
 
-- (NSString *)stringValueForSectionType:(NSInteger)type {
+- (NSString *)stringValueForSectionType:(NSInteger)section {
     return self;
 }
 
 - (void)switchBoolValueForObjectType:(NSInteger)type {
 }
 
-- (void)switchBoolValueForSectionType:(NSInteger)type {
+- (void)switchBoolValueForSectionType:(NSInteger)section {
 }
 
 + (NSString *)titleForObjectType:(NSInteger)type {
     return nil;
 }
 
-+ (NSString *)titleForSectionType:(NSInteger)type {
++ (NSString *)titleForSectionType:(NSInteger)section {
     return nil;
 }
 
@@ -997,7 +997,7 @@ static char UPDATE_DELEGATE_KEY;
     return self;
 }
 
-- (NSArray<NSObject *> *)valuesForSectionType:(NSInteger)type {
+- (NSArray<NSObject *> *)valuesForSectionType:(NSInteger)section {
     return [NSArray arrayWithNullableObject:self];
 }
 
@@ -1005,15 +1005,15 @@ static char UPDATE_DELEGATE_KEY;
     return NO;
 }
 
-- (NSString *)badgeValueForSectionType:(NSInteger)type {
+- (NSString *)badgeValueForSectionType:(NSInteger)section {
     return nil;
 }
 
-+ (BOOL)isEmailSectionType:(NSInteger)type {
++ (BOOL)isEmailSectionType:(NSInteger)section {
     return NO;
 }
 
-+ (BOOL)isPhoneSectionType:(NSInteger)type {
++ (BOOL)isPhoneSectionType:(NSInteger)section {
     return NO;
 }
 
