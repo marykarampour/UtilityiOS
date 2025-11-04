@@ -233,6 +233,7 @@ typedef UIView * (^DOUBLE_INDEX_SIZE_VIEW_CREATION_HANDLER)(NSUInteger row, NSUI
 
 typedef BOOL (^EvaluateSelectedObjectHandler)(id obj);
 typedef void (^VoidActionHandler)();
+typedef void (^VoidIntActionHandler)(int i);
 typedef MKU_LIST_ITEM_SELECTED_ACTION (^LIST_ITEM_SELECTED_ACTION_HANDLER)(NSUInteger type);
 typedef NSDictionary <NSString *, VoidActionHandler> *TitleVoidActionHandlers;
 
