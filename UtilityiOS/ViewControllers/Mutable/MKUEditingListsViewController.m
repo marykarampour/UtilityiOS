@@ -3,7 +3,7 @@
 //  MKU HAWB Reader
 //
 //  Created by Maryam Karampour on 2025-07-28.
-//  Copyright © 2025 Commodity Forwarders Inc. All rights reserved.
+//  Copyright © 2025 Prometheus Software. All rights reserved.
 //
 
 #import "MKUEditingListsViewController.h"

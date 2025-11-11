@@ -1,9 +1,9 @@
 //
 //  MKUNetworkManager.m
-//  CFI HAWB Reader
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2025-10-02.
-//  Copyright © 2025 Commodity Forwarders Inc. All rights reserved.
+//  Copyright © 2025 Prometheus Software. All rights reserved.
 //
 
 #import "MKUNetworkManager.h"
