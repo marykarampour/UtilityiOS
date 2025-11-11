@@ -6,10 +6,6 @@
 //  Copyright © 2017 Maryam Karampour. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
-#import "NSObject+ProcessModel.h"
-#import "MKURESTNetworkManager.h"
-#import "MKUSOAPNetworkManager.h"
 #import "MKUServicesProtocol.h"
 
 /** @brief Apps should subclass this class and override methods. The subclass can be a singleton.
