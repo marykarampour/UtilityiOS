@@ -59,7 +59,7 @@
 + (NSSet<NSString *> *)excludedProperties;
 
 /** @brief Override in subclass if you want properties have different format than other JSON keys
- @note Use with + (StringFormat)customFormat
+ @note Use with + (MKU_STRING_FORMAT)customFormat
  @code
  + (NSSet<NSString *> *)customKeys {
  return [NSSet setWithObjects:
@@ -73,12 +73,12 @@
 /** @brief Override in subclass if you want properties have different format than other JSON keys
   @note Use with + (NSSet<NSString *> *)customKeys
  @code
- + (StringFormat)customFormat {
-    return StringFormatNone;
+ + (MKU_STRING_FORMAT)customFormat {
+    return MKU_STRING_FORMAT_NONE;
  }
  @endcode
  */
-+ (StringFormat)customFormat;
++ (MKU_STRING_FORMAT)customFormat;
 
 /** @brief Override in subclass if you want properties have custom keys in JSON
  @code
@@ -108,16 +108,20 @@
 @property (class, nonatomic, strong, readonly) NSSet<NSString *> *dateProperties;
 
 /** @brief Used to set the mapper format for object to JSON.
- @note default is StringFormatNONE, override + (StringFormat)classMapperFormat in subclass to customize */
-@property (class, nonatomic, assign, readonly) StringFormat mapperFormat;
+ @note default is MKU_STRING_FORMATNONE, override + (MKU_STRING_FORMAT)classMapperFormat in subclass to customize */
+@property (class, nonatomic, assign, readonly) MKU_STRING_FORMAT mapperFormat;
 
-- (instancetype)initWithStringsDictionary:(NSDictionary *)values;
+- (instancetype)initWithDictionary:(NSDictionary *)dict;
+/** @param Default is NO. If NO, JSONModel methods will be used, otherwise XMLSerialize will be done. */
+- (instancetype)initWithDictionary:(NSDictionary *)dict useXML:(BOOL)XML;
+/** @param Default is NO. If NO, JSONModel methods will be used, otherwise XMLSerialize will be done. */
+- (instancetype)initWithDictionary:(NSDictionary *)dict error:(NSError *__autoreleasing *)err useXML:(BOOL)XML;
 
-+ (NSArray *)toDictionaryWithArray:(NSArray<MKUModel *> *)items;
-+ (NSArray *)toDictionaryWithArray:(NSArray<MKUModel *> *)items withTags:(BOOL)tags;
++ (NSArray *)toDictionaryWithArray:(NSArray<MKUModel *> *)items useXML:(BOOL)XML;
++ (NSArray *)toDictionaryWithArray:(NSArray<MKUModel *> *)items withTags:(BOOL)tags useXML:(BOOL)XML;
 
 /** @brief Override in subclass to set the mapper format for object to JSON. */
-+ (StringFormat)classMapperFormat;
++ (MKU_STRING_FORMAT)classMapperFormat;
 
 /** @brief override in subclass to set custom date formatter */
 + (NSDateFormatter *)dateFormatter;
@@ -158,7 +162,11 @@
 - (NSString *)stringValue;
 /** @brief A JSON representation of the serialized object. */
 - (NSData *)dataValue;
-/** @brief A JSON representation of the serialized object is converted to dictionary and used to create the object using initWithStringsDictionary:. */
+/** @brief A representation of the serialized object in XML or JSON format. */
+- (NSData *)dataValueUseXML:(BOOL)XML;
+/** @brief A representation of the serialized object in XML or JSON format. */
+- (NSDictionary *)toDictionaryWithXML:(BOOL)XML;
+/** @brief A JSON representation of the serialized object is converted to dictionary and used to create the object using initWithDictionary:. */
 + (instancetype)objectWithJSON:(NSString *)string;
 - (BOOL)propertyIsBool:(NSString *)propertyName;
 /** @brief Default is NO. If No is assuems local time for formatting. */
@@ -194,5 +202,20 @@
 + (instancetype)optionForType:(NSInteger)type options:(NSArray<MKUOption *> *)options;
 
 - (NSComparisonResult)compare:(MKUOption *)option;
+
+@end
+
+/** @brief description retruns true or false based on false and true states. If they are equal, it will be nil. */
+@interface MKUBool : MKUModel
+
+@property (nonatomic, assign) BOOL falseState;
+@property (nonatomic, assign) BOOL trueState;
+
+/** @brief Sets falseState to true and trueState to false. */
+- (void)setFalse;
+/** @brief Sets trueState to true and falseState to false. */
+- (void)setTrue;
+/** @brief If state is YES, does setTrue, if state is NO, does setFalse. */
+- (void)setState:(BOOL)state;
 
 @end

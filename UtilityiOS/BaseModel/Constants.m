@@ -115,10 +115,6 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
     return NO;
 }
 
-+ (BOOL)USING_SOAP {
-    return NO;
-}
-
 + (NSString *)BaseLocalHostURL {
     return @"://localhost";
 }

@@ -51,8 +51,29 @@ static char UPDATE_DELEGATE_KEY;
     return self;
 }
 
-- (instancetype)initWithStringsDictionary:(NSDictionary *)map {
-    if (self = [super initWithDictionary:map error:nil]) {
+- (instancetype)initWithDictionary:(NSDictionary *)dict {
+    if (self = [super initWithDictionary:dict]) {
+        self.GUID = [Constants GUID];
+    }
+    return self;
+}
+
+- (instancetype)initWithDictionary:(NSDictionary *)dict useXML:(BOOL)XML {
+    if (self = [super initWithDictionary:dict useXML:XML]) {
+        self.GUID = [Constants GUID];
+    }
+    return self;
+}
+
+- (instancetype)initWithDictionary:(NSDictionary *)dict error:(NSError *__autoreleasing *)err {
+    if (self = [super initWithDictionary:dict error:err]) {
+        self.GUID = [Constants GUID];
+    }
+    return self;
+}
+
+- (instancetype)initWithDictionary:(NSDictionary *)dict error:(NSError *__autoreleasing *)err useXML:(BOOL)XML {
+    if (self = [super initWithDictionary:dict error:err useXML:XML]) {
         self.GUID = [Constants GUID];
     }
     return self;

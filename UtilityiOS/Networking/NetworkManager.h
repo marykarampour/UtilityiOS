@@ -25,7 +25,7 @@ typedef NS_ENUM(NSUInteger, NETWORK_MANAGER_TYPE_) {
 
 @end
 
-@interface NetworkManager : NSObject
+@interface MKURESTNetworkManager : NSObject
 
 + (instancetype)instance;
 

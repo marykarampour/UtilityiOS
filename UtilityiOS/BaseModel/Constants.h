@@ -390,8 +390,6 @@ typedef NS_ENUM(NSUInteger, MKU_BADGE_VIEW_STATE) {
 
 + (ServerEnvironment)ServerEnvironmentVariable;
 + (BOOL)USING_HTTPS;
-/** @brief Default is NO. If NO, JSONModel methods will be used, otherwise XMLSerialize which is compatible with XML will be done. */
-+ (BOOL)USING_SOAP;
 /** @brief This url must be of form ://domain */
 + (NSString *)BaseLocalHostURL;
 /** @brief This url must be of form ://domain */
