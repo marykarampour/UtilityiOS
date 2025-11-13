@@ -219,3 +219,11 @@
 - (void)setState:(BOOL)state;
 
 @end
+
+
+@interface JSONValueTransformer (MKUModel)
+
+- (id)NSDataFromNSString:(NSString *)string;
+- (NSString *)JSONObjectFromNSData:(NSData *)data;
+
+@end

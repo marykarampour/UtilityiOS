@@ -1009,3 +1009,16 @@ const void * MAPPER_FORMAT_KEY;
 }
 
 @end
+
+
+@implementation JSONValueTransformer (MKUModel)
+
+- (id)NSDataFromNSString:(NSString*)string {
+    return [[NSData alloc] initWithBase64EncodedString:string options:0];
+}
+
+- (NSString *)JSONObjectFromNSData:(NSData *)data {
+    return [data base64EncodedStringWithOptions:0];
+}
+
+@end

@@ -987,7 +987,7 @@ static JSONKeyMapper* globalKeyMapper = nil;
             if (YES) {
 
                 //create selector from the property's class name
-                NSString* selectorName = [NSString stringWithFormat:@"%@From%@:", @"JSONObject", p.type?p.type:p.structName];
+                NSString* selectorName = [NSString stringWithFormat:@"%@From%@:", @"JSONObject", p.type ? [p.type description] : p.structName];
                 SEL selector = NSSelectorFromString(selectorName);
 
                 BOOL foundCustomTransformer = NO;
