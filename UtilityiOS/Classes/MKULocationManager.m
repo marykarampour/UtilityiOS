@@ -79,10 +79,6 @@ static NotificationCategoryIdentifier const GeoFenceCatID = @"GeoFenceCatID";
     return [self location2D].longitude;
 }
 
-- (float)speed {
-    return self.speed;
-}
-
 - (CLLocationCoordinate2D)getLocation {
     return self.locationManager.location.coordinate;
 }

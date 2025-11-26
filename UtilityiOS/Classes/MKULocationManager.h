@@ -35,7 +35,6 @@
 - (CGPoint)locationPoint;
 - (double)latitude;
 - (double)longitude;
-- (float)speed;
 - (CLLocationCoordinate2D)getLocation;
 - (float)getHeadingForDirectionToCoordinate:(CLLocationCoordinate2D)location;
 - (float)bearingBetweenLocationAndLocation:(CLLocation *)endLocation;
