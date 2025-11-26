@@ -39,6 +39,7 @@
 - (CLLocationCoordinate2D)getLocation;
 - (float)getHeadingForDirectionToCoordinate:(CLLocationCoordinate2D)location;
 - (float)bearingBetweenLocationAndLocation:(CLLocation *)endLocation;
+- (float)calculateDistanceInMetersBetweenCoord:(CLLocationCoordinate2D)coord1 coord:(CLLocationCoordinate2D)coord2;
 
 //Geofencing
 - (void)createGeofencedZone:(NSArray<__kindof MKUGeoFencePoint *> *)geofencedPoints;
