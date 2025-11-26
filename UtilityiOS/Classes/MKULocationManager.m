@@ -18,6 +18,7 @@ static NotificationCategoryIdentifier const GeoFenceCatID = @"GeoFenceCatID";
 @interface MKULocationManager ()
 
 @property (nonatomic, assign) float speed;
+@property (nonatomic, strong, readwrite) CLLocationManager *locationManager;
 @property (nonatomic, assign) CLLocationCoordinate2D lastFencedLocation;
 
 // These are set to prevent multiple consecutive calls being processed
@@ -42,17 +43,17 @@ static NotificationCategoryIdentifier const GeoFenceCatID = @"GeoFenceCatID";
     if (self = [super init]) {
         [self checkLocationAuthorizationStatus];
         
-        self.location = [[CLLocationManager alloc] init];
-        self.location.delegate = self;
-        self.location.distanceFilter = kCLDistanceFilterNone;
-        self.location.desiredAccuracy = kCLLocationAccuracyBest;
-        self.location.pausesLocationUpdatesAutomatically = YES;
+        self.locationManager = [[CLLocationManager alloc] init];
+        self.locationManager.delegate = self;
+        self.locationManager.distanceFilter = kCLDistanceFilterNone;
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        self.locationManager.pausesLocationUpdatesAutomatically = YES;
         
-        if ([self.location respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-            [self.location requestWhenInUseAuthorization];
+        if ([self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+            [self.locationManager requestWhenInUseAuthorization];
         }
-        if ([self.location respondsToSelector:@selector(requestAlwaysAuthorization)]) {
-            [self.location requestAlwaysAuthorization];
+        if ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
+            [self.locationManager requestAlwaysAuthorization];
         }
         
         [self setMonitoringLocation];
@@ -62,12 +63,20 @@ static NotificationCategoryIdentifier const GeoFenceCatID = @"GeoFenceCatID";
     return self;
 }
 
-- (float)latitude {
-    return self.location.location.coordinate.latitude;
+- (CLLocationCoordinate2D)location2D {
+    return self.locationManager.location.coordinate;
 }
 
-- (float)longitude {
-    return self.location.location.coordinate.longitude;
+- (CGPoint)locationPoint {
+    return CGPointMake(self.locationManager.location.coordinate.latitude, self.locationManager.location.coordinate.longitude);
+}
+
+- (double)latitude {
+    return [self location2D].latitude;
+}
+
+- (double)longitude {
+    return [self location2D].longitude;
 }
 
 - (float)speed {
@@ -75,19 +84,19 @@ static NotificationCategoryIdentifier const GeoFenceCatID = @"GeoFenceCatID";
 }
 
 - (CLLocationCoordinate2D)getLocation {
-    return self.location.location.coordinate;
+    return self.locationManager.location.coordinate;
 }
 
 #pragma mark - calculating locations
 
 - (float)getHeadingForDirectionToCoordinate:(CLLocationCoordinate2D)location {
     
-    float fLat = (self.location.location.coordinate.latitude)*M_PI/180.0;
-    float fLng = (self.location.location.coordinate.longitude)*M_PI/180.0;
+    float fLat = ([self latitude])*M_PI/180.0;
+    float fLng = ([self longitude])*M_PI/180.0;
     float tLat = (location.latitude)*M_PI/180.0;
     float tLng = (location.longitude)*M_PI/180.0;
     
-    DEBUGLOG(@"%@", self.location.heading);
+    DEBUGLOG(@"%@", self.locationManager.heading);
     
     return (atan2(sin(tLng-fLng)*cos(tLat), cos(fLat)*sin(tLat)-sin(fLat)*cos(tLat)*cos(tLng-fLng)))*180.0/M_PI;
 }
@@ -108,7 +117,7 @@ static NotificationCategoryIdentifier const GeoFenceCatID = @"GeoFenceCatID";
 }
 
 - (BOOL)locationIsInRegion:(CLLocationCoordinate2D)coord {
-    if ([self calculateDistanceInMetersBetweenCoord:self.location.location.coordinate coord:coord] < [Constants GeoFenceRadiousMeter]) {
+    if ([self calculateDistanceInMetersBetweenCoord:self.locationManager.location.coordinate coord:coord] < [Constants GeoFenceRadiousMeter]) {
         return YES;
     }
     return NO;
@@ -116,20 +125,30 @@ static NotificationCategoryIdentifier const GeoFenceCatID = @"GeoFenceCatID";
 
 - (float)bearingBetweenLocationAndLocation:(CLLocation *)endLocation {
     
-    CLLocation *northPoint = [[CLLocation alloc] initWithLatitude:(self.location.location.coordinate.latitude)+.01 longitude:endLocation.coordinate.longitude];
-    float magA = [northPoint distanceFromLocation:self.location.location];
-    float magB = [endLocation distanceFromLocation:self.location.location];
-    CLLocation *startLat = [[CLLocation alloc] initWithLatitude:self.location.location.coordinate.latitude longitude:0];
+    CLLocation *northPoint = [[CLLocation alloc] initWithLatitude:(self.locationManager.location.coordinate.latitude)+.01 longitude:endLocation.coordinate.longitude];
+    float magA = [northPoint distanceFromLocation:self.locationManager.location];
+    float magB = [endLocation distanceFromLocation:self.locationManager.location];
+    CLLocation *startLat = [[CLLocation alloc] initWithLatitude:self.locationManager.location.coordinate.latitude longitude:0];
     CLLocation *endLat = [[CLLocation alloc] initWithLatitude:endLocation.coordinate.latitude longitude:0];
     float aDotB = magA*[endLat distanceFromLocation:startLat];
     
     return (acosf(aDotB/(magA*magB)))*180.0/M_PI;
 }
 
-#pragma mark - location update
+#pragma mark - location
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
     [self setMonitoringLocation];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    DEBUGLOG(@"Location manager faild with error: %@", error.localizedDescription);
+}
+
+- (void)locationManagerDidChangeAuthorization:(CLLocationManager *)manager {
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusDenied || [CLLocationManager authorizationStatus] == kCLAuthorizationStatusRestricted) {
+        [NSObject OKAlertWithTitle:[Constants LocationRestrictedTitle_STR] message:[Constants LocationRestrictedMessage_STR]];
+    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations {
@@ -167,7 +186,7 @@ static NotificationCategoryIdentifier const GeoFenceCatID = @"GeoFenceCatID";
 
 - (void)createGeofencedZone:(NSArray<__kindof MKUGeoFencePoint *> *)geofencedPoints {
     self.geofencedPoints = geofencedPoints;
-    self.lastFencedLocation = self.location.location.coordinate;
+    self.lastFencedLocation = self.locationManager.location.coordinate;
     for (MKUGeoFencePoint *loc in geofencedPoints) {
         unsigned int i = 1;
         [self createGeofenceForPoint:loc.point];
@@ -180,7 +199,7 @@ static NotificationCategoryIdentifier const GeoFenceCatID = @"GeoFenceCatID";
 
 - (void)createGeofenceForPoint:(CLLocationCoordinate2D)point {
     CLCircularRegion *region = [[CLCircularRegion alloc] initWithCenter:point radius:[Constants GeoFenceRadiousMeter] identifier:[[NSUUID UUID] UUIDString]];
-    [self.location startMonitoringForRegion:region];
+    [self.locationManager startMonitoringForRegion:region];
 }
 
 #pragma mark - notifications
@@ -189,9 +208,7 @@ static NotificationCategoryIdentifier const GeoFenceCatID = @"GeoFenceCatID";
     [[MKUNotificationController instance] scheduleLocalNotificationWithIdentifier:point.identifier categoryID:GeoFenceCatID body:point.title fireTime:self.geofencePointNotificationDelay*index];
 }
 
-
 #pragma mark - helpers
-
 
 - (void)checkLocationAuthorizationStatus {
     switch ([CLLocationManager authorizationStatus]) {
@@ -209,10 +226,10 @@ static NotificationCategoryIdentifier const GeoFenceCatID = @"GeoFenceCatID";
     switch ([CLLocationManager authorizationStatus]) {
         case kCLAuthorizationStatusAuthorizedAlways:
         case kCLAuthorizationStatusAuthorizedWhenInUse: {
-            [self.location startMonitoringSignificantLocationChanges];
+            [self.locationManager startMonitoringSignificantLocationChanges];
             if ([CLLocationManager headingAvailable]) {
-                self.location.headingFilter = 5.0;
-                [self.location startUpdatingHeading];
+                self.locationManager.headingFilter = 5.0;
+                [self.locationManager startUpdatingHeading];
             }
         }
             break;
