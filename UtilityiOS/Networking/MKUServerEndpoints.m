@@ -6,9 +6,9 @@
 //  Copyright © 2017 BHS Consultants. All rights reserved.
 //
 
-#import "ServerEndpoints.h"
+#import "MKUServerEndpoints.h"
 
-@implementation ServerEndpoints
+@implementation MKUServerEndpoints
 
 + (NSString *)AUTH {
     return @"/api/v1/auth";

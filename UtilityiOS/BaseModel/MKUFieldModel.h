@@ -28,26 +28,26 @@
 + (NSDictionary <NSNumber *, NSString *> *)titleEnumDictionary;
 
 - (BOOL)hasValueForObjectType:(NSInteger)type;
-- (BOOL)hasValueForSectionType:(NSInteger)type;
+- (BOOL)hasValueForSectionType:(NSInteger)section;
 - (BOOL)boolValueForObjectType:(NSInteger)type;
-- (BOOL)boolValueForSectionType:(NSInteger)type;
+- (BOOL)boolValueForSectionType:(NSInteger)section;
 - (NSDate *)dateValueForObjectType:(NSInteger)type;
-- (NSDate *)dateValueForSectionType:(NSInteger)type;
+- (NSDate *)dateValueForSectionType:(NSInteger)section;
 + (DATE_FORMAT_STYLE)dateFormatForObjectType:(NSInteger)type;
-+ (DATE_FORMAT_STYLE)dateFormatForSectionType:(NSInteger)type;
++ (DATE_FORMAT_STYLE)dateFormatForSectionType:(NSInteger)section;
 + (MKU_TEXT_TYPE)textTypeForObjectType:(NSInteger)type;
 + (BOOL)shouldValidateWhenEditingObjectType:(NSInteger)type;
 - (NSNumber *)numberValueForObjectType:(NSInteger)type;
-- (NSNumber *)numberValueForSectionType:(NSInteger)type;
+- (NSNumber *)numberValueForSectionType:(NSInteger)section;
 - (NSObject *)valueForObjectType:(NSInteger)type;
-- (NSArray<NSObject *> *)valuesForSectionType:(NSInteger)type;
+- (NSArray<NSObject *> *)valuesForSectionType:(NSInteger)section;
 + (NSString *)titleForObjectType:(NSInteger)type;
-+ (NSString *)titleForSectionType:(NSInteger)type;
++ (NSString *)titleForSectionType:(NSInteger)section;
 + (NSArray<NSNumber *> *)typesForSection:(NSInteger)section;
 - (NSString *)stringValueForObjectType:(NSInteger)type;
-- (NSString *)stringValueForSectionType:(NSInteger)type;
-+ (NSArray<NSNumber *> *)objectTypesForSectionType:(NSInteger)type;
-- (NSString *)badgeValueForSectionType:(NSInteger)type;
+- (NSString *)stringValueForSectionType:(NSInteger)section;
++ (NSArray<NSNumber *> *)objectTypesForSectionType:(NSInteger)section;
+- (NSString *)badgeValueForSectionType:(NSInteger)section;
 /** @brief Default is 2. */
 - (NSUInteger)floatingDigits;
 
@@ -58,16 +58,16 @@
 - (NSString *)localDateStringForObjectType:(NSInteger)type;
 
 - (void)setValue:(NSObject *)value forObjectType:(NSInteger)type;
-- (void)setValue:(NSObject *)value forSectionType:(NSInteger)type;
+- (void)setValue:(NSObject *)value forSectionType:(NSInteger)section;
 - (void)switchBoolValueForObjectType:(NSInteger)type;
-- (void)switchBoolValueForSectionType:(NSInteger)type;
+- (void)switchBoolValueForSectionType:(NSInteger)section;
 - (BOOL)isLongValueForObjectType:(NSInteger)type;
-- (BOOL)isLongValueForSectionType:(NSInteger)type;
-+ (BOOL)isEditableSectionType:(NSInteger)type;
-+ (BOOL)isCommentSectionType:(NSInteger)type;
+- (BOOL)isLongValueForSectionType:(NSInteger)section;
++ (BOOL)isEditableSectionType:(NSInteger)section;
++ (BOOL)isCommentSectionType:(NSInteger)section;
 + (BOOL)isUppercaseStringObjectType:(NSInteger)type;
-+ (BOOL)isEmailSectionType:(NSInteger)type;
-+ (BOOL)isPhoneSectionType:(NSInteger)type;
++ (BOOL)isEmailSectionType:(NSInteger)section;
++ (BOOL)isPhoneSectionType:(NSInteger)section;
 
 + (NSString *)missingValueErrorMessage;
 + (NSString *)missingObjectErrorMessage;
@@ -99,10 +99,10 @@
 @protocol MKUUpdateObjectProtocol <MKUMutableObjectProtocol>
 
 @optional
-- (BOOL)isLongValueForSectionType:(NSInteger)type;
-- (BOOL)isEditableSectionType:(NSInteger)type;
-- (BOOL)hasValueForSectionType:(NSInteger)type;
-- (BOOL)isCommentSectionType:(NSInteger)type;
+- (BOOL)isLongValueForSectionType:(NSInteger)section;
+- (BOOL)isEditableSectionType:(NSInteger)section;
+- (BOOL)hasValueForSectionType:(NSInteger)section;
+- (BOOL)isCommentSectionType:(NSInteger)section;
 
 @end
 
@@ -127,7 +127,7 @@
 /** @brief Automatically assigned in init. Gets reset in copy. */
 @property (nonatomic, strong, readonly) NSString *GUID;
 
-+ (void)iterateOverTypesForSectionType:(NSInteger)type block:(void(^)(NSNumber *obj, NSUInteger idx, BOOL *stop))block;
++ (void)iterateOverTypesForSectionType:(NSInteger)section block:(void(^)(NSNumber *obj, NSUInteger idx, BOOL *stop))block;
 
 //validation
 /** @brief Loops through object types in the propertyEnumDictionary and checks for objects not being nil in case of NSObject,

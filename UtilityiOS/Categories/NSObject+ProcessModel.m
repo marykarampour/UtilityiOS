@@ -48,7 +48,7 @@
     return nil;
 }
 
-+ (void)processResult:(id)result error:(NSError *)error class:(Class)modelClass completion:(ServerResultErrorBlock)completion {
++ (void)processResult:(id)result error:(NSError *)error class:(Class)modelClass completion:(MKUServerResultErrorBlock)completion {
     if (!result || !modelClass) {
         completion(nil, error);
     }
@@ -86,7 +86,7 @@
     }
 }
 
-+ (void)processValuesInResult:(id)result error:(NSError *)error completion:(ServerResultErrorBlock)completion {
++ (void)processValuesInResult:(id)result error:(NSError *)error completion:(MKUServerResultErrorBlock)completion {
     if (error || !result) {
         completion(nil, error);
     }
@@ -118,7 +118,7 @@
     }
 }
 
-+ (void)processDataURLResult:(id)result error:(NSError *)error completion:(ServerResultErrorBlock)completion {
++ (void)processDataURLResult:(id)result error:(NSError *)error completion:(MKUServerResultErrorBlock)completion {
     if (!error && result) {
         if ([result isKindOfClass:[NSURL class]]) {
             NSError *err = nil;

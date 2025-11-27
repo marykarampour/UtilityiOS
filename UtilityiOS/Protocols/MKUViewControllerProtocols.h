@@ -13,5 +13,6 @@
 @optional
 /** @brief A default init method that takes an int as parameter. Used in menu transitions and search facilities. */
 - (instancetype)initWithMKUType:(NSInteger)type;
+- (void)dismissView;
 
 @end

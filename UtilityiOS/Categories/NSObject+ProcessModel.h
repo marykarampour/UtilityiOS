@@ -7,18 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "ServerDefinitions.h"
+#import "MKUServerDefinitions.h"
 
 @interface NSObject (ProcessModel)
 
 /** @brief Use when deserialized values from JSON to model objects are needed */
 + (id)processResult:(id)result class:(Class)modelClass;
 /** @brief Use when deserialized values from JSON to model objects are needed */
-+ (void)processResult:(id)result error:(NSError *)error class:(Class)modelClass completion:(ServerResultErrorBlock)completion;
++ (void)processResult:(id)result error:(NSError *)error class:(Class)modelClass completion:(MKUServerResultErrorBlock)completion;
 /** @brief Use when raw values from JSON are needed */
-+ (void)processValuesInResult:(id)result error:(NSError *)error completion:(ServerResultErrorBlock)completion;
++ (void)processValuesInResult:(id)result error:(NSError *)error completion:(MKUServerResultErrorBlock)completion;
 /** @brief Use to process data/file downloaded from url, it returns NSData object in completion */
-+ (void)processDataURLResult:(id)result error:(NSError *)error completion:(ServerResultErrorBlock)completion;
++ (void)processDataURLResult:(id)result error:(NSError *)error completion:(MKUServerResultErrorBlock)completion;
 
 @end
 

@@ -8,63 +8,74 @@
 
 #import <Foundation/Foundation.h>
 
-typedef NS_ENUM(NSUInteger, StringFormat) {
-    
+/** Additional supported formats are:
+ 
+//camelCasing the input string, example:
+//1. example_string -> ExampleString
+//2. exampleString -> ExampleString
+//3. example_string_0 -> exampleString0
+ MKU_STRING_FORMAT_CAPITALIZED and MKU_STRING_FORMAT_CAMELCASE,
+
+//camelCase to under_score with all characters uppercased
+//1. exampleString -> EXAMPLE_STRING
+//2. exampleString0 -> EXAMPLE_STRING_0
+MKU_STRING_FORMAT_UNDERSCORE and MKU_STRING_FORMAT_UPPERCASE_ALL,
+
+//camelCase to under_score - this option will not underscore digits
+//1. exampleString -> example_string
+//2. exampleString0 -> example_string0
+MKU_STRING_FORMAT_UNDERSCORE and MKU_STRING_FORMAT_IGNORE_DIGITS,
+
+//camelCase to under_score with all characters uppercased - this option will not underscore digits
+//1. exampleString -> EXAMPLE_STRING
+//2. exampleString0 -> EXAMPLE_STRING0
+MKU_STRING_FORMAT_UNDERSCORE and MKU_STRING_FORMAT_IGNORE_DIGITS and MKU_STRING_FORMAT_UPPERCASE_ALL,
+
+//capitalized__IS_Under_score to CapitalizedISCamelCase
+//1. example_string -> Example String
+//2. example__string_0 -> Example String0
+ MKU_STRING_FORMAT_CAPITALIZED and MKU_STRING_FORMAT_CAMELCASE and MKU_STRING_FORMAT_SPACED_SANITIZED_GROUPED_ONE_CHARS
+*/
+typedef NS_OPTIONS(NSUInteger, MKU_STRING_FORMAT) {
     //No change, the output string will be the same as input, example:
     //1. example_string -> example_string
     //2. exampleString -> exampleString
-    StringFormatNone,
+    MKU_STRING_FORMAT_NONE                                  = 0,
     
     //Capitaliazing the input string, example:
     //1. example_string -> Example_string
     //2. exampleString -> ExampleString
-    StringFormatCapitalized,
+    MKU_STRING_FORMAT_CAPITALIZED                           = 1 << 0,
     
     //camelCasing the input string, example:
     //1. example_string -> exampleString
     //2. exampleString -> exampleString
-    StringFormatCamelCase,
-    
-    //camelCasing the input string, example:
-    //1. example_string -> ExampleString
-    //2. exampleString -> ExampleString
-    //3. example_string_0 -> exampleString0
-    StringFormatCapitalizedCamelCase,
+    MKU_STRING_FORMAT_CAMELCASE                             = 1 << 1,
     
     //Upper case all charachters of input string, example:
     //1. example_string -> EXAMPLE_STRING
     //2. exampleString -> EXAMPLESTRING
-    StringFormatUpperCaseAll,
+    MKU_STRING_FORMAT_UPPERCASE_ALL                         = 1 << 2,
     
     //camelCase to under_score
     //1. exampleString -> example_string
     //2. exampleString0 -> example_string_0
-    StringFormatUnderScore,
-    
-    //camelCase to under_score with all characters uppercased
-    //1. exampleString -> EXAMPLE_STRING
-    //2. exampleString0 -> EXAMPLE_STRING_0
-    StringFormatUnderScoreUpperCaseAll,
+    MKU_STRING_FORMAT_UNDERSCORE                            = 1 << 3,
     
     //camelCase to under_score - this option will not underscore digits
     //1. exampleString -> example_string
     //2. exampleString0 -> example_string0
-    StringFormatUnderScoreIgnoreDigits,
+    MKU_STRING_FORMAT_IGNORE_DIGITS                         = 1 << 4,
     
-    //camelCase to under_score with all characters uppercased - this option will not underscore digits
-    //1. exampleString -> EXAMPLE_STRING
-    //2. exampleString0 -> EXAMPLE_STRING0
-    StringFormatUnderScoreIgnoreDigitsUpperCaseAll,
-
     //capitalized__IS_Under_score to CapitalizedISCamelCase
     //1. example_string -> Example String
     //2. example__string_0 -> Example String0
-    StringFormatCapitalizedCamelCaseSpacedSanitizedGroupedOneChars
+    MKU_STRING_FORMAT_SPACED_SANITIZED_GROUPED_ONE_CHARS    = 1 << 5
 };
 
 @interface NSString (Utility)
 
-- (NSString *)format:(StringFormat)format;
+- (NSString *)format:(MKU_STRING_FORMAT)format;
 - (NSString *)capitalizeFirstChar;
 - (NSString *)lowercaseFirstChar;
 
@@ -134,7 +145,8 @@ typedef NS_ENUM(NSUInteger, StringFormat) {
 + (NSString *)nonNullString:(NSString *)string;
 + (NSString *)nonNullOrSpaceString:(NSString *)string;
 + (NSString *)nonEmptyOrNoneString:(NSString *)string;
-+ (NSString *)combineString:(NSString *)str1 withString:(NSString *)str2;
+/** @param delimiter Pass nil or empty string for no delimiter. */
++ (NSString *)combineString:(NSString *)str1 withString:(NSString *)str2 delimiter:(NSString *)delimiter;
 
 //XML
 - (NSString *)addResultForTag:(NSString *)tag;

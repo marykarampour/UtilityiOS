@@ -9,7 +9,7 @@
 #import "NSObject+Alert.h"
 #import "UIViewController+Utility.h"
 #import "UIViewController+Navigation.h"
-#import "ServerController.h"
+#import "MKUServerController.h"
 #import "MKUAppDelegate.h"
 #import "MKUSpinner.h"
 
@@ -310,7 +310,7 @@
     
     [alert addAction:[UIAlertAction actionWithTitle:[Constants OK_STR] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [MKUSpinner show];
-        [ServerController authWithUserID:userID password:passText.text completion:^(id result, NSError *error) {
+        [MKUServerController authWithUserID:userID password:passText.text completion:^(id result, NSError *error) {
             [MKUSpinner hide];
             if (!error && result) {
                 if (handler) handler();
@@ -348,7 +348,7 @@
     
     [alert addAction:[UIAlertAction actionWithTitle:[Constants OK_STR] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [MKUSpinner show];
-        [ServerController authWithUserID:userID password:passText.text completion:^(id result, NSError *error) {
+        [MKUServerController authWithUserID:userID password:passText.text completion:^(id result, NSError *error) {
             [MKUSpinner hide];
             if (!error && result) {
                 if ([successAction.target respondsToSelector:successAction.action]) {
@@ -383,7 +383,7 @@
     
     [alert addAction:[UIAlertAction actionWithTitle:[Constants OK_STR] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [MKUSpinner show];
-        [ServerController authWithUserID:userText.text password:passText.text completion:^(id result, NSError *error) {
+        [MKUServerController authWithUserID:userText.text password:passText.text completion:^(id result, NSError *error) {
             [MKUSpinner hide];
             if (!error && result) {
                 if (handler) handler(result);

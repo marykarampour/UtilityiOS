@@ -30,7 +30,7 @@ typedef NS_OPTIONS(NSUInteger, MKU_MENU_ACCESSORY_TYPE) {
     MKU_MENU_ACCESSORY_TYPE_DISCLOSURE = 1 << 2
 };
 
-@protocol MKUMenuViewControllerProtocol <MKUCellStyleProtocol, MKUBadgeItemUpdateDelegate>
+@protocol MKUMenuViewControllerProtocol <MKUViewControllerProtocol, MKUCellStyleProtocol, MKUBadgeItemUpdateDelegate>
 
 @required
 - (void)transitionToViewAtIndexPath:(NSIndexPath *)indexPath;

@@ -14,42 +14,39 @@
 
 @implementation NSString (Utility)
 
-- (NSString *)format:(StringFormat)format {
-    switch (format) {
-        case StringFormatNone:
-            return self;
-            break;
-        case StringFormatCapitalized:
-            return [self capitalizeFirstChar];
-            break;
-        case StringFormatUpperCaseAll:
-            return [self uppercaseString];
-            break;
-        case StringFormatUnderScore:
-            return [self camelCaseToUnderScoreIgnoreDigits:NO upperCaseAll:NO];
-            break;
-        case StringFormatUnderScoreUpperCaseAll:
-            return [self camelCaseToUnderScoreIgnoreDigits:NO upperCaseAll:YES];
-            break;
-        case StringFormatUnderScoreIgnoreDigits:
-            return [self camelCaseToUnderScoreIgnoreDigits:YES upperCaseAll:NO];
-            break;
-        case StringFormatUnderScoreIgnoreDigitsUpperCaseAll:
-            return [self camelCaseToUnderScoreIgnoreDigits:YES upperCaseAll:YES];
-            break;
-        case StringFormatCamelCase:
-            return [self underScoreToCamelCaseUpperCaseAll:NO];
-            break;
-        case StringFormatCapitalizedCamelCase:
-            return [[self underScoreToCamelCaseUpperCaseAll:NO] capitalizedString];
-            break;
-        case StringFormatCapitalizedCamelCaseSpacedSanitizedGroupedOneChars:
-            return [self sanitizeCapitalizedCamelCaseSpaced];
-            break;
-        default:
-            return self;
-            break;
-    }
+- (NSString *)format:(MKU_STRING_FORMAT)format {
+    
+    if (format == MKU_STRING_FORMAT_NONE)
+        return self;
+    
+    if (format == MKU_STRING_FORMAT_CAPITALIZED)
+        return [self capitalizeFirstChar];
+    
+    if (format == MKU_STRING_FORMAT_UPPERCASE_ALL)
+        return [self uppercaseString];
+    
+    if (format == MKU_STRING_FORMAT_UNDERSCORE)
+        return [self camelCaseToUnderScoreIgnoreDigits:NO upperCaseAll:NO];
+    
+    if (format & MKU_STRING_FORMAT_UNDERSCORE && format & MKU_STRING_FORMAT_UPPERCASE_ALL)
+        return [self camelCaseToUnderScoreIgnoreDigits:NO upperCaseAll:YES];
+    
+    if (format & MKU_STRING_FORMAT_UNDERSCORE && format & MKU_STRING_FORMAT_IGNORE_DIGITS)
+        return [self camelCaseToUnderScoreIgnoreDigits:YES upperCaseAll:NO];
+    
+    if (format & MKU_STRING_FORMAT_UNDERSCORE && format & MKU_STRING_FORMAT_IGNORE_DIGITS && format & MKU_STRING_FORMAT_UPPERCASE_ALL)
+        return [self camelCaseToUnderScoreIgnoreDigits:YES upperCaseAll:YES];
+    
+    if (format == MKU_STRING_FORMAT_CAMELCASE)
+        return [self underScoreToCamelCaseUpperCaseAll:NO];
+    
+    if (format & MKU_STRING_FORMAT_CAPITALIZED && format & MKU_STRING_FORMAT_CAMELCASE)
+        return [[self underScoreToCamelCaseUpperCaseAll:NO] capitalizedString];
+    
+    if (format & MKU_STRING_FORMAT_CAPITALIZED && format & MKU_STRING_FORMAT_CAMELCASE && format & MKU_STRING_FORMAT_SPACED_SANITIZED_GROUPED_ONE_CHARS)
+        return [self sanitizeCapitalizedCamelCaseSpaced];
+    
+    return self;
 }
 
 - (NSString *)capitalizeFirstChar {
@@ -261,7 +258,7 @@
 
 - (NSString *)sanitizeCapitalizedCamelCaseSpaced {
     
-    NSString *string = [self format:StringFormatUnderScore];
+    NSString *string = [self format:MKU_STRING_FORMAT_UNDERSCORE];
     string = [string stringByReplacingOccurrencesOfString:@"_" withString:@" "];
     string = [string capitalizedString];
     string = [string removeSpaceBetweenOneCharacterSubstrings];
@@ -408,6 +405,8 @@
 }
 
 - (NSString *)addResultTag:(NSString *)result forTag:(NSString *)tag {
+    if (![self containsString:tag]) return self;
+    
     NSString *string = [self copy];
     NSString *tagStr = [NSString stringWithFormat:@"<%@>", tag];
     NSString *tagCloseStr = [NSString stringWithFormat:@"</%@>", tag];
@@ -418,6 +417,8 @@
 }
 
 - (NSString *)removeXMLNilTrueForTag:(NSString *)tag {
+    if (![self containsString:tag]) return self;
+
     NSString *string = [self copy];
     NSString *tagStr = [NSString stringWithFormat:@"<%@ xsi:nil=\"true\" />", tag];
     string = [string stringByReplacingOccurrencesOfString:tagStr withString:@""];
@@ -480,14 +481,13 @@
     return string.length == 0 ? @"None" : string;
 }
 
-+ (NSString *)combineString:(NSString *)str1 withString:(NSString *)str2 {
-    if (0 < str1.length && 0 < str2.length) {
-        if ([str1 isEqualToString:str2]) {
-            return str1;
-        }
-        return [NSString stringWithFormat:@"%@ %@", str1, str2];
++ (NSString *)combineString:(NSString *)str1 withString:(NSString *)str2 delimiter:(NSString *)delimiter {
+    if (str1.length && str2.length) {
+        if ([str1 isEqualToString:str2]) return str1;
+        if (delimiter.length == 0) return [NSString stringWithFormat:@"%@%@", str1, str2];
+        return [NSString stringWithFormat:@"%@%@%@", str1, delimiter, str2];
     }
-    else if (0 < str1.length) {
+    else if (str1.length) {
         return str1;
     }
     return str2;

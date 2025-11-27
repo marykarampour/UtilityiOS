@@ -9,7 +9,7 @@
 #import "SplitViewManager.h"
 #import "MKUBaseDetailViewController.h"
 #import "LoginViewController.h"
-#import "ServerController.h"
+#import "MKUServerController.h"
 #import "NSObject+Utility.h"
 #import "NSObject+Alert.h"
 #import "MKUSpinner.h"
@@ -49,7 +49,7 @@
 
 - (void)logout {
     [MKUSpinner show];
-    [ServerController logoutUserWithCompletion:^(id result, NSError *error) {
+    [MKUServerController logoutUserWithCompletion:^(id result, NSError *error) {
         [MKUSpinner hide];
         [self.splitViewController didLogout];
         [[SplitViewManager instance].splitViewController animateLogout];

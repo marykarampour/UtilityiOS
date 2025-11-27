@@ -70,7 +70,7 @@ const void * MAPPER_FORMAT_KEY;
     return properties;
 }
 
-+ (StringFormat)mapperFormat {
++ (MKU_STRING_FORMAT)mapperFormat {
     NSNumber *mapper = objc_getAssociatedObject(self, &MAPPER_FORMAT_KEY);
     if (!mapper) {
         mapper = @([self classMapperFormat]);
@@ -79,17 +79,25 @@ const void * MAPPER_FORMAT_KEY;
     return mapper.integerValue;
 }
 
-+ (StringFormat)classMapperFormat {
-    return StringFormatNone;
++ (MKU_STRING_FORMAT)classMapperFormat {
+    return MKU_STRING_FORMAT_NONE;
 }
 
-- (instancetype)initWithStringsDictionary:(NSDictionary *)values {
-    return [self initWithStringsDictionary:values mapper:[[self class] keyMapper]];
+- (instancetype)initWithDictionary:(NSDictionary *)dict {
+    return [self initWithDictionary:dict error:nil];
+}
+
+- (instancetype)initWithDictionary:(NSDictionary *)dict useXML:(BOOL)XML {
+    return [self initWithDictionary:dict error:nil useXML:XML];
+}
+
+- (instancetype)initWithDictionary:(NSDictionary *)dict error:(NSError *__autoreleasing *)err {
+    return [self initWithDictionary:dict error:err useXML:NO];
 }
 
 //overriding this only to support date formates not supporeted by JSONModel
-- (instancetype)initWithDictionary:(NSDictionary *)dict error:(NSError *__autoreleasing *)err {
-    if ([Constants USING_SOAP]) {
+- (instancetype)initWithDictionary:(NSDictionary *)dict error:(NSError *__autoreleasing *)err useXML:(BOOL)XML {
+    if (XML) {
         self = [super init];
         [self XMLDeserialize:dict];
         return self;
@@ -103,43 +111,6 @@ const void * MAPPER_FORMAT_KEY;
                 NSDate * date = [[self.class dateFormatter] dateFromString:value];
                 if ([date isKindOfClass:[NSDate class]]) {
                     [self setValue:date forKey:name];
-                }
-            }
-        }
-    }
-    return self;
-}
-
-- (instancetype)initWithStringsDictionary:(NSDictionary *)values mapper:(JSONKeyMapper *)mapper {
-    if ([Constants USING_SOAP]) {
-        self = [super init];
-        [self XMLDeserialize:values];
-        return self;
-    }
-    if (self = [super init]) {
-        NSSet *names = [[self class] propertyNames];
-        for (NSString *name in names) {
-            NSString *propertyName = [self.class convertToJson:name];
-            
-            Class class = [NSObject classOfProperty:name forObjectClass:[self class]];
-            id value = values[propertyName];
-            
-            if (value && ![value isKindOfClass:[NSNull class]]) {
-                if (class == [NSString class]) {
-                    if ([value isKindOfClass:[NSString class]] && ![(NSString *)value isEqualToString:@"<null>"]) {
-                        [self setValue:value forKey:name];
-                    }
-                }
-                else if (class == [NSNumber class]) {
-                    if ([value isKindOfClass:[NSString class]]) {
-                        [self setValue:[value stringToNumber] forKey:name];
-                    }
-                    else if ([value isKindOfClass:[NSNumber class]]) {
-                        [self setValue:value forKey:name];
-                    }
-                }
-                else {
-                    [self setValue:@([value boolValue]) forKey:name];
                 }
             }
         }
@@ -270,22 +241,26 @@ const void * MAPPER_FORMAT_KEY;
 }
 
 - (NSDictionary *)toDictionary {
+    return [self toDictionaryWithXML:NO];
+}
+
+- (NSDictionary *)toDictionaryWithXML:(BOOL)XML {
     NSSet *set = [[self class] excludedKeys];
-    if ([Constants USING_SOAP])
+    if (XML)
         return [self XMLSerializeIgnoringKeys:set];
     return [self toDictionaryWithExcludedKeys:set];
 }
 
-+ (NSArray *)toDictionaryWithArray:(NSArray<MKUModel *> *)items {
-    return [self toDictionaryWithArray:items withTags:YES];
++ (NSArray *)toDictionaryWithArray:(NSArray<MKUModel *> *)items useXML:(BOOL)XML {
+    return [self toDictionaryWithArray:items withTags:YES useXML:XML];
 }
 
-+ (NSArray *)toDictionaryWithArray:(NSArray<MKUModel *> *)items withTags:(BOOL)tags {
++ (NSArray *)toDictionaryWithArray:(NSArray<MKUModel *> *)items withTags:(BOOL)tags useXML:(BOOL)XML {
     
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (MKUModel *object in items) {
         if ([object isKindOfClass:[MKUModel class]]) {
-            NSDictionary *dict = [Constants USING_SOAP] ? [object XMLSerialize] : [object toDictionary];
+            NSDictionary *dict = XML ? [object XMLSerialize] : [object toDictionary];
             if (tags)
                 [arr addObject:@{[[object class] tagName] : dict}];
             else
@@ -307,10 +282,10 @@ const void * MAPPER_FORMAT_KEY;
 }
 
 + (DictStringString *)DBMapperDict {
-    return [self keyMapperWithFormat:StringFormatUnderScoreIgnoreDigits];
+    return [self keyMapperWithFormat:MKU_STRING_FORMAT_UNDERSCORE | MKU_STRING_FORMAT_IGNORE_DIGITS];
 }
 
-+ (DictStringString *)keyMapperWithFormat:(StringFormat)format {
++ (DictStringString *)keyMapperWithFormat:(MKU_STRING_FORMAT)format {
     if ([self usingAncestors]) {
         return [self keyMapperDictionaryWithAncestorsWithFormat:format];
     }
@@ -323,7 +298,7 @@ const void * MAPPER_FORMAT_KEY;
     return [[JSONKeyMapper alloc] initWithModelToJSONDictionary:[self DBMapperDict]];
 }
 
-+ (NSDictionary *)keyMapperDictionaryWithAncestorsWithFormat:(StringFormat)format {
++ (NSDictionary *)keyMapperDictionaryWithAncestorsWithFormat:(MKU_STRING_FORMAT)format {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     Class class = self;
     while (class != [MKUModel class]) {
@@ -333,7 +308,7 @@ const void * MAPPER_FORMAT_KEY;
     return dict;
 }
 
-+ (NSDictionary *)keyMapperDictionaryForClass:(Class)class format:(StringFormat)format {
++ (NSDictionary *)keyMapperDictionaryForClass:(Class)class format:(MKU_STRING_FORMAT)format {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
     unsigned int count = 0;
     objc_property_t *properties = class_copyPropertyList(class, &count);
@@ -392,13 +367,13 @@ const void * MAPPER_FORMAT_KEY;
     return nil;
 }
 
-+ (StringFormat)customFormat {
-    return StringFormatNone;
++ (MKU_STRING_FORMAT)customFormat {
+    return MKU_STRING_FORMAT_NONE;
 }
 
 + (DictStringString *)customKeyValueDict {
     MDictStringString *dict = [[MDictStringString alloc] init];
-    StringFormat format = [self customFormat];
+    MKU_STRING_FORMAT format = [self customFormat];
     NSSet<NSString *> *keys = [self customKeys];
     for (NSString *name in keys) {
         [dict setObject:[name format:format] forKey:name];
@@ -536,15 +511,19 @@ const void * MAPPER_FORMAT_KEY;
 }
 
 - (NSData *)dataValue {
-    NSDictionary *dict = [Constants USING_SOAP] ? [self XMLSerialize] : [self toDictionary];
+    return [self dataValueUseXML:NO];
+}
+
+- (NSData *)dataValueUseXML:(BOOL)XML {
+    NSDictionary *dict = XML ? [self XMLSerialize] : [self toDictionary];
     return [NSJSONSerialization dataWithJSONObject:dict options:0 error:nil];
 }
 
 + (instancetype)objectWithJSON:(NSString *)string {
     NSData *data = [string dataUsingEncoding:NSUTF8StringEncoding];
     if (data) {
-        NSDictionary *map = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-        return [[self alloc] initWithStringsDictionary:map];
+        NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+        return [[self alloc] initWithDictionary:dict];
     }
     return nil;
 }
@@ -715,7 +694,7 @@ const void * MAPPER_FORMAT_KEY;
                     NSMutableArray *map = [NSMutableArray arrayWithArray:value];
                     
                     for (NSUInteger i = 0; i < [map count]; ++i) {
-                        map[i] = [(MKUModel *)[cls alloc] initWithStringsDictionary:map[i]];
+                        map[i] = [(MKUModel *)[cls alloc] initWithDictionary:map[i] useXML:YES];
                     }
                     deserialized = map;
                 }
@@ -726,7 +705,7 @@ const void * MAPPER_FORMAT_KEY;
             else if ([value isKindOfClass:[NSDictionary class]]) {
                 if ([value count] > 0) {
                     if ([propertyClass isSubclassOfClass:[MKUModel class]]) {
-                        deserialized = [(MKUModel *) [propertyClass alloc] initWithStringsDictionary:value];
+                        deserialized = [(MKUModel *) [propertyClass alloc] initWithDictionary:value useXML:YES];
                     }
                     else {
                         deserialized = value;
@@ -741,7 +720,7 @@ const void * MAPPER_FORMAT_KEY;
                                 if ([cls isSubclassOfClass:[MKUModel class]]) {
                                     for (NSUInteger i = 0; i < [map count]; ++i) {
                                         if ([cls isSubclassOfClass:[MKUModel class]]) {
-                                            map[i] = [(MKUModel *)[cls alloc] initWithStringsDictionary:map[i]];
+                                            map[i] = [(MKUModel *)[cls alloc] initWithDictionary:map[i] useXML:YES];
                                         }
                                     }
                                     object = (id)map;
@@ -752,7 +731,7 @@ const void * MAPPER_FORMAT_KEY;
                             }
                             else {
                                 if ([cls isSubclassOfClass:[MKUModel class]]) {
-                                    object = (id)@[[(MKUModel *) [cls alloc] initWithStringsDictionary:classMap[key]]];
+                                    object = (id)@[[(MKUModel *) [cls alloc] initWithDictionary:classMap[key] useXML:YES]];
                                 }
                                 else if (classMap.count == 1) {
                                     object = (id)@[classMap.allValues.firstObject];
@@ -792,7 +771,7 @@ const void * MAPPER_FORMAT_KEY;
                 
                 BOOL isMutable = [propertyClass isSubclassOfClass:[NSMutableArray class]];
                 if ([cls isSubclassOfClass:[MKUModel class]]) {
-                    NSObject *obj = [(MKUModel *)[cls alloc] initWithStringsDictionary:value];
+                    NSObject *obj = [(MKUModel *)[cls alloc] initWithDictionary:value useXML:YES];
                     deserialized = isMutable ? [@[obj] mutableCopy] : @[obj];
                 }
                 else {
@@ -829,10 +808,9 @@ const void * MAPPER_FORMAT_KEY;
 }
 
 + (NSArray<MKUModel *> *)XMLDeserializeArray:(NSArray<NSDictionary *> *)items {
-    
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (NSDictionary *dict in items) {
-        MKUModel *object = [[self alloc] initWithStringsDictionary:dict];
+        MKUModel *object = [[self alloc] initWithDictionary:dict useXML:YES];
         [arr addObject:object];
     }
     return arr;
@@ -1000,6 +978,47 @@ const void * MAPPER_FORMAT_KEY;
 
 - (NSComparisonResult)compare:(MKUOption *)option {
     return [@(self.value) compare:@(option.value)];
+}
+
+@end
+
+@implementation MKUBool
+
+- (NSString *)description {
+    if (self.falseState && self.trueState) return nil;
+    if (!self.falseState && !self.trueState) return nil;
+    if (self.trueState) return @"true";
+    return @"false";
+}
+
+- (void)setFalse {
+    self.falseState = YES;
+    self.trueState = NO;
+}
+
+- (void)setTrue {
+    self.falseState = NO;
+    self.trueState = YES;
+}
+
+- (void)setState:(BOOL)state {
+    if (state)
+        [self setTrue];
+    else
+        [self setFalse];
+}
+
+@end
+
+
+@implementation JSONValueTransformer (MKUModel)
+
+- (id)NSDataFromNSString:(NSString*)string {
+    return [[NSData alloc] initWithBase64EncodedString:string options:0];
+}
+
+- (NSString *)JSONObjectFromNSData:(NSData *)data {
+    return [data base64EncodedStringWithOptions:0];
 }
 
 @end
