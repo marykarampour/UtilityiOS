@@ -21,11 +21,19 @@ typedef NS_ENUM(NSUInteger, MKU_DATE_PICKER_ROW) {
     MKU_DATE_PICKER_ROW_COUNT
 };
 
+static dispatch_queue_t dispatch;
+
 @interface MKUTableViewController ()
 
 @end
 
 @implementation MKUTableViewController
+
++ (void)initialize {
+    if (!dispatch) {
+        dispatch = dispatch_queue_create("DISPATCH_QUEUE", NULL);
+    }
+}
 
 - (void)initBase {
     self.sectionHeaderStyle = [MKULabelStyleObject styleWithInsets:UIEdgeInsetsZero font:[AppTheme sectionHeaderFont] textColor:[AppTheme sectionHeaderTextColor] backgroundColor:[AppTheme sectionHeaderBackgroundColor]];
@@ -399,11 +407,14 @@ typedef NS_ENUM(NSUInteger, MKU_DATE_PICKER_ROW) {
         info.indexPath = indexPath;
         info.showDatePicker = !info.showDatePicker;
         
-        [self reloadSection:section];
-        if (!info.showDatePicker)
-            [self didHideDatePickerAtIndexPath:indexPath];
-        else
-            [self didShowDatePickerAtIndexPath:indexPath];
+        [self reloadSection:section completion:^{
+            if (!info.showDatePicker) {
+                [self didHideDatePickerAtIndexPath:indexPath];
+            }
+            else {
+                [self didShowDatePickerAtIndexPath:indexPath];
+            }
+        }];
     }
     else {
         [self didSelectNonDateRowAtIndexPath:indexPath];
@@ -457,6 +468,18 @@ typedef NS_ENUM(NSUInteger, MKU_DATE_PICKER_ROW) {
         [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationAutomatic];
         [self.tableView endUpdates];
         self.tableView.contentOffset = offset;
+    });
+}
+
+//This doesn't work properly, causes UI glitch in other sections
+- (void)reloadSection:(NSUInteger)section completion:(void (^)())completion {
+    dispatch_async(dispatch, ^{
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self.tableView beginUpdates];
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:section] withRowAnimation:UITableViewRowAnimationAutomatic];
+            [self.tableView endUpdates];
+            if (completion) completion();
+        });
     });
 }
 
