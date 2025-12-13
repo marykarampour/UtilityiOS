@@ -373,10 +373,6 @@ static NSString * const MULTI_SELECT_KEY = @"allowsMultipleSelection";
     [self reloadDataAnimated:NO];
 }
 
-- (NSObject<MKUPlaceholderProtocol> *)listItemAtIndexPath:(NSIndexPath *)indexPath {
-    return [super listItemAtIndexPath:indexPath];
-}
-
 - (BOOL)addItem:(NSObject<MKUPlaceholderProtocol> *)item {
     return [self addItem:item toListOfType:MKU_FIELD_LIST_TYPE_A];
 }

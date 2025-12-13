@@ -59,7 +59,7 @@
 - (NSMutableArray<__kindof NSObject<MKUPlaceholderProtocol> *> *)listItemsForListInSection:(NSUInteger)section;
 - (BOOL)canSelectItemsInListOfType:(NSUInteger)type;
 - (NSUInteger)listTypeForListInSection:(NSUInteger)section;
-- (NSObject<MKUPlaceholderProtocol> *)listItemAtIndexPath:(NSIndexPath *)indexPath;
+- (__kindof NSObject<MKUPlaceholderProtocol> *)listItemAtIndexPath:(NSIndexPath *)indexPath;
 
 /** @brief Retun view controller to be pushed when an item is selected. It will be called in
  willAddItemToListOfType:(NSUInteger)type withCompletion as well. Return nil to do custom actions. */
