@@ -108,7 +108,8 @@ const void * MAPPER_FORMAT_KEY;
             
             id value = dict[propertyName];
             if (value && ![value isKindOfClass:[NSNull class]]) {
-                NSDate * date = [[self.class dateFormatter] dateFromString:value];
+                DATE_FORMAT_STYLE style = [self.class dateFormatForProperty:propertyName];
+                NSDate *date = [NSDate dateFromString:value withFormat:style];
                 if ([date isKindOfClass:[NSDate class]]) {
                     [self setValue:date forKey:name];
                 }
@@ -245,14 +246,14 @@ const void * MAPPER_FORMAT_KEY;
 }
 
 - (NSDictionary *)toDictionaryWithXML:(BOOL)XML {
-    NSSet *set = [[self class] excludedKeys];
+    NSSet *set = [[self class] excludedKeysWithAncestors];
     if (XML)
         return [self XMLSerializeIgnoringKeys:set];
     return [self toDictionaryWithExcludedKeys:set];
 }
 
 + (NSArray *)toDictionaryWithArray:(NSArray<MKUModel *> *)items useXML:(BOOL)XML {
-    return [self toDictionaryWithArray:items withTags:YES useXML:XML];
+    return [self toDictionaryWithArray:items withTags:XML useXML:XML];
 }
 
 + (NSArray *)toDictionaryWithArray:(NSArray<MKUModel *> *)items withTags:(BOOL)tags useXML:(BOOL)XML {
@@ -264,7 +265,7 @@ const void * MAPPER_FORMAT_KEY;
             if (tags)
                 [arr addObject:@{[[object class] tagName] : dict}];
             else
-                [arr addObject:object];
+                [arr addObject:dict];
         }
         else {
             [arr addObject:object];
@@ -341,14 +342,6 @@ const void * MAPPER_FORMAT_KEY;
     return [[self JSONMapperDict] allKeysForObject:json].firstObject;
 }
 
-+ (NSDateFormatter *)dateFormatter {
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
-    [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZ"];
-    return formatter;
-}
-
 #pragma mark - MKUModelCustomKeysProtocol
 
 - (Class)classForProperty:(NSString *)property {
@@ -411,7 +404,7 @@ const void * MAPPER_FORMAT_KEY;
     return arr;
 }
 
-- (DATE_FORMAT_STYLE)dateFormatForProperty:(NSString *)propertyName {
++ (DATE_FORMAT_STYLE)dateFormatForProperty:(NSString *)property {
     return DATE_FORMAT_FULL_STYLE;
 }
 
@@ -468,7 +461,6 @@ const void * MAPPER_FORMAT_KEY;
 }
 
 - (void)setWithObject:(__kindof MKUModel *)object {
-    
     if (![self isKindOfClass:[object class]]) return;
     
     for (NSString *name in self.class.propertyNames) {
@@ -625,7 +617,7 @@ const void * MAPPER_FORMAT_KEY;
     }
     else if ([value isKindOfClass:[NSDate class]]) {
         BOOL isUTC = [self datePropertyIsUTC:key];
-        serialized = [((NSDate *)value) dateStringWithFormat:[self dateFormatForProperty:key] isUTC:isUTC];
+        serialized = [((NSDate *)value) dateStringWithFormat:[self.class dateFormatForProperty:key] isUTC:isUTC];
     }
     else if (value && ([attribute characterAtIndex:1] == 'B' || [attribute characterAtIndex:1] == 'c') && ([value isEqualToNumber:@0] || [value isEqualToNumber:@1])) {
         serialized = [self.class stringValueForBOOL:[value boolValue]];
@@ -1019,6 +1011,14 @@ const void * MAPPER_FORMAT_KEY;
 
 - (NSString *)JSONObjectFromNSData:(NSData *)data {
     return [data base64EncodedStringWithOptions:0];
+}
+
+- (id)NSDateFromNSString:(NSString *)string property:(NSString *)property inModelClass:(__unsafe_unretained Class)cls {
+    return [NSDate dateFromString:string withFormat:[cls dateFormatForProperty:property]];
+}
+
+- (NSString *)JSONObjectFromNSDate:(NSDate *)date property:(NSString *)property inModelClass:(__unsafe_unretained Class)cls {
+    return [date dateStringWithFormat:[NSDate dateFormatStringForFormat:[cls dateFormatForProperty:property]]];
 }
 
 @end

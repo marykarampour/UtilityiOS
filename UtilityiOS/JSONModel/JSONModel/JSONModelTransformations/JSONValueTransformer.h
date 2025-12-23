@@ -196,6 +196,9 @@ extern BOOL isNull(id value);
 
 //- (NSDate *)NSDateFromNSString:(NSString *)string;
 //- (NSString *)JSONObjectFromNSDate:(NSDate *)date;
+//- (id)NSDateFromNSString:(NSString *)string property:(NSString *)property inModelClass:(Class)cls;
+//- (NSString *)JSONObjectFromNSDate:(NSDate *)date property:(NSString *)property inModelClass:(Class)cls;
+
 
 #pragma mark - number <-> date
 

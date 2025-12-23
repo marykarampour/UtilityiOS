@@ -135,7 +135,7 @@
     return [[NSDateFormatter alloc] init].monthSymbols;
 }
 
-- (NSString *)dateFormatStringForFormat:(DATE_FORMAT_STYLE)format {
++ (NSString *)dateFormatStringForFormat:(DATE_FORMAT_STYLE)format {
     switch (format) {
         case DATE_FORMAT_FULL_STYLE:
             return DateFormatFullStyle;
@@ -170,6 +170,20 @@
     }
 }
 
++ (NSDate *)dateFromString:(NSString *)string withFormat:(DATE_FORMAT_STYLE)format {
+    return [[self dateFormatterWithFormat:format] dateFromString:string];
+}
+
++ (NSDateFormatter *)dateFormatterWithFormat:(DATE_FORMAT_STYLE)format {
+    
+    NSString *str = [self dateFormatStringForFormat:format];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
+    [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    [formatter setDateFormat:str];
+    return formatter;
+}
+
 - (NSString *)dateStringWithFormat:(DATE_FORMAT_STYLE)format isUTC:(BOOL)isUTC {
     return isUTC ? [self UTCDateStringWithFormat:format] : [self localDateStringWithFormat:format];
 }
@@ -182,7 +196,7 @@
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setTimeZone:[NSDate UTCTimeZone]];
-    [formatter setDateFormat:[self dateFormatStringForFormat:format]];
+    [formatter setDateFormat:[NSDate dateFormatStringForFormat:format]];
     return [formatter stringFromDate:[self copy]];
 }
 
@@ -190,7 +204,7 @@
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setTimeZone:[NSDate systemTimeZone]];
-    [formatter setDateFormat:[self dateFormatStringForFormat:format]];
+    [formatter setDateFormat:[NSDate dateFormatStringForFormat:format]];
     return [formatter stringFromDate:[self copy]];
 }
 

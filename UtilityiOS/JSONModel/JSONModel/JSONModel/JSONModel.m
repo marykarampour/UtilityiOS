@@ -434,11 +434,20 @@ static JSONKeyMapper* globalKeyMapper = nil;
                                               (property.structName? property.structName : property.type), //target name
                                               sourceClass]; //source name
                     SEL selector = NSSelectorFromString(selectorName);
+                    
+                    NSString* selectorPropertyName = [NSString stringWithFormat:@"%@From%@:property:inModelClass:",
+                                              (property.structName? property.structName : property.type), //target name
+                                              sourceClass]; //source name
+                    SEL selectorProperty = NSSelectorFromString(selectorPropertyName);
 
                     //check for custom transformer
                     BOOL foundCustomTransformer = NO;
+                    BOOL foundCustomPropertyTransformer = NO;
                     if ([valueTransformer respondsToSelector:selector]) {
                         foundCustomTransformer = YES;
+                    }
+                    else if ([valueTransformer respondsToSelector:selectorProperty]) {
+                        foundCustomPropertyTransformer = YES;
                     } else {
                         //try for hidden custom transformer
                         selectorName = [NSString stringWithFormat:@"__%@",selectorName];
@@ -449,14 +458,23 @@ static JSONKeyMapper* globalKeyMapper = nil;
                     }
 
                     //check if there's a transformer with that name
-                    if (foundCustomTransformer) {
+                    if (foundCustomPropertyTransformer) {
+                        IMP imp = [valueTransformer methodForSelector:selectorProperty];
+                        id (*func)(id, SEL, id, id, id) = (void *)imp;
+                        jsonValue = func(valueTransformer, selectorProperty, jsonValue, property.name, self.class);
+                        
+                        if (![jsonValue isEqual:[self valueForKey:property.name]])
+                            [self setValue:jsonValue forKey:property.name];
+                    }
+                    else if (foundCustomTransformer) {
                         IMP imp = [valueTransformer methodForSelector:selector];
                         id (*func)(id, SEL, id) = (void *)imp;
                         jsonValue = func(valueTransformer, selector, jsonValue);
 
                         if (![jsonValue isEqual:[self valueForKey:property.name]])
                             [self setValue:jsonValue forKey:property.name];
-                    } else {
+                    }
+                    else {
                         if (err) {
                             NSString* msg = [NSString stringWithFormat:@"%@ type not supported for %@.%@", property.type, [self class], property.name];
                             JSONModelError* dataErr = [JSONModelError errorInvalidDataWithTypeMismatch:msg];
@@ -990,9 +1008,16 @@ static JSONKeyMapper* globalKeyMapper = nil;
                 NSString* selectorName = [NSString stringWithFormat:@"%@From%@:", @"JSONObject", p.type ? [p.type description] : p.structName];
                 SEL selector = NSSelectorFromString(selectorName);
 
+                NSString* selectorPropertyName = [NSString stringWithFormat:@"%@From%@:property:inModelClass:", @"JSONObject", p.type ? [p.type description] : p.structName];
+                SEL selectorProperty = NSSelectorFromString(selectorPropertyName);
+                
                 BOOL foundCustomTransformer = NO;
+                BOOL foundCustomPropertyTransformer = NO;
                 if ([valueTransformer respondsToSelector:selector]) {
                     foundCustomTransformer = YES;
+                }
+                else if ([valueTransformer respondsToSelector:selectorProperty]) {
+                    foundCustomPropertyTransformer = YES;
                 } else {
                     //try for hidden transformer
                     selectorName = [NSString stringWithFormat:@"__%@",selectorName];
@@ -1003,13 +1028,21 @@ static JSONKeyMapper* globalKeyMapper = nil;
                 }
 
                 //check if there's a transformer declared
-                if (foundCustomTransformer) {
+                if (foundCustomPropertyTransformer) {
+                    IMP imp = [valueTransformer methodForSelector:selectorProperty];
+                    id (*func)(id, SEL, id, id, id) = (void *)imp;
+                    value = func(valueTransformer, selectorProperty, value, p.name, self.class);
+                    
+                    [tempDictionary setValue:value forKeyPath:keyPath];
+                }
+                else if (foundCustomTransformer) {
                     IMP imp = [valueTransformer methodForSelector:selector];
                     id (*func)(id, SEL, id) = (void *)imp;
                     value = func(valueTransformer, selector, value);
-
+                    
                     [tempDictionary setValue:value forKeyPath:keyPath];
-                } else {
+                }
+                else {
                     //in this case most probably a custom property was defined in a model
                     //but no default reverse transformer for it
                     JMLog(@"Value transformer not found");

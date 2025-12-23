@@ -32,6 +32,7 @@ typedef void (^MKUServerResultHeaderErrorBlock) (id result, NSDictionary *header
 typedef void (^MKUServerResultErrorBlock) (id result, NSError *error);
 typedef void (^MKUServerStatusCodeResultErrorBlock) (NSInteger statusCode, id result, NSError *error);
 typedef void (^MKUServerStatusCodeResultKeyErrorBlock) (NSInteger statusCode, id result, NSString *key, NSError *error);
+typedef void (^MKUServerStatusCodeResultClassKeyErrorBlock) (NSInteger statusCode, id result, Class cls, NSString *key, NSError *error);
 typedef void (^MKUServerNumberErrorBlock) (NSNumber *num, NSError *error);
 typedef void (^MKUServerArrayErrorBlock) (NSArray *arr, NSError *error);
 

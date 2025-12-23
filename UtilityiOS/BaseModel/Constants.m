@@ -367,7 +367,7 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
 #pragma mark - flags
 
 + (BOOL)IS_TESTING {
-    return YES;
+    return NO;
 }
 
 #pragma mark - strings

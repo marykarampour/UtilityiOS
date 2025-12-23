@@ -86,7 +86,9 @@ static char UPDATE_DELEGATE_KEY;
 }
 
 + (NSSet<NSString *> *)excludedKeys {
-    return [NSSet setWithObjects:NSStringFromSelector(@selector(GUID)), NSStringFromSelector(@selector(updateDelegate)), nil];
+    return [NSSet
+            setWithObjects:NSStringFromSelector(@selector(GUID)),
+            NSStringFromSelector(@selector(updateDelegate)), nil];
 }
 //Not clear why GUID was created. Its only use case at the moment is to make otherwise equal objects, not equal.
 //We are excluding it here to accomodate isModified in MKUUpdateObject. This might have to change if it created unexpected bugs.

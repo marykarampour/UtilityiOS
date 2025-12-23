@@ -92,8 +92,11 @@
 
 - (Class)classForProperty:(NSString *)property;
 
-/** @brief Used to serialize dates. Default is DATE_FORMAT_FULL_STYLE. */
-- (DATE_FORMAT_STYLE)dateFormatForProperty:(NSString *)propertyName;
+/** @brief Used to serialize dates. Default is DATE_FORMAT_FULL_STYLE.
+ @note Override in subclass to set custom date format for all date properties used in JSONValueTransformer */
++ (DATE_FORMAT_STYLE)dateFormatForProperty:(NSString *)property;
+/** @brief Override in subclass to set the mapper format for object to JSON. */
++ (MKU_STRING_FORMAT)classMapperFormat;
 
 @end
 
@@ -119,12 +122,6 @@
 
 + (NSArray *)toDictionaryWithArray:(NSArray<MKUModel *> *)items useXML:(BOOL)XML;
 + (NSArray *)toDictionaryWithArray:(NSArray<MKUModel *> *)items withTags:(BOOL)tags useXML:(BOOL)XML;
-
-/** @brief Override in subclass to set the mapper format for object to JSON. */
-+ (MKU_STRING_FORMAT)classMapperFormat;
-
-/** @brief override in subclass to set custom date formatter */
-+ (NSDateFormatter *)dateFormatter;
 
 + (NSString *)convertToJson:(NSString *)property;
 + (NSString *)convertToProperty:(NSString *)json;
@@ -226,4 +223,9 @@
 - (id)NSDataFromNSString:(NSString *)string;
 - (NSString *)JSONObjectFromNSData:(NSData *)data;
 
+- (id)NSDateFromNSString:(NSString *)string property:(NSString *)property inModelClass:(Class)cls;
+- (NSString *)JSONObjectFromNSDate:(NSDate *)date property:(NSString *)property inModelClass:(Class)cls;
+
 @end
+
+
