@@ -103,7 +103,9 @@ static char UIVIEWCONTROLER_TRANSITION_LIST_KEY;
     
     MKUSubtitleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[MKUSubtitleTableViewCell identifier]];
     if (!cell) {
-        cell = [[MKUSubtitleTableViewCell alloc] init];
+        UITableViewCellStyle style = [self respondsToSelector:@selector(cellStyleForRowAtIndexPath:)] ?
+        [self cellStyleForRowAtIndexPath:indexPath] : UITableViewCellStyleSubtitle;
+        cell = [[MKUSubtitleTableViewCell alloc] initWithStyle:style];
     }
     
     if ([self respondsToSelector:@selector(setTextForRowAtIndexPath:inCell:)])

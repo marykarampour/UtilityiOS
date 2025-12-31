@@ -256,10 +256,6 @@ static NSString * const MULTI_SELECT_KEY = @"allowsMultipleSelection";
     return 52.0;
 }
 
-- (CGFloat)heightForNonEditingListRowAtIndexPath:(NSIndexPath *)indexPath {
-    return UITableViewAutomaticDimension;
-}
-
 - (void)updateItemsWithUnmatchedTypeItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndex:(NSUInteger)index {
 }
 

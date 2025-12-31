@@ -32,6 +32,7 @@
 - (void)setTextForRowAtIndexPath:(NSIndexPath *)indexPath inCell:(MKUBaseTableViewCell *)cell;
 /** @brief Default sets accessoryType and selectionStyle. */
 - (void)setStyleForRowAtIndexPath:(NSIndexPath *)indexPath inCell:(MKUBaseTableViewCell *)cell;
+- (UITableViewCellStyle)cellStyleForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (UITableViewCellAccessoryType)accessoryTypeForRowAtIndexPath:(NSIndexPath *)indexPath;
 /** @brief Default is UITableViewCellAccessoryCheckmark. */
 - (UITableViewCellAccessoryType)accessoryTypeForSelectedRowForListOfType:(NSUInteger)type;

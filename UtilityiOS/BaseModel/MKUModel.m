@@ -7,6 +7,7 @@
 //
 
 #import "MKUModel.h"
+#import "NSDictionary+Utility.h"
 #import "NSNumber+Utility.h"
 #import "NSObject+Utility.h"
 #import "NSString+Utility.h"
@@ -235,9 +236,29 @@ const void * MAPPER_FORMAT_KEY;
 
 #pragma mark - key mapper
 
+- (NSDictionary *)toDictionaryWithNull:(NSDictionary *)dict {
+    NSMutableDictionary *res = [dict mutableCopy];
+    
+    for (NSString *name in self.class.propertyNames) {
+        if ([self respondsToSelector:NSSelectorFromString(name)] && ![self valueForKey:name]) {
+            [res setObject:[NSNull null] forKey:name];
+        }
+    }
+    return res;
+}
+
 - (NSDictionary *)toDictionaryWithExcludedKeys:(StringSet *)keys {
+    return [self toDictionaryWithExcludedKeys:keys includeNull:NO];
+}
+
+- (NSDictionary *)toDictionaryWithExcludedKeys:(StringSet *)keys includeNull:(BOOL)include {
+    
     NSMutableDictionary *dict = [[super toDictionary] mutableCopy];
-    [dict removeObjectsForKeys:[keys allObjects]];
+    MStringArr *arr = [[keys allObjects] mutableCopy];
+    if (!include)
+        [arr addObjectsFromArray:[dict NullKeysArray]];
+    [dict removeObjectsForKeys:arr];
+    
     return dict;
 }
 
@@ -246,10 +267,18 @@ const void * MAPPER_FORMAT_KEY;
 }
 
 - (NSDictionary *)toDictionaryWithXML:(BOOL)XML {
+    return [self toDictionaryWithXML:XML includeNull:NO];
+}
+
+- (NSDictionary *)toDictionaryIncludeNull:(BOOL)include {
+    return [self toDictionaryWithXML:NO includeNull:include];
+}
+
+- (NSDictionary *)toDictionaryWithXML:(BOOL)XML includeNull:(BOOL)include {
     NSSet *set = [[self class] excludedKeysWithAncestors];
     if (XML)
         return [self XMLSerializeIgnoringKeys:set];
-    return [self toDictionaryWithExcludedKeys:set];
+    return [self toDictionaryWithExcludedKeys:set includeNull:include];
 }
 
 + (NSArray *)toDictionaryWithArray:(NSArray<MKUModel *> *)items useXML:(BOOL)XML {

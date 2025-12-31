@@ -136,6 +136,12 @@
  */
 - (NSDictionary *)toDictionaryWithExcludedKeys:(StringSet *)keys;
 
+/** @brief An extension to - (NSDictionary *)toDictionary excluding given keys
+ @note Use with + (NSSet<NSString *> *)excludedKeys
+ @param include If Yes a nil field will be replaced with NSNull.
+ */
+- (NSDictionary *)toDictionaryWithExcludedKeys:(StringSet *)keys includeNull:(BOOL)include;
+
 #pragma mark - search predicate
 
 /** @brief key value pair for search predicates containg the class and property name
@@ -161,8 +167,15 @@
 - (NSData *)dataValue;
 /** @brief A representation of the serialized object in XML or JSON format. */
 - (NSData *)dataValueUseXML:(BOOL)XML;
-/** @brief A representation of the serialized object in XML or JSON format. */
+/** @brief A representation of the serialized object in XML or JSON format.
+ By default include Null is false. */
 - (NSDictionary *)toDictionaryWithXML:(BOOL)XML;
+/** @brief A representation of the serialized object in XML or JSON format.
+ @param include If Yes a nil field will be replaced with NSNull. */
+- (NSDictionary *)toDictionaryWithXML:(BOOL)XML includeNull:(BOOL)include;
+/** @brief A representation of the serialized object in JSON format.
+ @param include If Yes a nil field will be replaced with NSNull. */
+- (NSDictionary *)toDictionaryIncludeNull:(BOOL)include;
 /** @brief A JSON representation of the serialized object is converted to dictionary and used to create the object using initWithDictionary:. */
 + (instancetype)objectWithJSON:(NSString *)string;
 - (BOOL)propertyIsBool:(NSString *)propertyName;

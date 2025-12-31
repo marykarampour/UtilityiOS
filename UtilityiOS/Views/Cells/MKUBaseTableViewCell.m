@@ -18,7 +18,11 @@
 @implementation MKUSubtitleTableViewCell
 
 - (instancetype)init {
-    if (self = [super initWithStyle:UITableViewCellStyleSubtitle]) {
+    return [self initWithStyle:UITableViewCellStyleSubtitle];
+}
+
+- (instancetype)initWithStyle:(UITableViewCellStyle)style {
+    if (self = [super initWithStyle:style]) {
         self.textLabel.numberOfLines = 0;
         self.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
         self.detailTextLabel.numberOfLines = 0;

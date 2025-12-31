@@ -179,8 +179,7 @@
             if ([self hideSection:section] || [self shouldHideSelectionSection:section])
                 return 0.0;
             else {
-                MKULabelAttributes *attrs = [self labelAttributesForSection:section];
-                return [self adjustHeight:[attrs heightForWidth:self.view.frame.size.width]];
+                return [self attributedHeightForRowAtIndexPath:indexPath];
             }
         }
     }
@@ -499,7 +498,14 @@
 }
 
 - (CGFloat)heightForNonEditingListRowAtIndexPath:(NSIndexPath *)indexPath {
-    return UITableViewAutomaticDimension;
+    return [self attributedHeightForRowAtIndexPath:indexPath];
+}
+
+- (CGFloat)attributedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    MKULabelAttributes *attrs = [self labelAttributesForSection:indexPath.section];
+    UITableViewCellStyle style = [self cellStyleForRowAtIndexPath:indexPath];
+    CGFloat widthFactor = (style == UITableViewCellStyleValue1 || style == UITableViewCellStyleValue2) ? 52.0 : 0.0;
+    return [self adjustHeight:[attrs heightForWidth:self.view.frame.size.width]] + widthFactor;
 }
 
 - (__kindof MKUBaseTableViewCell *)cellForListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath {
@@ -1142,6 +1148,10 @@
 
 - (UITableViewCellAccessoryType)accessoryTypeForSingleDeselectedRowForListOfType:(NSUInteger)type {
     return UITableViewCellAccessoryDisclosureIndicator;
+}
+
+- (UITableViewCellStyle)cellStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewCellStyleDefault;
 }
 
 - (UITableViewCellSelectionStyle)selectionStyleForListOfType:(NSUInteger)type {
