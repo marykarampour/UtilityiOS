@@ -253,10 +253,11 @@ const void * MAPPER_FORMAT_KEY;
 
 - (NSDictionary *)toDictionaryWithExcludedKeys:(StringSet *)keys includeNull:(BOOL)include {
     
-    NSMutableDictionary *dict = [[super toDictionary] mutableCopy];
-    MStringArr *arr = [[keys allObjects] mutableCopy];
+    NSMutableDictionary *dict = [[self toDictionaryWithNull:[super toDictionary]] mutableCopy];
+    MStringArr *arr = [[NSMutableArray alloc] init];
     if (!include)
         [arr addObjectsFromArray:[dict NullKeysArray]];
+    [arr addObjectsFromArray:[keys allObjects]];
     [dict removeObjectsForKeys:arr];
     
     return dict;
