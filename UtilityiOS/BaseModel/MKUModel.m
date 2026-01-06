@@ -248,7 +248,7 @@ const void * MAPPER_FORMAT_KEY;
 }
 
 - (NSDictionary *)toDictionaryWithExcludedKeys:(StringSet *)keys {
-    return [self toDictionaryWithExcludedKeys:keys includeNull:NO];
+    return [self toDictionaryWithExcludedKeys:keys includeNull:self.includeNull];
 }
 
 - (NSDictionary *)toDictionaryWithExcludedKeys:(StringSet *)keys includeNull:(BOOL)include {
@@ -268,7 +268,7 @@ const void * MAPPER_FORMAT_KEY;
 }
 
 - (NSDictionary *)toDictionaryWithXML:(BOOL)XML {
-    return [self toDictionaryWithXML:XML includeNull:NO];
+    return [self toDictionaryWithXML:XML includeNull:self.includeNull];
 }
 
 - (NSDictionary *)toDictionaryIncludeNull:(BOOL)include {
@@ -383,7 +383,7 @@ const void * MAPPER_FORMAT_KEY;
 }
 
 + (NSSet<NSString *> *)excludedKeys {
-    return nil;
+    return [NSSet setWithObject:NSStringFromSelector(@selector(includeNull))];
 }
 
 + (NSSet<NSString *> *)customKeys {

@@ -114,6 +114,9 @@
  @note default is MKU_STRING_FORMATNONE, override + (MKU_STRING_FORMAT)classMapperFormat in subclass to customize */
 @property (class, nonatomic, assign, readonly) MKU_STRING_FORMAT mapperFormat;
 
+/** @brief If YES, nulls will be added to toDictionary. */
+@property (nonatomic, assign) BOOL includeNull;
+
 - (instancetype)initWithDictionary:(NSDictionary *)dict;
 /** @param Default is NO. If NO, JSONModel methods will be used, otherwise XMLSerialize will be done. */
 - (instancetype)initWithDictionary:(NSDictionary *)dict useXML:(BOOL)XML;
