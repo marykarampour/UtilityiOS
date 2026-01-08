@@ -100,8 +100,19 @@
 
 @end
 
+/** @brief These properties are universal defaults across your app.
+ Create a category of MKUModel and implement these.
+ If not provided, model defaults are used or ignored. */
+@protocol MKUModelUniversalDefaultsProtocol <NSObject>
+
+@optional
++ (DATE_FORMAT_STYLE)defaultDateFormat;
++ (BOOL)defaultIncludeNull;
+
+@end
+
 //TODO: JSONModel does not support all types, e.g., Class. Made it not throw exception, have to decide
-@interface MKUModel : JSONModel <NSCoding, NSCopying, MKUModelCustomKeysProtocol>
+@interface MKUModel : JSONModel <NSCoding, NSCopying, MKUModelCustomKeysProtocol, MKUModelUniversalDefaultsProtocol>
 
 @property (class, nonatomic, strong, readonly) NSSet<NSString *> *propertyNames;
 /** @brief Key is property name and value is Attribute name */

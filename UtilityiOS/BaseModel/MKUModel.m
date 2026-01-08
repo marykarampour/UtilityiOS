@@ -84,6 +84,14 @@ const void * MAPPER_FORMAT_KEY;
     return MKU_STRING_FORMAT_NONE;
 }
 
+- (instancetype)init {
+    if (self = [super init]) {
+        if ([self.class respondsToSelector:@selector(defaultIncludeNull)])
+            self.includeNull = [self.class defaultIncludeNull];
+    }
+    return self;
+}
+
 - (instancetype)initWithDictionary:(NSDictionary *)dict {
     return [self initWithDictionary:dict error:nil];
 }
@@ -98,11 +106,13 @@ const void * MAPPER_FORMAT_KEY;
 
 //overriding this only to support date formates not supporeted by JSONModel
 - (instancetype)initWithDictionary:(NSDictionary *)dict error:(NSError *__autoreleasing *)err useXML:(BOOL)XML {
+    
     if (XML) {
         self = [super init];
         [self XMLDeserialize:dict];
         return self;
     }
+    
     if (self = [super initWithDictionary:dict error:err]) {
         for (NSString *name in self.class.dateProperties) {
             NSString *propertyName = [self.class convertToJson:name];
@@ -116,6 +126,9 @@ const void * MAPPER_FORMAT_KEY;
                 }
             }
         }
+        
+        if ([self.class respondsToSelector:@selector(defaultIncludeNull)])
+            self.includeNull = [self.class defaultIncludeNull];
     }
     return self;
 }
@@ -435,6 +448,7 @@ const void * MAPPER_FORMAT_KEY;
 }
 
 + (DATE_FORMAT_STYLE)dateFormatForProperty:(NSString *)property {
+    if ([self respondsToSelector:@selector(defaultDateFormat)]) return [self defaultDateFormat];
     return DATE_FORMAT_FULL_STYLE;
 }
 
