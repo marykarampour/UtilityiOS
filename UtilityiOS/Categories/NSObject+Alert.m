@@ -180,6 +180,23 @@
     [self actionAlertWithTitle:title message:message type:MKU_ACTION_ALERT_TYPE_OK alertActionHandler:handler cancelActionHandler:cancelHandler];
 }
 
+- (void)actionAlertWithTitle:(NSString *)title message:(NSString *)message actionTitle:(NSString *)actionTitle alertActionHandler:(void (^)(void))handler cancelActionHandler:(void (^)(void))cancelHandler {
+    
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:actionTitle style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if (handler) handler();
+    }]];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:[Constants Cancel_STR] style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        if (cancelHandler) cancelHandler();
+    }]];
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[self presentingVC] presentViewController:alert animated:YES completion:nil];
+    });
+}
+
 - (void)actionAlertWithTitle:(NSString *)title message:(NSString *)message type:(MKU_ACTION_ALERT_TYPE)type alertActionHandler:(void (^)(void))handler cancelActionHandler:(void (^)(void))cancelHandler {
     
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
