@@ -170,6 +170,10 @@
     return 0.0;
 }
 
+- (CGFloat)headerHorizontalMargin {
+    return 0.0;
+}
+
 - (CGFloat)contentViewTopMargin {
     if ([self headerHeight] == CONSTRAINT_NO_PADDING)
         return [self headerVerticalMargin];
@@ -189,6 +193,10 @@
 }
 
 - (CGFloat)footerVerticalMargin {
+    return 0.0;
+}
+
+- (CGFloat)footerHorizontalMargin {
     return 0.0;
 }
 
@@ -221,8 +229,8 @@
         [self.backView constraint:NSLayoutAttributeCenterX view:self.headerView];
     }
     else {
-        [self.backView constraint:NSLayoutAttributeLeft view:self.headerView];
-        [self.backView constraint:NSLayoutAttributeRight view:self.headerView];
+        [self.backView constraint:NSLayoutAttributeLeft view:self.headerView margin:[self headerHorizontalMargin]];
+        [self.backView constraint:NSLayoutAttributeRight view:self.headerView margin:-[self headerHorizontalMargin]];
     }
     
     if (0 < [self footerWidth]) {
@@ -230,8 +238,8 @@
         [self.backView constraint:NSLayoutAttributeCenterX view:self.footerView];
     }
     else {
-        [self.backView constraint:NSLayoutAttributeLeft view:self.footerView];
-        [self.backView constraint:NSLayoutAttributeRight view:self.footerView];
+        [self.backView constraint:NSLayoutAttributeLeft view:self.footerView margin:[self footerHorizontalMargin]];
+        [self.backView constraint:NSLayoutAttributeRight view:self.footerView margin:-[self footerHorizontalMargin]];
     }
     
     if ([self headerHeight] != CONSTRAINT_NO_PADDING)

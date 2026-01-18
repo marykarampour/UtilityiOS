@@ -46,6 +46,9 @@
 - (void)setTitle:(NSString *)title value:(NSInteger)value start:(NSInteger)start end:(NSInteger)end;
 - (void)addStepperTarget:(id)target action:(SEL)action;
 - (void)setIndexPath:(NSIndexPath *)indexPath;
++ (CGFloat)controlWidths;
++ (CGFloat)fieldWidth;
++ (CGFloat)controlHorizontalMargin;
 
 @end
 
