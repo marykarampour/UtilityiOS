@@ -93,7 +93,7 @@ static CGFloat const STEPPER_WIDTH = 90.0;
 }
 
 + (CGFloat)controlWidths {
-    return STEPPER_WIDTH + FIELD_WIDTH + PADDING;
+    return STEPPER_WIDTH + FIELD_WIDTH;
 }
 
 + (CGFloat)fieldWidth {
