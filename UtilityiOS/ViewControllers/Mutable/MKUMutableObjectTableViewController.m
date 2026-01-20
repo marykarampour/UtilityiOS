@@ -503,7 +503,7 @@
 
 - (CGFloat)attributedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     MKULabelAttributes *attrs = [self labelAttributesForSection:indexPath.section];
-    UITableViewCellStyle style = [self cellStyleForRowAtIndexPath:indexPath];
+    UITableViewCellStyle style = [self cellStyleForSubtitleRowAtIndexPath:indexPath];
     CGFloat widthFactor = (style == UITableViewCellStyleValue1 || style == UITableViewCellStyleValue2) ? 52.0 : 0.0;
     return [self adjustHeight:[attrs heightForWidth:self.view.frame.size.width]] + widthFactor;
 }
@@ -1148,10 +1148,6 @@
 
 - (UITableViewCellAccessoryType)accessoryTypeForSingleDeselectedRowForListOfType:(NSUInteger)type {
     return UITableViewCellAccessoryDisclosureIndicator;
-}
-
-- (UITableViewCellStyle)cellStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return UITableViewCellStyleSubtitle;
 }
 
 - (UITableViewCellSelectionStyle)selectionStyleForListOfType:(NSUInteger)type {
