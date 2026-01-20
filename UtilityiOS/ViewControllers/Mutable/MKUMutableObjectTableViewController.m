@@ -1150,6 +1150,10 @@
     return UITableViewCellAccessoryDisclosureIndicator;
 }
 
+- (UITableViewCellStyle)cellStyleForSubtitleRowAtIndexPath:(NSIndexPath *)indexPath {
+    return UITableViewCellStyleSubtitle;
+}
+
 - (UITableViewCellSelectionStyle)selectionStyleForListOfType:(NSUInteger)type {
     return [self defaultSelectionStyleForListOfType:type];
 }
