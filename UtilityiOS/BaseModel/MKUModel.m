@@ -598,7 +598,7 @@ const void * MAPPER_FORMAT_KEY;
     return (value && ([attribute characterAtIndex:1] == 'B' || [attribute characterAtIndex:1] == 'c') && ([value isEqualToNumber:@0] || [value isEqualToNumber:@1]));
 }
 
-- (BOOL)datePropertyIsUTC:(NSString *)propertyName {
++ (BOOL)datePropertyIsUTC:(NSString *)propertyName {
     return NO;
 }
 
@@ -660,7 +660,7 @@ const void * MAPPER_FORMAT_KEY;
         serialized = [dict count] > 0 ? dict : nil;
     }
     else if ([value isKindOfClass:[NSDate class]]) {
-        BOOL isUTC = [self datePropertyIsUTC:key];
+        BOOL isUTC = [self.class datePropertyIsUTC:key];
         serialized = [((NSDate *)value) dateStringWithFormat:[self.class dateFormatForProperty:key] isUTC:isUTC];
     }
     else if (value && ([attribute characterAtIndex:1] == 'B' || [attribute characterAtIndex:1] == 'c') && ([value isEqualToNumber:@0] || [value isEqualToNumber:@1])) {
@@ -789,7 +789,7 @@ const void * MAPPER_FORMAT_KEY;
                 deserialized = [NSDate dateWithTimeIntervalSince1970:[value doubleValue]];
             }
             else if ([propertyClass isSubclassOfClass:[NSDate class]] && [value isKindOfClass:[NSString class]]) {
-                BOOL isUTC = [self datePropertyIsUTC:key];
+                BOOL isUTC = [self.class datePropertyIsUTC:key];
                 deserialized = [value dateWithAnyFormatIsUTC:isUTC];
             }
             else if ([propertyClass isSubclassOfClass:[NSNumber class]]) {
@@ -1058,7 +1058,8 @@ const void * MAPPER_FORMAT_KEY;
 }
 
 - (id)NSDateFromNSString:(NSString *)string property:(NSString *)property inModelClass:(__unsafe_unretained Class)cls {
-    return [NSDate dateFromString:string withFormat:[cls dateFormatForProperty:property]];
+    BOOL isUTC = [cls datePropertyIsUTC:property];
+    return [NSDate dateFromString:string withFormat:[cls dateFormatForProperty:property] isUTC:isUTC];
 }
 
 - (NSString *)JSONObjectFromNSDate:(NSDate *)date property:(NSString *)property inModelClass:(__unsafe_unretained Class)cls {

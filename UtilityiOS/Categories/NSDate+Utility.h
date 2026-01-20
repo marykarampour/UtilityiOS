@@ -20,7 +20,9 @@ typedef NS_ENUM(NSUInteger, MKU_REFERENCE_DATE_TYPE) {
 @interface NSDate (Utility)
 
 + (NSString *)dateFormatStringForFormat:(DATE_FORMAT_STYLE)format;
+/** #brief Timezone is local. */
 + (NSDate *)dateFromString:(NSString *)string withFormat:(DATE_FORMAT_STYLE)format;
++ (NSDate *)dateFromString:(NSString *)string withFormat:(DATE_FORMAT_STYLE)format isUTC:(BOOL)isUTC;;
 + (NSDateFormatter *)dateFormatterWithFormat:(DATE_FORMAT_STYLE)format;
 - (NSString *)dateStringWithFormat:(DATE_FORMAT_STYLE)format isUTC:(BOOL)isUTC;
 - (NSString *)UTCDateString;

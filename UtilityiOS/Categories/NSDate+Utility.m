@@ -171,7 +171,13 @@
 }
 
 + (NSDate *)dateFromString:(NSString *)string withFormat:(DATE_FORMAT_STYLE)format {
-    return [[self dateFormatterWithFormat:format] dateFromString:string];
+    return [self dateFromString:string withFormat:format isUTC:NO];
+}
+
++ (NSDate *)dateFromString:(NSString *)string withFormat:(DATE_FORMAT_STYLE)format isUTC:(BOOL)isUTC {
+    NSDateFormatter *formatter = [self dateFormatterWithFormat:format];
+    [formatter setTimeZone:isUTC ? [NSDate UTCTimeZone] : [NSDate systemTimeZone]];
+    return [formatter dateFromString:string];
 }
 
 + (NSDateFormatter *)dateFormatterWithFormat:(DATE_FORMAT_STYLE)format {
@@ -179,7 +185,6 @@
     NSString *str = [self dateFormatStringForFormat:format];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
-    [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
     [formatter setDateFormat:str];
     return formatter;
 }

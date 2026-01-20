@@ -194,7 +194,7 @@
 + (instancetype)objectWithJSON:(NSString *)string;
 - (BOOL)propertyIsBool:(NSString *)propertyName;
 /** @brief Default is NO. If No is assuems local time for formatting. */
-- (BOOL)datePropertyIsUTC:(NSString *)propertyName;
++ (BOOL)datePropertyIsUTC:(NSString *)propertyName;
 - (NSDictionary *)varNamesWithSingleLenght:(NSUInteger)lenght;
 
 @end
