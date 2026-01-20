@@ -1151,7 +1151,7 @@
 }
 
 - (UITableViewCellStyle)cellStyleForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return UITableViewCellStyleDefault;
+    return UITableViewCellStyleSubtitle;
 }
 
 - (UITableViewCellSelectionStyle)selectionStyleForListOfType:(NSUInteger)type {
