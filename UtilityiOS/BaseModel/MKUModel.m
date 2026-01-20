@@ -1063,7 +1063,8 @@ const void * MAPPER_FORMAT_KEY;
 }
 
 - (NSString *)JSONObjectFromNSDate:(NSDate *)date property:(NSString *)property inModelClass:(__unsafe_unretained Class)cls {
-    return [date dateStringWithFormat:[NSDate dateFormatStringForFormat:[cls dateFormatForProperty:property]]];
+    BOOL isUTC = [cls datePropertyIsUTC:property];
+    return [date dateStringWithFormat:[self.class dateFormatForProperty:property] isUTC:isUTC];
 }
 
 @end
