@@ -38,6 +38,7 @@
 - (CGFloat)maxHeaderHeight;
 - (CGFloat)headerWidth;
 - (CGFloat)headerVerticalMargin;
+- (CGFloat)headerHorizontalMargin;
 /** @brief Default is [self headerVerticalMargin] + [self headerHeight] */
 - (CGFloat)contentViewTopMargin;
 
@@ -51,6 +52,7 @@
 - (CGFloat)footerHeight;
 - (CGFloat)footerWidth;
 - (CGFloat)footerVerticalMargin;
+- (CGFloat)footerHorizontalMargin;
 /** @brief Default is [self footerVerticalMargin] + [self footerHeight] */
 - (CGFloat)contentViewBottomMargin;
 
