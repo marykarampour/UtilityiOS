@@ -104,20 +104,22 @@
     return [self addConstraintWithItem:view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0 constant:height];
 }
 
-- (void)constraintWidth:(CGFloat)width forView:(__kindof UIView *)view priority:(UILayoutPriority)priority {
-    if (!view) return;
+- (NSLayoutConstraint *)constraintWidth:(CGFloat)width forView:(__kindof UIView *)view priority:(UILayoutPriority)priority {
+    if (!view) return nil;
     
     NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeWidth multiplier:1.0 constant:width];
     constraint.priority = priority;
     [self addConstraint:constraint];
+    return constraint;
 }
 
-- (void)constraintHeight:(CGFloat)height forView:(__kindof UIView *)view priority:(UILayoutPriority)priority {
-    if (!view) return;
+- (NSLayoutConstraint *)constraintHeight:(CGFloat)height forView:(__kindof UIView *)view priority:(UILayoutPriority)priority {
+    if (!view) return nil;
     
     NSLayoutConstraint *constraint = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:view attribute:NSLayoutAttributeHeight multiplier:1.0 constant:height];
     constraint.priority = priority;
     [self addConstraint:constraint];
+    return constraint;
 }
 
 - (void)constraintSameWidthHeightForView:(__kindof UIView *)view {

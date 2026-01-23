@@ -120,6 +120,7 @@ typedef NS_ENUM(NSInteger, MKU_MUTABLE_OBJECT_FIELD_TYPE) {
 
 - (CGFloat)heightForStandardSelectionCell;
 - (CGFloat)heightForSingleCellRowAtIndexPath:(NSIndexPath *)indexPath;
+- (CGFloat)attributedHeightForRowAtIndexPath:(NSIndexPath *)indexPath;
 
 - (UIImage *)buttonImageForFieldAtIndexPath:(NSIndexPath *)indexPath;
 - (SEL)actionForFieldButtonAtIndexPath:(NSIndexPath *)indexPath;

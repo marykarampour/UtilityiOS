@@ -498,7 +498,7 @@
 }
 
 - (CGFloat)heightForNonEditingListRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [self attributedHeightForRowAtIndexPath:indexPath];
+    return UITableViewAutomaticDimension;
 }
 
 - (CGFloat)attributedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {

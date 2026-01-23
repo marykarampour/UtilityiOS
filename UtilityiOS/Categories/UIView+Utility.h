@@ -75,8 +75,8 @@ static CGFloat const CONSTRAINT_NO_PADDING = MAXFLOAT;
 /** @brief Limits the height or width of view to that of its parent */
 - (void)constraintLimitToParent:(NSLayoutAttribute)attr view:(__kindof UIView *)view;
 
-- (void)constraintWidth:(CGFloat)width forView:(__kindof UIView *)view priority:(UILayoutPriority)priority;
-- (void)constraintHeight:(CGFloat)height forView:(__kindof UIView *)view priority:(UILayoutPriority)priority;
+- (NSLayoutConstraint *)constraintWidth:(CGFloat)width forView:(__kindof UIView *)view priority:(UILayoutPriority)priority;
+- (NSLayoutConstraint *)constraintHeight:(CGFloat)height forView:(__kindof UIView *)view priority:(UILayoutPriority)priority;
 
 #pragma mark - constraints
 
