@@ -43,6 +43,7 @@ static NSString * const MULTI_SELECT_KEY = @"allowsMultipleSelection";
     MKUFieldListModel *obj = [[[self.class classForListObject] alloc] init];
     obj.activeListTypes = types;
     
+    [self initSelectedActionHandler];
     [self setUpdatedObject:obj];
     [self resetSelectedSets];
 }
