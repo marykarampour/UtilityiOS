@@ -32,7 +32,7 @@
  */
 + (BOOL)usingDynamicProperties;
 
-/** @brief Return how you want BOOL be serialized, e.g., YES / NO, or true / false.  DEfault is true / false */
+/** @brief Return how you want BOOL be serialized, e.g., YES / NO, or true / false.  Default is true / false */
 + (NSString *)stringValueForBOOL:(BOOL)value;
 + (BOOL)boolValueForObject:(NSObject *)value;
 
@@ -107,7 +107,6 @@
 
 @optional
 + (DATE_FORMAT_STYLE)defaultDateFormat;
-+ (BOOL)defaultIncludeNull;
 
 @end
 
@@ -124,9 +123,6 @@
 /** @brief Used to set the mapper format for object to JSON.
  @note default is MKU_STRING_FORMATNONE, override + (MKU_STRING_FORMAT)classMapperFormat in subclass to customize */
 @property (class, nonatomic, assign, readonly) MKU_STRING_FORMAT mapperFormat;
-
-/** @brief If YES, nulls will be added to toDictionary. */
-@property (nonatomic, assign) BOOL includeNull;
 
 - (instancetype)initWithDictionary:(NSDictionary *)dict;
 /** @param Default is NO. If NO, JSONModel methods will be used, otherwise XMLSerialize will be done. */
@@ -146,15 +142,8 @@
 - (void)copyValues:(__kindof MKUModel *)object;
 
 /** @brief An extension to - (NSDictionary *)toDictionary excluding given keys
- @note Use with + (NSSet<NSString *> *)excludedKeys 
- */
+ @note Use with + (NSSet<NSString *> *)excludedKeys */
 - (NSDictionary *)toDictionaryWithExcludedKeys:(StringSet *)keys;
-
-/** @brief An extension to - (NSDictionary *)toDictionary excluding given keys
- @note Use with + (NSSet<NSString *> *)excludedKeys
- @param include If Yes a nil field will be replaced with NSNull.
- */
-- (NSDictionary *)toDictionaryWithExcludedKeys:(StringSet *)keys includeNull:(BOOL)include;
 
 #pragma mark - search predicate
 
@@ -181,15 +170,8 @@
 - (NSData *)dataValue;
 /** @brief A representation of the serialized object in XML or JSON format. */
 - (NSData *)dataValueUseXML:(BOOL)XML;
-/** @brief A representation of the serialized object in XML or JSON format.
- By default include Null is false. */
+/** @brief A representation of the serialized object in XML or JSON format. */
 - (NSDictionary *)toDictionaryWithXML:(BOOL)XML;
-/** @brief A representation of the serialized object in XML or JSON format.
- @param include If Yes a nil field will be replaced with NSNull. */
-- (NSDictionary *)toDictionaryWithXML:(BOOL)XML includeNull:(BOOL)include;
-/** @brief A representation of the serialized object in JSON format.
- @param include If Yes a nil field will be replaced with NSNull. */
-- (NSDictionary *)toDictionaryIncludeNull:(BOOL)include;
 /** @brief A JSON representation of the serialized object is converted to dictionary and used to create the object using initWithDictionary:. */
 + (instancetype)objectWithJSON:(NSString *)string;
 - (BOOL)propertyIsBool:(NSString *)propertyName;

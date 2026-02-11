@@ -23,7 +23,7 @@
 - (StringArr *)NullKeysArray {
     MStringArr *arr = [[NSMutableArray alloc] init];
     [self enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, NSObject * _Nonnull obj, BOOL * _Nonnull stop) {
-        if ([obj.description containsString:@"null"]) {
+        if ([obj.description containsString:@"<null>"]) {
             [arr addObject:key];
         }
     }];

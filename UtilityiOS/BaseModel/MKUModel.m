@@ -84,14 +84,6 @@ const void * MAPPER_FORMAT_KEY;
     return MKU_STRING_FORMAT_NONE;
 }
 
-- (instancetype)init {
-    if (self = [super init]) {
-        if ([self.class respondsToSelector:@selector(defaultIncludeNull)])
-            self.includeNull = [self.class defaultIncludeNull];
-    }
-    return self;
-}
-
 - (instancetype)initWithDictionary:(NSDictionary *)dict {
     return [self initWithDictionary:dict error:nil];
 }
@@ -126,9 +118,6 @@ const void * MAPPER_FORMAT_KEY;
                 }
             }
         }
-        
-        if ([self.class respondsToSelector:@selector(defaultIncludeNull)])
-            self.includeNull = [self.class defaultIncludeNull];
     }
     return self;
 }
@@ -249,30 +238,9 @@ const void * MAPPER_FORMAT_KEY;
 
 #pragma mark - key mapper
 
-- (NSDictionary *)toDictionaryWithNull:(NSDictionary *)dict {
-    NSMutableDictionary *res = [dict mutableCopy];
-    
-    for (NSString *name in self.class.propertyNames) {
-        if ([self respondsToSelector:NSSelectorFromString(name)] && ![self valueForKey:name]) {
-            [res setObject:[NSNull null] forKey:name];
-        }
-    }
-    return res;
-}
-
 - (NSDictionary *)toDictionaryWithExcludedKeys:(StringSet *)keys {
-    return [self toDictionaryWithExcludedKeys:keys includeNull:self.includeNull];
-}
-
-- (NSDictionary *)toDictionaryWithExcludedKeys:(StringSet *)keys includeNull:(BOOL)include {
-    
-    NSMutableDictionary *dict = [[self toDictionaryWithNull:[super toDictionary]] mutableCopy];
-    MStringArr *arr = [[NSMutableArray alloc] init];
-    if (!include)
-        [arr addObjectsFromArray:[dict NullKeysArray]];
-    [arr addObjectsFromArray:[keys allObjects]];
-    [dict removeObjectsForKeys:arr];
-    
+    NSMutableDictionary *dict = [[super toDictionary] mutableCopy];
+    [dict removeObjectsForKeys:[keys allObjects]];
     return dict;
 }
 
@@ -281,18 +249,10 @@ const void * MAPPER_FORMAT_KEY;
 }
 
 - (NSDictionary *)toDictionaryWithXML:(BOOL)XML {
-    return [self toDictionaryWithXML:XML includeNull:self.includeNull];
-}
-
-- (NSDictionary *)toDictionaryIncludeNull:(BOOL)include {
-    return [self toDictionaryWithXML:NO includeNull:include];
-}
-
-- (NSDictionary *)toDictionaryWithXML:(BOOL)XML includeNull:(BOOL)include {
     NSSet *set = [[self class] excludedKeysWithAncestors];
     if (XML)
         return [self XMLSerializeIgnoringKeys:set];
-    return [self toDictionaryWithExcludedKeys:set includeNull:include];
+    return [self toDictionaryWithExcludedKeys:set];
 }
 
 + (NSArray *)toDictionaryWithArray:(NSArray<MKUModel *> *)items useXML:(BOOL)XML {
@@ -396,7 +356,7 @@ const void * MAPPER_FORMAT_KEY;
 }
 
 + (NSSet<NSString *> *)excludedKeys {
-    return [NSSet setWithObject:NSStringFromSelector(@selector(includeNull))];
+    return nil;
 }
 
 + (NSSet<NSString *> *)customKeys {
@@ -428,7 +388,7 @@ const void * MAPPER_FORMAT_KEY;
 + (StringSet *)excludedKeysWithAncestors {
     MStringSet *arr = [[MStringSet alloc] init];
     Class class = self;
-    Class finalClass = [self usingAncestors] ? [MKUModel class] : [self superclass];
+    Class finalClass = [self usingAncestors] ? [MKUModel superclass] : [self superclass];
     while (class != finalClass && class != [NSObject class]) {
         [arr addObjectsFromArray:[[class excludedKeys] allObjects]];
         class = [class superclass];
