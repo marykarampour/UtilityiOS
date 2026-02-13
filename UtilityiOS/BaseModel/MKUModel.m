@@ -239,7 +239,7 @@ const void * MAPPER_FORMAT_KEY;
 #pragma mark - key mapper
 
 - (NSDictionary *)toDictionaryWithExcludedKeys:(StringSet *)keys {
-    NSMutableDictionary *dict = [[super toDictionary] mutableCopy];
+    NSMutableDictionary *dict = [[self toDictionaryWithKeys:nil] mutableCopy];
     [dict removeObjectsForKeys:[keys allObjects]];
     return dict;
 }
@@ -317,7 +317,7 @@ const void * MAPPER_FORMAT_KEY;
     unsigned int count = 0;
     objc_property_t *properties = class_copyPropertyList(class, &count);
     NSDictionary *customNames = [self customKeyValueDict];
-    NSSet *excluded = [[self class] excludedKeys];
+    NSSet *excluded = [[self class] excludedKeysWithAncestors];
     
     for (unsigned int i=0; i<count; i++) {
         NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];

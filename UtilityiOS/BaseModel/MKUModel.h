@@ -141,10 +141,6 @@
 /** @brief Only copies values which are not nil */
 - (void)copyValues:(__kindof MKUModel *)object;
 
-/** @brief An extension to - (NSDictionary *)toDictionary excluding given keys
- @note Use with + (NSSet<NSString *> *)excludedKeys */
-- (NSDictionary *)toDictionaryWithExcludedKeys:(StringSet *)keys;
-
 #pragma mark - search predicate
 
 /** @brief key value pair for search predicates containg the class and property name
