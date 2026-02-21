@@ -12,7 +12,7 @@
 #import <objc/runtime.h>
 
 static char CONTAINER_KEY;
-static char BAR_BUTTONs_KEY;
+static char BAR_BUTTONS_KEY;
 static char TARGETS_KEY;
 
 @interface NSObject ()
@@ -33,11 +33,11 @@ static char TARGETS_KEY;
 }
 
 - (void)setBarButtons:(NSDictionary<NSNumber *,NSMutableArray<UIBarButtonItem *> *> *)barButtons {
-    objc_setAssociatedObject(self, &BAR_BUTTONs_KEY, barButtons, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, &BAR_BUTTONS_KEY, barButtons, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (NSDictionary<NSNumber *,NSMutableArray<UIBarButtonItem *> *> *)barButtons {
-    return objc_getAssociatedObject(self, &BAR_BUTTONs_KEY);
+    return objc_getAssociatedObject(self, &BAR_BUTTONS_KEY);
 }
 
 - (UIBarButtonItem *)buttonOfType:(NSUInteger)type position:(MKU_NAV_BAR_BUTTON_POSITION)position {
