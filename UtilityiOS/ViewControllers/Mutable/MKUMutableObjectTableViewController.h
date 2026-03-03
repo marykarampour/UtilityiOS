@@ -187,6 +187,7 @@ typedef NS_ENUM(NSInteger, MKU_MUTABLE_OBJECT_FIELD_TYPE) {
 
 - (void)resetSelectedSets;
 - (void)resetSelectedSetsInListOfType:(NSUInteger)type;
+- (void)setAllSelectedSetsInListOfType:(NSUInteger)type;
 - (void)setSelectedObjectsWithSet:(NSSet *)selectedObjects inListOfType:(NSUInteger)type;
 - (NSSet *)selectedSetsInListOfType:(NSUInteger)type;
 - (void)setSelectedObject:(__kindof NSObject<MKUPlaceholderProtocol> *)obj;

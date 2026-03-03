@@ -56,7 +56,7 @@
 /** @brief Default list is section 0. */
 - (void)setSelectedObjectsWithSet:(NSSet *)selectedObjects;
 /** @brief Default list is section 0. */
-- (NSMutableSet *)selectedObjects;
+- (NSMutableSet<ObjectType> *)selectedObjects;
 
 /** @brief Called in viewController:didReturnWithResultType:object: if it is updating existing object. It calls
  itemsListVC:didUpdateItem: and reloadDataAnimated: by default. Call super. */

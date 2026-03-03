@@ -660,7 +660,7 @@
 }
 
 - (NSIndexPath *)indexPathForItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item {
-    for (NSUInteger i=0; i<[self numberOfSectionsInTableView:self.tableView]; i++) {
+    for (NSUInteger i=0; i < [self numberOfSectionsInTableView:self.tableView]; i++) {
         NSUInteger type = [self typeForSection:i];
         if (type != MKU_MUTABLE_OBJECT_FIELD_TYPE_LIST) continue;
         
@@ -799,7 +799,12 @@
 }
 
 - (void)resetSelectedSetsInListOfType:(NSUInteger)type {
-    [self.selectedSets setObject:[[NSSet alloc] init] forKey:@(type)];
+    [self setSelectedObjectsWithSet:[[NSSet alloc] init] inListOfType:type reload:YES];
+}
+
+- (void)setAllSelectedSetsInListOfType:(NSUInteger)type {
+    NSArray *arr = [self listItemsForListOfType:type];
+    [self setSelectedObjectsWithSet:[arr set] inListOfType:type reload:YES];
 }
 
 - (void)setSelectedObjectsWithSet:(NSSet *)selectedObjects inListOfType:(NSUInteger)type {
