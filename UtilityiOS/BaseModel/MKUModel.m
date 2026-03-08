@@ -514,7 +514,7 @@ const void * MAPPER_FORMAT_KEY;
 }
 
 + (BOOL)boolValueForObject:(NSObject *)value {
-    return [[value description] isEqualToString:@"true"] ? YES : NO;
+    return ([[value description] isEqualToString:@"true"] || [[value description] isEqualToString:@"1"]) ? YES : NO;
 }
 
 + (BOOL)propertyIsEnum:(NSString *)name {
