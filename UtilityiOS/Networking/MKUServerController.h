@@ -45,6 +45,7 @@
 - (void)addManagerWithType:(NSUInteger)type baseURLString:(NSString *)URL isSOAP:(BOOL)isSOAP isAuth:(BOOL)isAuth;
 /** @brief The manager responsible for log in and out services. */
 - (id<MKUServicesProtocol>)authManager;
+- (id<MKUServicesProtocol>)managerForType:(NSUInteger)type;
 
 #pragma mark - sample services - subclass may override
 
