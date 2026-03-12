@@ -67,6 +67,7 @@
 
 #pragma - mark form
 
+- (void)requestWithPath:(NSString *)path type:(MKU_NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary<NSString *,NSString *> *)headers completionHandler:(MKUServerStatusCodeResultErrorBlock)completion;
 - (void)requestMultipartFormURL:(NSString *)url type:(MKU_NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters data:(NSArray<MKUMultipartInfo *> *)data completion:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completion;
 - (void)downloadURL:(NSString *)url toFile:(NSString *)filname completion:(MKUServerResultErrorBlock)completion;
 
@@ -86,5 +87,24 @@
 - (void)service:(id<MKUServicesProtocol>)service didFailWithError:(NSError *)error;
 - (void)service:(id<MKUServicesProtocol>)service didFinishLoading:(NSString *)stringXML dictionary:(NSDictionary *)dict;
 - (BOOL)service:(id<MKUServicesProtocol>)service didReceiveResponseCode:(NSInteger)statusCode;
+
+#pragma mark - REST
+
+/** @brief Utiltiy method that uses [self headers] as headers for the requests.
+ @code
+ REST
+ https://baseurl/service/action
+ @endcode
+ 
+ @code
+ SOAP
+ URL: https://baseurl/service
+ SOAP Action: endpointPrefix/action
+ @endcode
+ 
+ @param serverType Indicates which server to connect to. Each server corresponds to a NetworkManager instance.
+ @param path The URL path in REST.
+ */
+- (void)requestWithServerType:(NSUInteger)serverType path:(NSString *)path type:(MKU_NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary<NSString *,NSString *> *)headers completionHandler:(MKUServerStatusCodeResultErrorBlock)completion;
 
 @end

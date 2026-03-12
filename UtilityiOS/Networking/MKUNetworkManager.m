@@ -44,6 +44,8 @@
 - (void)downloadURL:(NSString *)url toFile:(NSString *)filname completion:(MKUServerResultErrorBlock)completion {
 }
 
+- (void)requestWithPath:(NSString *)path type:(MKU_NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary<NSString *,NSString *> *)headers completionHandler:(MKUServerStatusCodeResultErrorBlock)completion {
+}
 
 + (id<MKUServicesProtocol>)managerWithBaseURLString:(NSString *)URL { 
     return [[self alloc] init];

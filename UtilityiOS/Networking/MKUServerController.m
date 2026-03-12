@@ -48,6 +48,10 @@
     [[self managerForType:serverType] requestWithEndpointPrefix:endpointPrefix service:service action:action type:type parameters:parameters headers:headers completionHandler:completion];
 }
 
+- (void)requestWithServerType:(NSUInteger)serverType path:(NSString *)path type:(MKU_NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary<NSString *,NSString *> *)headers completionHandler:(MKUServerStatusCodeResultErrorBlock)completion {
+    [[self managerForType:serverType] requestWithPath:path type:type parameters:parameters headers:headers completionHandler:completion];
+}
+
 #pragma mark - swizzled in category
 
 + (void)authWithUserID:(__kindof NSObject *)userID password:(NSString *)password completion:(MKUServerResultErrorBlock)completion {

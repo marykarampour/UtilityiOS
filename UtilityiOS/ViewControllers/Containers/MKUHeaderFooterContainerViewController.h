@@ -25,6 +25,7 @@
 @property (nonatomic, strong) ObjectType childViewController;
 @property (nonatomic, weak) id<HeaderVCChildViewDelegate> headerChildDelegate;
 
+- (instancetype)initWithObject:(id)object;
 /** @brief Call this if you intend not to call super in your init, for example in case of a class cluster.
  @param objects A dictionary of objects passed to a custom init method. */
 - (void)initBaseWithObject:(id)object;
