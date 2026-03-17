@@ -446,6 +446,7 @@ typedef NS_ENUM(NSUInteger, MKU_BADGE_VIEW_STATE) {
 + (CGFloat)GeoFenceRadiousMeter;
 + (CGFloat)GeoFenceRadiousKiloMeter;
 + (CGFloat)TextPadding;
++ (CGFloat)DefaultPadding;
 + (CGFloat)HorizontalSpacing;
 + (CGFloat)VerticalSpacing;
 + (UIEdgeInsets)TabBarItemImageInsets;
