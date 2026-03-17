@@ -265,6 +265,10 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
     return 4.0;
 }
 
++ (CGFloat)DefaultPadding {
+    return 8.0;
+}
+
 + (CGFloat)HorizontalSpacing {
     return 8.0;
 }

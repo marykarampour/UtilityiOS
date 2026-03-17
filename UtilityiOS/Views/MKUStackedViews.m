@@ -18,7 +18,7 @@
 @implementation MKUStackedViews
 
 - (instancetype)initWithCount:(NSUInteger)count viewCreationHandler:(SINGLE_INDEX_VIEW_CREATION_HANDLER)handler {
-    return [self initWithCount:count padding:self.defaultPadding viewCreationHandler:handler];
+    return [self initWithCount:count padding:[Constants DefaultPadding] viewCreationHandler:handler];
 }
 
 - (instancetype)initWithCount:(NSUInteger)count padding:(CGFloat)padding viewCreationHandler:(SINGLE_INDEX_VIEW_CREATION_HANDLER)handler {
@@ -63,7 +63,6 @@
 
 - (instancetype)initWithViewCreationHandlers:(NSArray<SINGLE_INDEX_VIEW_CREATION_HANDLER> *)handlers {
     if (self = [super init]) {
-        
         self.views = [[NSMutableArray alloc] init];
         
         for (NSUInteger i=0; i<handlers.count; i++) {
@@ -86,10 +85,6 @@
     return self.views[index];
 }
 
-- (NSArray<__kindof UIView *> *)contentViews {
-    return self.views;
-}
-
 - (NSUInteger)count {
     return self.views.count;
 }
@@ -109,7 +104,7 @@
 }
 
 - (void)constreintViews {
-    [self constreintViewsWithPadding:self.defaultPadding];
+    [self constreintViewsWithPadding:[Constants DefaultPadding]];
 }
 
 @end
@@ -118,8 +113,7 @@
 @implementation MKUHorizontalViews
 
 - (void)constreintViewsWithSizes:(NSDictionary<NSNumber *,NSNumber *> *)sizes interItemSpacing:(CGFloat)interItemSpacing horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin {
-    
-    [self constraintHorizontally:[self contentViews] interItemMargin:interItemSpacing horizontalMargin:horizontalMargin verticalMargin:verticalMargin equalWidths:sizes.count == 0];
+    [self constraintHorizontally:[self views] interItemMargin:interItemSpacing horizontalMargin:horizontalMargin verticalMargin:verticalMargin equalWidths:sizes.count == 0];
     
     [sizes enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull key, NSNumber * _Nonnull obj, BOOL * _Nonnull stop) {
         NSUInteger index = key.integerValue;
@@ -143,8 +137,7 @@
 @implementation MKUVerticalViews
 
 - (void)constreintViewsWithSizes:(NSDictionary<NSNumber *,NSNumber *> *)sizes interItemSpacing:(CGFloat)interItemSpacing horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin {
-    
-    [self constraintVertically:[self contentViews] interItemMargin:interItemSpacing horizontalMargin:horizontalMargin verticalMargin:verticalMargin equalHeights:sizes.count == 0];
+    [self constraintVertically:[self views] interItemMargin:interItemSpacing horizontalMargin:horizontalMargin verticalMargin:verticalMargin equalHeights:sizes.count == 0];
     
     [sizes enumerateKeysAndObjectsUsingBlock:^(NSNumber * _Nonnull key, NSNumber * _Nonnull obj, BOOL * _Nonnull stop) {
         NSUInteger index = key.integerValue;

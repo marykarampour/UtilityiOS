@@ -23,9 +23,9 @@
 
 @interface MKUStackedViews <__covariant ViewType : UIView *> : UIView <MKUStackedViewProtocol>
 
-@property (nonatomic, assign) CGFloat defaultPadding;
-
-- (NSArray <__kindof UIView *> *)contentViews;
+/** @brief Initializes the views and adds them as subview but doesn't constraint them.
+ @param handler Returns a UIView that will be added and constrainted to self. */
+- (void)initViewsWithCount:(NSUInteger)count viewCreationHandler:(SINGLE_INDEX_VIEW_CREATION_HANDLER)handler;
 
 /** @param handler Returns a UIView that will be added and constrainted to self. */
 - (instancetype)initWithCount:(NSUInteger)count viewCreationHandler:(SINGLE_INDEX_VIEW_CREATION_HANDLER)handler;
