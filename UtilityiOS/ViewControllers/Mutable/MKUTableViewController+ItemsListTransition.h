@@ -17,5 +17,7 @@
 - (UITableViewCellSelectionStyle)defaultSelectionStyleForListOfType:(NSUInteger)type;
 - (UITableViewCellAccessoryType)defaultAccessoryTypeForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (void)handleTransitionForViewController:(UIViewController *)VC item:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath;
+- (BOOL)dispatchTransitionVCDelegateToTransitionToViewController:(UIViewController *)VC sourceViewController:(UIViewController *)sourceVC didSelectListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath;
+- (void)dispatchTransitionVCDelegateToDismissDestinationViewController:(UIViewController *)VC;
 
 @end

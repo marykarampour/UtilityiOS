@@ -38,10 +38,7 @@ static char UIVIEWCONTROLER_TRANSITION_LIST_KEY;
     if ([VC conformsToProtocol:@protocol(MKUViewControllerTransitionProtocol)] && !VC.transitionDelegate)
         VC.transitionDelegate = self;
     
-    if ([self.transitionVCDelegate respondsToSelector:@selector(handleTransitionToViewController:sourceViewController:didSelectListItem:atIndexPath:)]) {
-        [self.transitionVCDelegate handleTransitionToViewController:VC sourceViewController:self didSelectListItem:item atIndexPath:indexPath];
-    }
-    else {
+    if (![self dispatchTransitionVCDelegateToTransitionToViewController:VC sourceViewController:self didSelectListItem:item atIndexPath:indexPath]) {
         [self.navigationController pushViewController:VC animated:YES];
     }
 }
@@ -185,6 +182,20 @@ static char UIVIEWCONTROLER_TRANSITION_LIST_KEY;
         if (type != sectionType) type = sectionType;
     }
     return type;
+}
+
+- (BOOL)dispatchTransitionVCDelegateToTransitionToViewController:(UIViewController *)VC sourceViewController:(UIViewController *)sourceVC didSelectListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath {
+    if ([self.transitionVCDelegate respondsToSelector:@selector(handleTransitionToViewController:sourceViewController:didSelectListItem:atIndexPath:)]) {
+        [self.transitionVCDelegate handleTransitionToViewController:VC sourceViewController:sourceVC didSelectListItem:item atIndexPath:indexPath];
+        return YES;
+    }
+    return NO;
+}
+
+- (void)dispatchTransitionVCDelegateToDismissDestinationViewController:(UIViewController *)VC {
+    if ([self.transitionVCDelegate respondsToSelector:@selector(handleDismissDestinationViewController:)]) {
+        [self.transitionVCDelegate handleDismissDestinationViewController:VC];
+    }
 }
 
 @end
