@@ -124,6 +124,7 @@ static char PERFORM_SAVE_ACTION_HANDLER_KEY;
 }
 
 - (void)handleSaveObjectCompletionWithSuccess:(BOOL)success ID:(NSNumber *)ID error:(NSError *)error {
+    [MKUSpinner hide];
     if (!error && success) {
         if (ID && [self respondsToSelector:@selector(didFinishUpdateWithResultID:)])
             [self didFinishUpdateWithResultID:ID];

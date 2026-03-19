@@ -480,7 +480,7 @@
         [self resetSelectedSets];
         [self setSelectedIndexPath:nil];
         [self reloadDataAnimated:NO];
-        [self.transitionVCDelegate handleDismissDestinationViewController:viewController];
+        [self dispatchTransitionVCDelegateToDismissDestinationViewController:viewController];
     }
 }
 
