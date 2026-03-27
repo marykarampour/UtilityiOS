@@ -320,6 +320,7 @@ extern NSString * const DateFormatShortAPMStyle;
 extern NSString * const DateFormatWeekdayMonthLongStyle;
 extern NSString * const DateFormatTimeAPMStyle;
 extern NSString * const DateFormatFullTimeZoneStyle;
+extern NSString * const DateFormatFullMicrosecondsTimeZoneStyle;
 extern NSString * const DateFormatLongStyle;
 extern NSString * const DateFormatShortSlashStyle;
 extern NSString * const DateFormatTimeLongStyle;
@@ -347,6 +348,7 @@ typedef NS_ENUM(NSUInteger, DATE_FORMAT_STYLE) {
     DATE_FORMAT_WEEKDAY_MONTH_LONG_STYLE,
     DATE_FORMAT_TIME_APM_STYLE,
     DATE_FORMAT_FULL_TIMEZONE_STYLE,
+    DATE_FORMAT_FULL_MICROSECONDS_TIMEZONE_STYLE,
     DATE_FORMAT_LONG_STYLE,
     DATE_FORMAT_SHORT_SLASH_STYLE,
     DATE_FORMAT_TIME_LONG_STYLE,

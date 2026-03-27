@@ -19,5 +19,6 @@
 - (void)defaultEncodeParametersInURL;
 + (void)prettyPrintJSON:(NSDictionary *)dictionaryData;
 - (void)requestWithPath:(NSString *)path type:(MKU_NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary<NSString *,NSString *> *)headers completionHandler:(MKUServerStatusCodeResultErrorBlock)completion;
+- (void)requestWithPath:(NSString *)path type:(MKU_NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary<NSString *,NSString *> *)headers completionHeadersHandler:(MKUServerStatusCodeResultHeadersErrorBlock)completion;
 
 @end

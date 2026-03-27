@@ -9,7 +9,9 @@
 #import "MKUServerController.h"
 #import "NSObject+ProcessModel.h"
 #import "MKURESTNetworkManager.h"
+#ifdef ENABLE_SOAP
 #import "MKUSOAPNetworkManager.h"
+#endif
 #import "NSData+Compression.h"
 #import "MKUServerEndpoints.h"
 #import "MKUModel.h"
@@ -31,7 +33,12 @@
 }
 
 - (void)addManagerWithType:(NSUInteger)type baseURLString:(NSString *)URL isSOAP:(BOOL)isSOAP isAuth:(BOOL)isAuth {
-    Class cls = isSOAP ? [MKUSOAPNetworkManager class] : [MKURESTNetworkManager class];
+    Class cls = [MKURESTNetworkManager class];
+#ifdef ENABLE_SOAP
+    if (isSOAP) {
+        cls = [MKUSOAPNetworkManager class];
+    }
+#endif
     id<MKUServicesProtocol> manager = [cls managerWithBaseURLString:URL];
     manager.serviceDelegate = self;
     if (manager) {
