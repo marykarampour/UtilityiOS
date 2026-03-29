@@ -7,13 +7,13 @@
 //
 
 #import "MKUFieldModel.h"
-#import "MKUObjectProtocol.h"
+#import "MKUModelObjectProtocol.h"
 #import "MKUViewControllerTransitionProtocol.h"
 #import "MKUNavBarButtonTargetProtocol.h"
 
 /** @brief In MKU app almost all screens have a save and possibly also a reset button.
  Because this feature is very common these buttons are added to UIViewController as category. */
-@protocol MKUMutableObjectVCProtocol <MKUFieldModelDelegate, MKUNavBarButtonTargetProtocol, MKUObjectProtocol>
+@protocol MKUMutableObjectVCProtocol <MKUFieldModelDelegate, MKUNavBarButtonTargetProtocol, MKUModelObjectProtocol>
 
 @optional
 /** @note Default checks:

@@ -8,7 +8,7 @@
 
 #import "MKUModel.h"
 
-@protocol MKUObjectProtocol <NSObject>
+@protocol MKUModelObjectProtocol <NSObject>
 
 @optional
 - (void)didSetObject:(__kindof MKUModel *)object;

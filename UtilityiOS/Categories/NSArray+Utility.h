@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MKUObjectProtocol.h"
 
 @interface NSArray <ObjectType> (Utility)
 
@@ -33,9 +34,13 @@
 
 /** Returns indexOfObject: if found, otherwise returns the lower bound, i.e., -1. */
 - (NSInteger)lowerBoundIndexOfObject:(ObjectType)obj;
-
+/** @brief It returns an array of objects each of which constructed from an array via MKUObjectProtocol objectWithObject. */
++ (NSArray<MKUObjectProtocol> *)arrayOfType:(Class<MKUObjectProtocol>)cls withArrayAsProperty:(NSArray *)array;
 /** @brief It returns an array of values based on a given key that the objects in the original array responds to. */
 + (instancetype)arrayFromArray:(NSArray<ObjectType> *)array forKey:(NSString *)key;
+/** @brief It returns an array of values based on a given key that the objects in the original array responds to.
+ @param asString If YES description will be invoked to create an array of strings*/
++ (instancetype)arrayFromArray:(NSArray<ObjectType> *)array forKey:(NSString *)key asString:(BOOL)asString;
 /** @brief It returns an array of values based on a given handler's returned value. */
 + (instancetype)arrayFromArray:(NSArray<ObjectType> *)array handler:(id (^)(ObjectType obj))handler;
 + (instancetype)arrayWithArray:(NSArray<ObjectType> *)array byAddingObject:(ObjectType)anObject;

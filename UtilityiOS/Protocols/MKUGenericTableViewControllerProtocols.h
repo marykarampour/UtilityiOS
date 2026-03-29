@@ -92,6 +92,7 @@
 - (BOOL)canAddItemToListOfType:(NSUInteger)type;
 - (BOOL)canDeleteFromListOfType:(NSUInteger)type;
 - (BOOL)canMoveItemsInListOfType:(NSUInteger)type;
+- (NSUInteger)maxMultipleSelectionForListOfType:(NSUInteger)type;
 /** @brief Return YES if self.editing should be always YES. The navbar will not have the edit button in this case. Default is NO. */
 - (BOOL)canEditListsByDefault;
 - (NSString *)titleForAddCellInListOfType:(NSUInteger)type;

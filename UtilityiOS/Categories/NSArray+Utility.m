@@ -85,12 +85,24 @@
     return index;
 }
 
++ (NSArray *)arrayOfType:(Class<MKUObjectProtocol>)cls withArrayAsProperty:(NSArray *)array {
+    if (![cls conformsToProtocol:@protocol(MKUObjectProtocol)]) return nil;
+    return [self arrayFromArray:array handler:^id(id obj) {
+        return [cls objectWithObject:obj];
+    }];
+}
+
 + (instancetype)arrayFromArray:(NSArray *)array forKey:(NSString *)key {
+    return [self arrayFromArray:array forKey:key asString:NO];
+}
+
++ (instancetype)arrayFromArray:(NSArray *)array forKey:(NSString *)key asString:(BOOL)asString {
     if (array.count == 0) return nil;
     if (![array.firstObject respondsToSelector:NSSelectorFromString(key)]) return nil;
     
     return [self arrayFromArray:array handler:^id(id obj) {
-        return [obj valueForKey:key];
+        id value = [obj valueForKey:key];
+        return asString ? [value description] : value;
     }];
 }
 
