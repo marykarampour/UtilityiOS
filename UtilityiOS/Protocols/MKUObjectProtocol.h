@@ -1,9 +1,9 @@
 //
 //  MKUObjectProtocol.h
-//  CFI HAWB Reader
+//  UtilityiOS
 //
 //  Created by Maryam Karampour on 2026-03-26.
-//  Copyright © 2026 Commodity Forwarders Inc. All rights reserved.
+//  Copyright © 2026 Prometheus Software. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
