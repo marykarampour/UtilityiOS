@@ -106,15 +106,8 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
 }
 
 - (void)requestWithPath:(NSString *)path type:(MKU_NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary<NSString *,NSString *> *)headers completionHandler:(MKUServerStatusCodeResultErrorBlock)completion {
-    [self requestWithPath:path type:type parameters:parameters headers:headers completionHeadersHandler:^(NSInteger statusCode, id result, NSDictionary *responseHeaders, NSError *error) {
-        if (completion) completion(statusCode, result, error);
-    }];
-}
-
-- (void)requestWithPath:(NSString *)path type:(MKU_NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary<NSString *,NSString *> *)headers completionHeadersHandler:(MKUServerStatusCodeResultHeadersErrorBlock)completion {
-    
     if (!self.manager) {
-        if (completion) completion(0, nil, nil, nil);
+        if (completion) completion(0, nil, nil);
         return;
     }
     
@@ -139,20 +132,14 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
             headers = [httpResponse allHeaderFields];
             DEBUGLOG(@"Success Response Headers: %@", headers);
         }
-        if (completion) completion(httpResponse.statusCode, responseObject, headers, nil);
+        completion(httpResponse.statusCode, responseObject, nil);
     },
     ^(NSURLSessionDataTask *task, NSError *error) {
         NSDictionary *failureBody = [self resultFromError:error];
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)task.response;
-        NSDictionary *headers;
-
-        if ([httpResponse respondsToSelector:@selector(allHeaderFields)]) {
-            headers = [httpResponse allHeaderFields];
-            DEBUGLOG(@"Failure Response Headers: %@", headers);
-        }
 
         DEBUGLOG(@"Error Response: %@ - %@ - %@", task.response, error.localizedDescription, failureBody);
-        if (completion) completion(httpResponse.statusCode, failureBody, headers, error);
+        completion(httpResponse.statusCode, failureBody, error);
     });
 }
 
@@ -298,4 +285,3 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
 }
 
 @end
-

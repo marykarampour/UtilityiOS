@@ -31,7 +31,6 @@ typedef NS_ENUM(NSUInteger, MKU_NETWORK_CONTENT_TYPE) {
 typedef void (^MKUServerResultHeaderErrorBlock) (id result, NSDictionary *headers, NSError *error);
 typedef void (^MKUServerResultErrorBlock) (id result, NSError *error);
 typedef void (^MKUServerStatusCodeResultErrorBlock) (NSInteger statusCode, id result, NSError *error);
-typedef void (^MKUServerStatusCodeResultHeadersErrorBlock) (NSInteger statusCode, id result, NSDictionary *headers, NSError *error);
 typedef void (^MKUServerStatusCodeResultKeyErrorBlock) (NSInteger statusCode, id result, NSString *key, NSError *error);
 typedef void (^MKUServerStatusCodeResultClassKeyErrorBlock) (NSInteger statusCode, id result, Class cls, NSString *key, NSError *error);
 typedef void (^MKUServerNumberErrorBlock) (NSNumber *num, NSError *error);
