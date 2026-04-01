@@ -8,10 +8,7 @@
 
 #import "MKUServerController.h"
 #import "NSObject+ProcessModel.h"
-#import "MKURESTNetworkManager.h"
-#ifdef ENABLE_SOAP
-#import "MKUSOAPNetworkManager.h"
-#endif
+#import "MKUNetworkManager.h"
 #import "NSData+Compression.h"
 #import "MKUServerEndpoints.h"
 #import "MKUModel.h"
@@ -33,12 +30,7 @@
 }
 
 - (void)addManagerWithType:(NSUInteger)type baseURLString:(NSString *)URL isSOAP:(BOOL)isSOAP isAuth:(BOOL)isAuth {
-    Class cls = [MKURESTNetworkManager class];
-#ifdef ENABLE_SOAP
-    if (isSOAP) {
-        cls = [MKUSOAPNetworkManager class];
-    }
-#endif
+    Class cls = [self networkManagerClassForSOAP:isSOAP];
     id<MKUServicesProtocol> manager = [cls managerWithBaseURLString:URL];
     manager.serviceDelegate = self;
     if (manager) {
@@ -49,6 +41,10 @@
 
 - (id<MKUServicesProtocol>)managerForType:(NSUInteger)type {
     return [self.networkManagers objectForKey:@(type)];
+}
+
+- (Class)networkManagerClassForSOAP:(BOOL)isSOAP {
+    return [MKUNetworkManager classForNetworkManager];
 }
 
 - (void)requestWithServerType:(NSUInteger)serverType endpointPrefix:(NSString *)endpointPrefix service:(NSString *)service action:(NSString *)action type:(MKU_NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary<NSString *,NSString *> *)headers completionHandler:(MKUServerStatusCodeResultErrorBlock)completion {
