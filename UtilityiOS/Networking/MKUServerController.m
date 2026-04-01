@@ -29,8 +29,12 @@
     return self;
 }
 
++ (Class)classForNetworkManagerIsSOAP:(BOOL)isSOAP {
+    return [MKURESTNetworkManager class];
+}
+
 - (void)addManagerWithType:(NSUInteger)type baseURLString:(NSString *)URL isSOAP:(BOOL)isSOAP isAuth:(BOOL)isAuth {
-    Class cls = [[MKUNetworkManager class] classForNetworkManagerIsSOAP:isSOAP];
+    Class cls = [[self class] classForNetworkManagerIsSOAP:isSOAP];
     id<MKUServicesProtocol> manager = [cls managerWithBaseURLString:URL];
     manager.serviceDelegate = self;
     if (manager) {
