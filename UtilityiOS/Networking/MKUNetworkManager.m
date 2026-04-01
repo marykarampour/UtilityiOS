@@ -21,7 +21,7 @@
 
 @synthesize serviceDelegate;
 
-+ (Class)classForNetworkManager {
++ (Class)classForNetworkManagerIsSOAP:(BOOL)isSOAP {
     return [MKURESTNetworkManager class];
 }
 

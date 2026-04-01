@@ -46,7 +46,6 @@
 /** @brief The manager responsible for log in and out services. */
 - (id<MKUServicesProtocol>)authManager;
 - (id<MKUServicesProtocol>)managerForType:(NSUInteger)type;
-- (Class)networkManagerClassForSOAP:(BOOL)isSOAP;
 
 #pragma mark - sample services - subclass may override
 

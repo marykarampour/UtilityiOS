@@ -16,7 +16,7 @@
 
 @implementation MKUSOAPNetworkManager
 
-+ (Class)classForNetworkManager {
++ (Class)classForNetworkManagerIsSOAP:(BOOL)isSOAP {
     return self;
 }
 

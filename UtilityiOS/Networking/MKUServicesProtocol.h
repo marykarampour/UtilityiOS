@@ -41,7 +41,7 @@
 - (BOOL)isSOAP;
 /** @brief Returns a manager with base URL for each different server that you want to reach. */
 + (id<MKUServicesProtocol>)managerWithBaseURLString:(NSString *)URL;
-+ (Class)classForNetworkManager;
++ (Class)classForNetworkManagerIsSOAP:(BOOL)isSOAP;
 
 - (void)setHeaders:(NSDictionary *)headers;
 - (void)resetHeaders:(NSArray *)headers;
