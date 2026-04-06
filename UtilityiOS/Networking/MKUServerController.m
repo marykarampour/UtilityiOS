@@ -8,8 +8,8 @@
 
 #import "MKUServerController.h"
 #import "NSObject+ProcessModel.h"
+#import "MKUNetworkManager.h"
 #import "MKURESTNetworkManager.h"
-#import "MKUSOAPNetworkManager.h"
 #import "NSData+Compression.h"
 #import "MKUServerEndpoints.h"
 #import "MKUModel.h"
@@ -30,8 +30,12 @@
     return self;
 }
 
++ (Class)classForNetworkManagerIsSOAP:(BOOL)isSOAP {
+    return [MKURESTNetworkManager class];
+}
+
 - (void)addManagerWithType:(NSUInteger)type baseURLString:(NSString *)URL isSOAP:(BOOL)isSOAP isAuth:(BOOL)isAuth {
-    Class cls = isSOAP ? [MKUSOAPNetworkManager class] : [MKURESTNetworkManager class];
+    Class cls = [[self class] classForNetworkManagerIsSOAP:isSOAP];
     id<MKUServicesProtocol> manager = [cls managerWithBaseURLString:URL];
     manager.serviceDelegate = self;
     if (manager) {

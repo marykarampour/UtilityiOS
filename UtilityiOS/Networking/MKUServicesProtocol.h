@@ -14,6 +14,8 @@
 
 @protocol MKUNetworkManagerProtocol <NSObject>
 
++ (Class)classForNetworkManagerIsSOAP:(BOOL)isSOAP;
+
 /** @brief Utiltiy method that uses [self headers] as headers for the requests.
  @code
  REST

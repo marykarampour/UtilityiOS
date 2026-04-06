@@ -106,7 +106,6 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
 }
 
 - (void)requestWithPath:(NSString *)path type:(MKU_NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary<NSString *,NSString *> *)headers completionHandler:(MKUServerStatusCodeResultErrorBlock)completion {
-    
     if (!self.manager) {
         if (completion) completion(0, nil, nil);
         return;
@@ -286,4 +285,3 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
 }
 
 @end
-

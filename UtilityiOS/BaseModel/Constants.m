@@ -26,31 +26,32 @@ NSString * const DefaultPushNotificationDeviceTokenKey  = @"DefaultPushNotificat
 
 #pragma mark - format
 
-NSString * const DateFormatServerStyle              = @"YYYY-MM-dd HH:mm:ss";
-NSString * const DateFormatShortStyle               = @"yyyy-MM-dd";
-NSString * const DateFormatWeekdayShortStyle        = @"EEEE MMM dd";
-NSString * const DateFormatMonthDayYearStyle        = @"MMMM dd, yyyy";
-NSString * const DateFormatMonthYearStyle           = @"MMMM yyyy";
-NSString * const DateFormatDayMonthYearStyle        = @"dd MMMM yyyy";
-NSString * const DateFormatDayMonthYearNumericStyle = @"dd MM yyyy";
-NSString * const DateFormatWeekdayDayStyle          = @"EEEE dd";
-NSString * const DateFormatFullTimeStyle            = @"HH:mm:ss EEEE, MMMM dd, yyyy";
-NSString * const DateFormatShortAPMStyle            = @"yyyy/MM/dd hh:mm a";
-NSString * const DateFormatFullStyle                = @"yyyy-MM-dd'T'HH:mm:ss.SS";
-NSString * const DateFormatTimeStyle                = @"HH:mm:ss";
-NSString * const DateFormatWeekdayMonthLongStyle    = @"EEEE, MMMM dd, yyyy";
-NSString * const DateFormatTimeAPMStyle             = @"HH:mm:ss a";
-NSString * const DateFormatFullTimeZoneStyle        = @"yyyy-MM-dd'T'HH:mm:ss.SS zzz";
-NSString * const DateFormatLongStyle                = @"yyyy-MM-dd'T'HH:mm:ss";
-NSString * const DateFormatShortSlashStyle          = @"MM/dd/yy";
-NSString * const DateFormatTimeLongStyle            = @"MM-dd HH:mm";
-NSString * const DateFormatTimeShortStyle           = @"HH:mm";
-NSString * const DateFormatDayTimeStyle             = @"EEEE, MMM. d, yyyy h:mm a";
-NSString * const DateFormatDayTimeStyleLineBreak    = @"EEEE, MMM. d, yyyy\nh:mm a";
-NSString * const DateFormatDayStyle                 = @"EEEE, MMM. d, yyyy";
-NSString * const DateFormatDateTimeStyle            = @"yyyy-MM-dd HH:mm:ss";
-NSString * const DateFormatDateTimeCompactStyle     = @"MM-dd-yy HH:mm";
-NSString * const DateFormatMonthTimeCompactStyle    = @"MMM dd HH:mm";
+NSString * const DateFormatServerStyle                   = @"YYYY-MM-dd HH:mm:ss";
+NSString * const DateFormatShortStyle                    = @"yyyy-MM-dd";
+NSString * const DateFormatWeekdayShortStyle             = @"EEEE MMM dd";
+NSString * const DateFormatMonthDayYearStyle             = @"MMMM dd, yyyy";
+NSString * const DateFormatMonthYearStyle                = @"MMMM yyyy";
+NSString * const DateFormatDayMonthYearStyle             = @"dd MMMM yyyy";
+NSString * const DateFormatDayMonthYearNumericStyle      = @"dd MM yyyy";
+NSString * const DateFormatWeekdayDayStyle               = @"EEEE dd";
+NSString * const DateFormatFullTimeStyle                 = @"HH:mm:ss EEEE, MMMM dd, yyyy";
+NSString * const DateFormatShortAPMStyle                 = @"yyyy/MM/dd hh:mm a";
+NSString * const DateFormatFullStyle                     = @"yyyy-MM-dd'T'HH:mm:ss.SS";
+NSString * const DateFormatTimeStyle                     = @"HH:mm:ss";
+NSString * const DateFormatWeekdayMonthLongStyle         = @"EEEE, MMMM dd, yyyy";
+NSString * const DateFormatTimeAPMStyle                  = @"HH:mm:ss a";
+NSString * const DateFormatFullTimeZoneStyle             = @"yyyy-MM-dd'T'HH:mm:ss.SS zzz";
+NSString * const DateFormatFullMicrosecondsTimeZoneStyle = @"yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ";
+NSString * const DateFormatLongStyle                     = @"yyyy-MM-dd'T'HH:mm:ss";
+NSString * const DateFormatShortSlashStyle               = @"MM/dd/yy";
+NSString * const DateFormatTimeLongStyle                 = @"MM-dd HH:mm";
+NSString * const DateFormatTimeShortStyle                = @"HH:mm";
+NSString * const DateFormatDayTimeStyle                  = @"EEEE, MMM. d, yyyy h:mm a";
+NSString * const DateFormatDayTimeStyleLineBreak         = @"EEEE, MMM. d, yyyy\nh:mm a";
+NSString * const DateFormatDayStyle                      = @"EEEE, MMM. d, yyyy";
+NSString * const DateFormatDateTimeStyle                 = @"yyyy-MM-dd HH:mm:ss";
+NSString * const DateFormatDateTimeCompactStyle          = @"MM-dd-yy HH:mm";
+NSString * const DateFormatMonthTimeCompactStyle         = @"MMM dd HH:mm";
 
 #pragma mark - classes
 

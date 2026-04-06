@@ -9,10 +9,6 @@
 #import "MKUNetworkManager.h"
 #import "MKURESTNetworkManager.h"
 
-#ifdef ENABLE_SOAP
-#import "MKUSOAPNetworkManager.h"
-#endif
-
 @implementation MKUMultipartInfo
 
 @end

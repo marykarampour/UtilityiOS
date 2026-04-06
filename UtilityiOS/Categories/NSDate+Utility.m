@@ -141,6 +141,8 @@
             return DateFormatFullStyle;
         case DATE_FORMAT_FULL_TIMEZONE_STYLE:
             return DateFormatFullTimeZoneStyle;
+        case DATE_FORMAT_FULL_MICROSECONDS_TIMEZONE_STYLE:
+            return DateFormatFullMicrosecondsTimeZoneStyle;
         case DATE_FORMAT_LONG_STYLE:
             return DateFormatLongStyle;
         case DATE_FORMAT_SHORT_STYLE:
