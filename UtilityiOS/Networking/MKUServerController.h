@@ -35,8 +35,6 @@
  */
 @interface MKUServerController : NSObject <MKUNetworkManagerProtocol, MKUServicesDelegate>
 
-+ (Class)classForNetworkManagerIsSOAP:(BOOL)isSOAP;
-
 /** @brief Adds a networking manager with the give base url.
  
  @param url Base url string

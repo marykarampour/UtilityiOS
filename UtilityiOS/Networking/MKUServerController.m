@@ -9,6 +9,7 @@
 #import "MKUServerController.h"
 #import "NSObject+ProcessModel.h"
 #import "MKUNetworkManager.h"
+#import "MKURESTNetworkManager.h"
 #import "NSData+Compression.h"
 #import "MKUServerEndpoints.h"
 #import "MKUModel.h"
