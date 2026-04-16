@@ -68,6 +68,14 @@
 
 #pragma mark - process
 
+- (void)processLogin:(id)result error:(NSError *)error completionHeader:(void (^)(id, NSError *))completion {
+    [self.class processLogin:result forManager:[self managerForType:0] headers:nil error:error completionHeader:completion];
+}
+
+- (void)processLogoutWithError:(NSError *)error completionHeader:(void (^)(id, NSError *))completion {
+    [self.class processLogoutForManager:[self managerForType:0] error:error completionHeader:completion];
+}
+
 + (void)processLogin:(id)result forManager:(id<MKUServicesProtocol>)manager headers:(NSDictionary *)headers error:(NSError *)error completionHeader:(void (^)(id, NSError *))completion {
     if (!error && result) {
         NSString *token = [result objectForKey:[self authTokenKey]];
@@ -75,7 +83,7 @@
             token = [headers objectForKey:[self authTokenKey]];
         }
         if (token) {
-            [manager setHeaders:@{[self tokenKey]:token}];
+            [manager setHeaders:@{[self tokenKey] : [NSString stringWithFormat:@"%@%@", [self tokenPrefix], token]}];
         }
     }
     if (completion) completion(result, error);
@@ -147,6 +155,10 @@
 
 + (NSString *)tokenKey {
     return @"x-token";
+}
+
++ (NSString *)tokenPrefix {
+    return @"";
 }
 
 #pragma mark - errors

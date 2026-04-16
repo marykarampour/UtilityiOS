@@ -49,6 +49,10 @@
 
 #pragma mark - sample services - subclass may override
 
+/** @brief Sets auth token based on headers or result. Manager 0 is used. */
+- (void)processLogin:(id)result error:(NSError *)error completionHeader:(void(^)(id result, NSError *error))completion;
+/** @brief Sets auth token to empty. Manager 0 is used. */
+- (void)processLogoutWithError:(NSError *)error completionHeader:(void(^)(id result, NSError *error))completion;
 /** @brief Sets auth token based on headers or result. */
 + (void)processLogin:(id)result forManager:(id<MKUServicesProtocol>)manager headers:(NSDictionary *)headers error:(NSError *)error completionHeader:(void(^)(id result, NSError *error))completion;
 /** @brief Sets auth token to empty. */
@@ -72,6 +76,7 @@
 + (NSDictionary *)basicAuthHeaders;
 + (NSString *)authTokenKey;
 + (NSString *)tokenKey;
++ (NSString *)tokenPrefix;
 + (NSError *)unauthorizedWithMessage:(NSString *)message;
 + (NSError *)noContent;
 

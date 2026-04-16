@@ -47,9 +47,7 @@
     return [[self alloc] init];
 }
 
-
 - (void)requestMultipartFormURL:(NSString *)url type:(MKU_NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters data:(NSArray<MKUMultipartInfo *> *)data completion:(void (^)(NSURLResponse *, id, NSError *))completion { 
 }
-
 
 @end
