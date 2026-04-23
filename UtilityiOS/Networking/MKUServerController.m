@@ -91,7 +91,6 @@
 
 + (void)processLogoutForManager:(id<MKUServicesProtocol>)manager error:(NSError *)error completionHeader:(void (^)(id, NSError *))completion {
     [manager setHeaders:@{[self tokenKey]:@""}];
-    if (completion) completion(nil, error);
 }
 
 + (void)processResult:(id)resultObject error:(NSError *)error class:(Class)modelClass key:(NSString *)key completion:(MKUServerResultErrorBlock)completion {
