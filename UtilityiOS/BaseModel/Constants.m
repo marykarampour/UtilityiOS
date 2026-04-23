@@ -23,7 +23,6 @@ NSString * const DefaultLoggedInUsersKey                = @"DefaultLoggedInUsers
 NSString * const DefaultVersionKey                      = @"DefaultVersionKey";
 NSString * const DefaultSavedUsersKey                   = @"DefaultSavedUsersKey";
 NSString * const DefaultPushNotificationDeviceTokenKey  = @"DefaultPushNotificationDeviceTokenKey";
-NSString * const DefaultDeviceInstallationIDKey         = @"DefaultDeviceInstallationIDKey";
 
 #pragma mark - format
 
