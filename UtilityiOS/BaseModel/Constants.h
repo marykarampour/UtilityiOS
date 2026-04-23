@@ -303,6 +303,7 @@ extern NSString * const DefaultLoggedInUsersKey;
 extern NSString * const DefaultVersionKey;
 extern NSString * const DefaultSavedUsersKey;
 extern NSString * const DefaultPushNotificationDeviceTokenKey;
+extern NSString * const DefaultDeviceInstallationIDKey;
 
 #pragma mark - format
 
@@ -589,6 +590,7 @@ typedef NS_ENUM(NSUInteger, MKU_BADGE_VIEW_STATE) {
 + (NSString *)tokenStringFromTokenDate:(NSData *)deviceToken;
 + (NSString *)pushNotificationDeviceToken;
 + (NSString *)pushNotificationPlatform;
++ (NSString *)deviceInstallationID;
 
 #pragma mark - Notification Center
 
@@ -687,5 +689,3 @@ typedef NS_ENUM(NSUInteger, MKU_BADGE_VIEW_STATE) {
 + (void)autentiacteWithBiometrics:(void (^)(BOOL success, NSError *error))completion;
 
 @end
-
-

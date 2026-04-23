@@ -106,8 +106,44 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
 }
 
 - (void)requestWithPath:(NSString *)path type:(MKU_NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary<NSString *,NSString *> *)headers completionHandler:(MKUServerStatusCodeResultErrorBlock)completion {
+    if (!completion) return;
+
     if (!self.manager) {
-        if (completion) completion(0, nil, nil);
+        completion(0, nil, nil);
+        return;
+    }
+    
+    if (headers) [self setHeaders:headers];
+    
+    SEL selector = [selectors[@(type)] pointerValue];
+    operator requestOperator = (operator)[self.manager methodForSelector:selector];
+    DEBUGLOG(@"Request Headers: %@", [self.manager.requestSerializer HTTPRequestHeaders]);
+    DEBUGLOG(@"Parameters: %@", parameters.description);
+    [MKURESTNetworkManager prettyPrintJSON:parameters];
+    
+    requestOperator(self.manager, selector, path, parameters, nil, ^(NSURLSessionDataTask *task, id responseObject) {
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)task.response;
+        
+        DEBUGLOG(@"Success Response: %@ - %@ - %ld", task.response, responseObject, httpResponse.statusCode);
+        if ([responseObject respondsToSelector:@selector(description)]) {
+            DEBUGLOG(@"Response size in bytes: %ld", [[responseObject description] lengthOfBytesUsingEncoding:NSUTF8StringEncoding]);
+        }
+        completion(httpResponse.statusCode, responseObject, nil);
+    },
+    ^(NSURLSessionDataTask *task, NSError *error) {
+        NSDictionary *failureBody = [self resultFromError:error];
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)task.response;
+
+        DEBUGLOG(@"Error Response: %@ - %@ - %@", task.response, error.localizedDescription, failureBody);
+        completion(httpResponse.statusCode, failureBody, error);
+    });
+}
+
+- (void)requestWithPath:(NSString *)path type:(MKU_NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary<NSString *,NSString *> *)headers completionHeaders:(MKUServerResultHeaderErrorBlock)completion {
+    if (!completion) return;
+
+    if (!self.manager) {
+        completion(nil, nil, nil);
         return;
     }
     
@@ -132,14 +168,15 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
             headers = [httpResponse allHeaderFields];
             DEBUGLOG(@"Success Response Headers: %@", headers);
         }
-        completion(httpResponse.statusCode, responseObject, nil);
+        completion(responseObject, headers, nil);
     },
     ^(NSURLSessionDataTask *task, NSError *error) {
         NSDictionary *failureBody = [self resultFromError:error];
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)task.response;
+        NSDictionary *headers = [httpResponse allHeaderFields];
 
         DEBUGLOG(@"Error Response: %@ - %@ - %@", task.response, error.localizedDescription, failureBody);
-        completion(httpResponse.statusCode, failureBody, error);
+        completion(failureBody, headers, error);
     });
 }
 
