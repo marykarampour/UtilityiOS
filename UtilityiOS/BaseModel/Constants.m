@@ -1081,16 +1081,6 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
     return @"APNS";
 }
 
-+ (NSString *)deviceInstallationID {
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *installationID = [defaults stringForKey:DefaultDeviceInstallationIDKey];
-    if (installationID.length == 0) {
-        installationID = NSUUID.UUID.UUIDString;
-        [defaults setObject:installationID forKey:DefaultDeviceInstallationIDKey];
-    }
-    return installationID;
-}
-
 #pragma mark - Notification Center
 
 + (NSNotificationName)NotificationName_App_Terminated {

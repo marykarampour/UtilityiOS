@@ -590,7 +590,6 @@ typedef NS_ENUM(NSUInteger, MKU_BADGE_VIEW_STATE) {
 + (NSString *)tokenStringFromTokenDate:(NSData *)deviceToken;
 + (NSString *)pushNotificationDeviceToken;
 + (NSString *)pushNotificationPlatform;
-+ (NSString *)deviceInstallationID;
 
 #pragma mark - Notification Center
 
