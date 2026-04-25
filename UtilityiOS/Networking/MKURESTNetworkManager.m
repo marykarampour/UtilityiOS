@@ -133,8 +133,8 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
             DEBUGLOG(@"Success Response Headers: %@", headers);
             
             Class cls = self.serviceDelegate.class;
-            if ([cls respondsToSelector:@selector(applicationMetaDataKeysForPathapplicationMetaDataKeysForPathapplicationMetaDataKeysForPath:)] &&
-                [cls respondsToSelector:@selector(handlerForMetadataKeyhandlerForMetadataKey:)]) {
+            if ([cls respondsToSelector:@selector(applicationMetaDataKeysForPath:)] &&
+                [cls respondsToSelector:@selector(handlerForMetadataKey:)]) {
                 [[cls applicationMetaDataKeysForPath:path] enumerateObjectsUsingBlock:^(NSString * _Nonnull key, NSUInteger idx, BOOL * _Nonnull stop) {
                     NSString *obj = [headers objectForKey:key];
                     if (obj.length == 0)
