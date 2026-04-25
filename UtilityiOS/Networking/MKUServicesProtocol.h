@@ -67,9 +67,24 @@
  */
 - (void)requestWithEndpointPrefix:(NSString *)endpointPrefix service:(NSString *)service action:(NSString *)action type:(MKU_NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary<NSString *, NSString *> *)headers completionHandler:(MKUServerStatusCodeResultErrorBlock)completion;
 
+/** @brief Utiltiy method that uses [self headers] as headers for the requests.
+ @code
+ REST
+ https://baseurl/service/action
+ @endcode
+ 
+ @code
+ SOAP
+ URL: https://baseurl/service
+ SOAP Action: endpointPrefix/action
+ @endcode
+ 
+ @param path The URL path in REST.
+ */
+- (void)requestWithPath:(NSString *)path type:(MKU_NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary<NSString *,NSString *> *)headers completionHandler:(MKUServerStatusCodeResultErrorBlock)completion;
+
 #pragma - mark form
 
-- (void)requestWithPath:(NSString *)path type:(MKU_NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary<NSString *,NSString *> *)headers completionHandler:(MKUServerStatusCodeResultErrorBlock)completion;
 - (void)requestMultipartFormURL:(NSString *)url type:(MKU_NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters data:(NSArray<MKUMultipartInfo *> *)data completion:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completion;
 - (void)downloadURL:(NSString *)url toFile:(NSString *)filname completion:(MKUServerResultErrorBlock)completion;
 
@@ -77,9 +92,16 @@
 
 @end
 
+typedef void (^VoidManagerKeyActionHandler)(id<MKUServicesProtocol> manager, NSString *str);
+
 @protocol MKUServicesDelegate <NSObject>
 
 @optional
+
+/** @brief A handler that will be executed once headers or body contain a given key. */
++ (VoidManagerKeyActionHandler)handlerForMetadataKey:(NSString *)key;
+/** @brief Keys in headers or body of a request with path that contain metadata such as token, device info, etc. */
++ (StringArr *)applicationMetaDataKeysForPath:(NSString *)path;
 
 #pragma mark - SOAPEngine
 

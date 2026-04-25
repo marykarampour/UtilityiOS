@@ -98,7 +98,6 @@ const void * MAPPER_FORMAT_KEY;
 
 //overriding this only to support date formates not supporeted by JSONModel
 - (instancetype)initWithDictionary:(NSDictionary *)dict error:(NSError *__autoreleasing *)err useXML:(BOOL)XML {
-    
     if (XML) {
         self = [super init];
         [self XMLDeserialize:dict];

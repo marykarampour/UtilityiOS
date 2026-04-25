@@ -68,25 +68,22 @@
 
 #pragma mark - process
 
-- (void)processLogin:(id)result error:(NSError *)error completionHeader:(void (^)(id, NSError *))completion {
-    [self.class processLogin:result forManager:[self managerForType:0] headers:nil error:error completionHeader:completion];
++ (StringArr *)applicationMetaDataKeysForPath:(NSString *)path {
+    return @[];
+}
+
++ (VoidManagerKeyActionHandler)handlerForMetadataKey:(NSString *)key {
+    if ([key isEqualToString:[self authTokenKey]]) {
+        return ^(id<MKUServicesProtocol> manager, NSString *str) {
+            DEBUGLOG(@"%@ key %@", key, str);
+            [manager setHeaders:@{[self tokenKey] : [NSString stringWithFormat:@"%@%@", [self tokenPrefix], str]}];
+        };
+    }
+    return nil;
 }
 
 - (void)processLogoutWithError:(NSError *)error completionHeader:(void (^)(id, NSError *))completion {
     [self.class processLogoutForManager:[self managerForType:0] error:error completionHeader:completion];
-}
-
-+ (void)processLogin:(id)result forManager:(id<MKUServicesProtocol>)manager headers:(NSDictionary *)headers error:(NSError *)error completionHeader:(void (^)(id, NSError *))completion {
-    if (!error && result) {
-        NSString *token = [result objectForKey:[self authTokenKey]];
-        if (token.length == 0) {
-            token = [headers objectForKey:[self authTokenKey]];
-        }
-        if (token) {
-            [manager setHeaders:@{[self tokenKey] : [NSString stringWithFormat:@"%@%@", [self tokenPrefix], token]}];
-        }
-    }
-    if (completion) completion(result, error);
 }
 
 + (void)processLogoutForManager:(id<MKUServicesProtocol>)manager error:(NSError *)error completionHeader:(void (^)(id, NSError *))completion {
