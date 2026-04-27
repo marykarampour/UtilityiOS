@@ -494,7 +494,7 @@
     NSUInteger count = [self listItemsForListInSection:section].count;
     NSUInteger type = [self listTypeForListInSection:section];
 
-    return [self canAddItemToListOfType:type] && self.isEditing ? count + 1 : count;
+    return self.isEditing && [self canAddItemToListOfType:type] ? count + 1 : count;
 }
 
 - (CGFloat)heightForNonEditingListRowAtIndexPath:(NSIndexPath *)indexPath {
