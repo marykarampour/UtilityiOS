@@ -73,12 +73,10 @@
 + (NSString *)missingObjectErrorMessage;
 
 @optional
-/** @brief Call this method to send a message to updateDelegate that a value is updated. Useful in cases custom calculations require a view update.
- @param newText It is nil unless this is called as a result of shouldChangeCharactersInRange. */
+/** @brief Call this method to send a message to updateDelegate that a value is updated. Useful in cases custom calculations require a view update. */
 - (void)dispatchUpdateDelegateWithObjectType:(NSInteger)type;
 
-/** @brief Call this method to send a message to updateDelegate that a value is updated. Useful in cases custom calculations require a view update.
- @param newText It is nil unless this is called as a result of shouldChangeCharactersInRange. */
+/** @brief Call this method to send a message to updateDelegate that a value is updated. Useful in cases custom calculations require a view update. */
 - (void)dispatchUpdateDelegateWithObjectType:(NSInteger)type textField:(UITextField *)textField endEditing:(BOOL)endEditing atIndexPath:(NSIndexPath *)indexPath;
 
 /** @brief Set to implement custom updates when a value is updated. Useful in cases custom calculations require a view update. */
