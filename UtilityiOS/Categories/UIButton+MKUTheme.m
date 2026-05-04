@@ -66,7 +66,7 @@
     
     UIButton *button = [[UIButton alloc] init];
     button.backgroundColor = [UIColor clearColor];
-    button.imageView.contentMode =  UIViewContentModeScaleAspectFill;
+    button.imageView.contentMode = UIViewContentModeScaleAspectFill;
     [button setImage:[MKUAssets systemIconWithName:[MKUAssets Plus_Circle_Image_Name] color:[UIColor systemGreenColor]] forState:UIControlStateNormal];
     return button;
 }
@@ -82,8 +82,18 @@
     
     UIButton *button = [[UIButton alloc] init];
     button.backgroundColor = [UIColor clearColor];
-    button.imageView.contentMode =  UIViewContentModeScaleAspectFill;
+    button.imageView.contentMode = UIViewContentModeScaleAspectFill;
     [button setImage:[MKUAssets systemIconWithName:[MKUAssets Minus_Circle_Image_Name] color:[UIColor systemRedColor]] forState:UIControlStateNormal];
+    return button;
+}
+
++ (UIButton *)photoButtonWithTarget:(id)target action:(SEL)action color:(UIColor *)color size:(CGFloat)size {
+    
+    UIButton *button = [[UIButton alloc] init];
+    button.backgroundColor = [UIColor clearColor];
+    button.imageView.contentMode = UIViewContentModeScaleAspectFill;
+    [button setImage:[MKUAssets systemIconWithName:[MKUAssets Photo_Image_Name] color:color size:size] forState:UIControlStateNormal];
+    [button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
     return button;
 }
 
