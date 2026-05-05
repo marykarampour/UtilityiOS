@@ -32,8 +32,8 @@
 
 - (void)initBase {
     [super initBase];
-
-    self.isEditable = YES;
+    [self initIsEditable];
+    
     self.transitionVCDelegate = self;
     self.updateDelegate = self;
 }
@@ -65,6 +65,10 @@
 
 - (BOOL)hasMutableNavbar {
     return YES;
+}
+
+- (void)initIsEditable {
+    self.isEditable = YES;
 }
 
 - (void)setIsEditable:(BOOL)isEditable {

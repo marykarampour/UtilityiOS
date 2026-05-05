@@ -38,6 +38,9 @@ typedef NS_ENUM(NSInteger, MKU_MUTABLE_OBJECT_FIELD_TYPE) {
 @protocol MKUMutableObjectTableVCProtocol <MKUMutableObjectVCProtocol>
 
 @required
+/** @brief Set initial isEditable state. Called in initBase. */
+- (void)initIsEditable;
+
 - (BOOL)isHeaderSection:(NSUInteger)section;
 - (MKUBaseTableViewCell *)singleCellForRowAtIndexPath:(NSIndexPath *)indexPath;
 - (MKU_MUTABLE_OBJECT_FIELD_TYPE)typeForSection:(NSUInteger)section;
