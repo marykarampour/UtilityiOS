@@ -760,7 +760,8 @@ const void * MAPPER_FORMAT_KEY;
                 }
             }
             else if ([propertyClass isSubclassOfClass:[NSData class]] && [value isKindOfClass:[NSString class]]) {
-                deserialized = [value dataUsingEncoding:NSUTF8StringEncoding];
+                NSData *data = [[NSData alloc] initWithBase64EncodedString:value options:0];
+                deserialized = data;
             }
             else if (0 < [value description].length && [propertyClass isSubclassOfClass:[NSArray class]] && ![value isKindOfClass:[NSArray class]]) {
                 
