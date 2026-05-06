@@ -340,7 +340,7 @@
             
         default: {
             MKUBaseTableViewCell *cell = [self singleCellForRowAtIndexPath:indexPath];
-            cell.contentView.userInteractionEnabled = self.isEditable;
+            cell.contentView.userInteractionEnabled = [self userInteractionEnabledForSingleCellAtIndexPath:indexPath];
             return cell;
         }
             break;
@@ -876,6 +876,10 @@
 
 - (MKUBaseTableViewCell *)singleCellForRowAtIndexPath:(NSIndexPath *)indexPath {
     return [MKUBaseTableViewCell blankCell];
+}
+
+- (BOOL)userInteractionEnabledForSingleCellAtIndexPath:(NSIndexPath *)indexPath {
+    return self.isEditable;
 }
 
 - (CGFloat)heightForSingleCellRowAtIndexPath:(NSIndexPath *)indexPath {

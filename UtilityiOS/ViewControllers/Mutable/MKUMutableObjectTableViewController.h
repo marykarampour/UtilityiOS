@@ -43,6 +43,8 @@ typedef NS_ENUM(NSInteger, MKU_MUTABLE_OBJECT_FIELD_TYPE) {
 
 - (BOOL)isHeaderSection:(NSUInteger)section;
 - (MKUBaseTableViewCell *)singleCellForRowAtIndexPath:(NSIndexPath *)indexPath;
+/** @brief Default is based on isEditable. */
+- (BOOL)userInteractionEnabledForSingleCellAtIndexPath:(NSIndexPath *)indexPath;
 - (MKU_MUTABLE_OBJECT_FIELD_TYPE)typeForSection:(NSUInteger)section;
 
 /** @brief Implement in case of MKU_MUTABLE_OBJECT_FIELD_TYPE_SELECTION.
