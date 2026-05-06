@@ -729,7 +729,7 @@ const void * MAPPER_FORMAT_KEY;
                                     object = (id)@[[(MKUModel *) [cls alloc] initWithDictionary:classMap[key] useXML:YES]];
                                 }
                                 else if (classMap.count == 1) {
-                                    object = (id)@[classMap.allValues.firstObject];
+                                    object = [NSObject deserializeObjectResult:value objectClass:cls key:keys.firstObject];
                                 }
                                 else {
                                     object = (id)@[classMap];
