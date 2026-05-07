@@ -331,6 +331,7 @@ static char UPDATE_DELEGATE_KEY;
 }
 
 - (BOOL)hasValueForSectionType:(NSInteger)section {
+    if ([self.class isEditableSectionType:section]) return YES;
     
     __block BOOL hasValue = NO;
     
@@ -341,12 +342,12 @@ static char UPDATE_DELEGATE_KEY;
         }
     }];
     
-    return hasValue || [self.class isEditableSectionType:section];
+    return hasValue;
 }
 
 + (NSString *)titleForObjectType:(NSInteger)type {
     NSString *key = [self.propertyEnumDict objectForKey:@(type)];
-    return [key splitedStringForUppercaseComponentsAndGroupUppercase:YES];
+    return [[key capitalizeFirstChar] splitedStringForUppercaseComponentsAndGroupUppercase:YES];
 }
 
 + (NSString *)titleForSectionType:(NSInteger)section {
