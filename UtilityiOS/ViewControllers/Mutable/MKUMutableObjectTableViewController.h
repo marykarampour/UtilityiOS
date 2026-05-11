@@ -107,7 +107,7 @@ typedef NS_ENUM(NSInteger, MKU_MUTABLE_OBJECT_FIELD_TYPE) {
 - (CGFloat)checkboxButtonWidthForSection:(NSUInteger)section;
 - (void)switchBoolValueAtIndexPath:(NSIndexPath *)indexPath;
 /** @brief Default is isEditableSectionType of the object. */
-- (BOOL)isEditableSectionType:(NSInteger)section;
+- (BOOL)isEditableSectionType:(NSUInteger)section;
 /** @brief By default reloads the corresonding section only. */
 - (void)didSwitchBoolValueAtIndexPath:(NSIndexPath *)indexPath;
 /** @brief It is called in tableView:didSelectRowAtIndexPath: when type is MKU_MUTABLE_OBJECT_FIELD_TYPE_SELECTION.
@@ -150,8 +150,8 @@ typedef NS_ENUM(NSInteger, MKU_MUTABLE_OBJECT_FIELD_TYPE) {
 
 #pragma mark - VC
 
-/** @brief This is a utility class to facilitate simple screen with low vertically stacked UI elements. Although it is a
- tableview it does not do any dequeing, all cells are static and recreated on reload by default, unless subclass return a
+/** @brief A utility class to facilitate creating a simple screen with a few vertically stacked UI elements. It is a
+ tableview which does deque cells, all cells are static and recreated on reload by default, unless subclass return a
  predefined cells for any type in particular for MKU_MUTABLE_OBJECT_FIELD_TYPE_SINGLE_CELL. */
 @interface MKUMutableObjectTableViewController <__covariant ObjectType : __kindof NSObject<MKUFieldModelProtocol> *, __covariant UpdateObjectType : __kindof NSObject<MKUFieldModelProtocol> *> : MKUTableViewController <MKUMutableObjectTableVCProtocol, MKUViewControllerTransitionProtocol, MKUItemsListVCProtocol, MKUEditingListVCProtocol, MKUItemsListVCTransitionDelegate, MKUItemsListVCUpdateDelegate, MKUKVOProtocol>
 

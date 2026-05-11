@@ -1184,7 +1184,7 @@
     return [self defaultSelectionStyleForListOfType:type];
 }
 
-- (BOOL)isEditableSectionType:(NSInteger)section {
+- (BOOL)isEditableSectionType:(NSUInteger)section {
     return [self.object isEditableSectionType:section];
 }
 

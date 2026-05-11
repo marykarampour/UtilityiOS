@@ -72,13 +72,6 @@
 - (void)updateObject:(__kindof NSObject<MKUFieldModelProtocol> *)object didUpdateKey:(NSString *)key;
 
 @required
-/** @brief Handles action performed when pressing the reset button. Default in MKUMutableObjectTableViewController is:.
- @code
- [self.object reset];
- [self didResetUpdateObject:self.object.UpdatedObject];
- @endcode
- */
-
 /** @brief This is called when save is pressed as the completion of performSaveOrUpdateObjectWithCompletion.
  If nil, performSaveOrUpdateObjectWithCompletion will shows success failure error alerts, otherwise it will perform the completion with no alerts.
  @note Default completion is nil. Set to perform other actions. */

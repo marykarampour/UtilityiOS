@@ -14,7 +14,6 @@
 
 @property (nonatomic, strong) MKULabel *charView;
 @property (nonatomic, strong) MKULabel *placeHolder;
-@property (nonatomic, strong, readwrite) MKUText *textObject;
 @property (nonatomic, strong, readwrite) TextViewController *controller;
 
 @end
@@ -32,7 +31,6 @@
 - (instancetype)initWithPlaceholder:(NSString *)placeholder hasCharCount:(BOOL)hasCharCount {
     if (self = [super init]) {
         self.hasCharCount = hasCharCount;
-        self.textObject = [[MKUText alloc] init];
         
         self.placeHolder = [[MKULabel alloc] init];
         self.placeHolder.text = placeholder;

@@ -37,7 +37,15 @@
  */
 - (void)handleSavePressed;
 
-/** @brief Resets the object and calls didResetUpdateObject: */
+/** @brief Handles action performed when pressing the reset button.
+ Resets the object and calls didResetUpdateObject:
+ Default in MKUMutableObjectTableViewController is:.
+ @code
+ [self.object reset];
+ [self didResetUpdateObject:self.object.UpdatedObject];
+ @endcode
+ */
+
 - (void)reset;
 
 /** @brief Checks for successful result and shows an appropriate alert and dispatchDelegateForSaveDone if successful. */

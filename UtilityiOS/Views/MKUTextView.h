@@ -9,7 +9,6 @@
 #import "UITextView+IndexPath.h"
 #import "TextViewController.h"
 #import "MKULabel.h"
-#import "MKUText.h"
 
 @interface MKUTextView : UITextView
 

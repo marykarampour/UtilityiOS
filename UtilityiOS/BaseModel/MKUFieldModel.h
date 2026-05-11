@@ -73,12 +73,6 @@
 + (NSString *)missingObjectErrorMessage;
 
 @optional
-/** @brief Call this method to send a message to updateDelegate that a value is updated. Useful in cases custom calculations require a view update. */
-- (void)dispatchUpdateDelegateWithObjectType:(NSInteger)type;
-
-/** @brief Call this method to send a message to updateDelegate that a value is updated. Useful in cases custom calculations require a view update. */
-- (void)dispatchUpdateDelegateWithObjectType:(NSInteger)type textField:(UITextField *)textField endEditing:(BOOL)endEditing atIndexPath:(NSIndexPath *)indexPath;
-
 /** @brief Set to implement custom updates when a value is updated. Useful in cases custom calculations require a view update. */
 @property (nonatomic, weak) id<MKUFieldModelDelegate> updateDelegate;
 
@@ -98,7 +92,7 @@
 
 @optional
 - (BOOL)isLongValueForSectionType:(NSInteger)section;
-- (BOOL)isEditableSectionType:(NSInteger)section;
+- (BOOL)isEditableSectionType:(NSUInteger)section;
 - (BOOL)hasValueForSectionType:(NSInteger)section;
 - (BOOL)isCommentSectionType:(NSInteger)section;
 
@@ -140,6 +134,11 @@
 - (NSMutableArray<__kindof NSObject<MKUPlaceholderProtocol> *> *)arrayForObjectType:(NSUInteger)type;
 /** @brief Returns an array for a section corresponding to a property that conforms to protocol MKUArrayPropertyProtocol. */
 - (NSMutableArray<__kindof NSObject<MKUPlaceholderProtocol> *> *)arrayForSectionType:(NSUInteger)type;
+/** @brief Call this method to send a message to updateDelegate that a value is updated. Useful in cases custom calculations require a view update. */
+- (void)dispatchUpdateDelegateWithObjectType:(NSInteger)type;
+
+/** @brief Call this method to send a message to updateDelegate that a value is updated. Useful in cases custom calculations require a view update. */
+- (void)dispatchUpdateDelegateWithObjectType:(NSInteger)type textField:(UITextField *)textField endEditing:(BOOL)endEditing atIndexPath:(NSIndexPath *)indexPath;
 
 @end
 
@@ -163,7 +162,7 @@
 @property (nonatomic, assign, readonly) Class classForOriginalObject;
 @property (nonatomic, assign, readonly) Class classForUpdatedObject;
 
-/** @brief This innitialization copies object.
+/** @brief This initialization copies object.
  @note If using generics, and if object is nil, OriginalObject wlll be nil. In that case defaultClassForUpdatedObject must be provided and will be used to initialize both
  OriginalObject and UpdatedObject. Otherwise, don't use the generic types, instead redefine these properties explicitly and use @dynamic.
  The reason is that the generic type is errased in runtime and some NSObject subclasses such as NSString, when handled by OS have actual type constant, such as
@@ -186,7 +185,6 @@
 
 @property (nonatomic, strong) ObjectType OriginalObject;
 @property (nonatomic, strong) UpdateObjectType UpdatedObject;
-@property (nonatomic, strong) NSNumber *UserID;
 
 @end
 

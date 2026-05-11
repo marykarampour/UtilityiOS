@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+//not used
 @interface MKUText : NSObject
 
 @property (nonatomic, assign) NSUInteger maxChars;

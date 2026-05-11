@@ -399,15 +399,16 @@ static char UPDATE_DELEGATE_KEY;
 }
 
 - (NSString *)stringValueForSectionType:(NSInteger)section {
-    
-    __block NSString *value;
-    
-    NSObject *str = [[self valuesForSectionType:section] objectPassingTest:^BOOL(NSObject *obj, NSUInteger idx, BOOL *stop) {
+        
+    NSArray<NSObject *> *values = [self valuesForSectionType:section];
+    NSObject *str = [values objectPassingTest:^BOOL(NSObject *obj, NSUInteger idx, BOOL *stop) {
         return [obj isKindOfClass:[NSString class]];
     }];
     
     if (str) return [str description];
     
+    __block NSString *value;
+
     [self.class iterateOverTypesForSectionType:section block:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         
         NSInteger type = obj.integerValue;
@@ -418,7 +419,7 @@ static char UPDATE_DELEGATE_KEY;
         }
     }];
     
-    return 0 < value.length ? value : [[self valuesForSectionType:section].firstObject description];
+    return 0 < value.length ? value : [values.firstObject description];
 }
 
 + (NSArray<NSNumber *> *)objectTypesForSectionType:(NSInteger)section {
@@ -672,7 +673,7 @@ static char UPDATE_DELEGATE_KEY;
 }
 
 - (instancetype)duplicateUpdateObject {
-    MKUUpdateObject *obj = [[self.class alloc] init];
+    MKUMutableObject *obj = [[self.class alloc] init];
     obj.UpdatedObject = [self.UpdatedObject copy];
     [obj resetOriginalObject];
     return obj;
@@ -755,17 +756,11 @@ static char UPDATE_DELEGATE_KEY;
 @dynamic OriginalObject;
 @dynamic UpdatedObject;
 
-- (instancetype)duplicateUpdateObject {
-    MKUUpdateObject *obj = [super duplicateUpdateObject];
-    obj.UserID = self.UserID;
-    return obj;
-}
-
 - (BOOL)isLongValueForSectionType:(NSInteger)section {
     return [self.UpdatedObject isLongValueForSectionType:section];
 }
 
-- (BOOL)isEditableSectionType:(NSInteger)section {
+- (BOOL)isEditableSectionType:(NSUInteger)section {
     return [self.classForOriginalObject isEditableSectionType:section];
 }
 
