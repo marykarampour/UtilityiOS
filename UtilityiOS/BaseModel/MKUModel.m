@@ -751,11 +751,11 @@ const void * MAPPER_FORMAT_KEY;
                 BOOL isUTC = [self.class datePropertyIsUTC:key];
                 deserialized = [value dateWithAnyFormatIsUTC:isUTC];
             }
-            else if ([propertyClass isSubclassOfClass:[NSNumber class]]) {
+            else if ([propertyClass isSubclassOfClass:[NSNumber class]] && [value isKindOfClass:[NSString class]]) {
                 if ([value isEqualToString:@"true"] || [value isEqualToString:@"false"]) {
                     [self setValue:@([MKUModel boolValueForObject:value]) forKey:key];
                 }
-                else if ([value isKindOfClass:[NSString class]]) {
+                else {
                     deserialized = [value stringToNumber];
                 }
             }
