@@ -52,6 +52,7 @@
 - (ViewType)viewAtIndex:(NSUInteger)index;
 - (NSUInteger)count;
 - (NSMutableArray<ViewType> *)views;
+- (NSUInteger)indexOfView:(ViewType)view;
 
 @end
 
@@ -68,3 +69,49 @@
 - (ViewType)viewAtIndex:(NSUInteger)index;
 
 @end
+
+
+@interface MKUVerticallyStackedHorizontalViews <__covariant ViewType> : MKUVerticalViews <MKUHorizontalViews <ViewType> *>
+
+/** @param handler Returns a UIVIew that will be added and constrainted to self.
+ width is set on individual views in each row. Height is set on each row. */
+- (instancetype)initWithCount:(NSUInteger)count horizontalCount:(NSUInteger)horizontalCount padding:(CGFloat)padding  verticalSizes:(NSDictionary<NSNumber *, NSNumber *> *)verticalSizes horizontalSizes:(NSDictionary<NSNumber *, NSNumber *> *)horizontalSizes viewCreationHandler:(DOUBLE_INDEX_COUNT_VIEW_CREATION_HANDLER)handler;
+
+/** @param handler Returns a UIVIew that will be added and constrainted to self. */
+- (instancetype)initWithCount:(NSUInteger)count horizontalCount:(NSUInteger)horizontalCount padding:(CGFloat)padding viewCreationHandler:(DOUBLE_INDEX_COUNT_VIEW_CREATION_HANDLER)handler;
+
+/** @param handler Returns a UIVIew that will be added and constrainted to self. */
+- (instancetype)initWithCount:(NSUInteger)count horizontalCount:(NSUInteger)horizontalCount viewCreationHandler:(DOUBLE_INDEX_COUNT_VIEW_CREATION_HANDLER)handler;
+
+/** @param handler Returns a UIVIew that will be added and constrainted to self. */
+- (instancetype)initWithCount:(NSUInteger)count horizontalCount:(NSUInteger)horizontalCount interItemSpacing:(CGFloat)interItemSpacing horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin viewCreationHandler:(DOUBLE_INDEX_COUNT_VIEW_CREATION_HANDLER)handler;
+
+/** @param handler Returns a UIVIew that will be added and constrainted to self.
+ width is set on individual views in each row. Height is set on each row. */
+- (instancetype)initWithVerticalCount:(NSUInteger)verticalCount horizontalCount:(NSUInteger)horizontalCount padding:(CGFloat)padding  verticalSizes:(NSDictionary<NSNumber *, NSNumber *> *)verticalSizes horizontalSizes:(NSDictionary<NSNumber *, NSNumber *> *)horizontalSizes viewCreationHandler:(DOUBLE_INDEX_VIEW_CREATION_HANDLER)handler;
+
+/** @param handler Returns a UIVIew that will be added and constrainted to self. */
+- (instancetype)initWithVerticalCount:(NSUInteger)verticalCount horizontalCount:(NSUInteger)horizontalCount padding:(CGFloat)padding viewCreationHandler:(DOUBLE_INDEX_VIEW_CREATION_HANDLER)handler;
+
+/** @param handler Returns a UIVIew that will be added and constrainted to self. */
+- (instancetype)initWithVerticalCount:(NSUInteger)verticalCount horizontalCount:(NSUInteger)horizontalCount viewCreationHandler:(DOUBLE_INDEX_VIEW_CREATION_HANDLER)handler;
+
+/** @param handler Returns a UIVIew that will be added and constrainted to self. */
+- (instancetype)initWithVerticalCount:(NSUInteger)verticalCount horizontalCount:(NSUInteger)horizontalCount interItemSpacing:(CGFloat)interItemSpacing horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin viewCreationHandler:(DOUBLE_INDEX_VIEW_CREATION_HANDLER)handler;
+
+/** @param handler Returns a UIVIew that will be added and constrainted to self. */
+- (instancetype)initWithViewCreationHandlers:(NSArray <NSArray <SINGLE_INDEX_VIEW_CREATION_HANDLER> *> *)handlers;
+
+- (ViewType)viewForRow:(NSUInteger)row column:(NSUInteger)column;
+/** @param The index represents the spot in the views in total, first rows are calcualted, then columns, e.g., view is 2x3, and index = 5, means row = 2 and column = 1 */
+- (ViewType)viewForIndex:(NSUInteger)index;
+
+- (NSUInteger)rowCount;
+/** @brief These are individual views within rows and columns. */
+- (NSArray<ViewType> *)cellViews;
+- (NSUInteger)indexOfCellView:(ViewType)view;
+
+@end
+
+
+

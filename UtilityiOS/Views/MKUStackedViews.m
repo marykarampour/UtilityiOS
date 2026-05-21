@@ -7,7 +7,10 @@
 //
 
 #import "MKUStackedViews.h"
+#import "NSObject+Utility.h"
 #import "UIView+Utility.h"
+
+static CGFloat const PADDING = 4.0;
 
 @interface MKUStackedViews ()
 
@@ -89,6 +92,10 @@
     return self.views.count;
 }
 
+- (NSUInteger)indexOfView:(UIView *)view {
+    return [self.views indexOfObject:view];;
+}
+
 - (void)constreintViewsWithSizes:(NSDictionary<NSNumber *,NSNumber *> *)sizes interItemSpacing:(CGFloat)interItemSpacing horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin {
 }
 
@@ -153,6 +160,118 @@
 
 - (id)viewAtIndex:(NSUInteger)index {
     return [super viewAtIndex:index];
+}
+
+@end
+
+
+@interface MKUVerticallyStackedHorizontalViews ()
+
+@end
+
+@implementation MKUVerticallyStackedHorizontalViews
+
+- (instancetype)initWithCount:(NSUInteger)count horizontalCount:(NSUInteger)horizontalCount padding:(CGFloat)padding verticalSizes:(NSDictionary<NSNumber *, NSNumber *> *)verticalSizes horizontalSizes:(NSDictionary<NSNumber *, NSNumber *> *)horizontalSizes viewCreationHandler:(DOUBLE_INDEX_COUNT_VIEW_CREATION_HANDLER)handler {
+    return [self initWithVerticalCount:ceil((float)count / horizontalCount) horizontalCount:horizontalCount padding:padding verticalSizes:verticalSizes horizontalSizes:horizontalSizes viewCreationHandler:^UIView *(NSUInteger row, NSUInteger column) {
+        NSUInteger index = [NSObject indexOfRow:row column:column totalColumn:horizontalCount];
+        return index < count ? handler(index, row, column) : nil;
+    }];
+}
+
+- (instancetype)initWithCount:(NSUInteger)count horizontalCount:(NSUInteger)horizontalCount padding:(CGFloat)padding viewCreationHandler:(DOUBLE_INDEX_COUNT_VIEW_CREATION_HANDLER)handler {
+    return [self initWithCount:count horizontalCount:horizontalCount interItemSpacing:padding horizontalMargin:0.0 verticalMargin:padding viewCreationHandler:handler];
+}
+
+- (instancetype)initWithCount:(NSUInteger)count horizontalCount:(NSUInteger)horizontalCount viewCreationHandler:(DOUBLE_INDEX_COUNT_VIEW_CREATION_HANDLER)handler {
+    return [self initWithCount:count horizontalCount:horizontalCount padding:PADDING viewCreationHandler:handler];
+}
+
+- (instancetype)initWithCount:(NSUInteger)count horizontalCount:(NSUInteger)horizontalCount interItemSpacing:(CGFloat)interItemSpacing horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin viewCreationHandler:(DOUBLE_INDEX_COUNT_VIEW_CREATION_HANDLER)handler {
+    return [self initWithVerticalCount:ceil((float)count / horizontalCount) horizontalCount:horizontalCount interItemSpacing:interItemSpacing horizontalMargin:horizontalMargin verticalMargin:verticalMargin viewCreationHandler:^UIView *(NSUInteger row, NSUInteger column) {
+        NSUInteger index = [NSObject indexOfRow:row column:column totalColumn:horizontalCount];
+        return index < count ? handler(index, row, column) : nil;
+    }];
+}
+
+- (instancetype)initWithVerticalCount:(NSUInteger)verticalCount horizontalCount:(NSUInteger)horizontalCount viewCreationHandler:(DOUBLE_INDEX_VIEW_CREATION_HANDLER)handler {
+    return [self initWithVerticalCount:verticalCount horizontalCount:horizontalCount padding:PADDING viewCreationHandler:handler];
+}
+
+- (instancetype)initWithVerticalCount:(NSUInteger)verticalCount horizontalCount:(NSUInteger)horizontalCount padding:(CGFloat)padding verticalSizes:(NSDictionary<NSNumber *,NSNumber *> *)verticalSizes horizontalSizes:(NSDictionary<NSNumber *,NSNumber *> *)horizontalSizes viewCreationHandler:(DOUBLE_INDEX_VIEW_CREATION_HANDLER)handler {
+    return [super initWithCount:verticalCount interItemSpacing:padding horizontalMargin:0.0 verticalMargin:padding sizes:verticalSizes viewCreationHandler:^UIView *(NSUInteger row) {
+        return [[MKUHorizontalViews alloc] initWithCount:horizontalCount interItemSpacing:padding horizontalMargin:padding verticalMargin:0.0 sizes:horizontalSizes viewCreationHandler:^UIView *(NSUInteger column) {
+            return handler(row, column);
+        }];
+    }];
+}
+
+- (instancetype)initWithVerticalCount:(NSUInteger)verticalCount horizontalCount:(NSUInteger)horizontalCount padding:(CGFloat)padding viewCreationHandler:(DOUBLE_INDEX_VIEW_CREATION_HANDLER)handler  {
+    return [super initWithCount:verticalCount interItemSpacing:padding horizontalMargin:0.0 verticalMargin:padding viewCreationHandler:^UIView *(NSUInteger row) {
+        return [[MKUHorizontalViews alloc] initWithCount:horizontalCount interItemSpacing:padding horizontalMargin:padding verticalMargin:0.0 viewCreationHandler:^UIView *(NSUInteger column) {
+            return handler(row, column);
+        }];
+    }];
+}
+
+- (instancetype)initWithViewCreationHandlers:(NSArray<NSArray<SINGLE_INDEX_VIEW_CREATION_HANDLER> *> *)handlers {
+    return [super initWithCount:handlers.count interItemSpacing:PADDING horizontalMargin:0.0 verticalMargin:PADDING viewCreationHandler:^UIView *(NSUInteger row) {
+        return [[MKUHorizontalViews alloc] initWithCount:handlers.firstObject.count interItemSpacing:PADDING horizontalMargin:PADDING verticalMargin:0.0 viewCreationHandler:^UIView *(NSUInteger column) {
+            return [[handlers objectAtIndex:row] objectAtIndex:column](column);
+        }];
+    }];
+}
+
+- (instancetype)initWithVerticalCount:(NSUInteger)verticalCount horizontalCount:(NSUInteger)horizontalCount interItemSpacing:(CGFloat)interItemSpacing horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin viewCreationHandler:(DOUBLE_INDEX_VIEW_CREATION_HANDLER)handler {
+    return [super initWithCount:verticalCount interItemSpacing:interItemSpacing horizontalMargin:horizontalMargin verticalMargin:verticalMargin viewCreationHandler:^UIView *(NSUInteger row) {
+        return [[MKUHorizontalViews alloc] initWithCount:horizontalCount interItemSpacing:interItemSpacing horizontalMargin:horizontalMargin verticalMargin:verticalMargin viewCreationHandler:^UIView *(NSUInteger column) {
+            return handler(row, column);
+        }];
+    }];
+}
+
+- (id)viewForRow:(NSUInteger)row column:(NSUInteger)column {
+    if ([self count] <= row) return nil;
+    
+    MKUHorizontalViews *content = [self views][row];
+    if ([content count] <= column) return nil;
+    return [content viewAtIndex:column];
+}
+
+- (id)viewForIndex:(NSUInteger)index {
+    if ([self count] == 0) return nil;
+    
+    NSUInteger row = ceil(index / [[self views].firstObject count]);
+    NSUInteger column = index % [[self views].firstObject count];
+    return [self viewForRow:row column:column];
+}
+
+- (NSUInteger)rowCount {
+    return [self count];
+}
+
+- (NSArray *)cellViews {
+    
+    NSMutableArray *views = [[NSMutableArray alloc] init];
+    for (MKUHorizontalViews *hor in [self views]) {
+        [views addObjectsFromArray:[hor views]];
+    }
+    return views;
+}
+
+- (NSUInteger)indexOfCellView:(id)view {
+    NSUInteger row = [[self views] indexOfObjectPassingTest:^BOOL(MKUHorizontalViews *obj, NSUInteger idx, BOOL *stop) {
+        return [obj.subviews containsObject:view];
+    }];
+    
+    if (row == NSNotFound) return NSNotFound;
+    
+    MKUHorizontalViews *obj = [[self views] objectAtIndex:row];
+    
+    NSUInteger column = [[obj views] indexOfObjectPassingTest:^BOOL(UIView *obj, NSUInteger idx, BOOL *stop) {
+        return [obj isEqual:view];
+    }];
+    
+    return [NSObject indexOfRow:row column:column totalColumn:[obj count]];
 }
 
 @end

@@ -12,8 +12,6 @@
 #import "UIView+Utility.h"
 #import "MKUAssets.h"
 
-static CGFloat const CHECK_SIZE = 40.0;
-
 @interface MKURadioButtonView ()
 
 @property (nonatomic, assign, readwrite) MKU_RADIO_BUTTON_ALIGNMENT alignment;
@@ -83,7 +81,7 @@ static CGFloat const CHECK_SIZE = 40.0;
     
     [self removeConstraintsMask];
     [self constraintSidesForView:self.backButton];
-    [self constraintSize:CGSizeMake(CHECK_SIZE, CHECK_SIZE) forView:self.checkImageView];
+    [self constraintSize:CGSizeMake([Constants CheckBoxSize], [Constants CheckBoxSize]) forView:self.checkImageView];
     
     if (self.verticalAlignment == MKU_RADIO_BUTTON_VERTICAL_ALIGNMENT_CENTER_Y) {
         

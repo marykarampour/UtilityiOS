@@ -229,6 +229,7 @@ typedef UIView * (^VIEW_CREATION_HANDLER)(void);
 typedef UIView * (^SINGLE_INDEX_VIEW_CREATION_HANDLER)(NSUInteger index);
 typedef UIView * (^SINGLE_INDEX_SIZE_VIEW_CREATION_HANDLER)(NSUInteger index, CGFloat size);
 typedef UIView * (^DOUBLE_INDEX_VIEW_CREATION_HANDLER)(NSUInteger row, NSUInteger column);
+typedef UIView * (^DOUBLE_INDEX_COUNT_VIEW_CREATION_HANDLER)(NSUInteger index, NSUInteger row, NSUInteger column);
 typedef UIView * (^DOUBLE_INDEX_SIZE_VIEW_CREATION_HANDLER)(NSUInteger row, NSUInteger column, CGFloat width, CGFloat height);
 
 typedef BOOL (^EvaluateSelectedObjectHandler)(id obj);

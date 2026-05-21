@@ -684,6 +684,10 @@
     return index;
 }
 
++ (NSUInteger)indexOfRow:(NSUInteger)row column:(NSUInteger)column totalColumn:(NSUInteger)totalColumn {
+    return totalColumn * row + column;
+}
+
 - (NSUInteger)MKUHash {
     NSUInteger hashPrime = 179;
     NSUInteger hashEven = 178;

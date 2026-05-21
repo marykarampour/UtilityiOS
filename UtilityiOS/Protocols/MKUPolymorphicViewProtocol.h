@@ -27,4 +27,7 @@
  Call super first. */
 - (void)constraintViews;
 
+/** @brief Call in custom init where subviews depend on init parameters. */
+- (void)constraintSubViews;
+
 @end

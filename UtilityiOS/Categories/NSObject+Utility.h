@@ -138,6 +138,13 @@ typedef NS_OPTIONS(NSUInteger, MKU_COPY_OPTION) {
 /** @brief Returns N the power of 2 resulting from bit shifting as 1 << N
  @note If bits = 0, it returns -1.  */
 + (NSInteger)indexOfBitmask:(NSUInteger)bits;
+/** @brief Calculates a 0 based index of an element based on given position totalColumn * row + column
+ 00 01 02   0  1  2   3*0+0 3*0+1 3*0+2
+ 10 11 12   3  4  5   3*1+0 3*1+1 3*1+2
+ 20 21 22   6  7  8   3*2+0 3*2+1 3*2+2
+ 30 31 32   9 10 11   3*3+0 3*3+1 3*3+2
+ */
++ (NSUInteger)indexOfRow:(NSUInteger)row column:(NSUInteger)column totalColumn:(NSUInteger)totalColumn;
 
 @end
 
