@@ -27,3 +27,8 @@
 
 @end
 
+@protocol MKUCompoundViewProtocol <NSObject>
+
+@required
+
+@end

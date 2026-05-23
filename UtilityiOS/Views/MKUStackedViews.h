@@ -6,9 +6,9 @@
 //  Copyright © 2024 Prometheus Software. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "MKUViewProtocol.h"
 
-@protocol MKUStackedViewProtocol <NSObject>
+@protocol MKUStackedViewProtocol <MKUCompoundViewProtocol>
 
 @required
 /** @param sizes The key is the index of the view and the value is the width or height whichever applies. Only used if the corresponding value isn't zero. */
