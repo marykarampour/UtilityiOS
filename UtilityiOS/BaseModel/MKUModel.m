@@ -313,13 +313,10 @@ const void * MAPPER_FORMAT_KEY;
 
 + (NSDictionary *)keyMapperDictionaryForClass:(Class)class format:(MKU_STRING_FORMAT)format {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    unsigned int count = 0;
-    objc_property_t *properties = class_copyPropertyList(class, &count);
     NSDictionary *customNames = [self customKeyValueDict];
     NSSet *excluded = [[self class] excludedKeysWithAncestors];
     
-    for (unsigned int i=0; i<count; i++) {
-        NSString *name = [NSString stringWithUTF8String:property_getName(properties[i])];
+    for (NSString *name in [self propertyNames]) {
         if (![excluded containsObject:name]) {
             NSString *json_name;
             if ([customNames.allKeys containsObject:name]) {
@@ -332,7 +329,6 @@ const void * MAPPER_FORMAT_KEY;
             [dict setValue:json_name forKey:name];
         }
     }
-    free(properties);
     return dict;
 }
 
@@ -358,22 +354,12 @@ const void * MAPPER_FORMAT_KEY;
     return nil;
 }
 
-+ (NSSet<NSString *> *)customKeys {
-    return nil;
-}
-
 + (MKU_STRING_FORMAT)customFormat {
     return MKU_STRING_FORMAT_NONE;
 }
 
 + (DictStringString *)customKeyValueDict {
-    MDictStringString *dict = [[MDictStringString alloc] init];
-    MKU_STRING_FORMAT format = [self customFormat];
-    NSSet<NSString *> *keys = [self customKeys];
-    for (NSString *name in keys) {
-        [dict setObject:[name format:format] forKey:name];
-    }
-    return dict;
+    return [self customKeyValuesIgnoringKeys:[self excludedKeysWithAncestors]];
 }
 
 + (BOOL)usingDynamicProperties {
@@ -492,8 +478,8 @@ const void * MAPPER_FORMAT_KEY;
     return [type characterAtIndex:0] == 'Q';
 }
 
-- (NSString *)nameForProperty:(NSString *)property {
-    return property;
++ (NSString *)nameForProperty:(NSString *)property {
+    return [property format:[self customFormat]];
 }
 
 + (NSString *)tagName {
@@ -637,16 +623,26 @@ const void * MAPPER_FORMAT_KEY;
 
 - (NSDictionary *)XMLSerializeIgnoringKeys:(NSSet *)excludedKeys {
     NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
-    NSMutableDictionary *data = [[[self class] propertyAttributes] mutableCopy];
-    [data removeObjectsForKeys:[excludedKeys allObjects]];
+    NSDictionary *attrs = [[self class] propertyAttributes];
     
-    for (NSString *key in [data allKeys]) {
+    [[self.class customKeyValuesIgnoringKeys:excludedKeys] enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         if ([self propertyExists:key]) {
-            id value = [self XMLSerialize:key withAttribute:data[key]];
+            id value = [self XMLSerialize:key withAttribute:attrs[key]];
             if (value) {
-                [dict setObject:value forKey:[self nameForProperty:key]];
+                [dict setObject:value forKey:obj];
             }
         }
+    }];
+    
+    return [dict count] ? dict : nil;
+}
+
++ (NSDictionary *)customKeyValuesIgnoringKeys:(NSSet *)excludedKeys {
+    NSMutableDictionary *dict = [[NSMutableDictionary alloc] init];
+    
+    for (NSString *key in [self propertyNames]) {
+        if (![excludedKeys containsObject:key])
+            [dict setObject:[self nameForProperty:key] forKey:key];
     }
     
     return [dict count] > 0 ? dict : nil;
@@ -660,7 +656,7 @@ const void * MAPPER_FORMAT_KEY;
     NSDictionary *data = [[self class] propertyAttributes];
 
     for (NSString *key in [data allKeys]) {
-        [self XMLDeserialize:key withAttribute:data[key] withValue:dictionary[[self nameForProperty:key]]];
+        [self XMLDeserialize:key withAttribute:data[key] withValue:dictionary[[self.class nameForProperty:key]]];
     }
 }
 
@@ -985,6 +981,13 @@ const void * MAPPER_FORMAT_KEY;
     if (!self.falseState && !self.trueState) return nil;
     if (self.trueState) return @"true";
     return @"false";
+}
+
+- (NSNumber *)numberValue {
+    if (self.falseState && self.trueState) return nil;
+    if (!self.falseState && !self.trueState) return nil;
+    if (self.trueState) return @YES;
+    return @NO;
 }
 
 - (void)setFalse {

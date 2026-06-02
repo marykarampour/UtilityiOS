@@ -490,6 +490,10 @@
 
 + (void)swizzleSelectorOriginal:(SEL)originalSelector swizzled:(SEL)swizzledSelector isClassMethod:(BOOL)isClassMethod {
     Class class = isClassMethod ? object_getClass(self) : self.class;
+    [self swizzleSelectorOriginal:originalSelector swizzled:swizzledSelector isClassMethod:isClassMethod inClass:class];
+}
+
++ (void)swizzleSelectorOriginal:(SEL)originalSelector swizzled:(SEL)swizzledSelector isClassMethod:(BOOL)isClassMethod inClass:(Class)class {
     Method originalMethod = isClassMethod ? class_getClassMethod(class, originalSelector) : class_getInstanceMethod(class, originalSelector);
     Method swizzledMethod = isClassMethod ? class_getClassMethod(class, swizzledSelector) : class_getInstanceMethod(class, swizzledSelector);
     
@@ -503,9 +507,14 @@
 }
 
 + (void)swizzleSelector:(SEL)selector isClassMethod:(BOOL)isClassMethod {
+    Class class = isClassMethod ? object_getClass(self) : self.class;
+    [self swizzleSelector:selector isClassMethod:isClassMethod inClass:class];
+}
+
++ (void)swizzleSelector:(SEL)selector isClassMethod:(BOOL)isClassMethod inClass:(Class)cls {
     NSString *swizzledSelectorName = [NSString stringWithFormat:@"swizzled_%@", NSStringFromSelector(selector)];
     SEL swizzledSelector = NSSelectorFromString(swizzledSelectorName);
-    [self swizzleSelectorOriginal:selector swizzled:swizzledSelector isClassMethod:isClassMethod];
+    [self swizzleSelectorOriginal:selector swizzled:swizzledSelector isClassMethod:isClassMethod inClass:cls];
 }
 
 + (NSString *)GUID {

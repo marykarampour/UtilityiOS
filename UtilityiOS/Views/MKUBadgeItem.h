@@ -38,6 +38,7 @@
 
 /** @brief Badge names that with badge counts calculated as the sum of the other badges as long as their type are included as an option in the bitmask. */
 - (NSArray *)combinedBadgeNames;
+- (Class)badgeClass;
 
 @end
 

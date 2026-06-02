@@ -46,7 +46,8 @@ static char BADGE_DELEGATE_KEY;
     
     NSInteger combinedType = -1;
     NSUInteger count = 0;
-    MKUBadgeItem *badge = [MKUBadgeItem badgeWithName:name];
+    Class cls = [self.badgeDelegate respondsToSelector:@selector(badgeClass)] ? [self.badgeDelegate badgeClass] : [MKUBadgeItem class];
+    MKUBadgeItem *badge = [cls badgeWithName:name];
     
     for (MKUBadgeItem *obj in badges) {
         if (obj.type & badge.type) {

@@ -59,19 +59,12 @@
 + (NSSet<NSString *> *)excludedProperties;
 
 /** @brief Override in subclass if you want properties have different format than other JSON keys
- @note Use with + (MKU_STRING_FORMAT)customFormat
- @code
- + (NSSet<NSString *> *)customKeys {
- return [NSSet setWithObjects:
- NSStringFromSelector(@selector(fromDate)),
- NSStringFromSelector(@selector(toDate)), nil];
- }
- @endcode
+ @note Default uses no format returned from (MKU_STRING_FORMAT)customFormat
  */
-+ (NSSet<NSString *> *)customKeys;
++ (NSString *)nameForProperty:(NSString *)property;
 
 /** @brief Override in subclass if you want properties have different format than other JSON keys
-  @note Use with + (NSSet<NSString *> *)customKeys
+  @note Used with (NSString *)nameForProperty
  @code
  + (MKU_STRING_FORMAT)customFormat {
     return MKU_STRING_FORMAT_NONE;
@@ -158,7 +151,6 @@
 + (BOOL)propertyIsBool:(NSString *)name;
 + (BOOL)propertyIsEnum:(NSString *)name;
 
-- (NSString *)nameForProperty:(NSString *)property;
 + (NSString *)tagName;
 /** @brief A JSON representation of the serialized object. */
 - (NSString *)stringValue;
@@ -219,6 +211,7 @@
 - (void)setTrue;
 /** @brief If state is YES, does setTrue, if state is NO, does setFalse. */
 - (void)setState:(BOOL)state;
+- (NSNumber *)numberValue;
 
 @end
 

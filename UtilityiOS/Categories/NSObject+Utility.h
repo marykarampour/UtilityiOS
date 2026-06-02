@@ -77,15 +77,20 @@ typedef NS_OPTIONS(NSUInteger, MKU_COPY_OPTION) {
 + (Class)classOfProperty:(NSString *)name forObjectClass:(Class)objectClass;
 
 + (void)swizzleSelectorOriginal:(SEL)originalSelector swizzled:(SEL)swizzledSelector isClassMethod:(BOOL)isClassMethod;
++ (void)swizzleSelectorOriginal:(SEL)originalSelector swizzled:(SEL)swizzledSelector isClassMethod:(BOOL)isClassMethod inClass:(Class)cls;
 
 /** @brief This method uses swizzleSelectorOriginal:swizzled:isClassMethod to swizzle a method
  @param selector to be swizzled.
  @note The corresponding swizzled method with format swizzled_XXX should be implemeneted in your class for selector named XXX */
 + (void)swizzleSelector:(SEL)selector isClassMethod:(BOOL)isClassMethod;
 
+/** @brief This method uses swizzleSelectorOriginal:swizzled:isClassMethod to swizzle a method
+ @param selector to be swizzled.
+ @note The corresponding swizzled method with format swizzled_XXX should be implemeneted in your class for selector named XXX */
++ (void)swizzleSelector:(SEL)selector isClassMethod:(BOOL)isClassMethod inClass:(Class)cls;
+
 + (NSString *)GUID;
 + (NSString *)timestampGUID;
-
 
 - (void)processText:(NSString *)text condition:(BOOL)condition object:(NSString *)object action:(SEL)action;
 

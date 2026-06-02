@@ -720,7 +720,7 @@ static char UPDATE_DELEGATE_KEY;
     return [self defaultClassForUpdatedObject];
 }
 
-- (NSString *)nameForProperty:(NSString *)property {
++ (NSString *)nameForProperty:(NSString *)property {
     NSDictionary *map = @{NSStringFromSelector(@selector(OriginalObject)) : [self.class nameForOriginalObject],
                           NSStringFromSelector(@selector(UpdatedObject)) : [self.class nameForUpdatedObject]};
     NSString *name = [map objectForKey:property];

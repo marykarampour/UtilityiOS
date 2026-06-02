@@ -23,7 +23,7 @@ static NSArray<MKUOption *> *typeOptions;
 }
 
 + (instancetype)badgeWithName:(NSString *)name {
-    MKUBadgeItem *obj = [[MKUBadgeItem alloc] init];
+    MKUBadgeItem *obj = [[self alloc] init];
     obj.name = name;
     return obj;
 }
