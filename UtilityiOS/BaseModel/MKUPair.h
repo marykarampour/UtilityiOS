@@ -23,19 +23,6 @@
 
 @end
 
-//MKUKeyValue
-@protocol MKUKeyValue;
-
-@interface MKUKeyValue : MKUPair <NSString *, NSString *>
-
-@property (nonatomic, strong) __kindof NSString *first;
-@property (nonatomic, strong) __kindof NSString *second;
-
-+ (__kindof NSObject *)objectForKey:(__kindof NSObject *)key inArray:(NSArray<MKUKeyValue *> *)array;
-+ (__kindof NSArray *)keysForObject:(__kindof NSObject *)object inArray:(NSArray<MKUKeyValue *> *)array;
-
-@end
-
 //MKUPairArray
 @protocol MKUPairArray;
 
@@ -62,17 +49,3 @@
 + (NSArray<__kindof NSObject *> *)allValuesInArray:(NSArray<__kindof MKUPair <ObjectTypeFirst, ObjectTypeSecond> *> *)arr;
 
 @end
-
-//MKUKeyValueArray
-@protocol MKUKeyValueArray;
-
-@interface MKUKeyValueArray : MKUPairArray
-/** @brief array of key values
- @note add <MKUKeyValue, MKUPair> to subclass for serialization */
-@property (nonatomic, strong) __kindof NSArray<MKUKeyValue *> *array;
-
-@end
-
-typedef NSArray<MKUKeyValueArray *>        ArrMKKeyValueArray;
-typedef NSMutableArray<MKUKeyValueArray *> MArrMKKeyValueArray;
-typedef MKUPair<NSString *, StringArr *>   StringStringArrPair;

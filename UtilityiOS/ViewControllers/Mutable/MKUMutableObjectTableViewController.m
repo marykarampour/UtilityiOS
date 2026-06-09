@@ -1024,6 +1024,7 @@
 }
 
 - (void)didResetUpdateObject:(__kindof MKUFieldModel *)object {
+    [self resetSelectedSets];
     [self updateDatesWithUpdateObject:object];
     [self registerKVO];
     [self reloadDataAnimated:NO];
