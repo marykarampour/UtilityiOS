@@ -170,7 +170,7 @@
 @end
 
 
-@interface MKUOption : MKUModel
+@interface MKUOption : MKUModel <MKUPlaceholderProtocol>
 
 @property (nonatomic, strong) NSString *title;
 @property (nonatomic, strong) NSString *name;

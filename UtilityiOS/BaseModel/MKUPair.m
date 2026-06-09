@@ -26,38 +26,11 @@
     return [NSArray arrayFromArray:pairs forKey:NSStringFromSelector(@selector(second))];
 }
 
-@end
-
-@implementation MKUKeyValue
-
-@dynamic first;
-@dynamic second;
-
-+ (BOOL)usingAncestors {
-    return YES;
-}
-
-+ (NSObject *)objectForKey:(__kindof NSObject *)key inArray:(NSArray<MKUKeyValue *> *)array {
-    for (MKUPair *obj in array) {
-        if ([obj.first isEqual:key]) {
-            return obj.second;
-        }
-    }
-    return nil;
-}
-
-+ (NSArray *)keysForObject:(__kindof NSObject *)object inArray:(NSArray<MKUKeyValue *> *)array {
-    NSMutableArray *arr = [[NSMutableArray alloc] init];
-    for (MKUPair *obj in array) {
-        if ([obj.second isEqual:object]) {
-            if (obj.first) [arr addObject:obj.first];
-        }
-    }
-    return arr;
+- (NSString *)title {
+    return self.first.description;
 }
 
 @end
-
 
 @implementation MKUPairArray
 
@@ -74,7 +47,7 @@
 
 - (ObjectArr *)allKeys {
     MObjectArr *keys = [[NSMutableArray  alloc] init];
-    for (MKUKeyValue *obj in self.array) {
+    for (MKUPair *obj in self.array) {
         if (obj.first) [keys addObject:obj.first];
     }
     return keys;
@@ -175,10 +148,4 @@
 
 @end
 
-
-@implementation MKUKeyValueArray
-
-@dynamic array;
-
-@end
 
