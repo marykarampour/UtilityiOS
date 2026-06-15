@@ -28,18 +28,20 @@
 @protocol MKUItemsListVCProtocol <NSObject>
 
 @optional
-/** @brief Default uses textLabelAtIndexPath and detailTextLabelAtIndexPath and  attributedTextLabelAtIndexPath and attributedDetailTextLabelAtIndexPath. */
-- (void)setTextForRowAtIndexPath:(NSIndexPath *)indexPath inCell:(MKUBaseTableViewCell *)cell;
+/** @brief Default uses textLabelAtIndexPath and detailTextLabelAtIndexPath and attributedTextLabelForListItem:atIndexPath: and attributedDetailTextLabelForListItem:atIndexPath: */
+- (void)setTextForListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath inCell:(MKUBaseTableViewCell *)cell;
 /** @brief Default sets accessoryType and selectionStyle. */
-- (void)setStyleForRowAtIndexPath:(NSIndexPath *)indexPath inCell:(MKUBaseTableViewCell *)cell;
+- (void)setStyleForListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath inCell:(MKUBaseTableViewCell *)cell;
 - (UITableViewCellStyle)cellStyleForSubtitleRowAtIndexPath:(NSIndexPath *)indexPath;
-- (UITableViewCellAccessoryType)accessoryTypeForRowAtIndexPath:(NSIndexPath *)indexPath;
+- (UITableViewCellStyle)cellStyleForSubtitleListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath;
+/** @brief Default uses accessoryTypeForSelectedListItem:inListOfType: and accessoryTypeForDeselectedListItem:inListOfType. */
+- (UITableViewCellAccessoryType)accessoryTypeForListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath;
 /** @brief Default is UITableViewCellAccessoryCheckmark. */
-- (UITableViewCellAccessoryType)accessoryTypeForSelectedRowForListOfType:(NSUInteger)type;
+- (UITableViewCellAccessoryType)accessoryTypeForSelectedListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item inListOfType:(NSUInteger)type;
 /** @brief Default is UITableViewCellAccessoryNone. */
-- (UITableViewCellAccessoryType)accessoryTypeForDeselectedRowForListOfType:(NSUInteger)type;
+- (UITableViewCellAccessoryType)accessoryTypeForDeselectedListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item inListOfType:(NSUInteger)type;
 /** @brief Default is UITableViewCellAccessoryDisclosureIndicator. */
-- (UITableViewCellAccessoryType)accessoryTypeForSingleDeselectedRowForListOfType:(NSUInteger)type;
+- (UITableViewCellAccessoryType)accessoryTypeForSingleDeselectedListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item inListOfType:(NSUInteger)type;
 /** @brief If allowsMultipleSelection it is defaulted to UITableViewCellSelectionStyleNone else UITableViewCellSelectionStyleDefault. */
 - (UITableViewCellSelectionStyle)selectionStyleForListOfType:(NSUInteger)type;
 
@@ -48,8 +50,6 @@
 - (NSString *)noItemAvailableTitleForListOfType:(NSUInteger)type;
 - (NSString *)textLabelAtIndexPath:(NSIndexPath *)indexPath;
 - (NSString *)detailTextLabelAtIndexPath:(NSIndexPath *)indexPath;
-- (NSAttributedString *)attributedTextLabelAtIndexPath:(NSIndexPath *)indexPath;
-- (NSAttributedString *)attributedDetailTextLabelAtIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)isSelectedRowAtIndexPath:(NSIndexPath *)indexPath;
 - (__kindof MKUBaseTableViewCell *)cellForListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath;
 /** @brief Called in tableView: didSelectRowAtIndexPath: or methods called by it when a section is of type list or

@@ -1153,32 +1153,44 @@
     [self canTransitionToPresentingSelectionVCInSection:section];
 }
 
-- (void)setTextForRowAtIndexPath:(NSIndexPath *)indexPath inCell:(MKUBaseTableViewCell *)cell {
-    [self defaultSetTextForRowAtIndexPath:indexPath inCell:cell];
+- (void)setTextForListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath inCell:(MKUBaseTableViewCell *)cell {
+    [self defaultSetTextForListItem:item atIndexPath:indexPath inCell:cell];
 }
 
-- (void)setStyleForRowAtIndexPath:(NSIndexPath *)indexPath inCell:(MKUBaseTableViewCell *)cell {
-    [self defaultSetStyleForRowAtIndexPath:indexPath inCell:cell];
+- (void)setStyleForListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath inCell:(MKUBaseTableViewCell *)cell {
+    [self defaultSetStyleForListItem:item atIndexPath:indexPath inCell:cell];
 }
 
-- (UITableViewCellAccessoryType)accessoryTypeForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [self defaultAccessoryTypeForRowAtIndexPath:indexPath];
+- (UITableViewCellAccessoryType)accessoryTypeForListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath {
+    return [self defaultAccessoryTypeForListItem:item atIndexPath:indexPath];
 }
 
-- (UITableViewCellAccessoryType)accessoryTypeForSelectedRowForListOfType:(NSUInteger)type {
-    return UITableViewCellAccessoryCheckmark;
+- (UITableViewCellAccessoryType)accessoryTypeForSelectedListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item inListOfType:(NSUInteger)type {
+    MKU_LIST_ITEM_SELECTED_ACTION action = self.selectedActionHandler(0);
+    switch (action) {
+        case MKU_LIST_ITEM_SELECTED_ACTION_TRANSITION_TO_DETAIL:
+            return UITableViewCellAccessoryDisclosureIndicator;
+        case MKU_LIST_ITEM_SELECTED_ACTION_SELECT:
+            return UITableViewCellAccessoryCheckmark;
+        default:
+            return UITableViewCellAccessoryNone;
+    }
 }
 
-- (UITableViewCellAccessoryType)accessoryTypeForDeselectedRowForListOfType:(NSUInteger)type {
+- (UITableViewCellAccessoryType)accessoryTypeForDeselectedListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item inListOfType:(NSUInteger)type {
     return UITableViewCellAccessoryNone;
 }
 
-- (UITableViewCellAccessoryType)accessoryTypeForSingleDeselectedRowForListOfType:(NSUInteger)type {
-    return UITableViewCellAccessoryDisclosureIndicator;
+- (UITableViewCellAccessoryType)accessoryTypeForSingleDeselectedListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item inListOfType:(NSUInteger)type {
+    return UITableViewCellAccessoryNone;
 }
 
 - (UITableViewCellStyle)cellStyleForSubtitleRowAtIndexPath:(NSIndexPath *)indexPath {
     return UITableViewCellStyleSubtitle;
+}
+
+- (UITableViewCellStyle)cellStyleForSubtitleListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath {
+    return [self cellStyleForSubtitleRowAtIndexPath:indexPath];
 }
 
 - (UITableViewCellSelectionStyle)selectionStyleForListOfType:(NSUInteger)type {

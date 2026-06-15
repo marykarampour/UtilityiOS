@@ -286,11 +286,12 @@
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
     __block UITextField *alertText;
     
-    [alert addAction:[UIAlertAction actionWithTitle:[Constants OK_STR] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        if (handler) handler(alertText.text);
-    }]];
     [alert addAction:[UIAlertAction actionWithTitle:[Constants Cancel_STR] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         [alert dismissViewControllerAnimated:YES completion:nil];
+    }]];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:[Constants OK_STR] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        if (handler) handler(alertText.text);
     }]];
     
     [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {

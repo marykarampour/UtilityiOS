@@ -12,12 +12,14 @@
 @interface MKUTableViewController (ItemsListTransition) <MKUItemsListVCProtocol, MKUViewControllerTransitionDelegate>
 
 - (__kindof MKUBaseTableViewCell *)defaultTitleSubtitleCellForListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath;
-- (void)defaultSetTextForRowAtIndexPath:(NSIndexPath *)indexPath inCell:(MKUBaseTableViewCell *)cell;
-- (void)defaultSetStyleForRowAtIndexPath:(NSIndexPath *)indexPath inCell:(MKUBaseTableViewCell *)cell;
+- (void)defaultSetTextForListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath inCell:(MKUBaseTableViewCell *)cell;
+- (void)defaultSetStyleForListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath inCell:(MKUBaseTableViewCell *)cell;
 - (UITableViewCellSelectionStyle)defaultSelectionStyleForListOfType:(NSUInteger)type;
-- (UITableViewCellAccessoryType)defaultAccessoryTypeForRowAtIndexPath:(NSIndexPath *)indexPath;
+- (UITableViewCellAccessoryType)defaultAccessoryTypeForListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath;
 - (void)handleTransitionForViewController:(UIViewController *)VC item:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath;
 - (BOOL)dispatchTransitionVCDelegateToTransitionToViewController:(UIViewController *)VC sourceViewController:(UIViewController *)sourceVC didSelectListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath;
 - (void)dispatchTransitionVCDelegateToDismissDestinationViewController:(UIViewController *)VC;
+- (NSAttributedString *)attributedTextLabelForListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath;
+- (NSAttributedString *)attributedDetailTextLabelForListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath;
 
 @end

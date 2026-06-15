@@ -53,18 +53,18 @@
 
 - (__kindof MKUBaseTableViewCell *)cellForListItem:(__kindof NSObject<MKUSearchProtocol> *)item atIndexPath:(NSIndexPath *)indexPath {
     if ([self.headerDelegate isDetailCellAtIndexPath:indexPath]) {
-        return [self.headerDelegate tableView:self.tableView detailCellForObject:item];
+        return [self.headerDelegate tableView:self.tableView detailCellForObject:item atIndexPath:indexPath];
     }
     else {
         return [super cellForListItem:item atIndexPath:indexPath];
     }
 }
 
-- (UITableViewCellAccessoryType)accessoryTypeForSingleDeselectedRowForListOfType:(NSUInteger)type {
+- (UITableViewCellAccessoryType)accessoryTypeForSingleDeselectedListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item inListOfType:(NSUInteger)type {
     return self.headerDelegate.selectedActionHandler(0) == MKU_LIST_ITEM_SELECTED_ACTION_TRANSITION_TO_DETAIL ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
 }
 
-- (void)setTextForRowAtIndexPath:(NSIndexPath *)indexPath inCell:(MKUBaseTableViewCell *)cell {
+- (void)setTextForListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath inCell:(MKUBaseTableViewCell *)cell {
     cell.textLabel.attributedText = nil;
     cell.textLabel.text = [self textLabelAtIndexPath:indexPath];
     cell.detailTextLabel.attributedText = nil;
@@ -354,12 +354,12 @@
     [self.childViewController setSelectedObjectsWithSet:[NSMutableSet setWithArray:objects]];
 }
 
-- (__kindof MKUBaseTableViewCell *)tableView:(UITableView *)tableView detailCellForObject:(NSObject<MKUSearchProtocol> *)object {
+- (__kindof MKUBaseTableViewCell *)tableView:(UITableView *)tableView detailCellForObject:(NSObject<MKUSearchProtocol> *)object atIndexPath:(NSIndexPath *)indexPath {
     
     MKUSubtitleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[MKUSubtitleTableViewCell identifier]];
     if (!cell) {
         cell = [[MKUSubtitleTableViewCell alloc] init];
-        cell.accessoryType = self.selectedActionHandler(0) == MKU_LIST_ITEM_SELECTED_ACTION_TRANSITION_TO_DETAIL ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+        cell.accessoryType = [self.childViewController accessoryTypeForListItem:object atIndexPath:indexPath];
     }
     
     NSString *title = [object respondsToSelector:@selector(title)] ? [object title] : nil;

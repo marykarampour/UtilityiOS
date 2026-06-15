@@ -63,22 +63,20 @@ static char UIVIEWCONTROLER_TRANSITION_LIST_KEY;
     return nil;
 }
 
-- (NSAttributedString *)attributedTextLabelAtIndexPath:(NSIndexPath *)indexPath {
+- (NSAttributedString *)attributedTextLabelForListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath {
     if (![self respondsToSelector:@selector(listItemAtIndexPath:)]) return nil;
     
-    NSObject <MKUPlaceholderProtocol> *object = [self listItemAtIndexPath:indexPath];
-    if ([object respondsToSelector:@selector(attributedTitle)]) {
-        return [object attributedTitle];
+    if ([item respondsToSelector:@selector(attributedTitle)]) {
+        return [item attributedTitle];
     }
     return nil;
 }
 
-- (NSAttributedString *)attributedDetailTextLabelAtIndexPath:(NSIndexPath *)indexPath {
+- (NSAttributedString *)attributedDetailTextLabelForListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath {
     if (![self respondsToSelector:@selector(listItemAtIndexPath:)]) return nil;
     
-    NSObject <MKUPlaceholderProtocol> *object = [self listItemAtIndexPath:indexPath];
-    if ([object respondsToSelector:@selector(attributedSubtitle)]) {
-        return [object attributedSubtitle];
+    if ([item respondsToSelector:@selector(attributedSubtitle)]) {
+        return [item attributedSubtitle];
     }
     return nil;
 }
@@ -100,23 +98,23 @@ static char UIVIEWCONTROLER_TRANSITION_LIST_KEY;
     
     MKUSubtitleTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[MKUSubtitleTableViewCell identifier]];
     if (!cell) {
-        UITableViewCellStyle style = [self respondsToSelector:@selector(cellStyleForSubtitleRowAtIndexPath:)] ?
-        [self cellStyleForSubtitleRowAtIndexPath:indexPath] : UITableViewCellStyleSubtitle;
+        UITableViewCellStyle style = [self respondsToSelector:@selector(cellStyleForSubtitleListItem:atIndexPath:)] ?
+        [self cellStyleForSubtitleListItem:item atIndexPath:indexPath] : UITableViewCellStyleSubtitle;
         cell = [[MKUSubtitleTableViewCell alloc] initWithStyle:style];
     }
     
-    if ([self respondsToSelector:@selector(setTextForRowAtIndexPath:inCell:)])
-        [self setTextForRowAtIndexPath:indexPath inCell:cell];
+    if ([self respondsToSelector:@selector(setTextForListItem:atIndexPath:inCell:)])
+        [self setTextForListItem:item atIndexPath:indexPath inCell:cell];
     
-    if ([self respondsToSelector:@selector(setStyleForRowAtIndexPath:inCell:)])
-        [self setStyleForRowAtIndexPath:indexPath inCell:cell];
+    if ([self respondsToSelector:@selector(setStyleForListItem:atIndexPath:inCell:)])
+        [self setStyleForListItem:item atIndexPath:indexPath inCell:cell];
     
     return cell;
 }
 
-- (void)defaultSetTextForRowAtIndexPath:(NSIndexPath *)indexPath inCell:(MKUBaseTableViewCell *)cell {
-    NSAttributedString *attrTitle = [self attributedTextLabelAtIndexPath:indexPath];
-    NSAttributedString *attrSubtitle = [self attributedDetailTextLabelAtIndexPath:indexPath];
+- (void)defaultSetTextForListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath inCell:(MKUBaseTableViewCell *)cell {
+    NSAttributedString *attrTitle = [self attributedTextLabelForListItem:item atIndexPath:indexPath];
+    NSAttributedString *attrSubtitle = [self attributedDetailTextLabelForListItem:item atIndexPath:indexPath];
     
     if (attrTitle) {
         cell.textLabel.text = nil;
@@ -137,10 +135,10 @@ static char UIVIEWCONTROLER_TRANSITION_LIST_KEY;
     }
 }
 
-- (void)defaultSetStyleForRowAtIndexPath:(NSIndexPath *)indexPath inCell:(MKUBaseTableViewCell *)cell {
+- (void)defaultSetStyleForListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath inCell:(MKUBaseTableViewCell *)cell {
     
     NSUInteger sectionType = [self sectionTypeForIndexPath:indexPath];
-    UITableViewCellAccessoryType type = [self respondsToSelector:@selector(accessoryTypeForRowAtIndexPath:)] ? [self accessoryTypeForRowAtIndexPath:indexPath] : UITableViewCellAccessoryNone;
+    UITableViewCellAccessoryType type = [self respondsToSelector:@selector(accessoryTypeForListItem:atIndexPath:)] ? [self accessoryTypeForListItem:item atIndexPath:indexPath] : UITableViewCellAccessoryNone;
     
     cell.selectionStyle = [self respondsToSelector:@selector(selectionStyleForListOfType:)] ? [self selectionStyleForListOfType:sectionType] : UITableViewCellSelectionStyleNone;
     cell.accessoryType = type;
@@ -156,19 +154,19 @@ static char UIVIEWCONTROLER_TRANSITION_LIST_KEY;
     return UITableViewCellSelectionStyleNone;
 }
 
-- (UITableViewCellAccessoryType)defaultAccessoryTypeForRowAtIndexPath:(NSIndexPath *)indexPath {
+- (UITableViewCellAccessoryType)defaultAccessoryTypeForListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath {
     
     NSUInteger sectionType = [self sectionTypeForIndexPath:indexPath];
 
     if ([self respondsToSelector:@selector(isSelectedRowAtIndexPath:)]) {
         if (!self.tableView.allowsMultipleSelection) {
-            if ([self respondsToSelector:@selector(accessoryTypeForSingleDeselectedRowForListOfType:)]) {
-                return [self isSelectedRowAtIndexPath:indexPath] ? [self accessoryTypeForSelectedRowForListOfType:sectionType] : [self accessoryTypeForSingleDeselectedRowForListOfType:sectionType];
+            if ([self respondsToSelector:@selector(accessoryTypeForSingleDeselectedListItem:inListOfType:)]) {
+                return [self isSelectedRowAtIndexPath:indexPath] ? [self accessoryTypeForSelectedListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item inListOfType:sectionType] : [self accessoryTypeForSingleDeselectedListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item inListOfType:sectionType];
             }
         }
         else {
-            if ([self respondsToSelector:@selector(accessoryTypeForDeselectedRowForListOfType:)]) {
-                return [self isSelectedRowAtIndexPath:indexPath] ? [self accessoryTypeForSelectedRowForListOfType:sectionType] : [self accessoryTypeForDeselectedRowForListOfType:sectionType];
+            if ([self respondsToSelector:@selector(accessoryTypeForDeselectedListItem:inListOfType:)]) {
+                return [self isSelectedRowAtIndexPath:indexPath] ? [self accessoryTypeForSelectedListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item inListOfType:sectionType] : [self accessoryTypeForDeselectedListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item inListOfType:sectionType];
             }
         }
     }

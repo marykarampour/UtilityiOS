@@ -24,7 +24,7 @@
 - (void)searchText:(NSString *)searchText withCompletion:(void (^)(NSArray <NSObject<MKUSearchProtocol> *> *result))completion;
 - (void)searchDidSelectObject:(NSObject<MKUSearchProtocol> *)object atIndex:(NSInteger)index;
 /** @brief By default only called if selectedObject not nil. */
-- (__kindof MKUBaseTableViewCell *)tableView:(UITableView *)tableView detailCellForObject:(NSObject<MKUSearchProtocol> *)object;
+- (__kindof MKUBaseTableViewCell *)tableView:(UITableView *)tableView detailCellForObject:(NSObject<MKUSearchProtocol> *)object atIndexPath:(NSIndexPath *)indexPath;
 - (CGFloat)estimatedDetailCellHeightForObject:(NSObject<MKUSearchProtocol> *)object;
 - (CGFloat)estimatedCellHeightForObject:(NSObject<MKUSearchProtocol> *)object;
 + (UIColor *)selectedColor;
