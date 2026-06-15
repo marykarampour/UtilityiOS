@@ -815,6 +815,11 @@
     self.selectedSets = [[NSCache alloc] init];
 }
 
+- (void)resetSelectedSetsReload {
+    [self resetSelectedSets];
+    [self reloadDataAnimated:NO];
+}
+
 - (void)resetSelectedSetsInListOfType:(NSUInteger)type {
     [self setSelectedObjectsWithSet:[[NSSet alloc] init] inListOfType:type reload:YES];
 }

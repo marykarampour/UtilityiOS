@@ -191,6 +191,7 @@ typedef NS_ENUM(NSInteger, MKU_MUTABLE_OBJECT_FIELD_TYPE) {
 - (NSIndexPath *)indexPathForItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item;
 
 - (void)resetSelectedSets;
+- (void)resetSelectedSetsReload;
 - (void)resetSelectedSetsInListOfType:(NSUInteger)type;
 - (void)setAllSelectedSetsInListOfType:(NSUInteger)type;
 - (void)setSelectedObjectsWithSet:(NSSet *)selectedObjects inListOfType:(NSUInteger)type;
