@@ -105,18 +105,20 @@ const void * MAPPER_FORMAT_KEY;
     }
     
     if (self = [super initWithDictionary:dict error:err]) {
-        for (NSString *name in self.class.dateProperties) {
-            NSString *propertyName = [self.class convertToJson:name];
-            
-            id value = dict[propertyName];
-            if (value && ![value isKindOfClass:[NSNull class]]) {
-                DATE_FORMAT_STYLE style = [self.class dateFormatForProperty:propertyName];
-                NSDate *date = [NSDate dateFromString:value withFormat:style];
-                if ([date isKindOfClass:[NSDate class]]) {
-                    [self setValue:date forKey:name];
-                }
-            }
-        }
+//        TODO: Added JSONValueTransformer for Dates, this is not needed, remove when safe
+//        for (NSString *name in self.class.dateProperties) {
+//            NSString *propertyName = [self.class convertToJson:name];
+//            
+//            id value = dict[propertyName];
+//            if (value && ![value isKindOfClass:[NSNull class]]) {
+//                DATE_FORMAT_STYLE style = [self.class dateFormatForProperty:propertyName];
+//                BOOL isUTC = [self.class datePropertyIsUTC:name];
+//                NSDate *date = [NSDate dateFromString:value withFormat:style isUTC:isUTC];
+//                if ([date isKindOfClass:[NSDate class]]) {
+//                    [self setValue:date forKey:name];
+//                }
+//            }
+//        }
     }
     return self;
 }
