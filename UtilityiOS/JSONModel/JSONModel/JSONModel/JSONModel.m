@@ -32,9 +32,6 @@ static JSONKeyMapper* globalKeyMapper = nil;
 
 #pragma mark - JSONModel implementation
 @implementation JSONModel
-{
-    NSString* _description;
-}
 
 #pragma mark - initialization methods
 
@@ -1313,7 +1310,7 @@ static JSONKeyMapper* globalKeyMapper = nil;
 
     for (JSONModelClassProperty *p in [self __properties__]) {
 
-        id value = ([p.name isEqualToString:@"description"])?self->_description:[self valueForKey:p.name];
+        id value = [self valueForKey:p.name];
         NSString* valueDescription = (value)?[value description]:@"<nil>";
 
         if (p.isStandardJSONType && ![value respondsToSelector:@selector(count)] && [valueDescription length]>60) {
