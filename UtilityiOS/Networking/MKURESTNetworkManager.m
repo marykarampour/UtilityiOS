@@ -274,8 +274,11 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
     [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     [manager.requestSerializer setValue:@"application/json" forHTTPHeaderField:@"Accept"];
     
-    manager.responseSerializer = [AFJSONResponseSerializer serializer];
-    [manager.responseSerializer setAcceptableContentTypes:[NSSet setWithArray:contentTypes.allValues]];
+    AFJSONResponseSerializer *jsonSerializer = [AFJSONResponseSerializer serializer];
+    jsonSerializer.acceptableContentTypes = [NSSet setWithArray:contentTypes.allValues];
+    AFHTTPResponseSerializer *rawSerializer = [AFHTTPResponseSerializer serializer];
+    rawSerializer.acceptableContentTypes = [NSSet setWithArray:contentTypes.allValues];
+    manager.responseSerializer = [AFCompoundResponseSerializer compoundSerializerWithResponseSerializers:@[jsonSerializer, rawSerializer]];
     
     self.manager = manager;
 }
