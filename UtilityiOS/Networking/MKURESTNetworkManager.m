@@ -191,11 +191,14 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
     
     NSString *path = [NSString stringWithFormat:@"%@%@", self.manager.baseURL, url];
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:path]];
+    DEBUGLOG(@"Request Headers: %@", [self.manager.requestSerializer HTTPRequestHeaders]);
+
     NSURLSessionDownloadTask *downloadTask = [self.manager downloadTaskWithRequest:request progress:nil destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
         
         NSURL *docsDirPath = [NSURL fileURLWithPath:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject]];
         NSURL *fileURL = [docsDirPath URLByAppendingPathComponent:filname];
-        
+        DEBUGLOG(@"File URL: %@", fileURL);
+
         NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
         
         if (httpResponse.statusCode == 200) {

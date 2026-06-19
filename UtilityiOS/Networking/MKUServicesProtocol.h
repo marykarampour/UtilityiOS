@@ -130,5 +130,7 @@ typedef void (^VoidManagerKeyActionHandler)(id<MKUServicesProtocol> manager, NSS
  @param path The URL path in REST.
  */
 - (void)requestWithServerType:(NSUInteger)serverType path:(NSString *)path type:(MKU_NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters headers:(NSDictionary<NSString *,NSString *> *)headers completionHandler:(MKUServerStatusCodeResultErrorBlock)completion;
+- (void)requestMultipartFormURL:(NSString *)url serverType:(NSUInteger)serverType type:(MKU_NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters data:(NSArray<MKUMultipartInfo *> *)data completion:(void (^)(NSURLResponse *response, id responseObject, NSError *error))completion;
+- (void)downloadURL:(NSString *)url serverType:(NSUInteger)serverType toFile:(NSString *)filname completion:(MKUServerResultErrorBlock)completion;
 
 @end

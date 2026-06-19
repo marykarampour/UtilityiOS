@@ -668,7 +668,7 @@
 
 - (NSIndexPath *)indexPathForItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item {
     for (NSUInteger i=0; i < [self numberOfSectionsInTableView:self.tableView]; i++) {
-        NSUInteger type = [self typeForSection:i];
+        MKU_MUTABLE_OBJECT_FIELD_TYPE type = [self typeForSection:i];
         if (type != MKU_MUTABLE_OBJECT_FIELD_TYPE_LIST) continue;
         
         NSArray *arr = [self listItemsForListInSection:i];

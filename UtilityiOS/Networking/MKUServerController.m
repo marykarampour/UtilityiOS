@@ -56,6 +56,16 @@
     [[self managerForType:serverType] requestWithPath:path type:type parameters:parameters headers:headers completionHandler:completion];
 }
 
+- (void)requestMultipartFormURL:(NSString *)url serverType:(NSUInteger)serverType type:(MKU_NETWORK_REQUEST_TYPE)type parameters:(NSDictionary *)parameters data:(NSArray<MKUMultipartInfo *> *)data completion:(void (^)(NSURLResponse *, id, NSError *))completion{
+    [[self managerForType:serverType] requestMultipartFormURL:url type:type parameters:parameters data:data completion:completion];
+}
+
+- (void)downloadURL:(NSString *)url serverType:(NSUInteger)serverType toFile:(NSString *)filname completion:(MKUServerResultErrorBlock)completion {
+    id<MKUServicesProtocol> manager = [self managerForType:serverType];
+//    [manager setHeaders:[ServerController headers]];
+    [manager downloadURL:url toFile:filname completion:completion];
+}
+
 #pragma mark - swizzled in category
 
 + (void)authWithUserID:(__kindof NSObject *)userID password:(NSString *)password completion:(MKUServerResultErrorBlock)completion {
