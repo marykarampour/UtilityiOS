@@ -87,7 +87,7 @@ typedef NS_OPTIONS(NSUInteger, MKU_LABEL_ATTRIBUTES_TYPE) {
 
 @interface MKULabelAttributes ()
 
-@property (nonatomic, assign) NSUInteger type;
+@property (nonatomic, assign) MKU_LABEL_ATTRIBUTES_TYPE type;
 
 - (CGFloat)heightForWidth:(CGFloat)width text:(NSString *)text;
 - (instancetype)initWithType:(NSUInteger)type;
@@ -439,7 +439,7 @@ typedef NS_OPTIONS(NSUInteger, MKU_LABEL_ATTRIBUTES_TYPE) {
 }
 
 + (void)setAttributedTitles:(MKULabelAttributes *)obj label:(UILabel *)label sublabel:(UILabel *)sublabel {
-    [self setAttributedTitles:obj label:label sublabel:sublabel];
+    [obj setAttributedTitlesForLabel:label sublabel:sublabel];
 }
 
 - (CGFloat)heightForWidth:(CGFloat)width {

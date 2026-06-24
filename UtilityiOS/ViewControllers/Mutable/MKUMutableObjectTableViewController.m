@@ -529,9 +529,8 @@
         [self transitioningViewControllerForItem:item atIndexPath:indexPath completion:^(UIViewController *VC) {
             if (VC)
                 [self handleTransitionForViewController:VC item:item atIndexPath:indexPath];
-            else {
+            else
                 [self dispatchUpdateDelegateToSetSelected:!selected item:item];
-            }
         }];
     }
     else if (self.selectedActionHandler(section) == MKU_LIST_ITEM_SELECTED_ACTION_SELECT ||

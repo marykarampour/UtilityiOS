@@ -57,7 +57,6 @@
 - (instancetype)initWithTitle:(NSString *)title subtitle:(NSString *)subtitle value:(NSString *)value subvalue:(NSString *)subvalue placeholder:(NSString *)placeholder attrValue:(NSAttributedString *)attrValue attrSubvalue:(NSAttributedString *)attrSubvalue labelDelimiter:(NSString *)labelDelimiter sublabelDelimiter:(NSString *)sublabelDelimiter;
 + (instancetype)attributesWithTitle:(NSString *)title subtitle:(NSString *)subtitle value:(NSString *)value subvalue:(NSString *)subvalue placeholder:(NSString *)placeholder attrValue:(NSAttributedString *)attrValue attrSubvalue:(NSAttributedString *)attrSubvalue labelDelimiter:(NSString *)labelDelimiter sublabelDelimiter:(NSString *)sublabelDelimiter;
 
-- (void)setAttributedTitlesForLabel:(UILabel *)label sublabel:(UILabel *)sublabel;
 + (void)setAttributedTitles:(MKULabelAttributes *)obj label:(UILabel *)label sublabel:(UILabel *)sublabel;
 
 @end
