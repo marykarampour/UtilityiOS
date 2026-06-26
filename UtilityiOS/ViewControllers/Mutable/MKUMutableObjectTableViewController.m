@@ -539,7 +539,7 @@
             [self setDeselectedObject:item reload:NO];
         }
         else {
-            NSUInteger type = [self typeForSection:section];
+            NSUInteger type = [self listTypeForListInSection:section];
             if ([self shouldSelectItemsInListOfType:type]) {
                 [self setSelectedObject:item reload:NO];
                 [self didSelectListItem:item atIndexPath:indexPath];
