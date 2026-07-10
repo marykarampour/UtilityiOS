@@ -111,7 +111,7 @@ static char MENU_OBJECTS_KEY;
     MKUMenuItemObject *obj = [self menuObjectAtIndexPath:indexPath];
     UIViewController *nextViewController;
     
-    if ([obj.VCClass instancesRespondToSelector:@selector(initWithMKUType:)] && 0 <= obj.type) {
+    if ([obj.VCClass instancesRespondToSelector:@selector(initWithMKUType:)]) {
         nextViewController = [[obj.VCClass alloc] initWithMKUType:obj.type];
     }
     else {
