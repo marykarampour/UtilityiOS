@@ -154,7 +154,7 @@ typedef NS_ENUM(NSInteger, MKU_MUTABLE_OBJECT_FIELD_TYPE) {
  tableview which does deque cells, all cells are static and recreated on reload by default, unless subclass return a
  predefined cells for any type in particular for MKU_MUTABLE_OBJECT_FIELD_TYPE_SINGLE_CELL. */
 @interface MKUMutableObjectTableViewController <__covariant ObjectType : __kindof NSObject<MKUFieldModelProtocol> *, __covariant UpdateObjectType : __kindof NSObject<MKUFieldModelProtocol> *> : MKUTableViewController <MKUMutableObjectTableVCProtocol, MKUViewControllerTransitionProtocol, MKUItemsListVCProtocol, MKUEditingListVCProtocol, MKUItemsListVCTransitionDelegate, MKUItemsListVCUpdateDelegate, MKUKVOProtocol>
-
+ 
 
 - (__kindof MKUUpdateObject<ObjectType, UpdateObjectType> *)object;
 - (void)setObject:(__kindof MKUUpdateObject<ObjectType, UpdateObjectType> *)object;

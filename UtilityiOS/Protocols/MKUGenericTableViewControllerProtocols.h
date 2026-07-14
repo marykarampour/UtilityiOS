@@ -141,7 +141,7 @@
 @protocol MKUItemsListVCUpdateDelegate <NSObject>
 
 @optional
-- (void)itemsListVC:(UIViewController<MKUEditingListVCProtocol, MKUItemsListVCProtocol> *)VC didUpdateItems:(NSArray <__kindof NSObject<MKUPlaceholderProtocol> *> *)items inSection:(NSUInteger)section;
+- (void)itemsListVC:(UIViewController<MKUEditingListVCProtocol, MKUItemsListVCProtocol> *)VC didUpdateItems:(NSArray <__kindof NSObject<MKUPlaceholderProtocol> *> *)items inListOfType:(NSUInteger)type;
 - (void)itemsListVC:(UIViewController<MKUEditingListVCProtocol, MKUItemsListVCProtocol> *)VC didUpdateItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath;
 - (void)itemsListVC:(UIViewController<MKUEditingListVCProtocol, MKUItemsListVCProtocol> *)VC didSetSelected:(BOOL)selected item:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath;
 

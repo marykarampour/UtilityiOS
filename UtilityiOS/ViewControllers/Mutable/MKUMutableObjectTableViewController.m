@@ -639,9 +639,9 @@
     [self didFinishUpdatesInListOfType:type];
 }
 
-- (void)didFinishUpdatesInListOfType:(NSUInteger)section {
-    if ([self.updateDelegate respondsToSelector:@selector(itemsListVC:didUpdateItems:inSection:)]) {
-        [self.updateDelegate itemsListVC:self didUpdateItems:[self listItemsForListInSection:section] inSection:section];
+- (void)didFinishUpdatesInListOfType:(NSUInteger)type {
+    if ([self.updateDelegate respondsToSelector:@selector(itemsListVC:didUpdateItems:inListOfType:)]) {
+        [self.updateDelegate itemsListVC:self didUpdateItems:[self listItemsForListOfType:type] inListOfType:type];
     }
 }
 
@@ -849,7 +849,7 @@
     [self.navigationController pushViewController:VC animated:YES];
 }
 
-- (void)itemsListVC:(MKUItemsListViewController *)VC didUpdateItems:(NSArray <__kindof NSObject<MKUPlaceholderProtocol> *> *)items inSection:(NSUInteger)section {
+- (void)itemsListVC:(MKUItemsListViewController *)VC didUpdateItems:(NSArray <__kindof NSObject<MKUPlaceholderProtocol> *> *)items inListOfType:(NSUInteger)type {
 }
 
 - (void)itemsListVC:(MKUItemsListViewController *)VC didUpdateItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath {

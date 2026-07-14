@@ -360,8 +360,8 @@ static NSString * const MULTI_SELECT_KEY = @"allowsMultipleSelection";
 }
 
 - (void)dispatchUpdateDelegateToRefresh {
-    if ([self.updateDelegate respondsToSelector:@selector(itemsListVC:didUpdateItems:inSection:)]) {
-        [self.updateDelegate itemsListVC:self didUpdateItems:[self items] inSection:MKU_FIELD_LIST_TYPE_A];
+    if ([self.updateDelegate respondsToSelector:@selector(itemsListVC:didUpdateItems:inListOfType:)]) {
+        [self.updateDelegate itemsListVC:self didUpdateItems:[self items] inListOfType:MKU_FIELD_LIST_TYPE_A];
     }
 }
 
