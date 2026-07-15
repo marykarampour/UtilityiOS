@@ -116,7 +116,7 @@ typedef AFHTTPSessionManager *(* operator)(id manager, SEL cmd, id url, id param
     SEL selector = [selectors[@(type)] pointerValue];
     operator requestOperator = (operator)[self.manager methodForSelector:selector];
     DEBUGLOG(@"Request Headers: %@", [self.manager.requestSerializer HTTPRequestHeaders]);
-    DEBUGLOG(@"Parameters: %@", parameters.description);
+    DEBUGLOG(@"Parameters for request: %@\n%@", path, parameters.description);
     [MKURESTNetworkManager prettyPrintJSON:parameters];
     
     requestOperator(self.manager, selector, path, parameters, nil, ^(NSURLSessionDataTask *task, id responseObject) {
