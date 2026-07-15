@@ -16,6 +16,10 @@
             [self compare:range.end] == NSOrderedSame);
 }
 
+- (BOOL)isInRangeStart:(NSInteger)start end:(NSInteger)end {
+    return IN_RANGE(self.integerValue, start, end);
+}
+
 - (BOOL)isBOOL {
     CFTypeID numID = CFGetTypeID((__bridge CFTypeRef)(self));
     return numID == CFBooleanGetTypeID();

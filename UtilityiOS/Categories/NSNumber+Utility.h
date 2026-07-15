@@ -12,6 +12,7 @@
 @interface NSNumber (Utility)
 
 - (BOOL)isInRange:(MKURange *)range;
+- (BOOL)isInRangeStart:(NSInteger)start end:(NSInteger)end;
 - (BOOL)isBOOL;
 + (BOOL)isBOOL:(NSObject *)obj;
 + (NSNumber *)numberWith:(NSNumber *)num min:(NSNumber *)min max:(NSNumber *)max;
