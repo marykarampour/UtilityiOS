@@ -651,11 +651,11 @@
 }
 
 - (BOOL)isReferenceDateType:(MKU_REFERENCE_DATE_TYPE)type {
-    if ([self timeIntervalSinceReferenceDate] == 0)
+    if (IN_RANGE([self timeIntervalSinceReferenceDate], -TIMER_DURATION_24_HOUR, TIMER_DURATION_24_HOUR))
         return MKU_REFERENCE_DATE_TYPE_2001;
-    else if ([self timeIntervalSince1970] == 0)
+    else if (IN_RANGE([self timeIntervalSince1970], -TIMER_DURATION_24_HOUR, TIMER_DURATION_24_HOUR))
         return MKU_REFERENCE_DATE_TYPE_1970;
-    else if ([self timeIntervalSinceDate:[NSDate dateWithTimeIntervalSince1900]] == 0)
+    else if (IN_RANGE([self timeIntervalSinceDate:[NSDate dateWithTimeIntervalSince1900]], -TIMER_DURATION_24_HOUR, TIMER_DURATION_24_HOUR))
         return MKU_REFERENCE_DATE_TYPE_1900;
     return MKU_REFERENCE_DATE_TYPE_0;
 }
