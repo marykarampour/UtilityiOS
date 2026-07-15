@@ -21,6 +21,8 @@
 #define DEBUGLOG(s, ...)
 #endif
 
+#define IN_RANGE(i, min, max)                   min <= i && i <= max
+
 #define IS_IPHONE                               [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone
 #define IS_IPAD                                 [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad
 
@@ -39,6 +41,7 @@
 #define TIMER_DURATION_10_MIN                    10*TIMER_DURATION_1_MIN
 #define TIMER_DURATION_1_HOUR                    60*TIMER_DURATION_1_MIN
 #define TIMER_DURATION_12_HOUR                   12*TIMER_DURATION_1_HOUR
+#define TIMER_DURATION_24_HOUR                   24*TIMER_DURATION_1_HOUR
 
 #define BADGE_POOLING_TIMER                      TIMER_DURATION_10_MIN
 
