@@ -90,6 +90,7 @@ typedef NS_ENUM(NSUInteger, MKU_REFERENCE_DATE_TYPE) {
 - (NSDate *)setTimeComponentToDate:(NSDate *)date startDate:(NSDate *)startDate;
 - (NSDate *)setDayComponentToDate:(NSDate *)date;
 - (NSDate *)setNoneTimeComponentToDate:(NSDate *)date;
+- (BOOL)isReferenceDateType:(MKU_REFERENCE_DATE_TYPE)type;
 + (NSDate *)dateWithTimeIntervalSince1900;
 /** @brief Creates a date with date part from the given MKU_REFERENCE_DATE_TYPE and the time portion of self. */
 - (NSDate *)dateWithReferenceDateType:(MKU_REFERENCE_DATE_TYPE)type;

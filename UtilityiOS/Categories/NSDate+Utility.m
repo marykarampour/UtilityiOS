@@ -629,6 +629,16 @@
     return newDate;
 }
 
+- (BOOL)isReferenceDateType:(MKU_REFERENCE_DATE_TYPE)type {
+    if ([self timeIntervalSinceReferenceDate] == 0)
+        return MKU_REFERENCE_DATE_TYPE_2001;
+    else if ([self timeIntervalSince1970] == 0)
+        return MKU_REFERENCE_DATE_TYPE_1970;
+    else if ([self timeIntervalSinceDate:[NSDate dateWithTimeIntervalSince1900]] == 0)
+        return MKU_REFERENCE_DATE_TYPE_1900;
+    return MKU_REFERENCE_DATE_TYPE_0;
+}
+
 + (NSDate *)dateWithTimeIntervalSince1900 {
     return [[NSDate dateWithTimeIntervalSince1970:0] updateYearWithValue:-70];
 }
