@@ -12,7 +12,6 @@
 #import "UIViewController+Utility.h"
 #import "NSObject+Alert.h"
 #import <objc/runtime.h>
-#import "MKUSpinner.h"
 
 static char OBJECT_KEY;
 static char PERFORM_SAVE_ACTION_HANDLER_KEY;
@@ -94,12 +93,10 @@ static char PERFORM_SAVE_ACTION_HANDLER_KEY;
 
 - (void)performSaveOrUpdateObjectWithCompletion:(void (^)(BOOL, NSError *))completion {
     
-    [MKUSpinner show];
     if ([self respondsToSelector:@selector(canUpdate)] &&
         [self respondsToSelector:@selector(updateObjectWithCompletion:)] &&
         [self canUpdate]) {
         [self updateObjectWithCompletion:^(BOOL result, NSError *error) {
-            [MKUSpinner hide];
             if (completion) {
                 completion(result, error);
             }
@@ -110,7 +107,6 @@ static char PERFORM_SAVE_ACTION_HANDLER_KEY;
     }
     else if ([self respondsToSelector:@selector(saveObjectWithCompletion:)]) {
         [self saveObjectWithCompletion:^(NSNumber *result, NSError *error) {
-            [MKUSpinner hide];
             if (completion) {
                 if ([self respondsToSelector:@selector(didFinishUpdateWithResultID:)])
                     [self didFinishUpdateWithResultID:result];
@@ -124,7 +120,6 @@ static char PERFORM_SAVE_ACTION_HANDLER_KEY;
 }
 
 - (void)handleSaveObjectCompletionWithSuccess:(BOOL)success ID:(NSNumber *)ID error:(NSError *)error {
-    [MKUSpinner hide];
     if (!error && success) {
         if (ID && [self respondsToSelector:@selector(didFinishUpdateWithResultID:)])
             [self didFinishUpdateWithResultID:ID];
