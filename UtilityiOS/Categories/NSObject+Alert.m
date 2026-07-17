@@ -11,7 +11,6 @@
 #import "UIViewController+Navigation.h"
 #import "MKUServerController.h"
 #import "MKUAppDelegate.h"
-#import "MKUSpinner.h"
 
 @implementation NSObject (Alert)
 
@@ -327,9 +326,7 @@
     __block UITextField *passText;
     
     [alert addAction:[UIAlertAction actionWithTitle:[Constants OK_STR] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [MKUSpinner show];
         [MKUServerController authWithUserID:userID password:passText.text completion:^(id result, NSError *error) {
-            [MKUSpinner hide];
             if (!error && result) {
                 if (handler) handler();
             }
@@ -365,9 +362,7 @@
     __block UITextField *passText;
     
     [alert addAction:[UIAlertAction actionWithTitle:[Constants OK_STR] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [MKUSpinner show];
         [MKUServerController authWithUserID:userID password:passText.text completion:^(id result, NSError *error) {
-            [MKUSpinner hide];
             if (!error && result) {
                 if ([successAction.target respondsToSelector:successAction.action]) {
                     [successAction.target performSelector:successAction.action];
@@ -400,9 +395,7 @@
     __block UITextField *passText;
     
     [alert addAction:[UIAlertAction actionWithTitle:[Constants OK_STR] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [MKUSpinner show];
         [MKUServerController authWithUserID:userText.text password:passText.text completion:^(id result, NSError *error) {
-            [MKUSpinner hide];
             if (!error && result) {
                 if (handler) handler(result);
             }
