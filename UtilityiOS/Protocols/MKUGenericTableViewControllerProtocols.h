@@ -109,7 +109,7 @@
 - (void)willAddItemToListOfType:(NSUInteger)type withCompletion:(void (^)(__kindof NSObject<MKUPlaceholderProtocol> *item))completion;
 
 /** @brief Peform any actions required after adding this item such as updating navbar. */
-- (void)didAddItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item forRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)didAddItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item toListOfType:(NSUInteger)type;
 
 /** @brief If YES, the item is added on spot, if NO, presentTransitioningViewControllerWithItem is called to handle adding the new item.
  Default returns NO. */

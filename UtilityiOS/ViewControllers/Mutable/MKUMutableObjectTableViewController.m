@@ -268,6 +268,10 @@
             
         case MKU_MUTABLE_OBJECT_FIELD_TYPE_STEPPER_FIELD: {
             
+            if (!isEditable) {
+                return [self uneditableFieldCellForSection:section withStyle:UITableViewCellStyleValue1];
+            }
+            
             MKUSingleViewTableViewCell <MKUStepperFieldView *> *cell = [[MKUSingleViewTableViewCell alloc] initWithInsets:UIEdgeInsetsZero viewCreationHandler:^UIView *{
                 MKUStepperFieldView *view = [[MKUStepperFieldView alloc] initWithValues:[self stepperValuesForSection:section]];
                 [view setIndexPath:[NSIndexPath indexPathForRow:[self rowForFieldAtIndex:MKU_COLUMN_TYPE_LEFT inSection:section] inSection:section]];
@@ -373,7 +377,10 @@
         case MKU_MUTABLE_OBJECT_FIELD_TYPE_LIST: {
             self.selectedIndexPath = indexPath;
             NSObject<MKUPlaceholderProtocol> *item = [self listItemAtIndexPath:indexPath];
-            [self handleDidSelectListItem:item atIndexPath:indexPath];
+            if (item)
+                [self handleDidSelectListItem:item atIndexPath:indexPath];
+            else
+                [self performInsertToListOfType:type atIndexPath:indexPath withCompletion:nil];
         }
             break;
             
@@ -406,14 +413,7 @@
     NSUInteger type = [self listTypeForListInSection:section];
 
     if (editingStyle == UITableViewCellEditingStyleInsert) {
-        [self willAddItemToListOfType:type withCompletion:^(__kindof NSObject<MKUPlaceholderProtocol> *item) {
-            if (!item || ![self shouldAddItem:item toListOfType:type]) {
-                [self handleDidSelectListItem:item atIndexPath:indexPath];
-            }
-            else {
-                [self addItem:item toListOfType:type];
-                [self didAddItem:item forRowAtIndexPath:indexPath];
-            }
+        [self performInsertToListOfType:type atIndexPath:indexPath withCompletion:^(__kindof NSObject<MKUPlaceholderProtocol> *item) {
             [self didFinishCommitEditingStyle:editingStyle forRowAtIndexPath:indexPath];
         }];
     }
@@ -430,6 +430,19 @@
             [self didFinishCommitEditingStyle:editingStyle forRowAtIndexPath:indexPath];
         }];
     }
+}
+
+- (void)performInsertToListOfType:(NSUInteger)type atIndexPath:(NSIndexPath *)indexPath withCompletion:(void (^)(__kindof NSObject<MKUPlaceholderProtocol> *item))completion {
+    [self willAddItemToListOfType:type withCompletion:^(__kindof NSObject<MKUPlaceholderProtocol> *item) {
+        if (!item || ![self shouldAddItem:item toListOfType:type]) {
+            [self handleDidSelectListItem:item atIndexPath:indexPath];
+        }
+        else {
+            [self addItem:item toListOfType:type];
+            [self didAddItem:item toListOfType:type];
+        }
+        if (completion) completion(item);
+    }];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -709,7 +722,7 @@
     if (completion) completion(YES, nil);
 }
 
-- (void)didAddItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)didAddItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item toListOfType:(NSUInteger)type {
 }
 
 - (void)didDeleteItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -952,7 +965,7 @@
 }
 
 - (MKUStepperValueObject *)stepperValuesForSection:(NSUInteger)section {
-    return [MKUStepperValueObject objectWithTitle:[self titleForSection:section] value:0 start:0 end:[Constants Max_Stepper_Quantity]];
+    return [MKUStepperValueObject objectWithTitle:[self titleForSection:section] value:[self.object.UpdatedObject numberValueForSectionType:section].integerValue start:0 end:[Constants Max_Stepper_Quantity]];
 }
 
 - (void)switchBoolValueAtIndexPath:(NSIndexPath *)indexPath {
