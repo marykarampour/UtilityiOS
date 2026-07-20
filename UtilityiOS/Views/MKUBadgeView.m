@@ -42,6 +42,16 @@
     self.backgroundColor = [AppTheme badgeBackgroundColorForState:state];
 }
 
+- (void)setCount:(NSUInteger)count showZero:(BOOL)showZero {
+    if (!showZero && count <= 0) {
+        self.hidden = YES;
+    }
+    else {
+        NSString *str = [NSString stringWithFormat:@"%ld", count];
+        [self setText:str];
+    }
+}
+
 @end
 
 

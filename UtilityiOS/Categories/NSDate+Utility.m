@@ -629,6 +629,16 @@
     return newDate;
 }
 
+- (BOOL)isReferenceDateType:(MKU_REFERENCE_DATE_TYPE)type {
+    if (IN_RANGE([self timeIntervalSinceReferenceDate], -TIMER_DURATION_24_HOUR, TIMER_DURATION_24_HOUR))
+        return MKU_REFERENCE_DATE_TYPE_2001;
+    else if (IN_RANGE([self timeIntervalSince1970], -TIMER_DURATION_24_HOUR, TIMER_DURATION_24_HOUR))
+        return MKU_REFERENCE_DATE_TYPE_1970;
+    else if (IN_RANGE([self timeIntervalSinceDate:[NSDate dateWithTimeIntervalSince1900]], -TIMER_DURATION_24_HOUR, TIMER_DURATION_24_HOUR))
+        return MKU_REFERENCE_DATE_TYPE_1900;
+    return MKU_REFERENCE_DATE_TYPE_0;
+}
+
 + (NSDate *)dateWithTimeIntervalSince1900 {
     return [[NSDate dateWithTimeIntervalSince1970:0] updateYearWithValue:-70];
 }

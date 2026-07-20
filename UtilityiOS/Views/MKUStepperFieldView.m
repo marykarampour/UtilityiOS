@@ -66,7 +66,7 @@ static CGFloat const STEPPER_WIDTH = 90.0;
         
         self.titleLabel = [[MKULabel alloc] initWithText:title];
         self.valueField = [[MKUTextField alloc] init];
-        self.valueField.text = [NSString stringWithFormat:@"%ld", (long)value];
+        self.valueField.text = [NSString stringWithFormat:@"%ld", value];
         self.valueField.textAlignment = NSTextAlignmentCenter;
         [self.valueField setControllerDelegate:self];
         
@@ -90,6 +90,18 @@ static CGFloat const STEPPER_WIDTH = 90.0;
         [self constraint:NSLayoutAttributeCenterY view:self.stepper];
     }
     return self;
+}
+
++ (CGFloat)controlWidths {
+    return STEPPER_WIDTH + FIELD_WIDTH;
+}
+
++ (CGFloat)fieldWidth {
+    return FIELD_WIDTH;
+}
+
++ (CGFloat)controlHorizontalMargin {
+    return HORIZONTAL_PADDING;
 }
 
 - (void)setValues:(MKUStepperValueObject *)values {

@@ -14,6 +14,8 @@
 
 /** @brief Returns the size of text. This size is used to set the frame size. */
 - (CGSize)setText:(NSString *)text;
+/** @param showZero if NO the view will be hidden. */
+- (void)setCount:(NSUInteger)count showZero:(BOOL)showZero;
 
 @end
 

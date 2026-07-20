@@ -59,7 +59,7 @@
 - (NSMutableArray<__kindof NSObject<MKUPlaceholderProtocol> *> *)listItemsForListInSection:(NSUInteger)section;
 - (BOOL)canSelectItemsInListOfType:(NSUInteger)type;
 - (NSUInteger)listTypeForListInSection:(NSUInteger)section;
-- (NSObject<MKUPlaceholderProtocol> *)listItemAtIndexPath:(NSIndexPath *)indexPath;
+- (__kindof NSObject<MKUPlaceholderProtocol> *)listItemAtIndexPath:(NSIndexPath *)indexPath;
 
 /** @brief Retun view controller to be pushed when an item is selected. It will be called in
  willAddItemToListOfType:(NSUInteger)type withCompletion as well. Return nil to do custom actions. */
@@ -92,6 +92,7 @@
 - (BOOL)canAddItemToListOfType:(NSUInteger)type;
 - (BOOL)canDeleteFromListOfType:(NSUInteger)type;
 - (BOOL)canMoveItemsInListOfType:(NSUInteger)type;
+- (NSUInteger)maxMultipleSelectionForListOfType:(NSUInteger)type;
 /** @brief Return YES if self.editing should be always YES. The navbar will not have the edit button in this case. Default is NO. */
 - (BOOL)canEditListsByDefault;
 - (NSString *)titleForAddCellInListOfType:(NSUInteger)type;

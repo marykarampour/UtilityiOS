@@ -481,7 +481,7 @@
         [self resetSelectedSets];
         [self setSelectedIndexPath:nil];
         [self reloadDataAnimated:NO];
-        [self.transitionVCDelegate handleDismissDestinationViewController:viewController];
+        [self dispatchTransitionVCDelegateToDismissDestinationViewController:viewController];
     }
 }
 
@@ -530,8 +530,11 @@
             [self setDeselectedObject:item reload:NO];
         }
         else {
-            [self setSelectedObject:item reload:NO];
-            [self didSelectListItem:item atIndexPath:indexPath];
+            NSUInteger type = [self listTypeForListInSection:section];
+            if ([self shouldSelectItemsInListOfType:type]) {
+                [self setSelectedObject:item reload:NO];
+                [self didSelectListItem:item atIndexPath:indexPath];
+            }
         }
         
         [self dispatchUpdateDelegateToSetSelected:!selected item:item];
@@ -682,6 +685,10 @@
     return NO;
 }
 
+- (NSUInteger)maxMultipleSelectionForListOfType:(NSUInteger)type {
+    return self.tableView.allowsMultipleSelection ? INT_MAX : 1;
+}
+
 - (void)item:(__kindof NSObject<MKUPlaceholderProtocol> *)item1 didMoveFromIndex:(NSUInteger)index1 toIndex:(NSUInteger)index2 inListOfType:(NSUInteger)type {
 }
 
@@ -736,6 +743,11 @@
     return NO;
 }
 
+- (BOOL)shouldSelectItemsInListOfType:(NSUInteger)type {
+    NSUInteger max = [self maxMultipleSelectionForListOfType:type];
+    return !self.tableView.allowsMultipleSelection || max == 1 || [self selectedSetsInListOfType:type].count < max;
+}
+
 - (NSSet *)selectedSetsInListOfType:(NSUInteger)type {
     return [self.selectedSets objectForKey:@(type)];
 }
@@ -765,10 +777,11 @@
     
     if (!selectedObjects)
         selectedObjects = [[NSMutableSet alloc] init];
-    if (!self.tableView.allowsMultipleSelection)
+    if (!self.tableView.allowsMultipleSelection || [self maxMultipleSelectionForListOfType:type] == 1)
         [selectedObjects removeAllObjects];
+    if ([self shouldSelectItemsInListOfType:type])
+        [selectedObjects addObject:obj];
     
-    [selectedObjects addObject:obj];
     [self setSelectedObjectsWithSet:selectedObjects inListOfType:type reload:reload];
 }
 
@@ -1011,6 +1024,7 @@
 }
 
 - (void)didResetUpdateObject:(__kindof MKUFieldModel *)object {
+    [self resetSelectedSets];
     [self updateDatesWithUpdateObject:object];
     [self registerKVO];
     [self reloadDataAnimated:NO];

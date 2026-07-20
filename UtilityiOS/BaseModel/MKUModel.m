@@ -489,7 +489,7 @@ const void * MAPPER_FORMAT_KEY;
 }
 
 + (BOOL)boolValueForObject:(NSObject *)value {
-    return [[value description] isEqualToString:@"true"] ? YES : NO;
+    return ([[value description] isEqualToString:@"true"] || [[[value description] stringToNumber] boolValue]);
 }
 
 + (BOOL)propertyIsEnum:(NSString *)name {
@@ -734,7 +734,7 @@ const void * MAPPER_FORMAT_KEY;
                                     object = (id)@[[(MKUModel *) [cls alloc] initWithDictionary:classMap[key] useXML:YES]];
                                 }
                                 else if (classMap.count == 1) {
-                                    object = (id)@[classMap.allValues.firstObject];
+                                    object = [NSObject deserializeObjectResult:value objectClass:cls key:keys.firstObject];
                                 }
                                 else {
                                     object = (id)@[classMap];
@@ -756,16 +756,17 @@ const void * MAPPER_FORMAT_KEY;
                 BOOL isUTC = [self datePropertyIsUTC:key];
                 deserialized = [value dateWithAnyFormatIsUTC:isUTC];
             }
-            else if ([propertyClass isSubclassOfClass:[NSNumber class]]) {
+            else if ([propertyClass isSubclassOfClass:[NSNumber class]] && [value isKindOfClass:[NSString class]]) {
                 if ([value isEqualToString:@"true"] || [value isEqualToString:@"false"]) {
                     [self setValue:@([MKUModel boolValueForObject:value]) forKey:key];
                 }
-                else if ([value isKindOfClass:[NSString class]]) {
+                else {
                     deserialized = [value stringToNumber];
                 }
             }
             else if ([propertyClass isSubclassOfClass:[NSData class]] && [value isKindOfClass:[NSString class]]) {
-                deserialized = [value dataUsingEncoding:NSUTF8StringEncoding];
+                NSData *data = [[NSData alloc] initWithBase64EncodedString:value options:0];
+                deserialized = data;
             }
             else if (0 < [value description].length && [propertyClass isSubclassOfClass:[NSArray class]] && ![value isKindOfClass:[NSArray class]]) {
                 

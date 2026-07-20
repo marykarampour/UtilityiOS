@@ -17,6 +17,7 @@
 + (UIButton *)backButtonWithTitle:(NSString *)title target:(id)target action:(SEL)action;
 + (UIButton *)addButtonWithTarget:(id)target action:(SEL)action;
 + (UIButton *)deleteButtonWithTarget:(id)target action:(SEL)action;
++ (UIButton *)photoButtonWithTarget:(id)target action:(SEL)action color:(UIColor *)color size:(CGFloat)size;
 + (UIButton *)addButton;
 + (UIButton *)removeButton;
 

@@ -21,6 +21,8 @@
 #define DEBUGLOG(s, ...)
 #endif
 
+#define IN_RANGE(i, min, max)                   min <= i && i <= max
+
 #define IS_IPHONE                               [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPhone
 #define IS_IPAD                                 [UIDevice currentDevice].userInterfaceIdiom == UIUserInterfaceIdiomPad
 
@@ -39,6 +41,7 @@
 #define TIMER_DURATION_10_MIN                    10*TIMER_DURATION_1_MIN
 #define TIMER_DURATION_1_HOUR                    60*TIMER_DURATION_1_MIN
 #define TIMER_DURATION_12_HOUR                   12*TIMER_DURATION_1_HOUR
+#define TIMER_DURATION_24_HOUR                   24*TIMER_DURATION_1_HOUR
 
 #define BADGE_POOLING_TIMER                      TIMER_DURATION_10_MIN
 
@@ -233,6 +236,7 @@ typedef UIView * (^DOUBLE_INDEX_SIZE_VIEW_CREATION_HANDLER)(NSUInteger row, NSUI
 
 typedef BOOL (^EvaluateSelectedObjectHandler)(id obj);
 typedef void (^VoidActionHandler)();
+typedef void (^VoidIntActionHandler)(int i);
 typedef MKU_LIST_ITEM_SELECTED_ACTION (^LIST_ITEM_SELECTED_ACTION_HANDLER)(NSUInteger type);
 typedef NSDictionary <NSString *, VoidActionHandler> *TitleVoidActionHandlers;
 
@@ -444,6 +448,7 @@ typedef NS_ENUM(NSUInteger, MKU_BADGE_VIEW_STATE) {
 + (CGFloat)GeoFenceRadiousMeter;
 + (CGFloat)GeoFenceRadiousKiloMeter;
 + (CGFloat)TextPadding;
++ (CGFloat)DefaultPadding;
 + (CGFloat)HorizontalSpacing;
 + (CGFloat)VerticalSpacing;
 + (UIEdgeInsets)TabBarItemImageInsets;

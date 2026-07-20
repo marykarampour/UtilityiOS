@@ -399,6 +399,12 @@ static char UPDATE_DELEGATE_KEY;
     
     __block NSString *value;
     
+    NSObject *str = [[self valuesForSectionType:section] objectPassingTest:^BOOL(NSObject *obj, NSUInteger idx, BOOL *stop) {
+        return [obj isKindOfClass:[NSString class]];
+    }];
+    
+    if (str) return [str description];
+    
     [self.class iterateOverTypesForSectionType:section block:^(NSNumber * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         
         NSInteger type = obj.integerValue;

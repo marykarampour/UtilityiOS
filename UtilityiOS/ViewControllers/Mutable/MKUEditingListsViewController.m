@@ -43,6 +43,7 @@ static NSString * const MULTI_SELECT_KEY = @"allowsMultipleSelection";
     MKUFieldListModel *obj = [[[self.class classForListObject] alloc] init];
     obj.activeListTypes = types;
     
+    [self initSelectedActionHandler];
     [self setUpdatedObject:obj];
     [self resetSelectedSets];
 }
@@ -371,10 +372,6 @@ static NSString * const MULTI_SELECT_KEY = @"allowsMultipleSelection";
 - (void)didUpdateItem:(__kindof NSObject<NSCopying> *)item atIndex:(NSUInteger)index {
     [self dispatchUpdateDelegateToRefreshItem:item];
     [self reloadDataAnimated:NO];
-}
-
-- (NSObject<MKUPlaceholderProtocol> *)listItemAtIndexPath:(NSIndexPath *)indexPath {
-    return [super listItemAtIndexPath:indexPath];
 }
 
 - (BOOL)addItem:(NSObject<MKUPlaceholderProtocol> *)item {
