@@ -73,6 +73,9 @@ typedef NS_OPTIONS(NSUInteger, MKU_COPY_OPTION) {
 
 + (BOOL)haveSameNullity:(NSObject *)obj1 asObject:(NSObject *)obj2;
 
+/** @brief Splits the select name and capitalizes it. */
++ (NSString *)titleForSelector:(SEL)select;
+
 + (NSDictionary *)attributePropertyNamesOfClass:(Class)objectClass;
 + (Class)classOfProperty:(NSString *)name forObjectClass:(Class)objectClass;
 

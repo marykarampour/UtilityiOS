@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MKUContainerView.h"
+#import "MKUStackedViews.h"
 #import "MKULabel.h"
 
 typedef NS_OPTIONS(NSUInteger, MKU_MULTI_LABEL_VIEW_TYPE) {
@@ -26,7 +27,7 @@ typedef NS_OPTIONS(NSUInteger, MKU_MULTI_LABEL_VIEW_TYPE) {
 @property (nonatomic, strong, readonly) __kindof UIView *contentView;
 @property (nonatomic, strong, readonly) MKUContainerView<LeftObjectType> *leftView;
 @property (nonatomic, strong, readonly) MKUContainerView<RightObjectType> *rightView;
-@property (nonatomic, strong, readonly) NSMutableArray<__kindof MKULabel *> *labels;
+@property (nonatomic, strong, readonly) MKUVerticalViews<__kindof MKULabel *> *labels;
 
 /** @brief An optional view at the back of all views, if added will cover the entire contentView. */
 @property (nonatomic, strong, readonly) __kindof UIView *backView;

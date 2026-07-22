@@ -17,7 +17,7 @@
 @property (nonatomic, strong, readwrite) __kindof UIView *contentView;
 @property (nonatomic, strong, readwrite) MKUContainerView *leftView;
 @property (nonatomic, strong, readwrite) MKUContainerView *rightView;
-@property (nonatomic, strong, readwrite) NSMutableArray<__kindof MKULabel *> *labels;
+@property (nonatomic, strong, readwrite) MKUVerticalViews<__kindof MKULabel *> *labels;
 @property (nonatomic, strong, readwrite) __kindof UIView *backView;
 @property (nonatomic, assign) CGFloat constantWidthSum;
 @property (nonatomic, assign) UIEdgeInsets edgeIndests;
@@ -96,11 +96,7 @@
 - (void)constructWithLabelsCount:(NSUInteger)labelsCount {
     [self createLabels:labelsCount];
     [self.contentView removeConstraintsMask];
-    
-    [self.contentView constraint:NSLayoutAttributeLeft view:self.labels.firstObject margin:self.edgeIndests.left];
-    [self.contentView constraint:NSLayoutAttributeRight view:self.labels.firstObject margin:-self.edgeIndests.right];
-    
-    [self constraintLabels];
+    [self.contentView constraintSidesForView:self.labels insets:self.edgeIndests];
     
     self.constantWidthSum = self.edgeIndests.left+self.edgeIndests.right;
 }
@@ -110,6 +106,8 @@
     [self createLabels:labelsCount];
     [self.contentView removeConstraintsMask];
     
+    [self.contentView constraintHorizontally:@[self.leftView, self.labels] interItemMargin:[Constants HorizontalSpacing] horizontalMargin:self.edgeIndests.left verticalMargin:CONSTRAINT_NO_PADDING equalWidths:NO parentConstraints:NSLayoutAttributeLeft | NSLayoutAttributeRight verticalConstraints:NSLayoutAttributeNotAnAttribute];
+    
     if (self.leftView.frame.size.height > 0.0) {
         [self.contentView constraintSizeForView:self.leftView];
     }
@@ -118,21 +116,15 @@
         [self.contentView constraintWidthForView:self.leftView];
     }
     
-    [self.contentView addConstraintWithItem:self.labels.lastObject attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:self.labels.firstObject attribute:NSLayoutAttributeTop multiplier:1.0 constant:leftView.frame.size.height];
-    
-    [self.contentView addConstraintWithItem:self.labels.firstObject attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.leftView attribute:NSLayoutAttributeRight multiplier:1.0 constant:[Constants HorizontalSpacing]];
-    
     if (self.leftView.frame.origin.y == MULTILABEL_CENTER_Y) {
         [self.contentView constraint:NSLayoutAttributeCenterY view:self.leftView];
     }
     else {
-        [self.contentView addConstraintWithItem:self.labels.firstObject attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.leftView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+        [self.contentView addConstraintWithItem:self.labels attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.leftView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
     }
     
-    [self.contentView constraint:NSLayoutAttributeLeft view:self.leftView margin:self.edgeIndests.left];
-    [self.contentView constraint:NSLayoutAttributeRight view:self.labels.firstObject margin:-self.edgeIndests.right];
-    
-    [self constraintLabels];
+    [self.contentView constraint:NSLayoutAttributeTop view:self.labels margin:self.edgeIndests.top];
+    [self.contentView constraint:NSLayoutAttributeBottom view:self.labels margin:-self.edgeIndests.bottom];
     
     self.constantWidthSum = self.edgeIndests.left+self.edgeIndests.right+self.leftView.frame.size.width+[Constants HorizontalSpacing];
 }
@@ -142,6 +134,8 @@
     [self createLabels:labelsCount];
     [self.contentView removeConstraintsMask];
     
+    [self.contentView constraintHorizontally:@[self.labels, self.rightView] interItemMargin:[Constants HorizontalSpacing] horizontalMargin:self.edgeIndests.right verticalMargin:CONSTRAINT_NO_PADDING equalWidths:NO parentConstraints:NSLayoutAttributeLeft | NSLayoutAttributeRight verticalConstraints:NSLayoutAttributeNotAnAttribute];
+
     if (self.rightView.frame.size.height > 0.0) {
         [self.contentView constraintSizeForView:self.rightView];
     }
@@ -150,21 +144,15 @@
         [self.contentView constraintWidthForView:self.rightView];
     }
     
-    [self.contentView addConstraintWithItem:self.labels.lastObject attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:self.labels.firstObject attribute:NSLayoutAttributeTop multiplier:1.0 constant:rightView.frame.size.height];
-    
-    [self.contentView addConstraintWithItem:self.labels.firstObject attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.rightView attribute:NSLayoutAttributeLeft multiplier:1.0 constant:-[Constants HorizontalSpacing]];
-    
     if (self.rightView.frame.origin.y == MULTILABEL_CENTER_Y) {
         [self.contentView constraint:NSLayoutAttributeCenterY view:self.rightView];
     }
     else {
-        [self.contentView addConstraintWithItem:self.labels.firstObject attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.rightView attribute:NSLayoutAttributeTop multiplier:1.0 constant:-0.0];
+        [self.contentView addConstraintWithItem:self.labels attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.rightView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
     }
     
-    [self.contentView constraint:NSLayoutAttributeRight view:self.rightView margin:-self.edgeIndests.right];
-    [self.contentView constraint:NSLayoutAttributeLeft view:self.labels.firstObject margin:self.edgeIndests.left];
-    
-    [self constraintLabels];
+    [self.contentView constraint:NSLayoutAttributeTop view:self.labels margin:self.edgeIndests.top];
+    [self.contentView constraint:NSLayoutAttributeBottom view:self.labels margin:-self.edgeIndests.bottom];
     
     self.constantWidthSum = self.edgeIndests.left+self.edgeIndests.right+self.rightView.frame.size.width+[Constants HorizontalSpacing];
 }
@@ -174,6 +162,8 @@
     [self addLeftView:leftView];
     [self.contentView removeConstraintsMask];
     
+    [self.contentView constraintHorizontally:@[self.leftView, self.rightView] interItemMargin:[Constants HorizontalSpacing] horizontalMargin:self.edgeIndests.left verticalMargin:CONSTRAINT_NO_PADDING equalWidths:NO parentConstraints:NSLayoutAttributeLeft | NSLayoutAttributeRight verticalConstraints:NSLayoutAttributeNotAnAttribute];
+
     CGFloat width = self.leftView.frame.size.width;
     BOOL hasSize = NO;
     
@@ -198,13 +188,7 @@
     
     if (!hasSize)
     [self.contentView constraint:NSLayoutAttributeBottom view:bottom margin:-self.edgeIndests.bottom];
-    [self.contentView constraint:NSLayoutAttributeRight view:self.rightView margin:-self.edgeIndests.right];
-    [self.contentView constraint:NSLayoutAttributeLeft view:self.leftView margin:self.edgeIndests.left];
     [self.contentView constraint:NSLayoutAttributeTop view:self.leftView margin:self.edgeIndests.top];
-    //TODO: centerXY case
-    [self.contentView addConstraintWithItem:self.leftView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self.rightView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0];
-    [self.contentView addConstraintWithItem:self.rightView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.leftView attribute:NSLayoutAttributeRight multiplier:1.0 constant:0.0];
-    [self.contentView addConstraintWithItem:self.leftView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.rightView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
     
     self.constantWidthSum = self.edgeIndests.left+self.edgeIndests.right+width+[Constants HorizontalSpacing];
 }
@@ -214,6 +198,8 @@
     [self addLeftView:leftView];
     [self createLabels:labelsCount];
     [self.contentView removeConstraintsMask];
+    
+    [self.contentView constraintHorizontally:@[self.leftView, self.labels, self.rightView] interItemMargin:[Constants HorizontalSpacing] horizontalMargin:self.edgeIndests.left verticalMargin:CONSTRAINT_NO_PADDING equalWidths:NO parentConstraints:NSLayoutAttributeLeft | NSLayoutAttributeRight verticalConstraints:NSLayoutAttributeNotAnAttribute];
     
     if (leftView.frame.size.width > 0.0 && leftView.frame.size.height > 0.0) {
         [self.contentView constraintSizeForView:self.leftView];
@@ -226,26 +212,20 @@
     }
     
     [self.contentView constraintSizeForView:self.rightView];
-    [self.contentView constraint:NSLayoutAttributeRight view:self.rightView margin:-self.edgeIndests.right];
-    [self.contentView constraint:NSLayoutAttributeLeft view:self.leftView margin:self.edgeIndests.left];
     [self.contentView constraint:NSLayoutAttributeTop view:self.leftView margin:self.edgeIndests.top + [Constants TextPadding]];
     
     if (self.rightView.frame.origin.y == MULTILABEL_CENTER_Y) {
         [self.contentView constraint:NSLayoutAttributeCenterY view:self.rightView];
     }
     else if (self.rightView.frame.origin.y == MULTILABEL_TOP_FIRST_LABEL) {
-        [self.contentView addConstraintWithItem:self.labels.firstObject attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.rightView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+        [self.contentView addConstraintWithItem:self.labels attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.rightView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
     }
     else {
         [self.contentView addConstraintWithItem:self.leftView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.rightView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
     }
 
-    [self.contentView addConstraintWithItem:self.labels.lastObject attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:self.leftView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0];
-    [self.contentView addConstraintWithItem:self.labels.lastObject attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:self.rightView attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0];
-    [self.contentView addConstraintWithItem:self.rightView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.labels.firstObject attribute:NSLayoutAttributeRight multiplier:1.0 constant:[Constants HorizontalSpacing]];
-    [self.contentView addConstraintWithItem:self.labels.firstObject attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.leftView attribute:NSLayoutAttributeRight multiplier:1.0 constant:[Constants HorizontalSpacing]];
-    
-    [self constraintLabels];
+    [self.contentView constraint:NSLayoutAttributeTop view:self.labels margin:self.edgeIndests.top];
+    [self.contentView constraint:NSLayoutAttributeBottom view:self.labels margin:-self.edgeIndests.bottom];
     
     self.constantWidthSum = 2*self.edgeIndests.left+2*self.edgeIndests.right+self.leftView.frame.size.width+self.rightView.frame.size.width+2*[Constants HorizontalSpacing];
 }
@@ -253,13 +233,11 @@
 #pragma mark - helpers
 
 - (void)createLabels:(NSUInteger)labelsCount {
-    self.labels = [[NSMutableArray alloc] init];
+    self.labels = [[MKUVerticalViews alloc] initWithCount:labelsCount padding:4.0 viewCreationHandler:^UIView *(NSUInteger index) {
+        return [self createLabelAtIndex:index];
+    }];
     
-    for (NSUInteger i=0; i<labelsCount; i++) {
-        MKULabel *label = [self createLabelAtIndex:i];
-        [self.labels addObject:label];
-        [self.contentView addSubview:label];
-    }
+    [self.contentView addSubview:self.labels];
 }
 
 - (MKULabel *)createLabelAtIndex:(NSUInteger)index {
@@ -268,27 +246,6 @@
     label.lineBreakMode = NSLineBreakByWordWrapping;
     [label sizeToFit];
     return label;
-}
-
-- (void)constraintLabels {
-    [self.contentView constraint:NSLayoutAttributeTop view:self.labels.firstObject margin:self.edgeIndests.top];
-    [self.contentView constraint:NSLayoutAttributeBottom view:self.labels.lastObject margin:-self.edgeIndests.bottom priority:UILayoutPriorityDefaultHigh];
-    
-    if (self.labels.count > 1) {
-        for (NSUInteger i=1; i<self.labels.count; i++) {
-            MKULabel *label = self.labels[i];
-            [self.contentView addConstraintWithItem:label attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.labels.firstObject attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0.0];
-            [self.contentView addConstraintWithItem:label attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self.labels.firstObject attribute:NSLayoutAttributeRight multiplier:1.0 constant:0.0];
-        }
-        MKULabel *topLabel = self.labels.firstObject;
-        MKULabel *nextLabel;
-        
-        for (NSUInteger i=1; i<self.labels.count; i++) {
-            nextLabel = self.labels[i];
-            [self.contentView addConstraintWithItem:nextLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:topLabel attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0.0];
-            topLabel = nextLabel;
-        }
-    }
 }
 
 - (void)addLeftView:(__kindof UIView *)leftView {
@@ -310,18 +267,18 @@
 
 - (void)setText:(NSString *)text forLabelAtIndex:(NSUInteger)index {
     if (index < self.labels.count) {
-        self.labels[index].text = text;
+        [self.labels viewAtIndex:index].text = text;
     }
 }
 
 - (void)setAttributedText:(NSAttributedString *)text forLabelAtIndex:(NSUInteger)index {
     if (index < self.labels.count) {
-        self.labels[index].attributedText = text;
+        [self.labels viewAtIndex:index].attributedText = text;
     }
 }
 
 - (MKULabel *)labelAtIndex:(NSUInteger)index {
-    return [self.labels nullableObjectAtIndex:index];
+    return [self.labels viewAtIndex:index];
 }
 
 - (CGFloat)constantWidthSum {
@@ -331,7 +288,7 @@
 - (CGFloat)heightForWidth:(CGFloat)width {
     CGSize size = CGSizeMake(width-self.constantWidthSum-2*[Constants TextPadding], CGFLOAT_MAX);
     CGFloat height = 0.0;
-    for (MKULabel *label in self.labels) {
+    for (MKULabel *label in [self.labels views]) {
         NSStringDrawingContext *context = [[NSStringDrawingContext alloc] init];
         CGRect rect = CGRectZero;
         if (label.attributedText) {
