@@ -772,6 +772,11 @@
     return allIsNull;
 }
 
++ (NSString *)titleForSelector:(SEL)select {
+    NSString *key = NSStringFromSelector(select);
+    return [key splitedStringForUppercaseComponentsAndGroupUppercase:YES];
+}
+
 #pragma mark - overrides
 
 - (id)valueForUndefinedKey:(NSString *)key {

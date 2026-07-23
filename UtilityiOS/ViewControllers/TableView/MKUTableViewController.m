@@ -211,13 +211,13 @@ static dispatch_queue_t dispatch;
     
     if (type == MKU_TABLEVIEW_ACCESSORY_VIEW_TYPE_HEADER) {
         view.contentView.backgroundColor = [AppTheme tableHeaderBackgroundColor];
-        view.labels.firstObject.font = [AppTheme tableHeaderFont];
-        view.labels.firstObject.textColor = [AppTheme tableHeaderTextColor];
+        [view.labels viewAtIndex:0].font = [AppTheme tableHeaderFont];
+        [view.labels viewAtIndex:0].textColor = [AppTheme tableHeaderTextColor];
     }
     else {
         view.contentView.backgroundColor = [AppTheme tableFooterBackgroundColor];
-        view.labels.firstObject.font = [AppTheme tableFooterFont];
-        view.labels.firstObject.textColor = [AppTheme tableFooterTextColor];
+        [view.labels viewAtIndex:0].font = [AppTheme tableFooterFont];
+        [view.labels viewAtIndex:0].textColor = [AppTheme tableFooterTextColor];
     }
     return view;
 }
