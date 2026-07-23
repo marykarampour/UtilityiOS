@@ -72,11 +72,11 @@
 
 /** @brief If object is already in the array, nothing will happen.
  @return Objects that failed to be added to the array. */
-- (NSArray *)addUniqueObjectsFromArray:(NSArray<ObjectType> *)otherArray;
+- (NSMutableArray *)addUniqueObjectsFromArray:(NSArray<ObjectType> *)otherArray;
 
 /** @brief If object is already in the array, it will be replaced by the one from otherArray.
  @return Objects that were replaced. */
-- (NSArray *)addOrReplaceUniqueObjectsFromArray:(NSArray<ObjectType> *)otherArray;
+- (NSMutableArray *)addOrReplaceUniqueObjectsFromArray:(NSArray<ObjectType> *)otherArray;
 
 /** @brief If insert fails due to index being out of bounds the item will be added. */
 - (void)insertOrAddObject:(ObjectType)anObject atIndex:(NSUInteger)index;

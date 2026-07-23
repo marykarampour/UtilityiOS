@@ -229,14 +229,14 @@ static NSString * const MULTI_SELECT_KEY = @"allowsMultipleSelection";
     [self setItems:[NSMutableArray mutableArrayWithNullableArray:items] forListOfType:type];
 }
 
-- (NSArray *)addItems:(NSArray<NSObject<MKUPlaceholderProtocol> *> *)items toListSection:(NSUInteger)section {
-    NSArray *existing = [super addItems:items toListOfType:section];
+- (NSArray *)addItems:(NSArray<NSObject<MKUPlaceholderProtocol> *> *)items toListOfType:(NSUInteger)type {
+    NSArray *existing = [super addItems:items toListOfType:type];
     [self updateHeader];
     return existing;
 }
 
-- (void)deleteItems:(NSArray<NSObject<MKUPlaceholderProtocol> *> *)items fromListSection:(NSUInteger)section {
-    [super deleteItems:items fromListOfType:section];
+- (void)deleteItems:(NSArray<NSObject<MKUPlaceholderProtocol> *> *)items fromListOfType:(NSUInteger)type {
+    [super deleteItems:items fromListOfType:type];
     [self updateHeader];
 }
 
@@ -328,7 +328,7 @@ static NSString * const MULTI_SELECT_KEY = @"allowsMultipleSelection";
     return [self items][index];
 }
 
-- (NSMutableArray *)items {
+- (NSArray *)items {
     return [self listItemsForListOfType:MKU_FIELD_LIST_TYPE_A];
 }
 
@@ -383,7 +383,7 @@ static NSString * const MULTI_SELECT_KEY = @"allowsMultipleSelection";
 }
 
 - (void)deleteItems:(NSArray<NSObject<MKUPlaceholderProtocol> *> *)items {
-    [self deleteItems:items fromListSection:MKU_FIELD_LIST_TYPE_A];
+    [self deleteItems:items fromListOfType:MKU_FIELD_LIST_TYPE_A];
 }
 
 - (void)setSelectedObjectsWithSet:(NSSet *)selectedObjects {

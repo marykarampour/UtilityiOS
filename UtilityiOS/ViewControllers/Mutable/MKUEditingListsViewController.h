@@ -40,7 +40,7 @@
 /** @brief For NSObject, override description and return the title to be presented in UI.
  If conforming to MKUPlaceholderProtocol title  will be used.
  @note If there is no items, it sets the footer to noItemAvailableTitleForListOfType: */
-- (NSMutableArray<ObjectType> *)items;
+- (NSArray<ObjectType> *)items;
 /** @brief Default list is section 0. */
 - (void)setItems:(NSMutableArray<ObjectType> *)items;
 - (void)setItemsWithArray:(NSArray<__kindof NSObject<MKUPlaceholderProtocol> *> *)items;

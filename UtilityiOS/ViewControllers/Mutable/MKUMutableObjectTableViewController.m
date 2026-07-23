@@ -574,11 +574,11 @@
     }
 }
 
-- (NSMutableArray<NSObject<MKUPlaceholderProtocol> *> *)listItemsForListInSection:(NSUInteger)section {
+- (NSArray<NSObject<MKUPlaceholderProtocol> *> *)listItemsForListInSection:(NSUInteger)section {
     return [self listItemsForListOfType:[self listTypeForListInSection:section]];
 }
 
-- (NSMutableArray<NSObject<MKUPlaceholderProtocol> *> *)listItemsForListOfType:(NSUInteger)type {
+- (NSArray<NSObject<MKUPlaceholderProtocol> *> *)listItemsForListOfType:(NSUInteger)type {
     return [self.object.UpdatedObject arrayForSectionType:type];
 }
 
@@ -597,7 +597,9 @@
 }
 
 - (NSArray *)addItems:(NSArray<NSObject<MKUPlaceholderProtocol> *> *)items toListOfType:(NSUInteger)type {
-    NSArray *existing = [[self listItemsForListOfType:type] addOrReplaceUniqueObjectsFromArray:items];
+    NSMutableArray *arr = [[self listItemsForListOfType:type] mutableCopy];
+    NSArray *existing = [arr addOrReplaceUniqueObjectsFromArray:items];
+    [self.object.UpdatedObject setValue:arr forSectionType:type];
     
     [self resetSelectedSets];
     MIndexPathArr *addIndexPaths = [[NSMutableArray alloc] init];
@@ -629,21 +631,29 @@
             [indexPaths addObject:path];
     }
     
-    [[self listItemsForListOfType:type] removeObjectsInArray:items];
+    NSMutableArray *arr = [[self listItemsForListOfType:type] mutableCopy];
+    [arr removeObjectsInArray:items];
+    [self.object.UpdatedObject setValue:arr forSectionType:type];
+    
     [self resetSelectedSets];
     [self removeRowsAtIndexPaths:indexPaths];
     [self didFinishUpdatesInListOfType:type];
 }
 
 - (void)deleteAllItemsFromListOfType:(NSUInteger)type {
-    [[self listItemsForListOfType:type] removeAllObjects];
+    NSMutableArray *arr = [[self listItemsForListOfType:type] mutableCopy];
+    [arr removeAllObjects];
+    [self.object.UpdatedObject setValue:arr forSectionType:type];
+    
     [self reloadDataAnimated:NO];
     [self didFinishUpdatesInListOfType:type];
 }
 
 - (void)setItems:(NSArray<NSObject<MKUPlaceholderProtocol> *> *)items forListOfType:(NSUInteger)type {
-    [[self listItemsForListOfType:type] removeAllObjects];
-    [[self listItemsForListOfType:type] addUniqueObjectsFromArray:items];
+    NSMutableArray *arr = [[self listItemsForListOfType:type] mutableCopy];
+    [arr removeAllObjects];
+    [arr addUniqueObjectsFromArray:items];
+    [self.object.UpdatedObject setValue:arr forSectionType:type];
     
     NSCache *selectedSets = self.selectedSets;
     [self resetSelectedSets];
@@ -732,13 +742,7 @@
 }
 
 - (void)willAddItemToListOfType:(NSUInteger)type withCompletion:(void (^)(__kindof NSObject<MKUPlaceholderProtocol> *))completion {
-    
-    NSObject<MKUPlaceholderProtocol> *item = [self newItemInListOfType:type];
-    if (!item) {
-        completion(nil);
-        return;
-    }
-    completion(item);
+    completion([self newItemInListOfType:type]);
 }
 
 - (BOOL)shouldAddItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item toListOfType:(NSUInteger)type{

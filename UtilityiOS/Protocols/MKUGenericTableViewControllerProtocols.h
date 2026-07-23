@@ -56,8 +56,8 @@
  tableView: commitEditingStyle: forRowAtIndexPath for UITableViewCellEditingStyleInsert.
  Corresponds to selectedActionHandler of type MKU_LIST_ITEM_SELECTED_ACTION_SELECT and MKU_LIST_ITEM_SELECTED_ACTION_SHOW_DETAIL */
 - (void)didSelectListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath;
-- (NSMutableArray<__kindof NSObject<MKUPlaceholderProtocol> *> *)listItemsForListOfType:(NSUInteger)type;
-- (NSMutableArray<__kindof NSObject<MKUPlaceholderProtocol> *> *)listItemsForListInSection:(NSUInteger)section;
+- (NSArray<__kindof NSObject<MKUPlaceholderProtocol> *> *)listItemsForListOfType:(NSUInteger)type;
+- (NSArray<__kindof NSObject<MKUPlaceholderProtocol> *> *)listItemsForListInSection:(NSUInteger)section;
 - (BOOL)canSelectItemsInListOfType:(NSUInteger)type;
 - (NSUInteger)listTypeForListInSection:(NSUInteger)section;
 - (__kindof NSObject<MKUPlaceholderProtocol> *)listItemAtIndexPath:(NSIndexPath *)indexPath;

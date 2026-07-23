@@ -11,7 +11,7 @@
 @protocol MKUArrayPropertyProtocol <NSObject>
 
 @optional
-- (NSMutableArray<__kindof NSObject<MKUPlaceholderProtocol> *> *)array;
+- (NSArray<__kindof NSObject<MKUPlaceholderProtocol> *> *)array;
 + (instancetype)objectWithArray:(NSArray *)array;
 
 @end

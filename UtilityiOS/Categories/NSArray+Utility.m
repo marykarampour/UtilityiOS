@@ -202,7 +202,7 @@
     return YES;
 }
 
-- (NSArray *)addUniqueObjectsFromArray:(NSArray *)otherArray {
+- (NSMutableArray *)addUniqueObjectsFromArray:(NSArray *)otherArray {
     NSMutableArray *existing = [[NSMutableArray alloc] init];
     for (id obj in otherArray) {
         if (![self addUniqueObject:obj])
@@ -211,7 +211,7 @@
     return existing;
 }
 
-- (NSArray *)addOrReplaceUniqueObjectsFromArray:(NSArray *)otherArray {
+- (NSMutableArray *)addOrReplaceUniqueObjectsFromArray:(NSArray *)otherArray {
     NSMutableArray *existing = [[NSMutableArray alloc] init];
     for (id obj in otherArray) {
         if (![self addUniqueObject:obj]) {

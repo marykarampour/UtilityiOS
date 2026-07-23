@@ -576,7 +576,7 @@ static char UPDATE_DELEGATE_KEY;
     return nil;
 }
 
-- (NSMutableArray<__kindof NSObject<MKUPlaceholderProtocol> *> *)arrayForSectionType:(NSUInteger)type {
+- (NSArray<__kindof NSObject<MKUPlaceholderProtocol> *> *)arrayForSectionType:(NSUInteger)type {
     
     __block NSArray *value;
     
@@ -1084,8 +1084,8 @@ static char UPDATE_DELEGATE_KEY;
 
 @implementation NSArray (Property)
 
-- (NSMutableArray<__kindof NSObject<MKUPlaceholderProtocol> *> *)array {
-    return [self isKindOfClass:[NSMutableArray class]] ? self : [self mutableCopy];
+- (NSArray<__kindof NSObject<MKUPlaceholderProtocol> *> *)array {
+    return self;
 }
 
 @end

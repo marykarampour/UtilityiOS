@@ -133,7 +133,7 @@
 /** @brief Returns an array for a property that conforms to protocol MKUArrayPropertyProtocol. */
 - (NSMutableArray<__kindof NSObject<MKUPlaceholderProtocol> *> *)arrayForObjectType:(NSUInteger)type;
 /** @brief Returns an array for a section corresponding to a property that conforms to protocol MKUArrayPropertyProtocol. */
-- (NSMutableArray<__kindof NSObject<MKUPlaceholderProtocol> *> *)arrayForSectionType:(NSUInteger)type;
+- (NSArray<__kindof NSObject<MKUPlaceholderProtocol> *> *)arrayForSectionType:(NSUInteger)type;
 /** @brief Call this method to send a message to updateDelegate that a value is updated. Useful in cases custom calculations require a view update. */
 - (void)dispatchUpdateDelegateWithObjectType:(NSInteger)type;
 
