@@ -481,7 +481,9 @@
         if (components.count < 2) {
             return nil;
         }
-        class = NSClassFromString(components[1]);
+        
+        components = [components[1] componentsSeparatedByString:@"<"];
+        class = NSClassFromString(components[0]);
     }
     return class;
 }
