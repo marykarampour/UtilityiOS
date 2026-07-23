@@ -615,8 +615,14 @@
         }
     }
     
-    [self insertRowsAtIndexPaths:addIndexPaths];
-    [self reloadIndexPaths:replaceIndexPaths];
+    if ([self canAddItemToListOfType:type]) {
+        [self insertRowsAtIndexPaths:addIndexPaths];
+        [self reloadIndexPaths:replaceIndexPaths];
+    }
+    else {
+        [self reloadIndexPaths:addIndexPaths];
+    }
+    
     [self didFinishUpdatesInListOfType:type];
     
     return existing;
@@ -624,6 +630,7 @@
 
 - (void)deleteItems:(NSArray<NSObject<MKUPlaceholderProtocol> *> *)items fromListOfType:(NSUInteger)type {
     MIndexPathArr *indexPaths = [[NSMutableArray alloc] init];
+    BOOL canAdd = [self canAddItemToListOfType:type];
     
     for (NSObject<MKUPlaceholderProtocol> *item in items) {
         NSIndexPath *path = [self indexPathForItem:item];
@@ -636,7 +643,12 @@
     [self.object.UpdatedObject setValue:arr forSectionType:type];
     
     [self resetSelectedSets];
-    [self removeRowsAtIndexPaths:indexPaths];
+    if (canAdd) {
+        [self removeRowsAtIndexPaths:indexPaths];
+    }
+    else {
+        [self reloadDataAnimated:NO];
+    }
     [self didFinishUpdatesInListOfType:type];
 }
 
