@@ -713,6 +713,10 @@
     return nil;
 }
 
+- (NSObject<MKUPlaceholderProtocol> *)listItemForSelectedIndexPath {
+    return [self listItemAtIndexPath:self.selectedIndexPath];
+}
+
 - (BOOL)canAddItemToListOfType:(NSUInteger)type {
     return NO;
 }
