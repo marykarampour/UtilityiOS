@@ -190,6 +190,7 @@ typedef NS_ENUM(NSInteger, MKU_MUTABLE_OBJECT_FIELD_TYPE) {
 - (BOOL)isAddIndexPath:(NSIndexPath *)indexPath;
 - (NSIndexPath *)indexPathForItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item;
 - (NSObject<MKUPlaceholderProtocol> *)listItemForSelectedIndexPath;
+- (NSUInteger)listSectionForListType:(NSUInteger)type;
 
 - (void)resetSelectedSets;
 - (void)resetSelectedSetsReload;

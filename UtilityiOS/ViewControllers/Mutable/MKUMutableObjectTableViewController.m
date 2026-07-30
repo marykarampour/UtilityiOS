@@ -530,7 +530,7 @@
 }
 
 - (void)didSelectListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath {
-    if (self.selectedActionHandler(0) == MKU_LIST_ITEM_SELECTED_ACTION_TRANSITION_TO_DETAIL)
+    if (self.selectedActionHandler(indexPath.section) == MKU_LIST_ITEM_SELECTED_ACTION_TRANSITION_TO_DETAIL)
         [self presentTransitioningViewControllerWithItem:item atIndexPath:indexPath];
 }
 
@@ -584,6 +584,13 @@
 
 - (NSUInteger)listTypeForListInSection:(NSUInteger)section {
     return section;
+}
+
+- (NSUInteger)listSectionForListType:(NSUInteger)type {
+    for (NSUInteger i=0; i<[self numberOfSectionsInTableView:self.tableView]; i++) {
+        if ([self listTypeForListInSection:i] == type) return i;
+    }
+    return type;
 }
 
 - (BOOL)addItem:(NSObject<MKUPlaceholderProtocol> *)item toListOfType:(NSUInteger)type {
@@ -1203,7 +1210,9 @@
 }
 
 - (UITableViewCellAccessoryType)accessoryTypeForSelectedListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item inListOfType:(NSUInteger)type {
-    MKU_LIST_ITEM_SELECTED_ACTION action = self.selectedActionHandler(0);
+    
+    NSUInteger section = [self listSectionForListType:type];
+    MKU_LIST_ITEM_SELECTED_ACTION action = self.selectedActionHandler(section);
     switch (action) {
         case MKU_LIST_ITEM_SELECTED_ACTION_TRANSITION_TO_DETAIL:
             return UITableViewCellAccessoryDisclosureIndicator;
