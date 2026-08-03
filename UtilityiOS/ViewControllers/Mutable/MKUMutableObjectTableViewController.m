@@ -380,7 +380,7 @@
             if (item)
                 [self handleDidSelectListItem:item atIndexPath:indexPath];
             else
-                [self performInsertToListOfType:type atIndexPath:indexPath withCompletion:nil];
+                [self performInsertToListOfType:[self listTypeForListInSection:section] atIndexPath:indexPath withCompletion:nil];
         }
             break;
             
@@ -622,14 +622,8 @@
         }
     }
     
-    if ([self canAddItemToListOfType:type]) {
-        [self insertRowsAtIndexPaths:addIndexPaths];
-        [self reloadIndexPaths:replaceIndexPaths];
-    }
-    else {
-        [self reloadIndexPaths:addIndexPaths];
-    }
-    
+    [self insertRowsAtIndexPaths:addIndexPaths];
+    [self reloadIndexPaths:replaceIndexPaths];
     [self didFinishUpdatesInListOfType:type];
     
     return existing;
