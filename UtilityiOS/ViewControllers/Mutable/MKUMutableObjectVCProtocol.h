@@ -63,6 +63,7 @@
 - (BOOL)performDefaultSavePressedAction;
 
 - (void)dispatchDelegateForSaveDone;
+/** @brief Only required if the class of OriginalObject and UpdatedObject are different. */
 + (Class)classForObject;
 
 - (BOOL)showSaveSuccessAlert;
