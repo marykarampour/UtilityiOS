@@ -116,9 +116,6 @@
 
 @interface MKUFieldModel : MKUModel <MKUFieldModelProtocol, MKUDataUpdateProtocol>
 
-/** @brief Automatically assigned in init. Gets reset in copy. */
-@property (nonatomic, strong, readonly) NSString *GUID;
-
 + (void)iterateOverTypesForSectionType:(NSInteger)section block:(void(^)(NSNumber *obj, NSUInteger idx, BOOL *stop))block;
 
 //validation

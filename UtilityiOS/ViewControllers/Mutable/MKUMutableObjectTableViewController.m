@@ -414,7 +414,6 @@
 
     if (editingStyle == UITableViewCellEditingStyleInsert) {
         [self performInsertToListOfType:type atIndexPath:indexPath withCompletion:^(__kindof NSObject<MKUPlaceholderProtocol> *item) {
-            [self didFinishCommitEditingStyle:editingStyle forRowAtIndexPath:indexPath];
         }];
     }
     else if (editingStyle == UITableViewCellEditingStyleDelete) {
@@ -441,6 +440,7 @@
             [self addItem:item toListOfType:type];
             [self didAddItem:item toListOfType:type];
         }
+        [self didFinishCommitEditingStyle:UITableViewCellEditingStyleInsert forRowAtIndexPath:indexPath];
         if (completion) completion(item);
     }];
 }

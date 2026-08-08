@@ -30,8 +30,6 @@ static char UPDATE_DELEGATE_KEY;
 @property (nonatomic, strong, class, readonly) NSDictionary <NSNumber *, NSNumber *> *sectionEnumDict;
 @property (nonatomic, strong, class, readonly) NSDictionary <NSNumber *, NSString *> *titleEnumDict;
 
-@property (nonatomic, strong, readwrite) NSString *GUID;
-
 @end
 
 @implementation MKUFieldModel
@@ -44,56 +42,8 @@ static char UPDATE_DELEGATE_KEY;
     return objc_getAssociatedObject(self, &UPDATE_DELEGATE_KEY);
 }
 
-- (instancetype)init {
-    if (self = [super init]) {
-        self.GUID = [Constants GUID];
-    }
-    return self;
-}
-
-- (instancetype)initWithDictionary:(NSDictionary *)dict {
-    if (self = [super initWithDictionary:dict]) {
-        self.GUID = [Constants GUID];
-    }
-    return self;
-}
-
-- (instancetype)initWithDictionary:(NSDictionary *)dict useXML:(BOOL)XML {
-    if (self = [super initWithDictionary:dict useXML:XML]) {
-        self.GUID = [Constants GUID];
-    }
-    return self;
-}
-
-- (instancetype)initWithDictionary:(NSDictionary *)dict error:(NSError *__autoreleasing *)err {
-    if (self = [super initWithDictionary:dict error:err]) {
-        self.GUID = [Constants GUID];
-    }
-    return self;
-}
-
-- (instancetype)initWithDictionary:(NSDictionary *)dict error:(NSError *__autoreleasing *)err useXML:(BOOL)XML {
-    if (self = [super initWithDictionary:dict error:err useXML:XML]) {
-        self.GUID = [Constants GUID];
-    }
-    return self;
-}
-
-- (id)copy {
-    MKUFieldModel *obj = (MKUFieldModel *)[super copy];
-    obj.GUID = [Constants GUID];
-    return obj;
-}
-
 + (NSSet<NSString *> *)excludedKeys {
-    return [NSSet
-            setWithObjects:NSStringFromSelector(@selector(GUID)),
-            NSStringFromSelector(@selector(updateDelegate)), nil];
-}
-//Not clear why GUID was created. Its only use case at the moment is to make otherwise equal objects, not equal.
-//We are excluding it here to accomodate isModified in MKUUpdateObject. This might have to change if it created unexpected bugs.
-+ (NSSet<NSString *> *)excludedProperties {
-    return [NSSet setWithObject:NSStringFromSelector(@selector(GUID))];
+    return [NSSet setWithObjects:NSStringFromSelector(@selector(updateDelegate)), nil];
 }
 
 + (BOOL)usingAncestors {
