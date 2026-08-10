@@ -8,8 +8,7 @@
 
 #import "MKULabel.h"
 #import "MKUViewProtocol.h"
-
-@class MKURadioButtonView;
+#import "MKURadioButtonViewProtocol.h"
 
 typedef NS_ENUM(NSUInteger, MKU_RADIO_BUTTON_ALIGNMENT) {
     MKU_RADIO_BUTTON_ALIGNMENT_LEFT,
@@ -21,13 +20,6 @@ typedef NS_ENUM(NSUInteger, MKU_RADIO_BUTTON_VERTICAL_ALIGNMENT) {
     MKU_RADIO_BUTTON_VERTICAL_ALIGNMENT_TOP,
     MKU_RADIO_BUTTON_VERTICAL_ALIGNMENT_BOTTOM
 };
-
-@protocol MKURadioButtonViewProtocol <NSObject>
-
-@optional
-- (void)radioButton:(MKURadioButtonView *)view didSetOn:(BOOL)on;
-
-@end
 
 @interface MKURadioButtonView : UIView <MKUControlProtocol>
 
