@@ -6,20 +6,13 @@
 //  Copyright © 2024 Prometheus Software. All rights reserved.
 //
 
-#import "MKULabel.h"
-#import "MKUViewProtocol.h"
+#import "MKUMultiLabelViewController.h"
 
 @class MKURadioButtonView;
 
 typedef NS_ENUM(NSUInteger, MKU_RADIO_BUTTON_ALIGNMENT) {
     MKU_RADIO_BUTTON_ALIGNMENT_LEFT,
     MKU_RADIO_BUTTON_ALIGNMENT_RIGHT
-};
-
-typedef NS_ENUM(NSUInteger, MKU_RADIO_BUTTON_VERTICAL_ALIGNMENT) {
-    MKU_RADIO_BUTTON_VERTICAL_ALIGNMENT_CENTER_Y,
-    MKU_RADIO_BUTTON_VERTICAL_ALIGNMENT_TOP,
-    MKU_RADIO_BUTTON_VERTICAL_ALIGNMENT_BOTTOM
 };
 
 @protocol MKURadioButtonViewProtocol <NSObject>
@@ -29,31 +22,35 @@ typedef NS_ENUM(NSUInteger, MKU_RADIO_BUTTON_VERTICAL_ALIGNMENT) {
 
 @end
 
-@interface MKURadioButtonView : UIView <MKUControlProtocol>
+@interface MKURadioButtonView : MKUMultiLabelViewController <UIImageView *, UIImageView *> <MKUControlProtocol>
 
 @property (nonatomic, assign) BOOL on;
 @property (nonatomic, assign) BOOL enabled;
-@property (nonatomic, assign, readonly) MKU_RADIO_BUTTON_ALIGNMENT alignment;
-/** @brief Default is MKU_RADIO_BUTTON_VERTICAL_ALIGNMENT_CENTER_Y */
-@property (nonatomic, assign, readonly) MKU_RADIO_BUTTON_VERTICAL_ALIGNMENT verticalAlignment;
 @property (nonatomic, strong) UIImage *selectedImage;
 @property (nonatomic, strong) UIImage *deselectedImage;
 @property (nonatomic, strong) UIImage *disabledSelectedImage;
 @property (nonatomic, strong) UIImage *disabledDeselectedImage;
-@property (nonatomic, strong, readonly) MKULabel *titleLabel;
 /** @brief If nil, userInteractionEnabled will be disabled. */
 @property (nonatomic, weak) id<MKURadioButtonViewProtocol> delegate;
 
-/** @brief Uses insets for the checkbox. */
-- (instancetype)initWithCheckboxInset:(CGFloat)inset;
-/** @brief Uses insets for the checkbox. */
-- (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment checkboxInset:(CGFloat)inset;
-/** @brief Uses insets for the checkbox. */
-- (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment verticalAlignment:(MKU_RADIO_BUTTON_VERTICAL_ALIGNMENT)verticalAlignment  checkboxInset:(CGFloat)inset;
+/** @brief Uses insets for the checkbox. labelsCount = 1. */
+- (instancetype)initWithInsets:(UIEdgeInsets)insets;
+/** @brief Uses insets for the checkbox. labelsCount = 1. */
+- (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment insets:(UIEdgeInsets)insets;
+/** @brief Uses insets for the checkbox. labelsCount = 1. */
+- (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment verticalAlignment:(MULTILABEL_VERTICAL_ALIGNMENT)verticalAlignment insets:(UIEdgeInsets)insets;
 - (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment;
-- (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment verticalAlignment:(MKU_RADIO_BUTTON_VERTICAL_ALIGNMENT)verticalAlignment;
-/** @param target If nil, userInteractionEnabled will be disabled. */
-- (void)addTarget:(id)target action:(SEL)action;
+- (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment verticalAlignment:(MULTILABEL_VERTICAL_ALIGNMENT)verticalAlignment;
+
+/** @brief Uses insets for the checkbox. */
+- (instancetype)initWithInsets:(UIEdgeInsets)insets labelsCount:(NSUInteger)labelsCount;
+/** @brief Uses insets for the checkbox. */
+- (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment labelsCount:(NSUInteger)labelsCount insets:(UIEdgeInsets)insets;
+/** @brief Uses insets for the checkbox. */
+- (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment labelsCount:(NSUInteger)labelsCount verticalAlignment:(MULTILABEL_VERTICAL_ALIGNMENT)verticalAlignment insets:(UIEdgeInsets)insets;
+- (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment labelsCount:(NSUInteger)labelsCount;
+- (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment labelsCount:(NSUInteger)labelsCount verticalAlignment:(MULTILABEL_VERTICAL_ALIGNMENT)verticalAlignment;
+
 - (void)setIndexPath:(NSIndexPath *)indexPath;
 - (void)setMultiline;
 - (NSIndexPath *)indexPath;

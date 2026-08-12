@@ -21,7 +21,7 @@
 
 - (void)initBase {
     self.checkboxView = [MKURadioButtonView enabledRadioButtonWithTitle:nil];
-    self.checkboxView.titleLabel.font = [AppTheme mediumBoldLabelFont];
+    [self.checkboxView labelAtIndex:0].font = [AppTheme mediumBoldLabelFont];
     
     [self addSubview:self.checkboxView];
     [self removeConstraintsMask];

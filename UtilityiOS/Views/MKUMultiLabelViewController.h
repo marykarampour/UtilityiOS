@@ -7,8 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "UIButton+Utility.h"
 #import "MKUContainerView.h"
 #import "MKUStackedViews.h"
+#import "MKUViewProtocol.h"
 #import "MKULabel.h"
 
 typedef NS_OPTIONS(NSUInteger, MKU_MULTI_LABEL_VIEW_TYPE) {
@@ -18,21 +20,23 @@ typedef NS_OPTIONS(NSUInteger, MKU_MULTI_LABEL_VIEW_TYPE) {
     MKU_MULTI_LABEL_VIEW_TYPE_RIGHT = 1 << 2
 };
 
-#define MULTILABEL_CENTER_X         -1000
-#define MULTILABEL_CENTER_Y         -2000
-#define MULTILABEL_TOP_FIRST_LABEL  -3000
+typedef CGFloat MULTILABEL_VERTICAL_ALIGNMENT;
 
-@interface MKUMultiLabelViewController <__covariant LeftObjectType : __kindof UIView *, __covariant RightObjectType : __kindof UIView *> : NSObject
+#define MULTILABEL_VERTICAL_ALIGNMENT_CENTER_X          -1000.0
+#define MULTILABEL_VERTICAL_ALIGNMENT_CENTER_Y          -2000.0
+#define MULTILABEL_VERTICAL_ALIGNMENT_TOP_FIRST_LABEL   -3000.0
+#define MULTILABEL_VERTICAL_ALIGNMENT_BOTTOM_LAST_LABEL -4000.0
 
-@property (nonatomic, strong, readonly) __kindof UIView *contentView;
+@interface MKUMultiLabelViewController <__covariant LeftObjectType : __kindof UIView *, __covariant RightObjectType : __kindof UIView *> : UIView
+
 @property (nonatomic, strong, readonly) MKUContainerView<LeftObjectType> *leftView;
 @property (nonatomic, strong, readonly) MKUContainerView<RightObjectType> *rightView;
 @property (nonatomic, strong, readonly) MKUVerticalViews<__kindof MKULabel *> *labels;
 
 /** @brief An optional view at the back of all views, if added will cover the entire contentView. */
-@property (nonatomic, strong, readonly) __kindof UIView *backView;
+@property (nonatomic, strong, readonly) __kindof UIView<MKUControlProtocol> *backView;
 
-- (void)addBackView:(__kindof UIView *)backView;
+- (void)addBackView:(__kindof UIView<MKUControlProtocol> *)backView;
 
 /** @brief Default initializer
  @param contentView Pass nil if you want a default UIView be set as contentView */
@@ -42,7 +46,7 @@ typedef NS_OPTIONS(NSUInteger, MKU_MULTI_LABEL_VIEW_TYPE) {
  @param type supported types are:
     none uses leftview or if nil rightview
     labels only,
-    left and right views only (both should be non null, frame.size of whichever is nonzero is used, e.g.    left.frame.size.height = 22.0 is used if right.frame.size.height = 0.0. Default, left.frame is used for  size if both are provided). Set MULTILABEL_CENTER_X for constraint centerX for originX, and     MULTILABEL_CENTER_Y for centerY for originY.
+    left and right views only (both should be non null, frame.size of whichever is nonzero is used, e.g. left.frame.size.height = 22.0 is used if right.frame.size.height = 0.0. Default, left.frame is used for size if both are provided). Set MULTILABEL_VERTICAL_ALIGNMENT_CENTER_X for constraint centerX for originX, and MULTILABEL_VERTICAL_ALIGNMENT_CENTER_Y for centerY for originY.
     labels and left views
     labels and right views
     labels and left and right views

@@ -39,6 +39,9 @@
 - (instancetype)initWithContentView:(__kindof UIView *)contentView {
     if (self = [super init]) {
         self.contentView = contentView ? contentView : [[UIView alloc] init];
+        [self addSubview:self.contentView];
+        [self removeConstraintsMask];
+        [self constraintSidesForView:self.contentView];
     }
     return self;
 }
@@ -116,7 +119,7 @@
         [self.contentView constraintWidthForView:self.leftView];
     }
     
-    if (self.leftView.frame.origin.y == MULTILABEL_CENTER_Y) {
+    if (self.leftView.frame.origin.y == MULTILABEL_VERTICAL_ALIGNMENT_CENTER_Y) {
         [self.contentView constraint:NSLayoutAttributeCenterY view:self.leftView];
     }
     else {
@@ -144,7 +147,7 @@
         [self.contentView constraintWidthForView:self.rightView];
     }
     
-    if (self.rightView.frame.origin.y == MULTILABEL_CENTER_Y) {
+    if (self.rightView.frame.origin.y == MULTILABEL_VERTICAL_ALIGNMENT_CENTER_Y) {
         [self.contentView constraint:NSLayoutAttributeCenterY view:self.rightView];
     }
     else {
@@ -214,10 +217,10 @@
     [self.contentView constraintSizeForView:self.rightView];
     [self.contentView constraint:NSLayoutAttributeTop view:self.leftView margin:self.edgeIndests.top + [Constants TextPadding]];
     
-    if (self.rightView.frame.origin.y == MULTILABEL_CENTER_Y) {
+    if (self.rightView.frame.origin.y == MULTILABEL_VERTICAL_ALIGNMENT_CENTER_Y) {
         [self.contentView constraint:NSLayoutAttributeCenterY view:self.rightView];
     }
-    else if (self.rightView.frame.origin.y == MULTILABEL_TOP_FIRST_LABEL) {
+    else if (self.rightView.frame.origin.y == MULTILABEL_VERTICAL_ALIGNMENT_TOP_FIRST_LABEL) {
         [self.contentView addConstraintWithItem:self.labels attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.rightView attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
     }
     else {
@@ -243,6 +246,7 @@
 - (MKULabel *)createLabelAtIndex:(NSUInteger)index {
     MKULabel *label = [[MKULabel alloc] init];
     label.numberOfLines = 0;
+    label.minimumScaleFactor = 0.5;
     label.lineBreakMode = NSLineBreakByWordWrapping;
     [label sizeToFit];
     return label;
@@ -256,13 +260,17 @@
     self.rightView.view = rightView;
 }
 
-- (void)addBackView:(__kindof UIView *)backView {
+- (void)addBackView:(__kindof UIView<MKUControlProtocol> *)backView {
     self.backView = backView;
     backView.backgroundColor = [UIColor clearColor];
     [self.contentView addSubview:backView];
     [self.contentView bringSubviewToFront:backView];
     [self.contentView removeConstraintsMask];
     [self.contentView constraintSidesForView:backView];
+}
+
+- (void)addTarget:(id)target action:(SEL)action {
+    [self.backView addTarget:target action:action];
 }
 
 - (void)setText:(NSString *)text forLabelAtIndex:(NSUInteger)index {
