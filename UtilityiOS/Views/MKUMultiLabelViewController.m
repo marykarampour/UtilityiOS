@@ -38,10 +38,21 @@
 
 - (instancetype)initWithContentView:(__kindof UIView *)contentView {
     if (self = [super init]) {
-        self.contentView = contentView ? contentView : [[UIView alloc] init];
-        [self addSubview:self.contentView];
-        [self removeConstraintsMask];
-        [self constraintSidesForView:self.contentView];
+        if (!contentView) {
+            self.contentView = self;
+        }
+        else if ([contentView superview]) {
+            self.contentView = self;
+            [contentView addSubview:self];
+            [contentView removeConstraintsMask];
+            [contentView constraintSidesForView:self];
+        }
+        else {
+            self.contentView = contentView;
+            [self addSubview:self.contentView];
+            [self removeConstraintsMask];
+            [self constraintSidesForView:self.contentView];
+        }
     }
     return self;
 }

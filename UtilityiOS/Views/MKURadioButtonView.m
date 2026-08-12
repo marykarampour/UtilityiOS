@@ -58,7 +58,7 @@ static CGFloat const CHECK_SIZE = 40.0;
 }
 
 - (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment verticalAlignment:(MULTILABEL_VERTICAL_ALIGNMENT)verticalAlignment insets:(UIEdgeInsets)insets {
-    return [self initWithAlignment:alignment labelsCount:1 verticalAlignment:verticalAlignment insets:[NSObject insets:[Constants HorizontalSpacing]]];
+    return [self initWithAlignment:alignment labelsCount:1 verticalAlignment:verticalAlignment insets:insets];
 }
 
 - (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment labelsCount:(NSUInteger)labelsCount verticalAlignment:(MULTILABEL_VERTICAL_ALIGNMENT)verticalAlignment insets:(UIEdgeInsets)insets {
