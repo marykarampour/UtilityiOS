@@ -35,16 +35,16 @@ typedef NSDictionary<NSNumber *, MKUDateViewInfoObject *> DateSectionInfoObjctDi
 @protocol MKUTableViewControllerProtocol <NSObject>
 
 @optional
-- (void)didShowDatePickerAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
+- (void)didShowDatePickerAtIndexPath:(NSIndexPath *)indexPath;
 /** @brief Return NO if yo want this date section not expand to modify the date. Default is YES. */
 - (BOOL)isEditableDateSection:(NSUInteger)section;
 - (NSAttributedString *)attributedTitleForAccessoryLabelOfType:(MKU_TABLEVIEW_ACCESSORY_VIEW_TYPE)type inSection:(NSInteger)section;
 
 @required
 - (CGFloat)heightForNonDateRowAtIndexPath:(NSIndexPath * )indexPath;
-- (UITableViewCell * _Nonnull)tableView:(UITableView * _Nonnull)tableView cellForNonDateRowAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
-- (void)didSelectNonDateRowAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
-- (void)didHideDatePickerAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForNonDateRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)didSelectNonDateRowAtIndexPath:(NSIndexPath *)indexPath;
+- (void)didHideDatePickerAtIndexPath:(NSIndexPath *)indexPath;
 - (NSUInteger)numberOfRowsInNonDateSection:(NSUInteger)section;
 
 @end
@@ -62,8 +62,8 @@ typedef NSDictionary<NSNumber *, MKUDateViewInfoObject *> DateSectionInfoObjctDi
 @property (nonatomic, strong) MKULabelStyleObject *sectionHeaderStyle;
 @property (nonatomic, strong) MKULabelStyleObject *sectionFooterStyle;
 
-@property (nonatomic, strong, nullable) NSString *footerTitle;
-@property (nonatomic, strong, nullable) DateSectionInfoObjctDict *dateCellInfoObjects;
+@property (nonatomic, strong) NSString *footerTitle;
+@property (nonatomic, strong) DateSectionInfoObjctDict *dateCellInfoObjects;
 @property (nonatomic, assign) UIEdgeInsets accessoryViewInsets;
 @property (nonatomic, assign) NSUInteger MKUType;
 /** @brief Dark theme will set section headers dark blue with mist text color. */
@@ -109,17 +109,17 @@ typedef NSDictionary<NSNumber *, MKUDateViewInfoObject *> DateSectionInfoObjctDi
 #pragma mark - custom cell templates
 
 - (MKUBaseTableViewCell *)emptyCell;
-- (MKUBaseTableViewCell * )tableView:(UITableView * _Nonnull)tableView dateCellWithInfo:(MKUDateViewInfoObject * )info;
+- (MKUBaseTableViewCell * )tableView:(UITableView *)tableView dateCellWithInfo:(MKUDateViewInfoObject * )info;
 - (MKUBaseTableViewCell *)cellContainingView:(UIView *)view;
-- (MKUBaseTableViewCell *)textViewCellForIndexPath:(NSIndexPath * _Nonnull)indexPath title:(NSString *)title delegate:(id<TextViewDelegate>)delegate viewIndexPath:(NSIndexPath *)viewIndexPath text:(NSString *)text;
-- (MKUBaseTableViewCell *)textViewCellForIndexPath:(NSIndexPath * _Nonnull)indexPath title:(NSString *)title delegate:(id<TextViewDelegate>)delegate viewIndexPath:(NSIndexPath *)viewIndexPath text:(NSString *)text placeholder:(NSString *)placeholder;
-- (MKUBaseTableViewCell *)textViewCellForIndexPath:(NSIndexPath * _Nonnull)indexPath title:(NSString *)title delegate:(id<TextViewDelegate>)delegate viewIndexPath:(NSIndexPath *)viewIndexPath text:(NSString *)text placeholder:(NSString *)placeholder maxChars:(NSUInteger)maxChars;
+- (MKUBaseTableViewCell *)textViewCellForIndexPath:(NSIndexPath *)indexPath title:(NSString *)title delegate:(id<TextViewDelegate>)delegate viewIndexPath:(NSIndexPath *)viewIndexPath text:(NSString *)text;
+- (MKUBaseTableViewCell *)textViewCellForIndexPath:(NSIndexPath *)indexPath title:(NSString *)title delegate:(id<TextViewDelegate>)delegate viewIndexPath:(NSIndexPath *)viewIndexPath text:(NSString *)text placeholder:(NSString *)placeholder;
+- (MKUBaseTableViewCell *)textViewCellForIndexPath:(NSIndexPath *)indexPath title:(NSString *)title delegate:(id<TextViewDelegate>)delegate viewIndexPath:(NSIndexPath *)viewIndexPath text:(NSString *)text placeholder:(NSString *)placeholder maxChars:(NSUInteger)maxChars;
 - (MKUBaseTableViewCell *)textViewCellForRow:(NSUInteger)row withView:(MKUTextView *)view title:(NSString *)title insets:(UIEdgeInsets)insets;
-- (MKUBaseTableViewCell *)textFieldCellForIndexPath:(NSIndexPath * _Nonnull)indexPath title:(NSString *)title delegate:(id<TextFieldDelegate>)delegate viewIndexPath:(NSIndexPath *)viewIndexPath text:(NSString *)text placeholder:(NSString *)placeholder;
-- (MKUBaseTableViewCell *)textFieldCellForIndexPath:(NSIndexPath * _Nonnull)indexPath title:(NSString *)title delegate:(id<TextFieldDelegate>)delegate viewIndexPath:(NSIndexPath *)viewIndexPath text:(NSString *)text;
+- (MKUBaseTableViewCell *)textFieldCellForIndexPath:(NSIndexPath *)indexPath title:(NSString *)title delegate:(id<TextFieldDelegate>)delegate viewIndexPath:(NSIndexPath *)viewIndexPath text:(NSString *)text placeholder:(NSString *)placeholder;
+- (MKUBaseTableViewCell *)textFieldCellForIndexPath:(NSIndexPath *)indexPath title:(NSString *)title delegate:(id<TextFieldDelegate>)delegate viewIndexPath:(NSIndexPath *)viewIndexPath text:(NSString *)text;
 
 - (CGFloat)heightForTextFieldCellAtIndexPath:(NSIndexPath *)indexPath;
-- (CGFloat)heightForTextViewCellAtIndexPath:(NSIndexPath * _Nonnull)indexPath;
+- (CGFloat)heightForTextViewCellAtIndexPath:(NSIndexPath *)indexPath;
 - (void)updateTableView;
 
 /** @brief Used to adjust the content insets of the table view based on the navigation bar. Default is 0.

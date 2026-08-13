@@ -20,8 +20,7 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style alignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment {
     return [self initWithStyle:style insets:UIEdgeInsetsZero viewCreationHandler:^UIView *{
-        UIEdgeInsets margins = UIEdgeInsetsMake(0.0, [Constants HorizontalSpacing], 0.0, [Constants HorizontalSpacing]);
-        return [[MKURadioButtonView alloc] initWithAlignment:alignment checkboxInset:alignment == MKU_RADIO_BUTTON_ALIGNMENT_LEFT ? margins.left : margins.right];;
+        return [[MKURadioButtonView alloc] initWithAlignment:alignment insets:UIEdgeInsetsZero];
     }];
 }
 
@@ -31,8 +30,7 @@
 
 - (instancetype)initWithInsets:(UIEdgeInsets)insets alignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment {
     return [self initWithStyle:UITableViewCellStyleDefault insets:insets viewCreationHandler:^UIView *{
-        UIEdgeInsets margins = UIEdgeInsetsMake(0.0, [Constants HorizontalSpacing], 0.0, [Constants HorizontalSpacing]);
-        return [[MKURadioButtonView alloc] initWithAlignment:alignment checkboxInset:alignment == MKU_RADIO_BUTTON_ALIGNMENT_LEFT ? margins.left : margins.right];;
+        return [[MKURadioButtonView alloc] initWithAlignment:alignment insets:insets];
     }];
 }
 

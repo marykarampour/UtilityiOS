@@ -59,8 +59,8 @@
 - (void)setView:(__kindof UIView *)view {
     [UIView setContentView:view forSuperview:self.contentView insets:self.insets setterHandler:^{
         [self.view removeFromSuperview];
-        _view = view;
     }];
+    _view = view;
 }
 
 - (void)constructView {

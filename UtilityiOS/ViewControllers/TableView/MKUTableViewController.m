@@ -210,12 +210,12 @@ static dispatch_queue_t dispatch;
     [view constructWithType:MKU_MULTI_LABEL_VIEW_TYPE_LABEL leftView:nil rightView:nil labelsCount:1 insets:UIEdgeInsetsMake([Constants TableHeaderPadding], [Constants TableHeaderPadding], [Constants TableHeaderPadding], [Constants TableHeaderPadding])];
     
     if (type == MKU_TABLEVIEW_ACCESSORY_VIEW_TYPE_HEADER) {
-        view.contentView.backgroundColor = [AppTheme tableHeaderBackgroundColor];
+        view.backgroundColor = [AppTheme tableHeaderBackgroundColor];
         [view.labels viewAtIndex:0].font = [AppTheme tableHeaderFont];
         [view.labels viewAtIndex:0].textColor = [AppTheme tableHeaderTextColor];
     }
     else {
-        view.contentView.backgroundColor = [AppTheme tableFooterBackgroundColor];
+        view.backgroundColor = [AppTheme tableFooterBackgroundColor];
         [view.labels viewAtIndex:0].font = [AppTheme tableFooterFont];
         [view.labels viewAtIndex:0].textColor = [AppTheme tableFooterTextColor];
     }
@@ -231,9 +231,9 @@ static dispatch_queue_t dispatch;
     
     MKUMultiLabelViewController *view = [self createTableAccessoryViewOfType:type];
     [view setText:title forLabelAtIndex:0];
-    view.contentView.frame = CGRectMake(0.0, 0.0, [Constants screenWidth], [view heightForWidth:[Constants screenWidth]]);
+    view.frame = CGRectMake(0.0, 0.0, [Constants screenWidth], [view heightForWidth:[Constants screenWidth]]);
     
-    [self setView:view.contentView forAccessoryViewOfType:type];
+    [self setView:view forAccessoryViewOfType:type];
 }
 
 - (void)createTableAccessoryViewOfType:(MKU_TABLEVIEW_ACCESSORY_VIEW_TYPE)type withAttributedTitle:(NSAttributedString *)title {
@@ -245,9 +245,9 @@ static dispatch_queue_t dispatch;
     
     MKUMultiLabelViewController *view = [self createTableAccessoryViewOfType:type];
     [view setAttributedText:title forLabelAtIndex:0];
-    view.contentView.frame = CGRectMake(0.0, 0.0, [Constants screenWidth], [view heightForWidth:[Constants screenWidth]]);
+    view.frame = CGRectMake(0.0, 0.0, [Constants screenWidth], [view heightForWidth:[Constants screenWidth]]);
     
-    [self setView:view.contentView forAccessoryViewOfType:type];
+    [self setView:view forAccessoryViewOfType:type];
 }
 
 - (void)setView:(__kindof UIView *)view forAccessoryViewOfType:(MKU_TABLEVIEW_ACCESSORY_VIEW_TYPE)type {
