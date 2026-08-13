@@ -1223,7 +1223,15 @@
 }
 
 - (UITableViewCellAccessoryType)accessoryTypeForDeselectedListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item inListOfType:(NSUInteger)type {
-    return UITableViewCellAccessoryNone;
+    
+    NSUInteger section = [self listSectionForListType:type];
+    MKU_LIST_ITEM_SELECTED_ACTION action = self.selectedActionHandler(section);
+    switch (action) {
+        case MKU_LIST_ITEM_SELECTED_ACTION_TRANSITION_TO_DETAIL:
+            return UITableViewCellAccessoryDisclosureIndicator;
+        default:
+            return UITableViewCellAccessoryNone;
+    }
 }
 
 - (UITableViewCellAccessoryType)accessoryTypeForSingleDeselectedListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item inListOfType:(NSUInteger)type {
