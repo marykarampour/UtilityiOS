@@ -146,8 +146,6 @@ static char UIVIEWCONTROLER_TRANSITION_LIST_KEY;
 }
 
 - (UITableViewCellSelectionStyle)defaultSelectionStyleForListOfType:(NSUInteger)type {
-    if (IS_IPAD)
-        return UITableViewCellSelectionStyleDefault;
     if ([self respondsToSelector:@selector(isSelectedRowAtIndexPath:)])
         if (!self.tableView.allowsMultipleSelection)
             return UITableViewCellSelectionStyleDefault;
