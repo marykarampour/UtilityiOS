@@ -6,6 +6,7 @@
 //  Copyright © 2024 Prometheus Software. All rights reserved.
 //
 
+#import "UITextView+IndexPath.h"
 #import <objc/runtime.h>
 
 static char UITEXTVIEW_INDEXPATH_KEY;

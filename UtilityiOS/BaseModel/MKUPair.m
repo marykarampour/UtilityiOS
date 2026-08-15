@@ -45,6 +45,26 @@
     return self;
 }
 
++ (instancetype)pairsWithArray:(NSArray *)array {
+    return [[self alloc] initWithArray:array];
+}
+
+- (instancetype)initWithObjects:(NSArray *)objects forKeys:(NSArray *)keys {
+    if (self = [super init]) {
+        NSMutableArray<MKUPair *> *arr = [[NSMutableArray alloc] init];
+        [keys enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (idx < objects.count)
+                [arr addObject:[MKUPair pairWithFirst:obj second:objects[idx]]];
+        }];
+        self.array = arr;
+    }
+    return self;
+}
+
++ (instancetype)pairsWithObjects:(NSArray *)objects forKeys:(NSArray *)keys {
+    return [[self alloc] initWithObjects:objects forKeys:keys];
+}
+
 - (ObjectArr *)allKeys {
     MObjectArr *keys = [[NSMutableArray  alloc] init];
     for (MKUPair *obj in self.array) {
@@ -95,6 +115,10 @@
         }
     }
     return nil;
+}
+
+- (__kindof MKUPair *)pairAtIndex:(NSUInteger)index {
+    return [self.array nullableObjectAtIndex:index];;
 }
 
 - (NSUInteger)indexOfPairForKey:(__kindof NSObject *)key {

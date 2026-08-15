@@ -32,11 +32,15 @@
 @property (nonatomic, strong) NSArray<__kindof MKUPair <ObjectTypeFirst, ObjectTypeSecond> *> *array;
 
 - (instancetype)initWithArray:(NSArray<__kindof MKUPair <ObjectTypeFirst, ObjectTypeSecond> *> *)array;
++ (instancetype)pairsWithArray:(NSArray<__kindof MKUPair <ObjectTypeFirst, ObjectTypeSecond> *> *)array;
+- (instancetype)initWithObjects:(NSArray<ObjectTypeFirst> *)objects forKeys:(NSArray<ObjectTypeSecond> *)keys;
++ (instancetype)pairsWithObjects:(NSArray<ObjectTypeFirst> *)objects forKeys:(NSArray<ObjectTypeSecond> *)keys;
 
 - (NSArray<__kindof NSObject *> *)allKeys;
 - (NSArray<__kindof NSObject *> *)allValues;
 - (__kindof ObjectTypeSecond)objectForKey:(__kindof NSObject *)key;
 - (__kindof MKUPair <ObjectTypeFirst, ObjectTypeSecond> *)pairForKey:(__kindof NSObject *)key;
+- (__kindof MKUPair <ObjectTypeFirst, ObjectTypeSecond> *)pairAtIndex:(NSUInteger)index;
 - (NSUInteger)indexOfPairForKey:(__kindof NSObject *)key;
 - (void)addPair:(__kindof MKUPair <ObjectTypeFirst, ObjectTypeSecond> *)pair;
 - (void)insertPair:(__kindof MKUPair *)pair atIndex:(NSUInteger)index;

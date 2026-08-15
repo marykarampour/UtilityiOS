@@ -172,7 +172,8 @@ static CGFloat const PADDING = 4.0;
 @implementation MKUVerticallyStackedHorizontalViews
 
 - (instancetype)initWithCount:(NSUInteger)count horizontalCount:(NSUInteger)horizontalCount padding:(CGFloat)padding verticalSizes:(NSDictionary<NSNumber *, NSNumber *> *)verticalSizes horizontalSizes:(NSDictionary<NSNumber *, NSNumber *> *)horizontalSizes viewCreationHandler:(DOUBLE_INDEX_COUNT_VIEW_CREATION_HANDLER)handler {
-    return [self initWithVerticalCount:ceil((float)count / horizontalCount) horizontalCount:horizontalCount padding:padding verticalSizes:verticalSizes horizontalSizes:horizontalSizes viewCreationHandler:^UIView *(NSUInteger row, NSUInteger column) {
+    NSUInteger verticalCount = (horizontalCount == 0) ? count : ceil((float)count / horizontalCount);
+    return [self initWithVerticalCount:verticalCount horizontalCount:horizontalCount padding:padding verticalSizes:verticalSizes horizontalSizes:horizontalSizes viewCreationHandler:^UIView *(NSUInteger row, NSUInteger column) {
         NSUInteger index = [NSObject indexOfRow:row column:column totalColumn:horizontalCount];
         return index < count ? handler(index, row, column) : nil;
     }];
@@ -187,7 +188,8 @@ static CGFloat const PADDING = 4.0;
 }
 
 - (instancetype)initWithCount:(NSUInteger)count horizontalCount:(NSUInteger)horizontalCount interItemSpacing:(CGFloat)interItemSpacing horizontalMargin:(CGFloat)horizontalMargin verticalMargin:(CGFloat)verticalMargin viewCreationHandler:(DOUBLE_INDEX_COUNT_VIEW_CREATION_HANDLER)handler {
-    return [self initWithVerticalCount:ceil((float)count / horizontalCount) horizontalCount:horizontalCount interItemSpacing:interItemSpacing horizontalMargin:horizontalMargin verticalMargin:verticalMargin viewCreationHandler:^UIView *(NSUInteger row, NSUInteger column) {
+    NSUInteger verticalCount = (horizontalCount == 0) ? count : ceil((float)count / horizontalCount);
+    return [self initWithVerticalCount:verticalCount horizontalCount:horizontalCount interItemSpacing:interItemSpacing horizontalMargin:horizontalMargin verticalMargin:verticalMargin viewCreationHandler:^UIView *(NSUInteger row, NSUInteger column) {
         NSUInteger index = [NSObject indexOfRow:row column:column totalColumn:horizontalCount];
         return index < count ? handler(index, row, column) : nil;
     }];
