@@ -335,6 +335,11 @@
         }
             break;
             
+        case MKU_MUTABLE_OBJECT_FIELD_TYPE_BLANK: {
+            return [MKUBaseTableViewCell blankCell];
+        }
+            break;
+            
         default: {
             MKUBaseTableViewCell *cell = [self singleCellForRowAtIndexPath:indexPath];
             cell.contentView.userInteractionEnabled = self.isEditable;
@@ -1218,7 +1223,11 @@
 }
 
 - (BOOL)hideSection:(NSUInteger)section {
-    if ([self isDateSection:section] || [self canEditSection:section] || [self typeForSection:section] == MKU_MUTABLE_OBJECT_FIELD_TYPE_LIST) return NO;
+    MKU_MUTABLE_OBJECT_FIELD_TYPE type = [self typeForSection:section];
+    if ([self isDateSection:section] ||
+        [self canEditSection:section] ||
+        type == MKU_MUTABLE_OBJECT_FIELD_TYPE_LIST ||
+        type == MKU_MUTABLE_OBJECT_FIELD_TYPE_BLANK ) return NO;
     return !self.isEditable && [self hasNoValueOrAattributedValueInSection:section] && ![self hasTypesForSection:section];
 }
 
@@ -1290,13 +1299,13 @@
 
 - (MKURadioButtonTableViewCell *)radioButtonCellInSection:(NSUInteger)section enabled:(BOOL)enabled singleLine:(BOOL)singleLine {
     MKURadioButtonTableViewCell *cell = [[MKURadioButtonTableViewCell alloc] initWithInsets:UIEdgeInsetsMake(0.0, [Constants HorizontalSpacing], 0.0, [Constants HorizontalSpacing])];
-    cell.view.titleLabel.font = [AppTheme mediumBoldLabelFont];
-    cell.view.titleLabel.text = [self titleForSection:section];
+    [cell.view labelAtIndex:0].font = [AppTheme mediumBoldLabelFont];
+    [cell.view labelAtIndex:0].text = [self titleForSection:section];
     cell.view.on = [self boolValueForSection:section];
     cell.view.enabled = enabled;
     cell.view.userInteractionEnabled = NO;
-    if (!singleLine) [cell.view setMultiline];
-    
+    if (singleLine) [cell.view labelAtIndex:0].numberOfLines = 1;
+
     return cell;
 }
 
@@ -1305,9 +1314,10 @@
     if (!cell) {
         cell = [[MKURadioButtonTableViewCell alloc] initWithInsets:UIEdgeInsetsMake(0.0, 2*[Constants HorizontalSpacing], 0.0, 2*[Constants HorizontalSpacing])];
         cell.view.userInteractionEnabled = NO;
-        if (!singleLine) [cell.view setMultiline];
+        if (singleLine) [cell.view labelAtIndex:0].numberOfLines = 1;
+
     }
-    cell.view.titleLabel.text = title;
+    [cell.view labelAtIndex:0].text = title;
     cell.view.on = on;
     cell.view.enabled = enabled;
     
@@ -1324,12 +1334,12 @@
         NSIndexPath *lastPath = [NSIndexPath indexPathForRow:[self rowForFieldAtIndex:MKU_COLUMN_TYPE_RIGHT inSection:section] inSection:section];
         NSString *value = 0 < [self valueForSection:section].length ? [self valueForSection:section] : [self placeholderTitleForSection:section];
         
-        view.checkboxView.titleLabel.text = [self titleForSection:section];
+        [view.checkboxView labelAtIndex:0].text = [self titleForSection:section];
         view.checkboxView.on = [self boolValueForSection:section];
         view.checkboxView.enabled = enabled;
         view.checkboxView.userInteractionEnabled = NO;
         [view.checkboxView setIndexPath:firstPath];
-        if (!singleLine) [view.checkboxView setMultiline];
+        if (singleLine) [view.checkboxView labelAtIndex:0].numberOfLines = 1;
         
         view.accessoryView.hidden = [self isHiddenFieldAtIndex:MKU_COLUMN_TYPE_RIGHT inSection:section];
         [view.accessoryView setIndexPath:lastPath];

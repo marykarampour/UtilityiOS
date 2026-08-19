@@ -23,6 +23,7 @@
 @protocol MKUControlProtocol <NSObject>
 
 @required
+/** @param target If nil, userInteractionEnabled will be disabled. */
 - (void)addTarget:(id)target action:(SEL)action;
 
 @end

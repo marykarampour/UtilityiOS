@@ -75,7 +75,7 @@
     MKUTableViewSection *sect = [self sectionObjectForIndex:section];
     MKUButtonLabelView *header = [self headerViewForSection:section];
     [self customizeViewForHeader:header inSection:sect section:section];
-    return header.contentView;
+    return header;
 }
 
 - (MKUButtonLabelView *)headerViewForSection:(NSUInteger)section {

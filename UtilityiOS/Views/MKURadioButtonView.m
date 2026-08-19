@@ -8,19 +8,14 @@
 
 #import "MKURadioButtonView.h"
 #import "MKURadioButtonView.h"
-#import "UIControl+IndexPath.h"
+#import "UIView+IndexPath.h"
+#import "NSObject+Utility.h"
 #import "UIView+Utility.h"
 #import "MKUAssets.h"
 
 static CGFloat const CHECK_SIZE = 40.0;
 
 @interface MKURadioButtonView ()
-
-@property (nonatomic, assign, readwrite) MKU_RADIO_BUTTON_ALIGNMENT alignment;
-@property (nonatomic, assign, readwrite) MKU_RADIO_BUTTON_VERTICAL_ALIGNMENT verticalAlignment;
-@property (nonatomic, strong) UIImageView *checkImageView;
-@property (nonatomic, strong, readwrite) MKULabel *titleLabel;
-@property (nonatomic, strong) UIButton *backButton;
 
 @end
 
@@ -30,90 +25,62 @@ static CGFloat const CHECK_SIZE = 40.0;
     return [self initWithAlignment:MKU_RADIO_BUTTON_ALIGNMENT_LEFT];
 }
 
-- (instancetype)initWithCheckboxInset:(CGFloat)inset {
-    return [self initWithAlignment:MKU_RADIO_BUTTON_ALIGNMENT_LEFT checkboxInset:inset];
+- (instancetype)initWithInsets:(UIEdgeInsets)insets {
+    return [self initWithInsets:insets labelsCount:1];
+}
+
+- (instancetype)initWithInsets:(UIEdgeInsets)insets labelsCount:(NSUInteger)labelsCount {
+    return [self initWithAlignment:MKU_RADIO_BUTTON_ALIGNMENT_LEFT labelsCount:labelsCount insets:insets];
 }
 
 - (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment {
-    return [self initWithAlignment:alignment verticalAlignment:MKU_RADIO_BUTTON_VERTICAL_ALIGNMENT_CENTER_Y];
+    return [self initWithAlignment:alignment labelsCount:1];
 }
 
-- (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment checkboxInset:(CGFloat)inset {
-    return [self initWithAlignment:alignment verticalAlignment:MKU_RADIO_BUTTON_VERTICAL_ALIGNMENT_CENTER_Y checkboxInset:inset];
+- (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment labelsCount:(NSUInteger)labelsCount {
+    return [self initWithAlignment:alignment labelsCount:labelsCount verticalAlignment:MULTILABEL_VERTICAL_ALIGNMENT_CENTER_Y];
 }
 
-- (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment verticalAlignment:(MKU_RADIO_BUTTON_VERTICAL_ALIGNMENT)verticalAlignment {
-    return [self initWithAlignment:alignment verticalAlignment:verticalAlignment checkboxInset:[Constants HorizontalSpacing]];
+- (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment insets:(UIEdgeInsets)insets {
+    return [self initWithAlignment:alignment labelsCount:1 insets:insets];
 }
 
-- (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment verticalAlignment:(MKU_RADIO_BUTTON_VERTICAL_ALIGNMENT)verticalAlignment checkboxInset:(CGFloat)inset {
+- (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment labelsCount:(NSUInteger)labelsCount insets:(UIEdgeInsets)insets {
+    return [self initWithAlignment:alignment labelsCount:labelsCount verticalAlignment:MULTILABEL_VERTICAL_ALIGNMENT_CENTER_Y insets:insets];
+}
+
+- (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment verticalAlignment:(MULTILABEL_VERTICAL_ALIGNMENT)verticalAlignment {
+    return [self initWithAlignment:alignment labelsCount:1 verticalAlignment:verticalAlignment];
+}
+
+- (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment labelsCount:(NSUInteger)labelsCount verticalAlignment:(MULTILABEL_VERTICAL_ALIGNMENT)verticalAlignment {
+    return [self initWithAlignment:alignment labelsCount:labelsCount verticalAlignment:verticalAlignment insets:[NSObject insets:[Constants HorizontalSpacing]]];
+}
+
+- (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment verticalAlignment:(MULTILABEL_VERTICAL_ALIGNMENT)verticalAlignment insets:(UIEdgeInsets)insets {
+    return [self initWithAlignment:alignment labelsCount:1 verticalAlignment:verticalAlignment insets:insets];
+}
+
+- (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment labelsCount:(NSUInteger)labelsCount verticalAlignment:(MULTILABEL_VERTICAL_ALIGNMENT)verticalAlignment insets:(UIEdgeInsets)insets {
     if (self = [super init]) {
-        
-        self.alignment = alignment;
-        self.verticalAlignment = verticalAlignment;
-                
         self.selectedImage = [MKUAssets systemIconWithName:[MKUAssets Checkmark_Square_Image_Name] color:[AppTheme checkboxTintColor] size:[Constants CheckBoxSize]];
         self.deselectedImage = [MKUAssets systemIconWithName:[MKUAssets Square_Image_Name] color:[AppTheme checkboxTintColor] size:[Constants CheckBoxSize]];
         self.disabledSelectedImage = [MKUAssets systemIconWithName:[MKUAssets Checkmark_Square_Image_Name] color:[AppTheme checkboxDisabledColor] size:[Constants CheckBoxSize]];
         self.disabledDeselectedImage = [MKUAssets systemIconWithName:[MKUAssets Square_Image_Name] color:[AppTheme checkboxDisabledColor] size:[Constants CheckBoxSize]];
         
-        self.titleLabel = [[MKULabel alloc] init];
-        self.titleLabel.adjustsFontSizeToFitWidth = YES;
-        self.titleLabel.minimumScaleFactor = 0.5;
-        self.titleLabel.numberOfLines = 0;
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0.0, verticalAlignment, CHECK_SIZE, CHECK_SIZE)];
+        imageView.contentMode = UIViewContentModeCenter;
         
-        self.checkImageView = [[UIImageView alloc] init];
-        self.checkImageView.contentMode = UIViewContentModeCenter;
+        MKU_MULTI_LABEL_VIEW_TYPE type = alignment == MKU_RADIO_BUTTON_ALIGNMENT_LEFT ? MKU_MULTI_LABEL_VIEW_TYPE_LEFT : MKU_MULTI_LABEL_VIEW_TYPE_RIGHT;
+        type = type | MKU_MULTI_LABEL_VIEW_TYPE_LABEL;
+        UIImageView *left = alignment == MKU_RADIO_BUTTON_ALIGNMENT_LEFT ? imageView : nil;
+        UIImageView *right = alignment == MKU_RADIO_BUTTON_ALIGNMENT_RIGHT ? imageView : nil;
         
-        self.backButton = [[UIButton alloc] init];
-        self.backButton.userInteractionEnabled = NO;
-        
-        [self addSubview:self.titleLabel];
-        [self addSubview:self.checkImageView];
-        [self addSubview:self.backButton];
-        [self sendSubviewToBack:self.backButton];
-        
-        [self constraintLayoutWithCheckboxInset:inset];
-        [self addSwitchTarget:self];
+        [self constructWithType:type leftView:left rightView:right labelsCount:labelsCount insets:insets];
+        [self addBackView:[[UIButton alloc] init]];
+        [self addTarget:self action:@selector(switchOn)];
     }
     return self;
-}
-
-- (void)constraintLayoutWithCheckboxInset:(CGFloat)inset {
-    
-    [self removeConstraintsMask];
-    [self constraintSidesForView:self.backButton];
-    [self constraintSize:CGSizeMake(CHECK_SIZE, CHECK_SIZE) forView:self.checkImageView];
-    
-    if (self.verticalAlignment == MKU_RADIO_BUTTON_VERTICAL_ALIGNMENT_CENTER_Y) {
-        
-        NSArray *views = self.alignment == MKU_RADIO_BUTTON_ALIGNMENT_LEFT ? @[self.checkImageView, self.titleLabel] : @[self.titleLabel, self.checkImageView];
-        
-        [self constraint:NSLayoutAttributeCenterY view:self.checkImageView];
-        [self constraint:NSLayoutAttributeTop view:self.titleLabel margin:[Constants VerticalSpacing]];
-        [self constraint:NSLayoutAttributeBottom view:self.titleLabel margin:-[Constants VerticalSpacing]];
-        [self constraintHorizontally:views interItemMargin:inset horizontalMargin:inset verticalMargin:CONSTRAINT_NO_PADDING equalWidths:NO];
-    }
-    else {
-        if (self.alignment == MKU_RADIO_BUTTON_ALIGNMENT_LEFT) {
-            [self constraint:NSLayoutAttributeLeft view:self.checkImageView margin:inset];
-            [self constraint:NSLayoutAttributeRight view:self.titleLabel margin:-inset];
-            [self addConstraintWithItem:self.titleLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.checkImageView attribute:NSLayoutAttributeRight multiplier:1.0 constant:inset];
-        }
-        else {
-            [self constraint:NSLayoutAttributeRight view:self.checkImageView margin:-inset];
-            [self constraint:NSLayoutAttributeLeft view:self.titleLabel margin:inset];
-            [self addConstraintWithItem:self.checkImageView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.titleLabel attribute:NSLayoutAttributeRight multiplier:1.0 constant:inset];
-        }
-        
-        if (self.verticalAlignment == MKU_RADIO_BUTTON_VERTICAL_ALIGNMENT_TOP)
-            [self constraint:NSLayoutAttributeTop view:self.checkImageView margin:inset];
-        else
-            [self constraint:NSLayoutAttributeBottom view:self.checkImageView margin:inset];
-        
-        [self constraint:NSLayoutAttributeBottom view:self.titleLabel];
-        [self constraint:NSLayoutAttributeTop view:self.titleLabel];
-    }
 }
 
 - (void)setEnabled:(BOOL)enabled {
@@ -136,50 +103,32 @@ static CGFloat const CHECK_SIZE = 40.0;
 }
 
 - (void)updateViews {
-    self.checkImageView.image = self.enabled ? (self.on ? self.selectedImage : self.deselectedImage) : (self.on ? self.disabledSelectedImage : self.disabledDeselectedImage);
+    [self checkView].image = self.enabled ? (self.on ? self.selectedImage : self.deselectedImage) : (self.on ? self.disabledSelectedImage : self.disabledDeselectedImage);
 }
 
 - (void)setDelegate:(id<MKURadioButtonViewProtocol>)delegate {
     _delegate = delegate;
-    [self addSwitchTarget:delegate];
-}
-
-- (void)addSwitchTarget:(id)target {
-    if (target) {
-        [self.backButton addTarget:self action:@selector(switchOn) forControlEvents:UIControlEventTouchUpInside];
-    }
-    else {
-        [self.backButton removeTarget:self action:@selector(switchOn) forControlEvents:UIControlEventTouchUpInside];
-    }
-    self.backButton.userInteractionEnabled = target;
-}
-
-- (void)addTarget:(id)target action:(SEL)action {
-    [self.backButton addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
-    self.backButton.userInteractionEnabled = target;
+    self.backView.userInteractionEnabled = delegate;
 }
 
 - (void)setIndexPath:(NSIndexPath *)indexPath {
-    self.backButton.indexPath = indexPath;
+    self.backView.indexPath = indexPath;
 }
 
 - (NSIndexPath *)indexPath {
-    return self.backButton.indexPath;
+    return self.backView.indexPath;
 }
 
-- (void)setMultiline {
-    self.titleLabel.adjustsFontSizeToFitWidth = NO;
-    self.titleLabel.minimumScaleFactor = 1.0;
-    self.titleLabel.numberOfLines = 0;
-    self.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
+- (UIImageView *)checkView {
+    return (self.leftView ? self.leftView : self.rightView).view;
 }
 
 + (MKURadioButtonView *)enabledRadioButtonWithTitle:(NSString *)title {
     MKURadioButtonView *view = [[MKURadioButtonView alloc] init];
     view.enabled = YES;
-    view.titleLabel.text = title;
-    view.titleLabel.adjustsFontSizeToFitWidth = YES;
-    view.titleLabel.minimumScaleFactor = 0.8;
+    [view labelAtIndex:0].text = title;
+    [view labelAtIndex:0].adjustsFontSizeToFitWidth = YES;
+    [view labelAtIndex:0].minimumScaleFactor = 0.8;
     return view;
 }
 
