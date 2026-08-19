@@ -10,6 +10,7 @@
 #import "MKUAppDelegate.h"
 #import "NSString+Utility.h"
 #import <LocalAuthentication/LocalAuthentication.h>
+#import <sys/utsname.h>
 #import "MKUMessageComposerController.h"
 #import "NSObject+Utility.h"
 #import "NSError+Utility.h"
@@ -771,6 +772,23 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
 
 + (NSString *)targetName {
     return [[NSBundle mainBundle] infoDictionary][(NSString *)kCFBundleNameKey];
+}
+
++ (NSString *)deviceName {
+    struct utsname sys;
+    uname(&sys);
+    return [NSString stringWithCString:sys.machine encoding:NSUTF8StringEncoding];
+}
+//For device models see: https://stackoverflow.com/a/11197770/2197292
++ (BOOL)deviceMiniPhoneModel:(NSUInteger)iPhoneModel iPadModel:(NSUInteger)iPadModel {
+    NSString *model = [[[[self deviceName] componentsSeparatedByString:@","] firstObject] numbersOnly];
+    NSUInteger num = [[model stringToNumber] integerValue];
+    
+    if (0 < iPhoneModel)
+        return iPhoneModel <= num;
+    else if (0 < iPadModel)
+        return iPadModel <= num;
+    return NO;
 }
 
 + (CGFloat)statusBarHeight {

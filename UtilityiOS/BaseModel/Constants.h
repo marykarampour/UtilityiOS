@@ -575,6 +575,11 @@ typedef NS_ENUM(NSUInteger, MKU_BADGE_VIEW_STATE) {
 + (NSURL *)appDocumentsDirectory;
 + (NSString *)bundleID;
 + (NSString *)targetName;
++ (NSString *)deviceName;
+/** @brief If the provided device model number is 0 the check is not done.
+    @param iPhoneModel must be greater than 1.
+    @param iPadModel must be greater than 1. */
++ (BOOL)deviceMiniPhoneModel:(NSUInteger)iPhoneModel iPadModel:(NSUInteger)iPadModel;
 + (CGFloat)statusBarHeight;
 + (UIEdgeInsets)safeAreaInsets;
 + (CGFloat)safeAreaHeight;
