@@ -1052,7 +1052,7 @@
         NSDate *date = [object dateValueForSectionType:section];
         
         if (date) obj.date = date;
-        else [obj reset];
+        else if (!obj.date) [obj reset];
         
         if (![self canEditSection:section]) obj.isEditable = NO;
         else if (self.isEditable) obj.isEditable = YES;
