@@ -374,6 +374,10 @@ static NSDictionary <NSNumber *, UTType *> *supportedDocTypes;
     }
     
     UIViewController *vc;
+    BOOL vision = YES;
+    if (@available(iOS 26.0, *)) {
+        vision = [Constants deviceMiniPhoneModel:13 iPadModel:11];
+    }
     
     if (type == MKU_IMAGE_PICKER_TYPE_DOCS_IMPORT) {
         UIDocumentPickerViewController *picker = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:self.acceptedDocTypes];
@@ -416,7 +420,7 @@ static NSDictionary <NSNumber *, UTType *> *supportedDocTypes;
     else if (TARGET_IPHONE_SIMULATOR || type == MKU_IMAGE_PICKER_TYPE_PHOTOS_IMPORT) {
         vc = [self photoPickerController];
     }
-    else if (type == MKU_IMAGE_PICKER_TYPE_VISION) {
+    else if (type == MKU_IMAGE_PICKER_TYPE_VISION && vision) {
         VNDocumentCameraViewController *vision = [[VNDocumentCameraViewController alloc] init];
         vision.delegate = self;
         vc = vision;
