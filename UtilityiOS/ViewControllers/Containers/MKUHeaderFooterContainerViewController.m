@@ -252,7 +252,10 @@
 - (void)refreshHeaderHeightAnimated:(BOOL)animated {
     if (animated) {
         [UIView animateWithDuration:0.4 animations:^{
-            [self refreshHeaderHeight];
+            self.headerHeightConstraint.constant = [self headerHeight];
+            self.contentTopMarginConstraint.constant = [self contentViewTopMargin];
+        } completion:^(BOOL finished) {
+            [self.view layoutIfNeeded];
         }];
     }
     else {
