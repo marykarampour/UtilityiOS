@@ -731,6 +731,15 @@ static char UPDATE_DELEGATE_KEY;
 @dynamic OriginalObject;
 @dynamic UpdatedObject;
 
+- (void)reset {
+    id<MKUFieldModelDelegate> updateDelegate;
+    if ([self.UpdatedObject respondsToSelector:@selector(setUpdateDelegate:)])
+        updateDelegate = self.UpdatedObject.updateDelegate;
+    
+    [super reset];
+    self.UpdatedObject.updateDelegate = updateDelegate;
+}
+
 - (instancetype)duplicateUpdateObject {
     MKUUpdateObject *obj = [super duplicateUpdateObject];
     obj.UserID = self.UserID;
