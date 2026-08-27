@@ -22,7 +22,7 @@
 const void *PROPERTY_ENUM_KEY;
 const void *SECTION_ENUM_KEY;
 const void *TITLE_ENUM_KEY;
-static char UPDATE_DELEGATE_KEY;
+const void *UPDATE_DELEGATE_KEY;
 
 @interface MKUFieldModel ()
 

@@ -101,7 +101,7 @@ static char PERFORM_SAVE_ACTION_HANDLER_KEY;
                 completion(result, error);
             }
             else {
-                [self handleSaveObjectCompletionWithSuccess:result ID:nil error:error];
+                self.successResultCompletion(result, error);
             }
         }];
     }
@@ -113,7 +113,7 @@ static char PERFORM_SAVE_ACTION_HANDLER_KEY;
                 completion(0 < [result integerValue], error);
             }
             else {
-                [self handleSaveObjectCompletionWithSuccess:0 < [result integerValue] ID:result error:error];
+                self.IDResultCompletion(result, error);
             }
         }];
     }
