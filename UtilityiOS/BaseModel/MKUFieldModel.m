@@ -706,6 +706,15 @@ const void *UPDATE_DELEGATE_KEY;
 @dynamic OriginalObject;
 @dynamic UpdatedObject;
 
+- (void)reset {
+    id<MKUFieldModelDelegate> updateDelegate;
+    if ([self.UpdatedObject respondsToSelector:@selector(setUpdateDelegate:)])
+        updateDelegate = self.UpdatedObject.updateDelegate;
+    
+    [super reset];
+    self.UpdatedObject.updateDelegate = updateDelegate;
+}
+
 - (BOOL)isLongValueForSectionType:(NSInteger)section {
     return [self.UpdatedObject isLongValueForSectionType:section];
 }
