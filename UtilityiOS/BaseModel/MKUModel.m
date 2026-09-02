@@ -906,6 +906,18 @@ const void * MAPPER_FORMAT_KEY;
     return [self titlesForOptions:[self optionsForOptions:options range:range]];
 }
 
++ (NSString *)nameForOptions:(NSArray<MKUOption *> *)options value:(NSInteger)value {
+    return [options objectPassingTest:^BOOL(MKUOption *obj, NSUInteger idx, BOOL *stop) {
+        return obj.value == value;
+    }].name;
+}
+
++ (NSString *)titleForOptions:(NSArray<MKUOption *> *)options value:(NSInteger)value {
+    return [options objectPassingTest:^BOOL(MKUOption *obj, NSUInteger idx, BOOL *stop) {
+        return obj.value == value;
+    }].title;
+}
+
 + (NSArray<MKUOption *> *)optionsForOptions:(NSArray<MKUOption *> *)options range:(NSRange)range {
     return [options filteredArrayUsingPredicate:[NSPredicate predicateWithBlock:^BOOL(MKUOption * _Nullable evaluatedObject, NSDictionary<NSString *,id> * _Nullable bindings) {
         return NSLocationInRange(evaluatedObject.value, range);

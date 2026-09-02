@@ -172,6 +172,14 @@
     return str;
 }
 
+- (BOOL)containsObjectsFromArray:(NSArray *)otherArray {
+    return [[NSSet setWithArray:otherArray] isSubsetOfSet:[NSSet setWithArray:self]];
+}
+
+- (BOOL)intersectsWithArray:(NSArray *)otherArray {
+    return [[NSSet setWithArray:otherArray] intersectsSet:[NSSet setWithArray:self]];
+}
+
 - (NSSet *)set {
     return [NSSet setWithArray:self];
 }

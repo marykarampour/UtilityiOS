@@ -184,6 +184,8 @@
 + (NSArray *)titlesForOptions:(NSArray<MKUOption *> *)options;
 + (NSArray *)namesForOptions:(NSArray<MKUOption *> *)options range:(NSRange)range;
 + (NSArray *)titlesForOptions:(NSArray<MKUOption *> *)options range:(NSRange)range;
++ (NSString *)nameForOptions:(NSArray<MKUOption *> *)options value:(NSInteger)value;
++ (NSString *)titleForOptions:(NSArray<MKUOption *> *)options value:(NSInteger)value;
 + (NSArray<MKUOption *> *)optionsForOptions:(NSArray<MKUOption *> *)options range:(NSRange)range;
 /** @param values can be a bitmask or other int, either case bitwise & will be used to evalaute if the option matches.*/
 + (NSArray<MKUOption *> *)optionsForOptions:(NSArray<MKUOption *> *)options values:(NSArray<NSNumber *> *)values;

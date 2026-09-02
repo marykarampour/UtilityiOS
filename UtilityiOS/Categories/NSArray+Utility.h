@@ -50,6 +50,8 @@
 + (NSDictionary<NSString *, NSMutableArray<ObjectType> *> *)groupedArrayFromArray:(NSArray<ObjectType> *)array forKey:(NSString *)key;
 - (instancetype)arrayByAddingObject:(ObjectType)anObject;
 - (NSString *)uniqueComponentsJoinedByString:(NSString *)separator usingSelector:(SEL)selector;
+- (BOOL)containsObjectsFromArray:(NSArray *)otherArray;
+- (BOOL)intersectsWithArray:(NSArray *)otherArray;
 
 - (NSSet<ObjectType> *)set;
 - (NSArray<ObjectType> *)unique;

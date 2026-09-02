@@ -65,7 +65,7 @@ typedef NSDictionary<NSNumber *, MKUDateViewInfoObject *> DateSectionInfoObjctDi
 @property (nonatomic, strong) NSString *footerTitle;
 @property (nonatomic, strong) DateSectionInfoObjctDict *dateCellInfoObjects;
 @property (nonatomic, assign) UIEdgeInsets accessoryViewInsets;
-@property (nonatomic, assign) NSUInteger MKUType;
+@property (nonatomic, assign) NSInteger MKUType;
 /** @brief Dark theme will set section headers dark blue with mist text color. */
 @property (nonatomic, assign) BOOL useDarkTheme;
 
