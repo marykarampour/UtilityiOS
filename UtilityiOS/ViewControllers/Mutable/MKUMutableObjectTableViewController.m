@@ -112,7 +112,7 @@
             return 0;
         
         BOOL isEditable = [self canEditSection:section];
-        return isEditable && type != MKU_MUTABLE_OBJECT_FIELD_TYPE_STEPPER_FIELD ? 2 : 1;
+        return isEditable && (type != MKU_MUTABLE_OBJECT_FIELD_TYPE_STEPPER_FIELD && type != MKU_MUTABLE_OBJECT_FIELD_TYPE_FIELD) ? 2 : 1;
     }
     
     if (type == MKU_MUTABLE_OBJECT_FIELD_TYPE_LIST)
