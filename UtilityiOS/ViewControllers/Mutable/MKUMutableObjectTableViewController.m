@@ -500,9 +500,7 @@
             [self addItem:object toListOfType:type];
         
         [self didUpdate:canUpdate item:object atIndexPath:self.selectedIndexPath];
-        [self resetSelectedSets];
-        [self setSelectedIndexPath:nil];
-        [self reloadDataAnimated:NO];
+        [self resetSelectedSetsReload];
         [self dispatchTransitionVCDelegateToDismissDestinationViewController:viewController];
     }
 }
@@ -856,6 +854,7 @@
 
 - (void)resetSelectedSetsReload {
     [self resetSelectedSets];
+    [self setSelectedIndexPath:nil];
     [self reloadDataAnimated:NO];
 }
 
