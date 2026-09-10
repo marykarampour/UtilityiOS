@@ -116,6 +116,8 @@
 
 @interface MKUFieldModel : MKUModel <MKUFieldModelProtocol, MKUDataUpdateProtocol>
 
++ (NSArray<NSString *> *)titlesForSectionTypes:(NSArray<NSNumber *> *)types;
+
 + (void)iterateOverTypesForSectionType:(NSInteger)section block:(void(^)(NSNumber *obj, NSUInteger idx, BOOL *stop))block;
 
 //validation

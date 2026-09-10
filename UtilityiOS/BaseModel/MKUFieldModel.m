@@ -89,6 +89,10 @@ const void *UPDATE_DELEGATE_KEY;
     return self.propertyEnumDict;
 }
 
++ (NSArray<NSString *> *)titlesForSectionTypes:(NSArray<NSNumber *> *)types {
+    return [self.titleEnumDict objectsForKeys:types notFoundMarker:@""];
+}
+
 + (void)iterateOverTypesForSectionType:(NSInteger)section block:(void(^)(NSNumber *obj, NSUInteger idx, BOOL *stop))block {
     
     NSArray<NSNumber *> *types = [self objectTypesForSectionType:section];

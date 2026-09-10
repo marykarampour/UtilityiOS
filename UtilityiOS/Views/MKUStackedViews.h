@@ -107,8 +107,9 @@
 - (ViewType)viewForIndex:(NSUInteger)index;
 
 - (NSUInteger)rowCount;
-/** @brief These are individual views within rows and columns. */
+/** @brief Individual views within rows and columns. */
 - (NSArray<ViewType> *)cellViews;
+/** @brief Index of individual views within rows and columns. */
 - (NSUInteger)indexOfCellView:(ViewType)view;
 
 @end
