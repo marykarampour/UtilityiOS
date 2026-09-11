@@ -73,24 +73,21 @@
 
 #pragma mark - typedefs
 
-typedef NSInteger ServerEnvironment;
-typedef NSInteger TargetType;
-
-enum {
-    ServerEnvironment_NONE = -1,
-    ServerEnvironment_DEV_IN,
-    ServerEnvironment_DEV_OUT,
-    ServerEnvironment_TESTING_IN,
-    ServerEnvironment_TESTING_OUT,
-    ServerEnvironment_LOCAL,
-    ServerEnvironment_QA,
-    ServerEnvironment_PROD,
-    ServerEnvironment_BASE
+typedef NS_ENUM(NSInteger, SERVER_ENVIRONMENT) {
+    SERVER_ENVIRONMENT_NONE = -1,
+    SERVER_ENVIRONMENT_DEV_IN,
+    SERVER_ENVIRONMENT_DEV_OUT,
+    SERVER_ENVIRONMENT_TESTING_IN,
+    SERVER_ENVIRONMENT_TESTING_OUT,
+    SERVER_ENVIRONMENT_LOCAL,
+    SERVER_ENVIRONMENT_QA,
+    SERVER_ENVIRONMENT_PROD,
+    SERVER_ENVIRONMENT_BASE
 };
 
-enum {
-    TargetType_NONE = -1,
-    TargetType_BASE
+typedef NS_ENUM(NSInteger, TARGET_TYPE) {
+    TARGET_TYPE_NONE = -1,
+    TARGET_TYPE_BASE
 };
 
 typedef NS_ENUM(NSInteger, MKU_TEXT_TYPE) {
@@ -397,7 +394,7 @@ typedef NS_ENUM(NSUInteger, MKU_BADGE_VIEW_STATE) {
 
 #pragma mark - networking
 
-+ (ServerEnvironment)ServerEnvironmentVariable;
++ (SERVER_ENVIRONMENT)ServerEnvironmentVariable;
 + (BOOL)USING_HTTPS;
 /** @brief This url must be of form ://domain */
 + (NSString *)BaseLocalHostURL;
@@ -609,7 +606,7 @@ typedef NS_ENUM(NSUInteger, MKU_BADGE_VIEW_STATE) {
 #pragma mark - abstracts
 
 + (NSURL *)BaseURL;
-+ (TargetType)appTargetType;
++ (TARGET_TYPE)appTargetType;
 + (NSString *)authorizationUsername;
 + (NSString *)authorizationPassword;
 

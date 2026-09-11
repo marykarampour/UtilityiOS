@@ -109,8 +109,8 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
 
 #pragma mark - networking
 
-+ (ServerEnvironment)ServerEnvironmentVariable {
-    return ServerEnvironment_DEV_IN;
++ (SERVER_ENVIRONMENT)ServerEnvironmentVariable {
+    return SERVER_ENVIRONMENT_DEV_IN;
 }
 
 + (BOOL)USING_HTTPS {
@@ -713,19 +713,17 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
 }
 
 + (NSString *)CommonURLString {
-   
     switch ([self ServerEnvironmentVariable]) {
-        case ServerEnvironment_PROD:        return [self BaseProductionURL];
-        case ServerEnvironment_QA:          return [self BaseQAURL];
-        case ServerEnvironment_TESTING_IN:  return [self BaseTestingInURL];
-        case ServerEnvironment_TESTING_OUT: return [self BaseTestingOutURL];
-        case ServerEnvironment_LOCAL:       return [self BaseLocalHostURL];
-        case ServerEnvironment_DEV_IN:      return [self BaseDevInURL];
-        case ServerEnvironment_DEV_OUT:
-        default: return [self BaseDevOutURL];
+        case SERVER_ENVIRONMENT_PROD:        return [self BaseProductionURL];
+        case SERVER_ENVIRONMENT_QA:          return [self BaseQAURL];
+        case SERVER_ENVIRONMENT_TESTING_IN:  return [self BaseTestingInURL];
+        case SERVER_ENVIRONMENT_TESTING_OUT: return [self BaseTestingOutURL];
+        case SERVER_ENVIRONMENT_LOCAL:       return [self BaseLocalHostURL];
+        case SERVER_ENVIRONMENT_DEV_IN:      return [self BaseDevInURL];
+        case SERVER_ENVIRONMENT_DEV_OUT:     return [self BaseDevOutURL];
+        default:                             return [self BaseDevOutURL];
     }
 }
-
 
 + (NSURL *)BaseURL {
     return [NSURL URLWithString:[self BaseURLString]];
@@ -1107,7 +1105,7 @@ static NSString * const DEFAULTS_SAVED_USERS_KEY = @"DEFAULTS_SAVED_USERS_KEY";
 
 #pragma mark - AppCommon abstracts
 
-+ (TargetType)appTargetType {
++ (TARGET_TYPE)appTargetType {
     return 0;
 }
 
