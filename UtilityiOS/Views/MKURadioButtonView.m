@@ -56,7 +56,7 @@
 }
 
 - (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment labelsCount:(NSUInteger)labelsCount verticalAlignment:(MULTILABEL_VERTICAL_ALIGNMENT)verticalAlignment {
-    return [self initWithAlignment:alignment labelsCount:labelsCount verticalAlignment:verticalAlignment insets:[NSObject insets:[Constants HorizontalSpacing]]];
+    return [self initWithAlignment:alignment labelsCount:labelsCount verticalAlignment:verticalAlignment insets:UIEdgeInsetsZero];
 }
 
 - (instancetype)initWithAlignment:(MKU_RADIO_BUTTON_ALIGNMENT)alignment verticalAlignment:(MULTILABEL_VERTICAL_ALIGNMENT)verticalAlignment insets:(UIEdgeInsets)insets {
