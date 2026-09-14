@@ -240,7 +240,7 @@ static CGFloat const PADDING = 4.0;
 }
 
 - (id)viewForIndex:(NSUInteger)index {
-    if ([self count] == 0) return nil;
+    if ([self count] == 0 || index == NSNotFound) return nil;
     
     NSUInteger row = ceil(index / [[self views].firstObject count]);
     NSUInteger column = index % [[self views].firstObject count];
