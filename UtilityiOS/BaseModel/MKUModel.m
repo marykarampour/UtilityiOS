@@ -1023,7 +1023,6 @@ const void * MAPPER_FORMAT_KEY;
 
 @end
 
-
 @implementation JSONValueTransformer (MKUModel)
 
 - (id)NSDataFromNSString:(NSString*)string {
@@ -1042,6 +1041,22 @@ const void * MAPPER_FORMAT_KEY;
 - (NSString *)JSONObjectFromNSDate:(NSDate *)date property:(NSString *)property inModelClass:(__unsafe_unretained Class)cls {
     BOOL isUTC = [cls datePropertyIsUTC:property];
     return [date dateStringWithFormat:[cls dateFormatForProperty:property] isUTC:isUTC];
+}
+
+@end
+
+@implementation MKUThemeOption
+
++ (instancetype)optionWithTitle:(NSString *)title name:(NSString *)name value:(NSInteger)value color:(UIColor *)color {
+    MKUThemeOption *obj = [MKUThemeOption optionWithTitle:title name:name value:value];
+    obj.color = color;
+    return obj;
+}
+
++ (instancetype)optionWithTitle:(NSString *)title value:(NSInteger)value color:(UIColor *)color {
+    MKUThemeOption *obj = [MKUThemeOption optionWithTitle:title value:value];
+    obj.color = color;
+    return obj;
 }
 
 @end

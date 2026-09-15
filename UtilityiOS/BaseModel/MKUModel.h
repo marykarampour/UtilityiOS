@@ -217,7 +217,6 @@
 
 @end
 
-
 @interface JSONValueTransformer (MKUModel)
 
 - (id)NSDataFromNSString:(NSString *)string;
@@ -228,4 +227,11 @@
 
 @end
 
+@interface MKUThemeOption : MKUOption
 
+@property (nonatomic, strong) UIColor *color;
+
++ (instancetype)optionWithTitle:(NSString *)title name:(NSString *)name value:(NSInteger)value color:(UIColor *)color;
++ (instancetype)optionWithTitle:(NSString *)title value:(NSInteger)value color:(UIColor *)color;
+
+@end
