@@ -196,3 +196,12 @@
 - (NSComparisonResult)compare:(MKUOption *)option;
 
 @end
+
+@interface MKUThemeOption : MKUOption
+
+@property (nonatomic, strong) UIColor *color;
+
++ (instancetype)optionWithTitle:(NSString *)title name:(NSString *)name value:(NSInteger)value color:(UIColor *)color;
++ (instancetype)optionWithTitle:(NSString *)title value:(NSInteger)value color:(UIColor *)color;
+
+@end
