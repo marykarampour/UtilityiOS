@@ -387,8 +387,9 @@ static dispatch_queue_t dispatch;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([self isDateSection:indexPath.section]) {
-        self.dateCellInfoObjects[@(indexPath.section)].indexPath = indexPath;
-        return [self tableView:tableView dateCellWithInfo:self.dateCellInfoObjects[@(indexPath.section)]];
+        MKUDateViewInfoObject *info = self.dateCellInfoObjects[@(indexPath.section)];
+        info.indexPath = indexPath;
+        return [self tableView:tableView dateCellWithInfo:info];
     }
     return [self tableView:tableView cellForNonDateRowAtIndexPath:indexPath];
 }
