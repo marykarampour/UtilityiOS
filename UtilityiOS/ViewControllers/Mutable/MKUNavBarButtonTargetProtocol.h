@@ -26,9 +26,6 @@
  @note Put in the inner most view controller. */
 - (BOOL)hasButtonOfType:(MKU_NAV_BAR_BUTTON_TYPE)type;
 
-/** @brief If not implemented, the button will be positioned at right. */
-- (MKU_NAV_BAR_BUTTON_POSITION)positionForButtonOfType:(MKU_NAV_BAR_BUTTON_TYPE)type;
-
 /** @brief title of the  button if type is not MKU_NAV_BAR_BUTTON_TYPE_IMAGE, otherwise it is the name of the image resource.
  @note Put in the inner most view controller. */
 - (NSString *)titleForButtonOfType:(MKU_NAV_BAR_BUTTON_TYPE)type;

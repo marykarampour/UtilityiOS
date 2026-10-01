@@ -78,7 +78,6 @@ static char TARGETS_KEY;
         button = [UIBarButtonItem editNavBarButtonObject];
     }
     else {
-        MKU_NAV_BAR_BUTTON_POSITION position = [self respondsToSelector:@selector(positionForButtonOfType:)] ? [self positionForButtonOfType:type] : MKU_NAV_BAR_BUTTON_POSITION_RIGHT;
         NSString *title = [self respondsToSelector:@selector(titleForButtonOfType:)] ? [self titleForButtonOfType:type] : nil;
         UIImage *image = [self respondsToSelector:@selector(imageForButtonOfType:)] ? [self imageForButtonOfType:type] : nil;
         BOOL enabled = [self respondsToSelector:@selector(isEnabledButtonOfType:)] ? [self isEnabledButtonOfType:type] : NO;
