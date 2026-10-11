@@ -1005,13 +1005,13 @@ const void * MAPPER_FORMAT_KEY;
 }
 
 - (void)setFalse {
-    self.falseState = YES;
-    self.trueState = NO;
+    _falseState = YES;
+    _trueState = NO;
 }
 
 - (void)setTrue {
-    self.falseState = NO;
-    self.trueState = YES;
+    _falseState = NO;
+    _trueState = YES;
 }
 
 - (void)setState:(BOOL)state {
