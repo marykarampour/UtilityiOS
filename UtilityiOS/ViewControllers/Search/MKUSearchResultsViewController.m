@@ -60,8 +60,31 @@
     }
 }
 
+- (UITableViewCellAccessoryType)accessoryTypeForSelectedListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item inListOfType:(NSUInteger)type {
+    if ([self.headerDelegate respondsToSelector:@selector(accessoryTypeForSelectedListItem:inListOfType:)]) {
+        return [self.headerDelegate accessoryTypeForSelectedListItem:item inListOfType:type];
+    }
+    else {
+        return [super accessoryTypeForSelectedListItem:item inListOfType:type];
+    }
+}
+
+- (UITableViewCellAccessoryType)accessoryTypeForDeselectedListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item inListOfType:(NSUInteger)type {
+    if ([self.headerDelegate respondsToSelector:@selector(accessoryTypeForDeselectedListItem:inListOfType:)]) {
+        return [self.headerDelegate accessoryTypeForDeselectedListItem:item inListOfType:type];
+    }
+    else {
+        return [super accessoryTypeForDeselectedListItem:item inListOfType:type];
+    }
+}
+
 - (UITableViewCellAccessoryType)accessoryTypeForSingleDeselectedListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item inListOfType:(NSUInteger)type {
-    return self.headerDelegate.selectedActionHandler(0) == MKU_LIST_ITEM_SELECTED_ACTION_TRANSITION_TO_DETAIL ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+    if ([self.headerDelegate respondsToSelector:@selector(accessoryTypeForSingleDeselectedListItem:inListOfType:)]) {
+        return [self.headerDelegate accessoryTypeForSingleDeselectedListItem:item inListOfType:type];
+    }
+    else {
+        return [super accessoryTypeForSingleDeselectedListItem:item inListOfType:type];
+    }
 }
 
 - (void)setTextForListItem:(__kindof NSObject<MKUPlaceholderProtocol> *)item atIndexPath:(NSIndexPath *)indexPath inCell:(MKUBaseTableViewCell *)cell {

@@ -55,7 +55,7 @@
 
 @end
 
-@interface MKUSearchResultsViewController <__covariant ObjectType : NSObject<MKUSearchProtocol> *> : MKUHeaderFooterContainerViewController <MKUSearchHeaderVCParentViewDelegate, MKURefreshViewControllerDelegate, MKUSearchResultsUpdateDelegate, MKUSearchResultsTransitionDelegate, MKUViewControllerActionProtocol, MKUItemsListVCNavBarDelegate>
+@interface MKUSearchResultsViewController <__covariant ObjectType : NSObject<MKUSearchProtocol> *> : MKUHeaderFooterContainerViewController <MKUSearchHeaderVCParentViewDelegate, MKURefreshViewControllerDelegate, MKUSearchResultsUpdateDelegate, MKUSearchResultsTransitionDelegate, MKUViewControllerActionProtocol, MKUItemsListVCNavBarDelegate, MKUItemsListVCProtocol>
 
 @property (nonatomic, strong) MKUSearchResultsChildViewController *childViewController;
 @property (nonatomic, strong) MKUSearchHeaderView *headerView;
